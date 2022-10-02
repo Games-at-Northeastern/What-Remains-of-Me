@@ -14,6 +14,7 @@ public class PlayerDialogueInteractor : MonoBehaviour
     [SerializeField] CollisionDetector dialogueCollisionDetector;
     [SerializeField] GameObject promptSprite; // There is only one prompt sprite in the game, and it is either inactive or over a specific dialogue holding gameObject.
     public DialogueEvent OnDialogueRequested = new DialogueEvent();
+    public DialogueInitiator dialogueInitiator = new DialogueInitiator();
     ControlSchemes cs;
 
     private void Start()
@@ -30,8 +31,10 @@ public class PlayerDialogueInteractor : MonoBehaviour
     {
         if (activeDialogue != null)
         {
+            dialogueInitiator.StartDialogueSequence(activeDialogue);
             promptSprite.SetActive(false);
             OnDialogueRequested.Invoke(activeDialogue);
+            
             print("Dialogue Requested");
         }
     }
@@ -45,12 +48,14 @@ public class PlayerDialogueInteractor : MonoBehaviour
         GameObject dGameObject = dialogueCollisionDetector.CollidingWith(); // d should have dialogue component if able to be collided with by dialogueCollisionDetector
         if (dGameObject != null)
         {
+            
             Dialogue dialogue = dGameObject.GetComponent<Dialogue>();
             if (dialogue != activeDialogue)
             {
                 promptSprite.transform.position = dialogue.GetPromptTransform().position;
                 promptSprite.SetActive(true);
                 activeDialogue = dialogue;
+                PlayDialogue();
             }
         }
         else

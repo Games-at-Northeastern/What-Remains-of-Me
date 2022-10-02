@@ -28,11 +28,13 @@ public class DialoguePlayer : MonoBehaviour
     IEnumerator DialogueSequence(Dialogue d)
     {
         text.text = "";
+        
         IDialogueTree dialogueTree = d.GetDialogueTree();
+        print (dialogueTree);
         bool inputForNextSegment;
         cs.Player.Dialogue.performed += _ => inputForNextSegment = true;
         while (dialogueTree.HasNextSegment())
-        {
+        {   
             dialogueTree.NextSegment();
             // Filling in a segment, char by char
             while (!dialogueTree.SegmentIsComplete())
@@ -41,9 +43,12 @@ public class DialoguePlayer : MonoBehaviour
                 yield return new WaitForSecondsRealtime(timeToAdvanceCharacter);
                 text.text = dialogueTree.GetText();
             }
+            
+            
             // Wait for input for next segment
             inputForNextSegment = false;
             yield return new WaitUntil(() => inputForNextSegment);
+            
         }
         dialogueTree.Reset();
         onDialogueEnd.Invoke();
