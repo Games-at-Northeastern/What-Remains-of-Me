@@ -55,7 +55,7 @@ public interface IDialogueTree
     /// Select the response of the given index. This will cause the tree to advance
     /// to the appropriate next text segment (as in, you don't need to call
     /// NextSegment() to get it). If there are no responses, does nothing.
-    /// </summary>
+    /// @param      segment-index
     public void ChooseResponse(int index);
 
     /// <summary>

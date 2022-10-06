@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class seems to represent a dialgue tree that provides the capabilities
+/// to utilize multiple segements of dialogue that can be displayed onto the screen
+/// comments seem written well
+/// </summary>
 public class DialogueTree : ADialogueTree
 {
     [SerializeField] string[] segments;
@@ -9,6 +14,11 @@ public class DialogueTree : ADialogueTree
     int idxOfSegment = -1; // Which segment is being written. Out-of-range index means the next node is being read.
     int segmentLength = 0; // How many characters of the current segment are written
 
+    /// <summary>
+    /// It seems that all this is supposed to do is that
+    /// in the even that there is no dialogue left, it
+    /// Will basically just signal that theres an issue.
+    /// </summary>
     void Awake()
     {
         if (segments.Length == 0)
@@ -91,12 +101,25 @@ public class DialogueTree : ADialogueTree
         }
     }
 
+
+    /// <summary>
+    /// As of now it appears this functionality isn't supported
+    /// and now only debugs.
+    /// </summary>
+    /// <returns> nothing if no responses exist,
+    /// otherwise return response array of a size one or greater </returns>
     public override string[] GetResponses()
     {
         Debug.LogError("Unimplemented Method");
         return null;
     }
 
+
+    /// <summary>
+    /// As of now it appears this functionality isn't supported
+    /// and now only debugs.
+    /// </summary>
+    /// <param name="index"> segment index to retrive response from </param>
     public override void ChooseResponse(int index)
     {
         Debug.LogError("Unimplemented Method");
@@ -110,9 +133,17 @@ public class DialogueTree : ADialogueTree
         next.Reset();
     }
 
+    // <summary>
+    // Are this node's dialogues still being read?
+    // </summary>
+
     /// <summary>
-    /// Are this node's dialogues still being read?
+    /// Appears that this is a method offered by this class specifically
+    /// to check if the dialouge still has stuff to read by checking if
+    /// where you are reading is less that the length of your dialouge
     /// </summary>
+    /// <returns> return false if the segment index is less than
+    /// the amount of segments that exist </returns>
     private bool inThisNode()
     {
         return idxOfSegment < segments.Length;
