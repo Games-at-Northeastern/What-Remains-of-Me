@@ -22,6 +22,10 @@ public class DialogueInitiator : MonoBehaviour
         dp.onDialogueEnd.AddListener(() => EndDialogueSequence());
     }
 
+    /// <summary>
+    /// Initiates a dialogue sequence from the given Dialogue.
+    /// </summary>
+    /// <param name="d">The dialogue to be played</param>
     public void StartDialogueSequence(Dialogue d)
     {
         if (!inDialogueSequence)
@@ -33,6 +37,9 @@ public class DialogueInitiator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ends the current dialogue sequence if one has been initiated.
+    /// </summary>
     public void EndDialogueSequence()
     {
         if (inDialogueSequence)

@@ -20,11 +20,20 @@ public class DialoguePlayer : MonoBehaviour
         cs.Enable();
     }
 
+    /// <summary>
+    /// Begins the animation for the given Dialogue
+    /// </summary>
+    /// <param name="d">The dialogue to be played</param>
     public void PlayDialogue(Dialogue d)
     {
         StartCoroutine(DialogueSequence(d));
     }
 
+    /// <summary>
+    /// Coroutine to be called in the PlayDialogue method. This is what actually initiates the dialogue sequence.
+    /// </summary>
+    /// <param name="d">the dialogue to be played</param>
+    /// <returns></returns>
     IEnumerator DialogueSequence(Dialogue d)
     {
         text.text = "";
