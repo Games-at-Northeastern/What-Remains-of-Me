@@ -12,11 +12,21 @@ public class LevelLoader : MonoBehaviour
     private LevelManager lm;
     private Animator anim;
 
+    /// <summary>
+    /// Finds the Animator that should be a component 
+    /// in a game object that is a child of this LevelLoader.
+    /// </summary>
     private void Start()
     {
         anim = transform.GetChild(0).GetComponent<Animator>();
     }
 
+
+    /// <summary>
+    /// When the player collides with the LevelLoader,
+    /// begins loading the scene to load. 
+    /// <param name="collision">the other collider involved in this collision</param>
+    /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -25,6 +35,10 @@ public class LevelLoader : MonoBehaviour
         }
     }
 
+    /// <summary> 
+    /// Loads the given level.
+    /// <param name="name">the string name of the scene to load</param>
+    /// </summary>
     IEnumerator LoadLevel(string name)
     {
         anim.SetTrigger("Start");

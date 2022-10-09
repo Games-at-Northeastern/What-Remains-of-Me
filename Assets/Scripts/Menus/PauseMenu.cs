@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+/// <summary> 
+/// This class provides the functionalities needed for the pause menu.
+/// </summary>
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject pauseCanvas;
 
-    // Update is called once per frame
+    /// <summary>
+    /// Pauses the game if the "P" key is pressed.
+    /// </summary>
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
@@ -20,6 +26,9 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Pauses the game by opening the pause menu and stopping the game time. 
+    /// </summary>
     void Pause()
     {
         pauseCanvas.SetActive(true);
@@ -27,6 +36,9 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = true;
     }
 
+    /// <summary> 
+    /// Resumes the game by closing the pause menu and starting the game time. 
+    /// </summary>
     public void Resume()
     {
         pauseCanvas.SetActive(false);
@@ -34,6 +46,9 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = false;
     }
 
+    /// <summary>
+    /// Closes the pause menu and goes to the main menu screen.
+    /// </summary>
     public void MainMenu()
     {
         pauseCanvas.SetActive(false);
@@ -41,6 +56,9 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    /// <summary>
+    /// Quits the game and logs the action.
+    /// </summary>
     public void QuitGame()
     {
         Debug.Log("Quitting Game");

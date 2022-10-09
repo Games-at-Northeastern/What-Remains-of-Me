@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+/// <summary> 
+/// This class provides the functionalities for the LevelManager singleton, 
+/// which is used to manage the scene and warp the player between scenes.
+/// </summary>
 public class LevelManager : MonoBehaviour
 {
     private string warpDestination;
@@ -13,6 +18,10 @@ public class LevelManager : MonoBehaviour
     // Singleton
     public static LevelManager Instance { get; private set; }
 
+    /// <summary>
+    /// Since the LevelManager is a singleton, makes sure to keep the same instance 
+    /// of this game object
+    /// </summary> 
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -25,12 +34,22 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// If there is no player reference, sets the player reference to the player game object.
+    /// Do not destroy this singleton object when a new scene is loaded.
+    /// </summary>
     private void Start()
     {
         if (playerRef == null) { playerRef = GameObject.FindGameObjectWithTag("Player"); }
         DontDestroyOnLoad(this);
     }
 
+    /// <summary>
+    /// If there is no player reference, sets the player reference to the player game object.
+    /// If the player is supposed to load into a new scene, loads the player game object
+    /// into the scene at the scene's set load in position.
+    /// If the player presses the "R" key, resets the player at the tutorial scene. 
+    /// </summary>
     private void Update()
     {
         if (playerRef == null) { playerRef = GameObject.FindGameObjectWithTag("Player"); }
@@ -55,12 +74,20 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    /// <summary> 
+    /// Sets the warp destination.
+    /// <param name="warpDestination">the string name of the scene to warp to</param>
+    /// <param name="id">an integer id for the scene to warp to</param> 
+    /// </summary>
     public void SetWarpID(string warpDestination, int id)
     {
         this.warpDestination = warpDestination;
         this.toWarpID = id;
     }
 
+    /// <summary>
+    /// Warps to the set warp destination.
+    /// </summary>
     public void WarpToScene()
     {
         SceneManager.LoadScene(warpDestination);
