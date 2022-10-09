@@ -50,6 +50,10 @@ public class DialogueLeaf : ADialogueTree
         return "";
     }
 
+
+    /// <summary>
+    /// Returns false because a this is the end of a branch of a dialgoue tree.
+    /// </summary>
     public override bool HasNextSegment()
     {
         return false;

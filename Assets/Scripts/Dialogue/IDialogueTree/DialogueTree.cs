@@ -27,6 +27,11 @@ public class DialogueTree : ADialogueTree
         }
     }
 
+
+    /// <summary>
+    /// Advances the current text segment by one character. If the segment
+    /// is complete (at full length), advances to next dialogue tree node.
+    /// </summary> 
     public override void Advance()
     {
         if (inThisNode())
@@ -42,6 +47,11 @@ public class DialogueTree : ADialogueTree
         }
     }
 
+
+    /// <summary>
+    /// Goes straight to the end of the current text segment (puts it at
+    /// full length).
+    /// </summary>
     public override void AdvanceToEnd()
     {
         if (inThisNode())
@@ -54,6 +64,10 @@ public class DialogueTree : ADialogueTree
         }
     }
 
+    /// <summary>
+    /// Gives the current text segment as it is so far. It may not be complete /
+    /// at full length yet.
+    /// </summary>
     public override string GetText()
     {
         if (inThisNode())
@@ -66,6 +80,11 @@ public class DialogueTree : ADialogueTree
         }
     }
 
+
+    /// <summary>
+    /// Advances to the next segment, starting it at 0 characters in length. This
+    /// method needs to be called to obtain the first segment. 
+    /// </summary>
     public override void NextSegment()
     {
         print("Next segment");
@@ -84,6 +103,10 @@ public class DialogueTree : ADialogueTree
         }
     }
 
+
+    /// <summary>
+    /// Is there a next segment?
+    /// </summary>
     public override bool HasNextSegment()
     {
         return (idxOfSegment < segments.Length - 1) || next.HasNextSegment();

@@ -16,6 +16,11 @@ public class DialogueInitiator : MonoBehaviour
     [SerializeField] GameObject dialogueScreen;
     bool inDialogueSequence;
 
+
+    /// <summary> 
+    /// Adds listeners to start the dialogue sequence and end the dialogue sequence 
+    /// when the DialogueInitiator is initialized.
+    /// <summary>
     void Start()
     {
         pdi.OnDialogueRequested.AddListener((d) => StartDialogueSequence(d));
