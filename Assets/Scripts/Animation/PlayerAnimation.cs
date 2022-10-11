@@ -13,11 +13,17 @@ using UnityEngine;
 /// 
 public class PlayerAnimation : MonoBehaviour
 {
-    //the animator object, a built-in unity interface that helps us execeute animations
+    /// <summary>
+    /// the animator object, a built-in unity interface that helps us execeute animations
+    /// </summary>
     private Animator _animator;
-    //a reference to the movement script, to better understand the location of the player
+    /// <summary>
+    /// a reference to the movement script, to better understand the location of the player
+    /// </summary>
     private MovementExecuter _movementExecuter;
-    //a reference to the wire, to better understand the location of the wire
+    /// <summary>
+    /// a reference to the wire, to better understand the location of the wire
+    /// </summary>
     private WireThrower _wireThrower;
 
     /// <summary>
