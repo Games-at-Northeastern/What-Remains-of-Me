@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Represents a moving platform to be activated by an Outlet.
+/// </summary>
 public class PlatformMoving : AControllable
 {
     public List<Animator> platforms;

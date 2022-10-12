@@ -59,6 +59,9 @@ public class WireThrower : MonoBehaviour
         framesHeld = 0;
     }
 
+    /// <summary>
+    /// Function that is passed to the control scheme to handle the start of a throw.
+    /// </summary>
     void HandleThrowInputHeld()
     {
         if (activePlug == null && connectedOutlet == null)
@@ -69,6 +72,10 @@ public class WireThrower : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Function that is passed to the control scheme to handle cancelling a throw when the 
+    /// keyboard/mouse button for this action is released.
+    /// </summary>
     void HandleThrowInputReleasedKeyboard()
     {
         if (activePlug == null && connectedOutlet == null)
@@ -83,6 +90,10 @@ public class WireThrower : MonoBehaviour
         HandlePotentialDisconnect();
     }
 
+    /// <summary>
+    /// Function that is passed to the control scheme to handle cancelling a throw when the 
+    /// controller button for this action is released.
+    /// </summary>
     void HandleThrowInputReleasedController()
     {
         if (activePlug == null && connectedOutlet == null)
@@ -97,6 +108,9 @@ public class WireThrower : MonoBehaviour
         HandlePotentialDisconnect();
     }
 
+    /// <summary>
+    /// Function passed to the control scheme to handle disconnecting the wire when jumping.
+    /// </summary>
     void HandlePotentialDisconnectByJump()
     {
         if (me.GetCurrentMove().DisconnectByJumpOkay())
@@ -105,14 +119,21 @@ public class WireThrower : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles disconnection of wire.
+    /// </summary>
     void HandlePotentialDisconnect()
     {
         if (connectedOutlet != null)
         {
             Disconnect();
         }
-    } 
+    }
 
+    /// <summary>
+    /// Spawns a plug and launches it in the air towards the target outlet (found by calling ChangeOutletTarget).
+    /// Prepares for the possibility of the plug despawning or getting connected.
+    /// </summary>
     void FirePlugLockOn()
     {
         if (lockOnOutlet == null)
@@ -174,6 +195,9 @@ public class WireThrower : MonoBehaviour
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
 
+    /// <summary>
+    /// Sets the lockOnOutlet to the nearest object tagged "Outlet".
+    /// </summary>
     void ChangeOutletTarget()
     {
         if (lockOnOutlet == null)
@@ -359,6 +383,10 @@ public class WireThrower : MonoBehaviour
         distanceJoint.distance = amount;
     }
 
+    /// <summary>
+    /// Determines whether or not the Wire for this WireThrower exits.
+    /// </summary>
+    /// <returns>the state of the line renderer attached to this game object</returns>
     public bool WireExists()
     {
         return lineRenderer.enabled;
