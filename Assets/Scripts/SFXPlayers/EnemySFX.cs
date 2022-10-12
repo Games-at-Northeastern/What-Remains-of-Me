@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// Plays a desired clip when an action is performed by the player
+/// Plays a desired clip when an action is performed by the enemy
 /// </summary>
 public class EnemySFX : MonoBehaviour
 {
