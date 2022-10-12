@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 //A versititle and flexible system for playing sounds from anywhere in the game that has a refrence to this class. 
 //Works in tandem with the Sound.cs class, and used to play Layered Sounds or Songs. 
@@ -22,8 +21,10 @@ using UnityEngine.Audio;
 // 
 // FadeOutSound(string name, float rate)
 // FadeInSound(string name, float rate, float startVol) 
+//
 // FadeOutLayer(string name, int layerID, float rate) 
 // FadeInLayer(string name, int layerID, float rate)
+//
 // SetLayerVolume(string name, int layerID, float percent)
 // 
 
@@ -40,6 +41,8 @@ public class SoundController : MonoBehaviour
     private List<float> soundFadeRate;
     private List<bool> fadeINOUTRequests;
 
+    private AudioSource masterSFXSource; //Audio source for all non-looping sounds. Created on initilization. 
+
     [System.Serializable]
     public struct LayeredSound
     {
@@ -54,23 +57,34 @@ public class SoundController : MonoBehaviour
         soundFadeRate = new List<float>();
         fadeINOUTRequests = new List<bool>();
 
+        //Create an audio source for each non-looping sound effect to share. 
+        masterSFXSource = gameObject.AddComponent<AudioSource>();
         foreach (Sound s in sounds)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clip;
-            s.source.volume = s.baseVolume;
-            s.source.pitch = s.pitch;
-            s.source.loop = s.loop;
-        }
+            //If this is a looping sound, make a new audio layer for it. 
+            if (s.loop)
+            {
+                s.source = gameObject.AddComponent<AudioSource>();
+                s.source.clip = s.clip;
+                s.source.volume = s.baseVolume;
+                s.source.pitch = s.basePitch;
+                s.source.loop = s.loop;
+            } else
+            {
+                //Otherwise, the source for a non-looping sound will be the master audio source created above. 
+                s.source = masterSFXSource;
+            }
+        }     
 
-        for(int i = 0; i < layeredSounds.Length; i++)
+        //Layers in a layered sound must be looping, and each get their own audio source as a result. 
+        for (int i = 0; i < layeredSounds.Length; i++)
         {
             foreach (Sound s in layeredSounds[i].layers)
             {
                 s.source = gameObject.AddComponent<AudioSource>();
                 s.source.clip = s.clip;
                 s.source.volume = s.baseVolume;
-                s.source.pitch = s.pitch;
+                s.source.pitch = s.basePitch;
                 s.source.loop = s.loop;
             }
         }
@@ -118,22 +132,24 @@ public class SoundController : MonoBehaviour
         }
     }
 
-    //Play given sound by name. Volume will be set to base volume. 
+    //Play given looping or non-looping sound by name. Volume will be set to base volume. 
     public void PlaySound(string name)
     {
         foreach (Sound s in sounds)
         {
-            if (s.name == name)
+            if (s.soundName == name)
             {
-                s.source.Play();
-                s.source.volume = s.baseVolume;
-
                 if (s.loop)
                 {
-                    if (!loopingSounds.Contains(s.name))
+                    s.source.Play();
+                    s.source.volume = s.baseVolume;
+                    if (!loopingSounds.Contains(s.soundName))
                     {
-                        loopingSounds.Add(s.name);
+                        loopingSounds.Add(s.soundName);
                     }
+                } else
+                {
+                    s.source.PlayOneShot(s.clip, s.baseVolume);
                 }
 
                 return;
@@ -144,16 +160,16 @@ public class SoundController : MonoBehaviour
         {
             for (int x = 0; x < layeredSounds[i].layers.Length; x++)
             {
-                if (layeredSounds[i].layers[x].name == name)
+                if (layeredSounds[i].layers[x].soundName == name)
                 {
                     layeredSounds[i].layers[x].source.Play();
                     layeredSounds[i].layers[x].source.volume = layeredSounds[i].layers[x].baseVolume;
 
                     if (layeredSounds[i].layers[x].loop)
                     {
-                        if (!loopingSounds.Contains(layeredSounds[i].layers[x].name))
+                        if (!loopingSounds.Contains(layeredSounds[i].layers[x].soundName))
                         {
-                            loopingSounds.Add(layeredSounds[i].layers[x].name);
+                            loopingSounds.Add(layeredSounds[i].layers[x].soundName);
                         }
                     }
 
@@ -163,18 +179,17 @@ public class SoundController : MonoBehaviour
         }
     }
 
-    //Pause given sound by name, if it is playing.
+    //Pause given sound by name, if it is a looping sound.
     public void PauseSound(string name)
     {
         foreach (Sound s in sounds)
         {
-            if (s.name == name)
+            if (s.soundName == name)
             {
-                s.source.Pause();
-
                 if (s.loop)
                 {
-                    loopingSounds.Remove(s.name);
+                    s.source.Pause();
+                    loopingSounds.Remove(s.soundName);
                 }
                 return;
             }
@@ -184,13 +199,12 @@ public class SoundController : MonoBehaviour
         {
             for (int x = 0; x < layeredSounds[i].layers.Length; x++)
             {
-                if (layeredSounds[i].layers[x].name == name)
+                if (layeredSounds[i].layers[x].soundName == name)
                 {
-                    layeredSounds[i].layers[x].source.Pause();
-
                     if (layeredSounds[i].layers[x].loop)
                     {
-                        loopingSounds.Remove(layeredSounds[i].layers[x].name);
+                        layeredSounds[i].layers[x].source.Pause();
+                        loopingSounds.Remove(layeredSounds[i].layers[x].soundName);
                     }
                     return;
                 }
@@ -219,9 +233,9 @@ public class SoundController : MonoBehaviour
 
                     if (s.layers[i].loop)
                     {
-                        if (!loopingSounds.Contains(s.layers[i].name))
+                        if (!loopingSounds.Contains(s.layers[i].soundName))
                         {
-                            loopingSounds.Add(s.layers[i].name);
+                            loopingSounds.Add(s.layers[i].soundName);
                         }
                     }
                 }
@@ -235,9 +249,9 @@ public class SoundController : MonoBehaviour
     {
         foreach (Sound s in sounds)
         {
-            if (s.name == name)
-            {
-                if (soundsToFade.Contains(name))
+            if (s.soundName == name)
+            { 
+                if (soundsToFade.Contains(name) || s.loop == false)
                 {
                     return;
                 }
@@ -256,9 +270,9 @@ public class SoundController : MonoBehaviour
     {
         foreach (Sound s in sounds)
         {
-            if (s.name == name)
+            if (s.soundName == name)
             {
-                if (soundsToFade.Contains(name))
+                if (soundsToFade.Contains(name) || s.loop == false)
                 {
                     return;
                 }
@@ -267,7 +281,7 @@ public class SoundController : MonoBehaviour
                 soundFadeRate.Add(rate);
                 fadeINOUTRequests.Add(true);
 
-                PlaySound(s.name);
+                PlaySound(s.soundName);
                 s.source.volume = startVol;
                 return;
             }
@@ -283,12 +297,12 @@ public class SoundController : MonoBehaviour
             {
                 if(layerID < s.layers.Length)
                 {
-                    if (soundsToFade.Contains(s.layers[layerID].name))
+                    if (soundsToFade.Contains(s.layers[layerID].soundName))
                     {
                         return;
                     }
 
-                    soundsToFade.Add(s.layers[layerID].name);
+                    soundsToFade.Add(s.layers[layerID].soundName);
                     soundFadeRate.Add(rate);
                     fadeINOUTRequests.Add(false);
                     return;
@@ -309,12 +323,12 @@ public class SoundController : MonoBehaviour
             {
                 if (layerID < s.layers.Length)
                 {
-                    if (soundsToFade.Contains(s.layers[layerID].name))
+                    if (soundsToFade.Contains(s.layers[layerID].soundName))
                     {
                         return;
                     }
 
-                    soundsToFade.Add(s.layers[layerID].name);
+                    soundsToFade.Add(s.layers[layerID].soundName);
                     soundFadeRate.Add(rate);
                     fadeINOUTRequests.Add(true);
                     return;
@@ -355,7 +369,7 @@ public class SoundController : MonoBehaviour
     {
         foreach (Sound s in sounds)
         {
-            if (s.name == name)
+            if (s.soundName == name)
             {
                 return s.source;
             }
@@ -365,7 +379,7 @@ public class SoundController : MonoBehaviour
         {
             for(int x = 0; x < layeredSounds[i].layers.Length; x++)
             {
-                if (layeredSounds[i].layers[x].name == name)
+                if (layeredSounds[i].layers[x].soundName == name)
                 {
                     return layeredSounds[i].layers[x].source;
                 }                
@@ -380,7 +394,7 @@ public class SoundController : MonoBehaviour
     {
         foreach (Sound s in sounds)
         {
-            if (s.name == name)
+            if (s.soundName == name)
             {
                 return s.baseVolume;
             }
