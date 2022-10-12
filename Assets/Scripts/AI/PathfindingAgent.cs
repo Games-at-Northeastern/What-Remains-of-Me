@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-
+/// <summary>
+/// Class the represents Pathfinding for the AI
+/// </summary>
 public class PathfindingAgent : MonoBehaviour
 {
     public GridObject grid;
@@ -30,6 +32,10 @@ public class PathfindingAgent : MonoBehaviour
 
     private Vector3Int DEFAULT_VECTOR3INT = new Vector3Int(-9999, -9999, -9999);
 
+    /// <summary>
+    /// Initialize the Pathfinding Agent with the body, grid, time, start,
+    /// and path
+    /// </summary>
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -39,6 +45,11 @@ public class PathfindingAgent : MonoBehaviour
         path = new List<Vector3Int>();
     }
 
+    /// <summary>
+    /// Every Tick, initilize a path finding map if it doesnt exist,
+    /// at the start of following create A* Algorithim,
+    /// Move on Path.
+    /// </summary>
     private void Update()
     {
         if (pathfindingMap == null)
@@ -57,11 +68,18 @@ public class PathfindingAgent : MonoBehaviour
         currentTime -= Time.fixedDeltaTime;
     }
 
+    /// <summary>
+    /// Set the AI's target to the given object
+    /// </summary>
+    /// <param name="target">Target to be set for the AI's path finding</param>
     public void SetTarget(Transform target)
     {
         this.target = target;
     }
 
+    /// <summary>
+    /// Increment the AI's path and move it.
+    /// </summary>
     private void MoveOnPath()
     {
         Vector3Int[] pathArray = path.ToArray();
@@ -74,6 +92,10 @@ public class PathfindingAgent : MonoBehaviour
         ((BehaviorTree)ai).Move(pathfindingMap.GetWorldPosition(pathArray[pathIndex].x, pathArray[pathIndex].y));
     }
 
+    /// <summary>
+    /// Debugging method to print out the given path
+    /// </summary>
+    /// <param name="path">path list to be printed</param>
     private void PrintPath(List<Vector3Int> path)
     {
         Vector3Int[] pathArray = path.ToArray();
@@ -87,6 +109,12 @@ public class PathfindingAgent : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Finds the neighbors along the Path
+    /// </summary>
+    /// <param name="pos">Given Vector Position</param>
+    /// <returns>The neighbors found</returns>
     private List<Vector3Int> FindNeighbors(Vector3Int pos)
     {
         List<Vector3Int> neighbors = new List<Vector3Int>();
@@ -106,6 +134,12 @@ public class PathfindingAgent : MonoBehaviour
         return neighbors;
     }
 
+    /// <summary>
+    /// Gets the cost between the given current and given next vectors
+    /// </summary>
+    /// <param name="current">Current vector to start from</param>
+    /// <param name="next">End vector to compare to</param>
+    /// <returns>Cost from vectors</returns>
     private float GetCost(Vector3Int current, Vector3Int next)
     {
         float cost = 1f;
@@ -113,6 +147,14 @@ public class PathfindingAgent : MonoBehaviour
         return cost;
     }
 
+
+    /// <summary>
+    /// Finds absolute difference from the x and y between the two inputs
+    /// and returns a Heuristic Value
+    /// </summary>
+    /// <param name="target">Target Vector</param>
+    /// <param name="next">Next Vector</param>
+    /// <returns>Heuristic result</returns>
     private float Heuristic(Vector3Int target, Vector3Int next)
     {
         float D = 1f;
@@ -122,6 +164,11 @@ public class PathfindingAgent : MonoBehaviour
         return D * (dx + dy) + (D2 - 2 * D) * Mathf.Min(dx, dy);
     }
 
+
+    /// <summary>
+    /// A* pathing Algoritihm for AI pathing
+    /// </summary>
+    /// <returns>the path found</returns>
     private List<Vector3Int> AstarAlgorithm()
     {
         bool endFound = false;
