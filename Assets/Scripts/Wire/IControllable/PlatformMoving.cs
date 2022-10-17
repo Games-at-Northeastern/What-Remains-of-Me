@@ -11,6 +11,9 @@ public class PlatformMoving : AControllable
 
     private bool hasMoved = false;
 
+    /// <summary>
+    /// Updates the platforms by moving them when the battery percentage of the platform is full or empty.
+    /// </summary>
     private void Update()
     {
         if ((this.GetPercentFull() == 1 || this.GetPercentFull() == 0) && !hasMoved)

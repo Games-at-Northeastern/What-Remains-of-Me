@@ -17,6 +17,9 @@ public class ControllableDoor : AControllable
         initPos = transform.position;
     }
 
+    /// <summary>
+    /// Updates the door's position based on the amount of energy supplied to it.
+    /// </summary>
     void Update()
     {
         transform.position = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, energy / maxEnergy);

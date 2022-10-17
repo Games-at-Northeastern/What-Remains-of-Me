@@ -10,6 +10,9 @@ using UnityEngine;
 /// </summary>
 public class EnemyBattery : AControllable
 {
+    /// <summary> 
+    /// This EnemyBattery class has not been implemented, but it logs the amount of energy in an enemy.
+    /// </summary>
     private void Update()
     {
         if (energy / maxEnergy != 0 && energy / maxEnergy != 1)
