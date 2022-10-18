@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface BehaviorTree
+public interface IBehaviorTree
     {
         // Initializes structure of behavior tree.
         public void InitializeBehaviorTree();

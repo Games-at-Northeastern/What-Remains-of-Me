@@ -6,11 +6,11 @@ using UnityEngine;
 // success.
 public abstract class Node
     {
-        protected bool isSuccess;
+        protected bool _isSuccess;
 
         public bool GetSuccess()
         {
-            return isSuccess;
+            return _isSuccess;
         }
 
         public abstract bool Process();

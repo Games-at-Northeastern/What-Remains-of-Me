@@ -73,12 +73,12 @@ public class SurveillanceBotAI : MonoBehaviour
     /// </summary>
     public void AlertMode()
     {
-        var enemies = FindObjectsOfType<MonoBehaviour>().OfType<BehaviorTree>();
+        var enemies = FindObjectsOfType<MonoBehaviour>().OfType<IBehaviorTree>();
         foreach (MonoBehaviour enemy in enemies)
         {
             if (Vector3.Distance(this.gameObject.transform.position, enemy.gameObject.transform.position) <= alertRange)
             {
-                ((BehaviorTree)enemy).Alerted();
+                ((IBehaviorTree)enemy).Alerted();
             }
         }
 

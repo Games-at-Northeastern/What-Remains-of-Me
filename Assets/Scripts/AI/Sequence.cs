@@ -6,25 +6,25 @@ using UnityEngine;
 // true if all children are true.
 public class Sequence : Node
     {
-        protected List<Node> children;
+        protected List<Node> _children;
 
         public Sequence(List<Node> nodes)
         {
-            children = nodes;
+            _children = nodes;
         }
 
         public override bool Process()
         {
-            foreach (Node child in children)
+            foreach (Node child in _children)
             {
                 if (!child.Process())
                 {
-                    isSuccess = false;
+                    _isSuccess = false;
                     return false;
                 }
             }
 
-            isSuccess = true;
+            _isSuccess = true;
             return true;
         }
     }

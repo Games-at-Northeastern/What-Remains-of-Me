@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class PathfindingMinheap
 {
-    private List<Tuple<Vector3Int, float>> heap;
+    private List<Tuple<Vector3Int, float>> _heap;
 
 
     /// <summary>
@@ -16,7 +16,7 @@ public class PathfindingMinheap
     /// </summary>
     public PathfindingMinheap()
     {
-        heap = new List<Tuple<Vector3Int, float>>();
+        _heap = new List<Tuple<Vector3Int, float>>();
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public class PathfindingMinheap
     /// <param name="priority">Its priority</param>
     public void Add(Vector3Int pos, float priority)
     {
-        heap.Add(new Tuple<Vector3Int, float>(pos, priority));
+        _heap.Add(new Tuple<Vector3Int, float>(pos, priority));
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public class PathfindingMinheap
     private Tuple<Vector3Int, float> GetTopTuple()
     {
         Tuple<Vector3Int, float> bottom = new Tuple<Vector3Int, float>(new Vector3Int(-9999, -9999, -9999), 9999);
-        foreach (Tuple<Vector3Int, float> pair in heap)
+        foreach (Tuple<Vector3Int, float> pair in _heap)
         {
             if (bottom.Item2 > pair.Item2)
             {
@@ -64,7 +64,7 @@ public class PathfindingMinheap
     {
         Tuple<Vector3Int, float> bottom = GetTopTuple();
         Vector3Int bottomPos = bottom.Item1;
-        heap.Remove(bottom);
+        _heap.Remove(bottom);
         return bottomPos;
     }
 
@@ -75,6 +75,6 @@ public class PathfindingMinheap
     /// <returns>If the heap is empty</returns>
     public bool IsEmpty()
     {
-        return heap.Count == 0;
+        return _heap.Count == 0;
     }
 }

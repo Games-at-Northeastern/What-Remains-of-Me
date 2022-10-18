@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Class that represents and supports the behavior of enemy AI. 
 /// </summary>
-public class BasicEnemyAI : MonoBehaviour, BehaviorTree
+public class BasicEnemyAI : MonoBehaviour, IBehaviorTree
 {
     public GameObject player;
     public EnemyBattery battery;
@@ -271,10 +271,10 @@ public class BasicEnemyAI : MonoBehaviour, BehaviorTree
         {
             if (Vector3.Distance(player.position, enemy.position) <= radius)
             {
-                isSuccess = true;
+                _isSuccess = true;
                 return true;
             }
-            isSuccess = false;
+            _isSuccess = false;
             return false;
         }
     }
@@ -305,7 +305,7 @@ public class BasicEnemyAI : MonoBehaviour, BehaviorTree
         public override bool Process()
         {
             aiRef.isFollowing = false;
-            isSuccess = true;
+            _isSuccess = true;
             return true;
         }
     }
@@ -335,7 +335,7 @@ public class BasicEnemyAI : MonoBehaviour, BehaviorTree
         public override bool Process()
         {
             aiRef.isFollowing = true;
-            isSuccess = true;
+            _isSuccess = true;
             return true;
         }
     }
@@ -365,9 +365,9 @@ public class BasicEnemyAI : MonoBehaviour, BehaviorTree
         /// <returns>the isSuccess result</returns>
         public override bool Process()
         {
-            isSuccess = (battery.GetPercentFull() == 0 || battery.GetPercentFull() == 1);
-            aiRef.isDead = isSuccess;
-            return isSuccess;
+            _isSuccess = (battery.GetPercentFull() == 0 || battery.GetPercentFull() == 1);
+            aiRef.isDead = _isSuccess;
+            return _isSuccess;
         }
     }
 }
