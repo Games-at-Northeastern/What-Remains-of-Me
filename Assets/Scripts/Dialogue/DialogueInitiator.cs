@@ -11,47 +11,48 @@ using UnityEngine;
 /// </summary>
 public class DialogueInitiator : MonoBehaviour
 {
-    [SerializeField] PlayerDialogueInteractor pdi;
-    [SerializeField] DialoguePlayer dp;
-    [SerializeField] GameObject dialogueScreen;
-    bool inDialogueSequence;
+  [SerializeField] private PlayerDialogueInteractor pdi;
+  [SerializeField] private DialoguePlayer dp;
+  [SerializeField] private GameObject dialogueScreen;
+  private bool _inDialogueSequence;
 
 
-    /// <summary> 
-    /// Adds listeners to start the dialogue sequence and end the dialogue sequence 
-    /// when the DialogueInitiator is initialized.
-    /// <summary>
-    void Start()
+  /// <summary> 
+  /// Adds listeners to start the dialogue sequence and end the dialogue sequence 
+  /// when the DialogueInitiator is initialized.
+  /// </summary>
+  private void Start()
+  {
+    pdi.OnDialogueRequested.AddListener((d) => StartDialogueSequence(d));
+    dp.onDialogueEnd.AddListener(() => EndDialogueSequence());
+  }
+
+  /// <summary>
+  /// Initiates a dialogue sequence from the given Dialogue.
+  /// </summary>
+  /// <param name="d">The dialogue to be played</param>
+  public void StartDialogueSequence(Dialogue d)
+  {
+    if (_inDialogueSequence)
     {
-        pdi.OnDialogueRequested.AddListener((d) => StartDialogueSequence(d));
-        dp.onDialogueEnd.AddListener(() => EndDialogueSequence());
+      return;
     }
+    _inDialogueSequence = true;
+    dialogueScreen.SetActive(true);
+    dp.PlayDialogue(d);
+    GamePauseHandler.setPausedForDialogue(true);
+  }
 
-    /// <summary>
-    /// Initiates a dialogue sequence from the given Dialogue.
-    /// </summary>
-    /// <param name="d">The dialogue to be played</param>
-    public void StartDialogueSequence(Dialogue d)
+  /// <summary>
+  /// Ends the current dialogue sequence if one has been initiated.
+  /// </summary>
+  public void EndDialogueSequence()
+  {
+    if (_inDialogueSequence)
     {
-        if (!inDialogueSequence)
-        {
-            inDialogueSequence = true;
-            dialogueScreen.SetActive(true);
-            dp.PlayDialogue(d);
-            GamePauseHandler.setPausedForDialogue(true);
-        }
+      _inDialogueSequence = false;
+      dialogueScreen.SetActive(false);
+      GamePauseHandler.setPausedForDialogue(false);
     }
-
-    /// <summary>
-    /// Ends the current dialogue sequence if one has been initiated.
-    /// </summary>
-    public void EndDialogueSequence()
-    {
-        if (inDialogueSequence)
-        {
-            inDialogueSequence = false;
-            dialogueScreen.SetActive(false);
-            GamePauseHandler.setPausedForDialogue(false);
-        }
-    }
+  }
 }

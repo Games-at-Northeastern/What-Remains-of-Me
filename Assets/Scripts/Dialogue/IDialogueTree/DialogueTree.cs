@@ -3,173 +3,178 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This class seems to represent a dialgue tree that provides the capabilities
-/// to utilize multiple segements of dialogue that can be displayed onto the screen
+/// This class seems to represent a dialogue tree that provides the capabilities
+/// to utilize multiple segments of dialogue that can be displayed onto the screen
 /// comments seem written well
 /// </summary>
 public class DialogueTree : ADialogueTree
 {
-    [SerializeField] string[] segments;
-    [SerializeField] ADialogueTree next; // null represents that this is a leaf (end of tree)
-    int idxOfSegment = -1; // Which segment is being written. Out-of-range index means the next node is being read.
-    int segmentLength = 0; // How many characters of the current segment are written
+  [SerializeField] private string[] segments;
+  [SerializeField] private ADialogueTree next; // null represents that this is a leaf (end of tree)
 
-    /// <summary>
-    /// It seems that all this is supposed to do is that
-    /// in the even that there is no dialogue left, it
-    /// Will basically just signal that theres an issue.
-    /// </summary>
-    void Awake()
+  // Which segment is being written. Out-of-range index means the next node is being read.
+  private int _idxOfSegment = -1;
+
+  private int _segmentLength = 0; // How many characters of the current segment are written
+
+  /// <summary>
+  /// It seems that all this is supposed to do is that
+  /// in the even that there is no dialogue left, it
+  /// Will basically just signal that theres an issue.
+  /// </summary>
+  private void Awake()
+  {
+    if (segments.Length == 0)
     {
-        if (segments.Length == 0)
-        {
-            Debug.LogError("No dialogues exist in this dialogue node. This does not make sense.");
-        }
+      Debug.LogError("No dialogues exist in this dialogue node. This does not make sense.");
     }
+  }
 
 
-    /// <summary>
-    /// Advances the current text segment by one character. If the segment
-    /// is complete (at full length), advances to next dialogue tree node.
-    /// </summary> 
-    public override void Advance()
+  /// <summary>
+  /// Advances the current text segment by one character. If the segment
+  /// is complete (at full length), advances to next dialogue tree node.
+  /// </summary> 
+  public override void Advance()
+  {
+    if (InThisNode())
     {
-        if (inThisNode())
-        {
-            if (segmentLength < segments[idxOfSegment].Length) // If there is more to be advanced in the current segment
-            {
-                segmentLength++;
-            }
-        }
-        else
-        {
-            next.Advance();
-        }
+      // If there is more to be advanced in the current segment
+      if (_segmentLength < segments[_idxOfSegment].Length)
+      {
+        _segmentLength++;
+      }
     }
-
-
-    /// <summary>
-    /// Goes straight to the end of the current text segment (puts it at
-    /// full length).
-    /// </summary>
-    public override void AdvanceToEnd()
+    else
     {
-        if (inThisNode())
-        {
-            segmentLength = segments[idxOfSegment].Length;
-        }
-        else
-        {
-            next.AdvanceToEnd();
-        }
+      next.Advance();
     }
+  }
 
-    /// <summary>
-    /// Gives the current text segment as it is so far. It may not be complete /
-    /// at full length yet.
-    /// </summary>
-    public override string GetText()
+
+  /// <summary>
+  /// Goes straight to the end of the current text segment (puts it at
+  /// full length).
+  /// </summary>
+  public override void AdvanceToEnd()
+  {
+    if (InThisNode())
     {
-        if (inThisNode())
-        {
-            return segments[idxOfSegment].Substring(0, segmentLength);
-        }
-        else
-        {
-            return next.GetText();
-        }
+      _segmentLength = segments[_idxOfSegment].Length;
     }
-
-
-    /// <summary>
-    /// Advances to the next segment, starting it at 0 characters in length. This
-    /// method needs to be called to obtain the first segment. 
-    /// </summary>
-    public override void NextSegment()
+    else
     {
-        print("Next segment");
-        if (inThisNode())
-        {
-            idxOfSegment++;
-            segmentLength = 0;
-            if (idxOfSegment == segments.Length) // If this puts the segment index at the edge, go to index 0 in the next tree
-            {
-                next.NextSegment();
-            }
-        }
-        else
-        {
-            next.NextSegment();
-        }
+      next.AdvanceToEnd();
     }
+  }
 
-
-    /// <summary>
-    /// Is there a next segment?
-    /// </summary>
-    public override bool HasNextSegment()
+  /// <summary>
+  /// Gives the current text segment as it is so far. It may not be complete /
+  /// at full length yet.
+  /// </summary>
+  public override string GetText()
+  {
+    if (InThisNode())
     {
-        return (idxOfSegment < segments.Length - 1) || next.HasNextSegment();
+      return segments[_idxOfSegment].Substring(0, _segmentLength);
     }
-
-    public override bool SegmentIsComplete()
+    else
     {
-        if (inThisNode())
-        {
-            return segmentLength == segments[idxOfSegment].Length;
-        }
-        else
-        {
-            return next.SegmentIsComplete();
-        }
+      return next.GetText();
     }
+  }
 
 
-    /// <summary>
-    /// As of now it appears this functionality isn't supported
-    /// and now only debugs.
-    /// </summary>
-    /// <returns> nothing if no responses exist,
-    /// otherwise return response array of a size one or greater </returns>
-    public override string[] GetResponses()
+  /// <summary>
+  /// Advances to the next segment, starting it at 0 characters in length. This
+  /// method needs to be called to obtain the first segment. 
+  /// </summary>
+  public override void NextSegment()
+  {
+    print("Next segment");
+    if (InThisNode())
     {
-        Debug.LogError("Unimplemented Method");
-        return null;
+      _idxOfSegment++;
+      _segmentLength = 0;
+      
+      // If this puts the segment index at the edge, go to index 0 in the next tree
+      if (_idxOfSegment == segments.Length)
+      {
+        next.NextSegment();
+      }
     }
-
-
-    /// <summary>
-    /// As of now it appears this functionality isn't supported
-    /// and now only debugs.
-    /// </summary>
-    /// <param name="index"> segment index to retrive response from </param>
-    public override void ChooseResponse(int index)
+    else
     {
-        Debug.LogError("Unimplemented Method");
-        // Nothing
+      next.NextSegment();
     }
+  }
 
-    public override void Reset()
+
+  /// <summary>
+  /// Is there a next segment?
+  /// </summary>
+  public override bool HasNextSegment()
+  {
+    return _idxOfSegment < segments.Length - 1 || next.HasNextSegment();
+  }
+
+  public override bool SegmentIsComplete()
+  {
+    if (InThisNode())
     {
-        idxOfSegment = -1;
-        segmentLength = 0;
-        next.Reset();
+      return _segmentLength == segments[_idxOfSegment].Length;
     }
-
-    // <summary>
-    // Are this node's dialogues still being read?
-    // </summary>
-
-    /// <summary>
-    /// Appears that this is a method offered by this class specifically
-    /// to check if the dialouge still has stuff to read by checking if
-    /// where you are reading is less that the length of your dialouge
-    /// </summary>
-    /// <returns> return false if the segment index is less than
-    /// the amount of segments that exist </returns>
-    private bool inThisNode()
+    else
     {
-        return idxOfSegment < segments.Length;
+      return next.SegmentIsComplete();
     }
+  }
+
+
+  /// <summary>
+  /// As of now it appears this functionality isn't supported
+  /// and now only debugs.
+  /// </summary>
+  /// <returns> nothing if no responses exist,
+  /// otherwise return response array of a size one or greater </returns>
+  public override string[] GetResponses()
+  {
+    Debug.LogError("Unimplemented Method");
+    return null;
+  }
+
+
+  /// <summary>
+  /// As of now it appears this functionality isn't supported
+  /// and now only debugs.
+  /// </summary>
+  /// <param name="index"> segment index to retrieve response from </param>
+  public override void ChooseResponse(int index)
+  {
+    Debug.LogError("Unimplemented Method");
+    // Nothing
+  }
+
+  public override void Reset()
+  {
+    _idxOfSegment = -1;
+    _segmentLength = 0;
+    next.Reset();
+  }
+
+  // <summary>
+  // Are this node's dialogues still being read?
+  // </summary>
+
+  /// <summary>
+  /// Appears that this is a method offered by this class specifically
+  /// to check if the dialogue still has stuff to read by checking if
+  /// where you are reading is less that the length of your dialogue
+  /// </summary>
+  /// <returns> return false if the segment index is less than
+  /// the amount of segments that exist </returns>
+  private bool InThisNode()
+  {
+    return _idxOfSegment < segments.Length;
+  }
 }
-

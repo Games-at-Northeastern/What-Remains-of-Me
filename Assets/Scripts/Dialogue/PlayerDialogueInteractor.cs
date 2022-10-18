@@ -10,53 +10,58 @@ using UnityEngine;
 /// </summary>
 public class PlayerDialogueInteractor : MonoBehaviour
 {
-    Dialogue activeDialogue; // Either the dialogue being prompted or the dialogue being read
-    [SerializeField] CollisionDetector dialogueCollisionDetector;
-    [SerializeField] GameObject promptSprite; // There is only one prompt sprite in the game, and it is either inactive or over a specific dialogue holding gameObject.
-    public DialogueEvent OnDialogueRequested = new DialogueEvent();
-    ControlSchemes cs;
+  private Dialogue _activeDialogue; // Either the dialogue being prompted or the dialogue being read
+  [SerializeField] private CollisionDetector dialogueCollisionDetector;
 
-    private void Start()
-    {
-        cs = new ControlSchemes();
-        cs.Enable();
-        cs.Player.Dialogue.performed += _ => PlayDialogue();
-    }
+  // There is only one prompt sprite in the game, and it is either
+  // inactive or over a specific dialogue holding gameObject.
+  [SerializeField] private GameObject promptSprite; 
 
-    /// <summary>
-    /// Has a dialogue take place, if there is an active dialogue prompt.
-    /// </summary>
-    void PlayDialogue()
-    {
-        if (activeDialogue != null)
-        {
-            promptSprite.SetActive(false);
-            OnDialogueRequested.Invoke(activeDialogue);
-            print("Dialogue Requested");
-        }
-    }
+  public DialogueEvent OnDialogueRequested = new();
+  private ControlSchemes _cs;
 
-    /// <summary>
-    /// Update whether a dialogue prompt is active or not,
-    /// and update the placement of the prompt sprite.
-    /// </summary>
-    private void Update()
+  private void Start()
+  {
+    _cs = new ControlSchemes();
+    _cs.Enable();
+    _cs.Player.Dialogue.performed += _ => PlayDialogue();
+  }
+
+  /// <summary>
+  /// Has a dialogue take place, if there is an active dialogue prompt.
+  /// </summary>
+  private void PlayDialogue()
+  {
+    if (_activeDialogue != null)
     {
-        GameObject dGameObject = dialogueCollisionDetector.CollidingWith(); // d should have dialogue component if able to be collided with by dialogueCollisionDetector
-        if (dGameObject != null)
-        {
-            Dialogue dialogue = dGameObject.GetComponent<Dialogue>();
-            if (dialogue != activeDialogue)
-            {
-                promptSprite.transform.position = dialogue.GetPromptTransform().position;
-                promptSprite.SetActive(true);
-                activeDialogue = dialogue;
-            }
-        }
-        else
-        {
-            activeDialogue = null;
-            promptSprite.SetActive(false);
-        }
+      promptSprite.SetActive(false);
+      OnDialogueRequested.Invoke(_activeDialogue);
+      print("Dialogue Requested");
     }
+  }
+
+  /// <summary>
+  /// Update whether a dialogue prompt is active or not,
+  /// and update the placement of the prompt sprite.
+  /// </summary>
+  private void Update()
+  {
+    // d should have dialogue component if able to be collided with by dialogueCollisionDetector
+    GameObject dGameObject = dialogueCollisionDetector.CollidingWith(); 
+    if (dGameObject != null)
+    {
+      var dialogue = dGameObject.GetComponent<Dialogue>();
+      if (dialogue != _activeDialogue)
+      {
+        promptSprite.transform.position = dialogue.GetPromptTransform().position;
+        promptSprite.SetActive(true);
+        _activeDialogue = dialogue;
+      }
+    }
+    else
+    {
+      _activeDialogue = null;
+      promptSprite.SetActive(false);
+    }
+  }
 }
