@@ -24,6 +24,10 @@ namespace UI.PlayerVirusMeter
         {
             _playerVirusMeterUI = _playerVirusMeterUIMB;
             _virusReactiveProperty = _virusReactivePropertySO;
+            
+            // Get the virus UI to sync up with player virus stat when the scene is loaded
+            // This only has to happen once, it will automatically update hereafter
+            _playerVirusMeterUI.SetVirusPercentage(_virusReactiveProperty.Value);
         }
 
         private void OnEnable()
