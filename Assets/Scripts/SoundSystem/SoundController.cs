@@ -30,7 +30,9 @@ using UnityEngine;
 
 public class SoundController : MonoBehaviour
 {
-    public Sound[] sounds; //The list of all sounds/songs used in this level, scene etc. There should only be 1 sound of each name.
+    public SoundPackPresets[] soundPresets;
+
+    public List<Sound> sounds; //The list of all sounds/songs used in this level, scene etc. There should only be 1 sound of each name.
 
     public LayeredSound[] layeredSounds; //The list of all the layered sounds/songs for this context. Composed of several sounds. 
 
@@ -54,6 +56,27 @@ public class SoundController : MonoBehaviour
         soundsToFade = new List<string>();
         soundFadeRate = new List<float>();
         fadeINOUTRequests = new List<bool>();
+
+        //Loop through presets to determine if a certain group of sounds is needed
+        foreach (SoundPackPresets s in soundPresets)
+        {
+            switch (s)
+            {
+                case SoundPackPresets.Player:
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Player_WalkLeftFoot"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Player_WalkRightFoot"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Player_JumpUp"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Swing"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Damaged"));
+                    break;
+                case SoundPackPresets.Enemy:
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Enemy_Walk"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Enemy_Attack"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Enemy_Overloaded"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Enemy_Drained"));
+                    break;
+            }
+        }
 
         //Create an audio source for each non-looping sound effect to share. 
         foreach (Sound s in sounds)
@@ -398,4 +421,13 @@ public class SoundController : MonoBehaviour
         return 1;
     }
 
+}
+
+//To avoid repetiton of having to drag in the same sounds to each sound controller,
+//make custom 'sets' of sounds that each SoundController can have to load in a group all at once
+//ie. one containing all the player's sfx etc.. 
+public enum SoundPackPresets
+{
+    Player,
+    Enemy
 }
