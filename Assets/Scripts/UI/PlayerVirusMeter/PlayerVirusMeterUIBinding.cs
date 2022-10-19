@@ -14,26 +14,26 @@ namespace UI.PlayerVirusMeter
     {
         #region DependencyInjection
         [SerializeField] private PlayerVirusMeterUI _playerVirusMeterUIMB;
-        [SerializeField] private FloatReactivePropertySO _healthReactivePropertySO;
+        [SerializeField] private FloatReactivePropertySO _virusReactivePropertySO;
         #endregion
         
         private IPlayerVirusMeterUI _playerVirusMeterUI;
-        private IFloatReactiveProperty _healthReactiveProperty;
+        private IFloatReactiveProperty _virusReactiveProperty;
 
         void Awake()
         {
             _playerVirusMeterUI = _playerVirusMeterUIMB;
-            _healthReactiveProperty = _healthReactivePropertySO;
+            _virusReactiveProperty = _virusReactivePropertySO;
         }
 
         private void OnEnable()
         {
-            _healthReactiveProperty.SubscribeListener(_playerVirusMeterUI.SetVirusPercentage);
+            _virusReactiveProperty.SubscribeListener(_playerVirusMeterUI.SetVirusPercentage);
         }
 
         private void OnDisable()
         {
-            _healthReactiveProperty.UnsubscribeListener(_playerVirusMeterUI.SetVirusPercentage);
+            _virusReactiveProperty.UnsubscribeListener(_playerVirusMeterUI.SetVirusPercentage);
         }
     }
 }
