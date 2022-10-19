@@ -41,8 +41,6 @@ public class SoundController : MonoBehaviour
     private List<float> soundFadeRate;
     private List<bool> fadeINOUTRequests;
 
-    private AudioSource masterSFXSource; //Audio source for all non-looping sounds. Created on initilization. 
-
     [System.Serializable]
     public struct LayeredSound
     {
@@ -58,22 +56,13 @@ public class SoundController : MonoBehaviour
         fadeINOUTRequests = new List<bool>();
 
         //Create an audio source for each non-looping sound effect to share. 
-        masterSFXSource = gameObject.AddComponent<AudioSource>();
         foreach (Sound s in sounds)
         {
-            //If this is a looping sound, make a new audio layer for it. 
-            if (s.loop)
-            {
-                s.source = gameObject.AddComponent<AudioSource>();
-                s.source.clip = s.clip;
-                s.source.volume = s.baseVolume;
-                s.source.pitch = s.basePitch;
-                s.source.loop = s.loop;
-            } else
-            {
-                //Otherwise, the source for a non-looping sound will be the master audio source created above. 
-                s.source = masterSFXSource;
-            }
+            s.source = gameObject.AddComponent<AudioSource>();
+            s.source.clip = s.clip;
+            s.source.volume = s.baseVolume;
+            s.source.pitch = s.basePitch;
+            s.source.loop = s.loop;
         }     
 
         //Layers in a layered sound must be looping, and each get their own audio source as a result. 
@@ -139,19 +128,17 @@ public class SoundController : MonoBehaviour
         {
             if (s.soundName == name)
             {
+                s.source.Stop();
+                s.source.Play();
+                s.source.volume = s.baseVolume;
+
                 if (s.loop)
-                {
-                    s.source.Play();
-                    s.source.volume = s.baseVolume;
+                {                
                     if (!loopingSounds.Contains(s.soundName))
                     {
                         loopingSounds.Add(s.soundName);
                     }
-                } else
-                {
-                    s.source.PlayOneShot(s.clip, s.baseVolume);
                 }
-
                 return;
             }
         }
@@ -179,16 +166,16 @@ public class SoundController : MonoBehaviour
         }
     }
 
-    //Pause given sound by name, if it is a looping sound.
+    //Pause given sound by name.
     public void PauseSound(string name)
     {
         foreach (Sound s in sounds)
         {
             if (s.soundName == name)
             {
+                s.source.Pause();
                 if (s.loop)
-                {
-                    s.source.Pause();
+                {                
                     loopingSounds.Remove(s.soundName);
                 }
                 return;
