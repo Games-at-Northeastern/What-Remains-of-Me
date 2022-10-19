@@ -1,14 +1,17 @@
 using System;
 using UniRx;
+using UnityEngine;
 
 namespace SmartScriptableObjects.FloatEvent
 {
+	[CreateAssetMenu(menuName = "SO Reactive Properties/Float")]
 	public class FloatReactivePropertySO : DescriptionBaseSO, IFloatReactiveProperty
 	{
+		[SerializeField] private FloatReactiveProperty _reactiveProperty;
+		
 		private Action<float> _onEventRaised;
-		private readonly IReactiveProperty<float> _reactiveProperty = new FloatReactiveProperty();
 
-		void Awake()
+		void OnEnable()
 		{
 			_reactiveProperty.Subscribe(x => _onEventRaised?.Invoke(x));
 		}
