@@ -12,6 +12,7 @@ namespace UI.PlayerVirusMeter
 
 		public void SetVirusPercentage(float percentage)
 		{
+			// 1.1f and not 1f because comparison with floats are wonky
 			if (percentage is < 0 or > 1.1f)
 			{
 				throw new ArgumentException("Virus meter percentage cannot be outside of 0 and 1.");
