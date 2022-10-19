@@ -52,18 +52,6 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown("space"))
-        {
-            AddVirus(10f);
-        }
-        else if (Input.GetKeyDown("k"))
-        {
-            SubtractVirus(10f);
-        }
-    }
-
     /*
      * deducts the amount of energy given up until 0 for energy transmission use
      * and kills the player if the battery is 0.
