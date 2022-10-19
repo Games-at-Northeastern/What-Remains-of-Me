@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using SmartScriptableObjects.FloatEvent;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -9,18 +10,25 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Player Stats")]
     [SerializeField] float initBattery;
     [SerializeField] float maxBattery;
-    [SerializeField] float virus;
     [SerializeField] float iframesTime;
+    [SerializeField] private float _maxVirus;
+    
+    [Header("Dependency Injection")] 
+    [SerializeField] private FloatReactivePropertySO _virusValSO;
 
     static float Battery;
     static float MaxBattery;
     public static PlayerHealth instance { get; private set; }
+    
+    [Header("Player Events")]
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
     bool iframes;
 
+    private IFloatReactiveProperty _virusVal;
 
     /*
      * sets the PlayerHealth component to this object and gets the 
@@ -36,10 +44,23 @@ public class PlayerHealth : MonoBehaviour
             instance = this;
             Battery = initBattery;
             MaxBattery = maxBattery;
+            _virusVal = _virusValSO;
         }
         else
         {
             Debug.LogError("Instance already exists for PlayerHealth");
+        }
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown("space"))
+        {
+            AddVirus(10f);
+        }
+        else if (Input.GetKeyDown("k"))
+        {
+            SubtractVirus(10f);
         }
     }
 
@@ -87,7 +108,7 @@ public class PlayerHealth : MonoBehaviour
      */
     public void AddVirus(float amount)
     {
-        virus += amount;
+        _virusVal.Value = Mathf.Min(_virusVal.Value + amount / _maxVirus, 1f);
         MaxBattery -= amount;
         if (MaxBattery < Battery) { Battery = MaxBattery; }
         if (Battery == 0) { Die(); }
@@ -95,7 +116,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void SubtractVirus(float amount)
     {
-        virus -= amount;
+        _virusVal.Value = Mathf.Max(_virusVal.Value - amount / _maxVirus, 0);
         MaxBattery += amount;
     }
 
