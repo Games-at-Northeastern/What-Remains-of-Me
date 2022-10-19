@@ -1,6 +1,6 @@
 using System;
 
-namespace UI
+namespace UI.PlayerVirusMeter
 {
 	/// <summary>
 	/// Allows the display of the player's virus value.

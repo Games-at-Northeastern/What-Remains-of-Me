@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
+using Image = UnityEngine.UI.Image;
 
-namespace UI
+namespace UI.PlayerVirusMeter
 {
 	public sealed class PlayerVirusMeterUI : MonoBehaviour, IPlayerVirusMeterUI
 	{
@@ -12,7 +12,7 @@ namespace UI
 
 		public void SetVirusPercentage(float percentage)
 		{
-			if (percentage is < 0 or > 1)
+			if (percentage is < 0 or > 1.1f)
 			{
 				throw new ArgumentException("Virus meter percentage cannot be outside of 0 and 1.");
 			}
@@ -27,7 +27,8 @@ namespace UI
 		/// <remarks>Assume that the percentage is between 0 and 1 inclusive.</remarks>
 		private void UpdateBarLength(float percentage)
 		{
-			int indexToAccess = Mathf.FloorToInt(percentage * _barSprites.Length);
+			int indexToAccess = Mathf.Min(Mathf.FloorToInt(percentage * _barSprites.Length),
+				_barSprites.Length - 1);
 			_barImage.sprite = _barSprites[indexToAccess];
 		}
 	}

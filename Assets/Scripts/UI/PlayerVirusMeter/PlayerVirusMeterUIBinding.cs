@@ -1,8 +1,7 @@
-using System;
 using SmartScriptableObjects.FloatEvent;
 using UnityEngine;
 
-namespace UI
+namespace UI.PlayerVirusMeter
 {
     public sealed class PlayerVirusMeterUIBinding : MonoBehaviour
     {
