@@ -9,15 +9,18 @@ using UnityEngine.UI;
 public class PlayerHealthView : MonoBehaviour
 {
     [SerializeField] Slider slider;
+    public PlayerInfo playerInfo;
 
     void Start()
     {
-        PlayerHealth.instance.OnHealthChanged.AddListener(() => UpdateHealthView());
+        //deleted the instace listener that was originally here becuase we are
+        //updating the slider to costantly be the percentage of the battery to
+        //max battery in the scriptable object
         UpdateHealthView();
     }
 
     void UpdateHealthView()
     {
-        slider.value = PlayerHealth.GetRelativeBattery() * slider.maxValue;
+        slider.value = ((float) playerInfo.battery/playerInfo.maxBattery) * slider.maxValue;
     }
 }

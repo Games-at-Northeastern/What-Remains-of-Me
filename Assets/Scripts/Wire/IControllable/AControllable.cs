@@ -12,7 +12,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     [SerializeField] protected float energy;
     [SerializeField] protected float maxEnergy;
     [SerializeField] protected float virus;
-
+    public PlayerInfo playerInfo;
 
     /// <summary> 
     /// This controllable gains the given amount of energy and takes it to the player health.
@@ -20,11 +20,11 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void GainEnergy(float amount)
     {
-        if (PlayerHealth.CanGiveEnergy(amount))
+        if (playerInfo.battery > amount)
         {
             float initEnergy = energy;
             energy = Mathf.Clamp(energy + amount, 0, maxEnergy);
-            PlayerHealth.instance.LoseEnergy(energy - initEnergy);
+            playerInfo.battery -= (energy - initEnergy);
         }
     }
 
@@ -34,15 +34,15 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void LoseEnergy(float amount)
     {
-        if (PlayerHealth.CanTakeEnergy(amount))
+        if (playerInfo.battery > amount)
         {
             // Can lose none / some of energy being taken by player
             float initEnergy = energy;
             float initVirus = virus;
             energy = Mathf.Clamp(energy - amount, 0, maxEnergy);
             virus = Mathf.Clamp(virus - amount, 0, virus);
-            PlayerHealth.instance.GainEnergy(initEnergy - energy);
-            PlayerHealth.instance.AddVirus(initVirus - virus);
+            playerInfo.battery += (initEnergy - energy);
+            playerInfo.virus += (initVirus - virus);
         }
     }
 
@@ -55,7 +55,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     }
 
     /// <summary>
-    /// Can the player lose the given amount of energy? 
+    /// Can the controllable lose the given amount of energy? 
     /// <param name="amount"> float to compare to player energy </param>
     /// </summary>
     bool canLoseEnergy(float amount)
