@@ -10,16 +10,11 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private float _maxVirus;
-    
-    [SerializeField] private FloatReactivePropertySO _virusValSO;
     public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
     bool iframes;
-
-    private IFloatReactiveProperty _virusVal;
-
+    
     /*
      * sets the PlayerHealth component to this object and gets the 
      * and sets the battery and max battery at run time.
@@ -29,7 +24,6 @@ public class PlayerHealth : MonoBehaviour
      */
     private void Awake()
     {
-        _virusVal = _virusValSO;
     }
 
     /*
@@ -72,8 +66,7 @@ public class PlayerHealth : MonoBehaviour
      */
     public void AddVirus(float amount)
     {
-        _virusVal.Value = Mathf.Min(_virusVal.Value + amount / _maxVirus, 1f);
-        playerInfo.virus += amount;
+        playerInfo.virus.Value = Mathf.Min(playerInfo.virus.Value + amount / playerInfo.maxVirus, 1f);
         playerInfo.maxBattery -= amount;
         if (playerInfo.maxBattery < playerInfo.battery) { playerInfo.battery = playerInfo.maxBattery; }
         if (playerInfo.battery == 0) { Die(); }
@@ -81,8 +74,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void SubtractVirus(float amount)
     {
-        _virusVal.Value = Mathf.Max(_virusVal.Value - amount / _maxVirus, 0);
-        playerInfo.virus -= amount;
+        playerInfo.virus.Value = Mathf.Max(playerInfo.virus.Value - amount / playerInfo.maxVirus, 0);
         playerInfo.maxBattery += amount;
     }
 
