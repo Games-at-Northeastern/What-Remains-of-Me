@@ -12,8 +12,8 @@ public class Straight : IPlugMovementModel
     readonly PlugMovementSettings pms;
     readonly Transform returnTransform;
     readonly Transform myTransform;
-    float timePassed = 0;
-    bool retracting = false;
+    private float timePassed = 0;
+    private bool retracting = false;
 
     /// <summary>
     /// Initializes this move, setting it up with the direction that the plug

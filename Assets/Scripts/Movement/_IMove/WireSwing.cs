@@ -26,7 +26,7 @@ public class WireSwing : AMove
     {
         // Get starting angular vel
         Vector2 origPos = MI.transform.position;
-        Vector2 connectedOutletPos = WT.connectedOutlet.transform.position;
+        Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
         initRadius = Vector2.Distance(origPos, connectedOutletPos);
         WT.SetMaxWireLength(initRadius);
         float firstAngle = Mathf.Atan2(origPos.y - connectedOutletPos.y, origPos.x - connectedOutletPos.x);
@@ -43,13 +43,13 @@ public class WireSwing : AMove
     public override void AdvanceTime()
     {
         // If the wire has just disconnected, don't modify anything (would cause errors to try and refer to null outlet)
-        if (WT.connectedOutlet == null)
+        if (WT.ConnectedOutlet == null)
         {
             return;
         }
         // Get initial positions
         Vector2 origPos = MI.transform.position;
-        Vector2 connectedOutletPos = WT.connectedOutlet.transform.position;
+        Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
         // Angle going from outlet to player
         float angle = Mathf.Atan2(origPos.y - connectedOutletPos.y, origPos.x - connectedOutletPos.x);
         float radius = Vector2.Distance(origPos, connectedOutletPos);

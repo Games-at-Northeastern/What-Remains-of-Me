@@ -24,7 +24,7 @@ public class Dash : AMove
         xVel = Flipped() ? -MS.DashSpeedX : MS.DashSpeedX;
         timePassed = 0;
         WT.onConnect.AddListener(() => connectedInput = true);
-        CS.Player.Jump.performed += _ => { if (WT.connectedOutlet != null) { swingInput = true; } };
+        CS.Player.Jump.performed += _ => { if (WT.ConnectedOutlet != null) { swingInput = true; } };
         PH.OnDamageTaken.AddListener(() => damageInput = true);
     }
 
