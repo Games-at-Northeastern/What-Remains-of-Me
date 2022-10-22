@@ -5,6 +5,8 @@ using UnityEngine;
 /// <summary>
 /// Figures out when the player is hitting damaging material, and uses
 /// that to try and make the player take damage.
+/// 
+/// ~~~CURRENTLY NOT IN USE~~~
 /// </summary>
 public class DamageEnactor : MonoBehaviour
 {
