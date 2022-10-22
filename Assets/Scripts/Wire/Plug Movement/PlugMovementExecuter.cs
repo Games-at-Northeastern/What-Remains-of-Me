@@ -7,19 +7,13 @@ using UnityEngine.Events;
 /// Handles the movement of the wire, and whenever something happens that should
 /// end the movement of the plug, sends an event communicating that.
 /// </summary>
-[RequireComponent(typeof(Rigidbody2D))]
 public class PlugMovementExecuter : MonoBehaviour
 {
     public UnityEvent onTerminateRequest = new UnityEvent();
     public GameObjectEvent onConnectionRequest = new GameObjectEvent();
     IPlugMovementModel model = null;
-    Rigidbody2D rb;
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
+    [SerializeField] Rigidbody2D rb;
+    
     /// <summary>
     /// Initiates the movement of this plug, using the given model to handle it.
     /// The model given to this function should be a newly created one.

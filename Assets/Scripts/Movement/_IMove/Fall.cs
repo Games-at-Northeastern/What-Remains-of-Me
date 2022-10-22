@@ -28,7 +28,7 @@ public class Fall : AMove
         yVel = initYVel;
         CS.Player.Dash.performed += _ => dashInput = true;
         WT.onConnect.AddListener(() => connectedInput = true);
-        CS.Player.Jump.performed += _ => { if (WT.connectedOutlet != null) { swingInput = true; } };
+        CS.Player.Jump.performed += _ => { if (WT.ConnectedOutlet != null) { swingInput = true; } };
         PH.OnDamageTaken.AddListener(() => damageInput = true);
     }
 
@@ -63,7 +63,7 @@ public class Fall : AMove
         {
             return new Knockback();
         }
-        if (connectedInput || swingInput || WT.connectedOutlet != null)
+        if (connectedInput || swingInput || WT.ConnectedOutlet != null)
         {
             return new WireSwing(xVel, yVel);
         }

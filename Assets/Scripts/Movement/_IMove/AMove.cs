@@ -81,7 +81,7 @@ public abstract class AMove : IMove
     protected float GetCurrentWireLength()
     {
         Vector2 origPos = MI.transform.position;
-        Vector2 connectedOutletPos = WT.connectedOutlet.transform.position;
+        Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
         return Vector2.Distance(origPos, connectedOutletPos);
     }
 }
