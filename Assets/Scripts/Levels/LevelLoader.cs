@@ -20,7 +20,6 @@ public class LevelLoader : MonoBehaviour
     private void Start()
     {
         anim = animator;
-            //transform.GetChild(0).GetComponent<Animator>();
     }
 
 
