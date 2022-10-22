@@ -17,7 +17,7 @@ public class PathfindingAgent : MonoBehaviour
     public bool isFollowing;
     public bool debugMode;
 
-    private Rigidbody2D _rb;
+    [SerializeField] private Rigidbody2D _rb;
     private PathfindingGrid _pathfindingMap;
     private float _currentTime;
     private List<Vector3Int> _path;
@@ -38,7 +38,7 @@ public class PathfindingAgent : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        //_rb = GetComponent<Rigidbody2D>();
         _pathfindingMap = grid.GetPathfindingGrid();
         _currentTime = delay;
         _start = this.transform;

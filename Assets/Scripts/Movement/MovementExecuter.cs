@@ -6,29 +6,19 @@ using UnityEngine;
 /// The "main" movement script. Moves the player based on the information provided
 /// in the appropriate IMove script, switching when appropriate.
 /// </summary>
-[RequireComponent(typeof(MovementSettings))]
-[RequireComponent(typeof(MovementInfo))]
-[RequireComponent(typeof(WireThrower))]
-[RequireComponent(typeof(PlayerHealth))]
-[RequireComponent(typeof(Rigidbody2D))]
 public class MovementExecuter : MonoBehaviour
 {
-    Rigidbody2D rb; // To move the player
-    MovementInfo mi; // Gives other info to move scripts
-    MovementSettings ms; // Gives constants to move scripts
-    WireThrower wt; // Gives information about the wire
-    PlayerHealth ph; // Gives info about player health / damage
+    [SerializeField] private Rigidbody2D rb; // To move the player
+    [SerializeField] private MovementInfo mi; // Gives other info to move scripts
+    [SerializeField] private MovementSettings ms; // Gives constants to move scripts
+    [SerializeField] private WireThrower wt; // Gives information about the wire
+    [SerializeField] private PlayerHealth ph; // Gives info about player health / damage
     IMove currentMove; // The move taking place this frame
     Vector3 respawnPosition;
 
     // Initialization
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        mi = GetComponent<MovementInfo>();
-        ms = GetComponent<MovementSettings>();
-        wt = GetComponent<WireThrower>();
-        ph = GetComponent<PlayerHealth>();
         ControlSchemes cs = new ControlSchemes();
         cs.Enable();
         cs.Debug.Restart.performed += _ => Restart();

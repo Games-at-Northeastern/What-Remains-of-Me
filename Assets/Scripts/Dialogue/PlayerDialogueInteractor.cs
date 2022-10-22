@@ -51,12 +51,13 @@ public class PlayerDialogueInteractor : MonoBehaviour
     if (dGameObject != null)
     {
       var dialogue = dGameObject.GetComponent<Dialogue>();
-      if (dialogue != _activeDialogue)
+      if (dialogue == _activeDialogue)
       {
-        promptSprite.transform.position = dialogue.GetPromptTransform().position;
-        promptSprite.SetActive(true);
-        _activeDialogue = dialogue;
+        return;
       }
+      promptSprite.transform.position = dialogue.promptAppearTransform.position;
+      promptSprite.SetActive(true);
+      _activeDialogue = dialogue;
     }
     else
     {
