@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class LevelWarpZone : MonoBehaviour
 {
-    [SerializeField] LevelManager levelManager;
+    [SerializeField] private LevelManager levelManager;
     public int id;
     public string warpDestinationScene;
     public int warpDestinationID;

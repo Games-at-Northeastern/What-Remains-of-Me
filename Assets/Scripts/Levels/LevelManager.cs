@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] GameObject player;
+    [SerializeField] private GameObject player;
     private string warpDestination;
     private int toWarpID;
     private bool loadedNewScene = false;
