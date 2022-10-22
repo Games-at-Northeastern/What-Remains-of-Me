@@ -74,14 +74,9 @@ public class DialogueTree : ADialogueTree
   /// </summary>
   public override string GetText()
   {
-    if (InThisNode())
-    {
-      return segments[_idxOfSegment].Substring(0, _segmentLength);
-    }
-    else
-    {
-      return next.GetText();
-    }
+    return InThisNode() 
+      ? segments[_idxOfSegment].Substring(0, _segmentLength) 
+      : next.GetText();
   }
 
 
