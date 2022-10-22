@@ -1355,11 +1355,47 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 180451535942715999, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 283984833}
+    - target: {fileID: 180451535942715999, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
+      propertyPath: sr
+      value: 
+      objectReference: {fileID: 283984836}
+    - target: {fileID: 180451535942715999, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 283984834}
+    - target: {fileID: 180451535942715999, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
+      propertyPath: boxCollider2D
+      value: 
+      objectReference: {fileID: 283984835}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
 --- !u!4 &283984832 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 180451535942715997, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
+  m_PrefabInstance: {fileID: 283984831}
+  m_PrefabAsset: {fileID: 0}
+--- !u!50 &283984833 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 180451535942715985, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
+  m_PrefabInstance: {fileID: 283984831}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &283984834 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 180451535942715984, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
+  m_PrefabInstance: {fileID: 283984831}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &283984835 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 180451535942715987, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
+  m_PrefabInstance: {fileID: 283984831}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &283984836 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 180451535942715986, guid: 4195aae590200484b88c0f4cf77a0bb7, type: 3}
   m_PrefabInstance: {fileID: 283984831}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &315946195
@@ -32527,7 +32563,7 @@ RectTransform:
   m_Children:
   - {fileID: 1354463150}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
