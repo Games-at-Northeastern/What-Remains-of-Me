@@ -7,16 +7,11 @@ using UnityEngine;
 /// NOTE: Currently, all this script does is flip the player, but it can easily
 /// be expanded to also support animations, particles, etc.
 /// </summary>
-[RequireComponent(typeof(MovementExecuter))]
 public class VisualMovementExecuter : MonoBehaviour
 {
-    MovementExecuter me;
+    [SerializeField] private MovementExecuter me;
     [SerializeField] SpriteRenderer[] spriteRenderers;
 
-    private void Awake()
-    {
-        me = GetComponent<MovementExecuter>();
-    }
 
     private void Update()
     {
