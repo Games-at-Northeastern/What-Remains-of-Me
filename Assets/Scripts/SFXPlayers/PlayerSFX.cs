@@ -9,21 +9,19 @@ using UnityEngine;
 public class PlayerSFX : MonoBehaviour
 {
 
-    public AudioSource src;
-    public AudioClip walkLeftFoot;
-    public AudioClip walkRightFoot;
-    public AudioClip jumpUp;
-    // public AudioClip jumpLand;
-    public AudioClip swing;
-    public AudioClip damaged;
+    private SoundController soundController;
+
+    private void Awake()
+    {
+        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+    }
 
     /// <summary>
     /// Plays the left foot's walking audio clip at the player's location
     /// <summary>
     void WalkLeftFoot()
     {
-        src.clip = walkLeftFoot;
-        src.Play();
+        soundController.PlaySound("Player_WalkLeftFoot");
     }
 
     /// <summary>
@@ -31,8 +29,7 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     void WalkRightFoot()
     {
-        src.clip = walkRightFoot;
-        src.Play();
+        soundController.PlaySound("Player_WalkRightFoot");
     }
 
     /// <summary>
@@ -40,15 +37,13 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     void JumpUp()
     {
-        src.clip = jumpUp;
-        src.Play();
+        soundController.PlaySound("Player_JumpUp");
     }
 
     /*
-    void JumpLand()
-    {
-        src.clip = jumpLand;
-        src.Play();
+    void JumpLand() {
+       src.clip = jumpLand;
+       src.Play();
     }
     */
 
@@ -57,8 +52,7 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     void Swing()
     {
-        src.clip = swing;
-        src.Play();
+        soundController.PlaySound("Player_Swing");
     }
 
     /// <summary>
@@ -66,8 +60,7 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     void Damaged()
     {
-        src.clip = damaged;
-        src.Play();
+        soundController.PlaySound("Player_Damaged");
     }
 
 }

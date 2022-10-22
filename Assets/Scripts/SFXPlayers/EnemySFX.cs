@@ -8,19 +8,20 @@ using UnityEngine;
 
 public class EnemySFX : MonoBehaviour
 {
-    public AudioSource src;
-    public AudioClip walk;
-    public AudioClip attack;
-    public AudioClip overloaded;
-    public AudioClip drained;
+
+    private SoundController soundController;
+
+    private void Awake()
+    {
+        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+    }
 
     /// <summary>
     /// Plays the walking audio clip at the enemy's location
     /// <summary>
     void Walk()
     {
-        src.clip = walk;
-        src.Play();
+        soundController.PlaySound("Enemy_Walk");
     }
 
     /// <summary>
@@ -28,8 +29,7 @@ public class EnemySFX : MonoBehaviour
     /// <summary>
     void Attack()
     {
-        src.clip = attack;
-        src.Play();
+        soundController.PlaySound("Enemy_Attack");
     }
 
     /// <summary>
@@ -37,7 +37,6 @@ public class EnemySFX : MonoBehaviour
     /// <summary>
     void OverLoaded()
     {
-        src.clip = overloaded;
-        src.Play();
+        soundController.PlaySound("Enemy_Overloaded");
     }
 }

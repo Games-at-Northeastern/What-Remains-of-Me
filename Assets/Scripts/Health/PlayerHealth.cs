@@ -10,20 +10,10 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("Player Stats")]
-    [SerializeField] float initBattery;
-    [SerializeField] float maxBattery;
-    [SerializeField] float iframesTime;
     [SerializeField] private float _maxVirus;
     
-    [Header("Dependency Injection")] 
     [SerializeField] private FloatReactivePropertySO _virusValSO;
-
-    static float Battery;
-    static float MaxBattery;
-    public static PlayerHealth instance { get; private set; }
-    
-    [Header("Player Events")]
+    public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
     bool iframes;
@@ -39,17 +29,7 @@ public class PlayerHealth : MonoBehaviour
      */
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            Battery = initBattery;
-            MaxBattery = maxBattery;
-            _virusVal = _virusValSO;
-        }
-        else
-        {
-            Debug.LogError("Instance already exists for PlayerHealth");
-        }
+        _virusVal = _virusValSO;
     }
 
     /*
@@ -60,8 +40,8 @@ public class PlayerHealth : MonoBehaviour
      */
     public void LoseEnergy(float amount)
     {
-        Battery = Mathf.Clamp(Battery - amount, 0, maxBattery);
-        if (Battery == 0)
+        playerInfo.battery = Mathf.Clamp(playerInfo.battery - amount, 0, playerInfo.maxBattery);
+        if (playerInfo.battery == 0)
         {
             Die();
         }
@@ -78,11 +58,7 @@ public class PlayerHealth : MonoBehaviour
      */
     public void GainEnergy(float amount)
     {
-        Battery = Mathf.Clamp(Battery + amount, 0, maxBattery);
-        if (Battery == 0)
-        {
-            Die();
-        }
+        playerInfo.battery = Mathf.Clamp(playerInfo.battery + amount, 0, playerInfo.maxBattery);
         OnHealthChanged.Invoke();
     }
 
@@ -97,23 +73,25 @@ public class PlayerHealth : MonoBehaviour
     public void AddVirus(float amount)
     {
         _virusVal.Value = Mathf.Min(_virusVal.Value + amount / _maxVirus, 1f);
-        MaxBattery -= amount;
-        if (MaxBattery < Battery) { Battery = MaxBattery; }
-        if (Battery == 0) { Die(); }
+        playerInfo.virus += amount;
+        playerInfo.maxBattery -= amount;
+        if (playerInfo.maxBattery < playerInfo.battery) { playerInfo.battery = playerInfo.maxBattery; }
+        if (playerInfo.battery == 0) { Die(); }
     }
 
     public void SubtractVirus(float amount)
     {
         _virusVal.Value = Mathf.Max(_virusVal.Value - amount / _maxVirus, 0);
-        MaxBattery += amount;
+        playerInfo.virus -= amount;
+        playerInfo.maxBattery += amount;
     }
 
     /* 
      * Gives the battery amount the player has, from 0 to 1.
      */
-    public static float GetRelativeBattery()
+    public float GetRelativeBattery()
     {
-        return Battery / MaxBattery;
+        return playerInfo.battery / playerInfo.maxBattery;
     }
 
     /*
@@ -121,9 +99,9 @@ public class PlayerHealth : MonoBehaviour
      * 
      * @param amount     the amount of energy being given
      */
-    public static bool CanGiveEnergy(float amount)
+    public bool CanGiveEnergy(float amount)
     {
-        return Battery >= amount;
+        return playerInfo.battery >= amount;
     }
 
     /*
@@ -131,9 +109,9 @@ public class PlayerHealth : MonoBehaviour
      * 
      * @param amount    the amount of energy being taken
      */
-    public static bool CanTakeEnergy(float amount)
+    public bool CanTakeEnergy(float amount)
     {
-        return Battery <= MaxBattery - amount;
+        return playerInfo.battery <= playerInfo.maxBattery - amount;
     }
 
     /*
@@ -168,7 +146,7 @@ public class PlayerHealth : MonoBehaviour
     IEnumerator IFrameSequence()
     {
         iframes = true;
-        yield return new WaitForSeconds(iframesTime);
+        yield return new WaitForSeconds(playerInfo.iframesTime);
         iframes = false;
     }
 
