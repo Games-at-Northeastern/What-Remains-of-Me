@@ -7,20 +7,11 @@ using UnityEngine;
 /// Class for giving whether or not this gameObject is colliding
 /// with a certain set of layers.
 /// </summary>
-[RequireComponent(typeof(Collider2D))]
 public class CollisionDetector : MonoBehaviour
 {
-    Collider2D col;
+    [SerializeField] Collider2D col;
     [SerializeField] LayerMask collidesWith;
     [SerializeField] bool collidesWithTriggers;
-
-    /// <summary>
-    /// Initializes col to the attached object's collider.
-    /// </summary>
-    private void Awake()
-    {
-        col = GetComponent<Collider2D>();
-    }
 
     /// <summary>
     /// Is the collider for this gameObject touching any of the layers in the provided mask?
