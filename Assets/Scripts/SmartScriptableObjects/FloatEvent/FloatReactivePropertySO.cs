@@ -10,15 +10,14 @@ namespace SmartScriptableObjects.FloatEvent
 	/// scriptable object via drag and drop through the inspector.
 	/// </summary>
 	[CreateAssetMenu(menuName = "SO Reactive Properties/Float")]
-	public class FloatReactivePropertySO : DescriptionBaseSO, IFloatReactiveProperty
+	public class FloatReactivePropertySO : DescriptionBaseSO, IReactiveProperty<float>, 
+		IDisposable, IOptimizedObservable<float> 
 	{
 		[SerializeField] private FloatReactiveProperty _reactiveProperty;
-		
-		private Action<float> _onEventRaised;
 
-		void OnEnable()
+		public IDisposable Subscribe(IObserver<float> observer)
 		{
-			_reactiveProperty.Subscribe(x => _onEventRaised?.Invoke(x));
+			return _reactiveProperty.Subscribe(observer);
 		}
 
 		public float Value
@@ -27,14 +26,16 @@ namespace SmartScriptableObjects.FloatEvent
 			set => _reactiveProperty.Value = value;
 		}
 
-		public void SubscribeListener(Action<float> listener)
+		public bool HasValue => _reactiveProperty.HasValue;
+
+		public void Dispose()
 		{
-			_onEventRaised += listener;
+			_reactiveProperty.Dispose();
 		}
 
-		public void UnsubscribeListener(Action<float> listener)
+		public bool IsRequiredSubscribeOnCurrentThread()
 		{
-			_onEventRaised -= listener;
+			return _reactiveProperty.IsRequiredSubscribeOnCurrentThread();
 		}
 	}
 }

@@ -1,4 +1,6 @@
+using System;
 using SmartScriptableObjects.FloatEvent;
+using UniRx;
 using UnityEngine;
 
 namespace UI.PlayerVirusMeter
@@ -18,7 +20,7 @@ namespace UI.PlayerVirusMeter
         #endregion
         
         private IPlayerVirusMeterUI _playerVirusMeterUI;
-        private IFloatReactiveProperty _virusReactiveProperty;
+        private IReadOnlyReactiveProperty<float> _virusReactiveProperty;
 
         void Awake()
         {
@@ -29,15 +31,10 @@ namespace UI.PlayerVirusMeter
             // This only has to happen once, it will automatically update hereafter
             _playerVirusMeterUI.SetVirusPercentage(_virusReactiveProperty.Value);
         }
-
+        
         private void OnEnable()
         {
-            _virusReactiveProperty.SubscribeListener(_playerVirusMeterUI.SetVirusPercentage);
-        }
-
-        private void OnDisable()
-        {
-            _virusReactiveProperty.UnsubscribeListener(_playerVirusMeterUI.SetVirusPercentage);
+            _virusReactiveProperty.Subscribe(_playerVirusMeterUI.SetVirusPercentage);
         }
     }
 }

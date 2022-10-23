@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SmartScriptableObjects.FloatEvent;
+using UniRx;
 using UnityEngine;
 
 [CreateAssetMenu]
@@ -15,7 +16,7 @@ public class PlayerInfo : ScriptableObject
     [Header("Info")]
     public float battery;
     public float maxBattery;
-    [HideInInspector] public IFloatReactiveProperty virus;
+    [HideInInspector] public IReactiveProperty<float> virus;
     public float maxVirus;
     public float iframesTime;
 
