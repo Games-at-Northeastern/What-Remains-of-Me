@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 using Image = UnityEngine.UI.Image;
 
@@ -7,9 +8,16 @@ namespace UI.PlayerVirusMeter
 {
 	public sealed class PlayerVirusMeterUI : MonoBehaviour, IPlayerVirusMeterUI
 	{
-		[FormerlySerializedAs("_barImage")] [SerializeField] private Image _currBarImage;
+		[Header("Dependency Injection")]
+		[SerializeField] private Image _currBarImage;
 		[SerializeField] private Image _delayedBarImage;
+		[SerializeField] private Image _barHolderLightImage;
+		
 		[SerializeField] private Animator _animator;
+		
+		[Header("Colors")]
+		[Tooltip("Lower index is lower virus.")]
+		[SerializeField] private Color32[] _colors;
 		
 		[Tooltip("Lower index is shorter.")]
 		[SerializeField] private Sprite[] _barSprites;
@@ -26,6 +34,7 @@ namespace UI.PlayerVirusMeter
 
 			UpdateBarLength(_currBarImage, percentage);
 			_animator.SetFloat(Virus, percentage);
+			UpdateColor(_currBarImage, percentage);
 		}
 
 		public void SetDelayedVirusPercentage(float percentage)
@@ -37,6 +46,14 @@ namespace UI.PlayerVirusMeter
 			}
 
 			UpdateBarLength(_delayedBarImage, percentage);
+			UpdateColor(_barHolderLightImage, percentage);
+		}
+
+		private void UpdateColor(Image image, float percentage)
+		{
+			int indexToAccess = Mathf.Min(Mathf.FloorToInt(percentage * _colors.Length),
+				_colors.Length - 1);
+			image.color = _colors[indexToAccess];
 		}
 
 		/// <summary>
