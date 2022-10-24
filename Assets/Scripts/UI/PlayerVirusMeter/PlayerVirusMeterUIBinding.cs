@@ -29,12 +29,14 @@ namespace UI.PlayerVirusMeter
             
             // Get the virus UI to sync up with player virus stat when the scene is loaded
             // This only has to happen once, it will automatically update hereafter
-            _playerVirusMeterUI.SetVirusPercentage(_virusReactiveProperty.Value);
+            _playerVirusMeterUI.SetCurrVirusPercentage(_virusReactiveProperty.Value);
         }
         
         private void OnEnable()
         {
-            _virusReactiveProperty.Subscribe(_playerVirusMeterUI.SetVirusPercentage);
+            _virusReactiveProperty.TakeUntilDisable(this).Subscribe(_playerVirusMeterUI.SetCurrVirusPercentage);
+            _virusReactiveProperty.TakeUntilDisable(this).Throttle(TimeSpan.FromMilliseconds(500))
+                .Subscribe(_playerVirusMeterUI.SetDelayedVirusPercentage);
         }
     }
 }
