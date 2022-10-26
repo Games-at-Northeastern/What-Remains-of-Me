@@ -67,7 +67,7 @@ public class WireThrower : MonoBehaviour
         if (activePlug == null && connectedOutlet == null)
         {
             // Prepare to fire wire
-            Time.timeScale = timeScaleForAim;
+            Time.timeScale = 1;
             framesHeld = 0;
         }
     }
