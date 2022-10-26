@@ -11,14 +11,21 @@ namespace UI.PlayerVirusMeter
 		/// Sets the current virus percentage of this UI.
 		/// </summary>
 		/// <param name="percentage">A fraction between 0 and 1 inclusive</param>
-		/// <exception cref="ArgumentException">Thrown when the percentange is not within 0 and 1 inclusive.</exception>
+		/// <exception cref="ArgumentException">Thrown when the percentage is not within 0 and 1 inclusive.</exception>
 		void SetCurrVirusPercentage(float percentage);
 		
 		/// <summary>
 		/// Sets the delayed virus percentage of this UI.
 		/// </summary>
 		/// <param name="percentage">A fraction between 0 and 1 inclusive</param>
-		/// <exception cref="ArgumentException">Thrown when the percentange is not within 0 and 1 inclusive.</exception>
+		/// <exception cref="ArgumentException">Thrown when the percentage is not within 0 and 1 inclusive.</exception>
 		void SetDelayedVirusPercentage(float percentage);
+		
+		/// <summary>
+		/// Sets the bar holder lights percentage of this UI.
+		/// </summary>
+		/// <param name="percentage">A fraction between 0 and 1 inclusive</param>
+		/// <exception cref="ArgumentException">Thrown when the percentage is not within 0 and 1 inclusive.</exception>
+		void SetBarHolderLightsPercentage(float percentage);
 	}
 }

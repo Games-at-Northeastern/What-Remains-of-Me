@@ -46,6 +46,16 @@ namespace UI.PlayerVirusMeter
 			}
 
 			UpdateBarLength(_delayedBarImage, percentage);
+		}
+
+		public void SetBarHolderLightsPercentage(float percentage)
+		{
+			// 1.05f and not 1f because comparison with floats are wonky
+			if (percentage is < 0 or > 1.05f)
+			{
+				throw new ArgumentException("Virus meter percentage cannot be outside of 0 and 1.");
+			}
+			
 			UpdateColor(_barHolderLightImage, percentage);
 		}
 

@@ -36,7 +36,11 @@ namespace UI.PlayerVirusMeter
         {
             _virusReactiveProperty.TakeUntilDisable(this).Subscribe(_playerVirusMeterUI.SetCurrVirusPercentage);
             _virusReactiveProperty.TakeUntilDisable(this).Throttle(TimeSpan.FromMilliseconds(500))
-                .Subscribe(_playerVirusMeterUI.SetDelayedVirusPercentage);
+                .Subscribe(x =>
+                {
+                    _playerVirusMeterUI.SetDelayedVirusPercentage(x);
+                    _playerVirusMeterUI.SetBarHolderLightsPercentage(x);
+                });
         }
     }
 }
