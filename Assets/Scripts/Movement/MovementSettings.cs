@@ -10,7 +10,8 @@ using UnityEngine;
 /// the information here can be customized from the editor, but not changed
 /// from any other script.
 /// </summary>
-public class MovementSettings : MonoBehaviour
+[CreateAssetMenu]
+public class MovementSettings : ScriptableObject
 {
     // SERIALIZED FIELDS
 

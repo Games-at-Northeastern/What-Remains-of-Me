@@ -16,25 +16,15 @@ public class PlayerAnimation : MonoBehaviour
     /// <summary>
     /// the animator object, a built-in unity interface that helps us execeute animations
     /// </summary>
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
     /// <summary>
     /// a reference to the movement script, to better understand the location of the player
     /// </summary>
-    private MovementExecuter _movementExecuter;
+    [SerializeField] private MovementExecuter _movementExecuter;
     /// <summary>
     /// a reference to the wire, to better understand the location of the wire
     /// </summary>
-    private WireThrower _wireThrower;
-
-    /// <summary>
-    /// When the game starts the private varaibles (animator, movmentExecutor, and wireThrower) are initialized.
-    /// </summary>
-    void Start()
-    {
-        _animator = GetComponent<Animator>();
-        _movementExecuter = GetComponent<MovementExecuter>();
-        _wireThrower = GetComponent<WireThrower>();
-    }
+    [SerializeField] private WireThrower _wireThrower;
 
     /// <summary>
     /// Every frame this method is called. It updates the integer according to the movementExecutor object and 

@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField] private GameObject player;
     private string warpDestination;
     private int toWarpID;
     private bool loadedNewScene = false;
@@ -40,7 +41,8 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if (playerRef == null) { playerRef = GameObject.FindGameObjectWithTag("Player"); }
+        playerRef = player;
+
         DontDestroyOnLoad(this);
     }
 
@@ -52,7 +54,7 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (playerRef == null) { playerRef = GameObject.FindGameObjectWithTag("Player"); }
+        //if (playerRef == null) { playerRef = GameObject.FindGameObjectWithTag("Player"); }
         if (loadedNewScene)
         {
             GameObject[] warpZones = GameObject.FindGameObjectsWithTag("WarpZone");

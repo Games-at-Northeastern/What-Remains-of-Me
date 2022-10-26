@@ -12,12 +12,12 @@ public class DialoguePlayer : MonoBehaviour
   [SerializeField] private TextMeshProUGUI text;
   [SerializeField] private float timeToAdvanceCharacter;
   public UnityEvent onDialogueEnd;
-  private ControlSchemes cs;
+  private ControlSchemes _cs;
 
   private void Awake()
   {
-    cs = new ControlSchemes();
-    cs.Enable();
+    _cs = new ControlSchemes();
+    _cs.Enable();
   }
 
   /// <summary>
@@ -33,13 +33,13 @@ public class DialoguePlayer : MonoBehaviour
   /// Coroutine to be called in the PlayDialogue method. This is what actually initiates the dialogue sequence.
   /// </summary>
   /// <param name="d">the dialogue to be played</param>
-  /// <returns></returns>
+  /// <returns> IEnum to denote current position in sequence </returns>
   private IEnumerator DialogueSequence(Dialogue d)
   {
     text.text = "";
-    IDialogueTree dialogueTree = d.GetDialogueTree();
+    IDialogueTree dialogueTree = d.dialogueTree;
     bool inputForNextSegment;
-    cs.Player.Dialogue.performed += _ => inputForNextSegment = true;
+    _cs.Player.Dialogue.performed += _ => inputForNextSegment = true;
     while (dialogueTree.HasNextSegment())
     {
       dialogueTree.NextSegment();

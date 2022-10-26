@@ -61,6 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f8ebcffc6004919a5a1a20f4c0eeb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 2125607805431244711}
   collidesWith:
     serializedVersion: 2
     m_Bits: 375
@@ -136,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f8ebcffc6004919a5a1a20f4c0eeb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 3710720549982324410}
   collidesWith:
     serializedVersion: 2
     m_Bits: 1024
@@ -211,6 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f8ebcffc6004919a5a1a20f4c0eeb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 3710720551092903171}
   collidesWith:
     serializedVersion: 2
     m_Bits: 512
@@ -227,7 +230,6 @@ GameObject:
   - component: {fileID: 3710720551263122993}
   - component: {fileID: 3710720551263122995}
   - component: {fileID: 8560950188133196083}
-  - component: {fileID: 3710720551263123004}
   - component: {fileID: 3710720551263123005}
   - component: {fileID: 3710720551263123000}
   - component: {fileID: 3710720551263123006}
@@ -259,7 +261,7 @@ Transform:
   m_GameObject: {fileID: 3710720551263122992}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3710720549826380118}
@@ -309,8 +311,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 565412307
+  m_SortingLayer: 2
   m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: f31f90459b152b94a9cac44fbb2f977b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -360,60 +362,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0.025300145, y: -0.09838945}
   m_Size: {x: 0.735754, y: 1.3969711}
   m_Direction: 0
---- !u!114 &3710720551263123004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3710720551263122992}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81ee105d27ff24bb7b38c99a0f939d30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  runToIdleSpeed: 0.01
-  jumpLandableTimer: 0.1
-  jumpInitVelY: 6.5
-  jumpInitGravity: 0
-  jumpMaxGravity: 25
-  jumpGravityIncRate: 80
-  jumpMinSpeedY: -10
-  jumpCancelYVelMultiplier: 0.35
-  fallGravity: 20
-  fallMaxSpeedX: 4
-  fallSmoothTimeX: 0.2
-  fallMinSpeedY: -10
-  runMaxSpeed: 4
-  runSmoothTime: 0.1
-  wallSlideSpeed: -1
-  wallJumpLandableTimer: 0.1
-  wallJumpInitVelX: 4
-  wallJumpMaxSpeedX: 4
-  wallJumpSmoothTimeX: 0.3
-  wallJumpInitVelY: 5
-  wallJumpMinSpeedY: -10
-  wallJumpInitGravity: 0
-  wallJumpMaxGravity: 20
-  wallJumpGravityIncRate: 40
-  wallJumpCancelYVelMultiplier: 0.6
-  dashSpeedX: 7
-  dashTime: 0.3
-  wireSwingBounceDecayMultiplier: 0.25
-  wireSwingDecayMultiplier: 1.5
-  wireSwingNaturalAccelMultiplier: 7
-  wireSwingManualAccelMultiplier: 1.7
-  wireSwingAngularVelOfDash: 3
-  wireSwingReferenceWireLength: 5
-  wsrGravity: 20
-  wsrMaxSpeedX: 4
-  wsrSmoothTimeX: 0.5
-  wsrMinSpeedY: -8
-  wireGeneralMaxDistance: 10
-  knockbackVertVel: 6
-  absKnockbackHorizVel: 4
-  knockbackGravity: 25
-  knockbackGravityHorizOnRecovery: 7
 --- !u!114 &3710720551263123005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,6 +374,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78a4a64db71c474a8e3b679730d697f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  mi: {fileID: 0}
+  ms: {fileID: 0}
+  wt: {fileID: 0}
+  ph: {fileID: 0}
 --- !u!114 &3710720551263123000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,6 +391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5ea8ef88698345e0a4c70230906fd16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  me: {fileID: 0}
 --- !u!114 &3710720551263123006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,6 +421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82f33e8b75f884ba294ee8123eb0109e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  me: {fileID: 0}
   spriteRenderers:
   - {fileID: 3710720551263122993}
   - {fileID: 3710720551263122993}
@@ -488,6 +443,10 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   plugPrefab: {fileID: 4615177501490907055, guid: a647468d1f59f4cadb7ddfc0f20951b3, type: 3}
   timeScaleForAim: 0.3
+  _plugMovementSettings: {fileID: 0}
+  _movementExecuter: {fileID: 0}
+  _lineRenderer: {fileID: 0}
+  _distanceJoint: {fileID: 0}
   onConnect:
     m_PersistentCalls:
       m_Calls: []
@@ -657,6 +616,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34564fb9c20054a9c92addfd56430fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MI: {fileID: 0}
+  PH: {fileID: 0}
   damageAmount: 20
 --- !u!114 &3710720551263122945
 MonoBehaviour:
@@ -670,6 +631,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 807b1a7a6f8d93a47b78ec75a6f56f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
+  _movementExecuter: {fileID: 0}
+  _wireThrower: {fileID: 0}
 --- !u!95 &3710720551263122944
 Animator:
   serializedVersion: 4
@@ -812,12 +776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326b23119f03c4f4f89803f2ad16c3f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  src: {fileID: 2029035810831846686}
-  walkLeftFoot: {fileID: 8300000, guid: fa41cb20e086b8842a7e364b76465628, type: 3}
-  walkRightFoot: {fileID: 8300000, guid: 494526dcd426da047b1b3e64518ffd4a, type: 3}
-  jumpUp: {fileID: 8300000, guid: 4ae11fab36727294b91e9ac994edcb3b, type: 3}
-  swing: {fileID: 8300000, guid: eb3cfe5dff9128a40b28bef2c03f395a, type: 3}
-  damaged: {fileID: 8300000, guid: 816b2dd04403b2d40bfb95c19e5daa7a, type: 3}
+  soundController: {fileID: 0}
 --- !u!1 &3710720551404092653
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,6 +848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f8ebcffc6004919a5a1a20f4c0eeb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 3710720551404092648}
   collidesWith:
     serializedVersion: 2
     m_Bits: 375
@@ -964,6 +924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f8ebcffc6004919a5a1a20f4c0eeb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 3710720551461444461}
   collidesWith:
     serializedVersion: 2
     m_Bits: 375
@@ -1039,6 +1000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f8ebcffc6004919a5a1a20f4c0eeb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 3710720551594228981}
   collidesWith:
     serializedVersion: 2
     m_Bits: 375
