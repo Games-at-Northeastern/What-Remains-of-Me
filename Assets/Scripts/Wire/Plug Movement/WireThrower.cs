@@ -44,7 +44,7 @@ public class WireThrower : MonoBehaviour
         // Add left click handling functionality
         cs = new ControlSchemes();
         cs.Enable();
-        cs.Player.Throw.started += _ => HandleThrowInputHeld();
+        //cs.Player.Throw.started += _ => HandleThrowInputHeld();
         cs.Player.ThrowController.canceled += _ => HandleThrowInputReleasedController();
         cs.Player.ThrowMouse.canceled += _ => HandleThrowInputReleasedKeyboard();
         cs.Player.Jump.performed += _ => HandlePotentialDisconnectByJump();
@@ -59,18 +59,19 @@ public class WireThrower : MonoBehaviour
         framesHeld = 0;
     }
 
-    /// <summary>
-    /// Function that is passed to the control scheme to handle the start of a throw.
-    /// </summary>
-    void HandleThrowInputHeld()
-    {
-        if (activePlug == null && connectedOutlet == null)
-        {
-            // Prepare to fire wire
-            Time.timeScale = timeScaleForAim;
-            framesHeld = 0;
-        }
-    }
+    // /// <summary>
+    // /// Function that is passed to the control scheme to handle the start of a throw. 
+    // /// NOTE: COMMENTED OUT AS THIS FEATURE WAS DEEMED UNNECESSARY AND OBSTRUCTIVE 
+    // /// </summary>
+    // void HandleThrowInputHeld()
+    // {
+    //     if (activePlug == null && connectedOutlet == null)
+    //     {
+    //         // Prepare to fire wire
+    //         Time.timeScale = timeScaleForAim;
+    //         framesHeld = 0;
+    //     }
+    // }
 
     /// <summary>
     /// Function that is passed to the control scheme to handle cancelling a throw when the 
