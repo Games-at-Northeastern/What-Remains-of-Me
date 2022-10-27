@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using SmartScriptableObjects.FloatEvent;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -9,13 +10,11 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
-
     public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
     bool iframes;
-
-
+    
     /*
      * sets the PlayerHealth component to this object and gets the 
      * and sets the battery and max battery at run time.
@@ -25,7 +24,6 @@ public class PlayerHealth : MonoBehaviour
      */
     private void Awake()
     {
-
     }
 
     /*
@@ -68,7 +66,7 @@ public class PlayerHealth : MonoBehaviour
      */
     public void AddVirus(float amount)
     {
-        playerInfo.virus += amount;
+        playerInfo.virus.Value = Mathf.Min(playerInfo.virus.Value + amount / playerInfo.maxVirus, 1f);
         playerInfo.maxBattery -= amount;
         if (playerInfo.maxBattery < playerInfo.battery) { playerInfo.battery = playerInfo.maxBattery; }
         if (playerInfo.battery == 0) { Die(); }
@@ -76,7 +74,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void SubtractVirus(float amount)
     {
-        playerInfo.virus -= amount;
+        playerInfo.virus.Value = Mathf.Max(playerInfo.virus.Value - amount / playerInfo.maxVirus, 0);
         playerInfo.maxBattery += amount;
     }
 

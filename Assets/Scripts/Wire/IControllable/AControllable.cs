@@ -42,7 +42,8 @@ public abstract class AControllable : MonoBehaviour, IControllable
             energy = Mathf.Clamp(energy - amount, 0, maxEnergy);
             virus = Mathf.Clamp(virus - amount, 0, virus);
             playerInfo.battery += (initEnergy - energy);
-            playerInfo.virus += (initVirus - virus);
+            playerInfo.virus.Value = Mathf.Clamp(playerInfo.virus.Value + (initVirus - virus) / playerInfo.maxVirus, 
+                0, 1f);
         }
     }
 
