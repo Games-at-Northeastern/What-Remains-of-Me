@@ -23,15 +23,15 @@ public class DialogueInitiator : MonoBehaviour
   /// </summary>
   private void Start()
   {
-    pdi.OnDialogueRequested.AddListener((d) => StartDialogueSequence(d));
-    dp.onDialogueEnd.AddListener(() => EndDialogueSequence());
+    pdi.OnDialogueRequested.AddListener(StartDialogueSequence);
+    dp.onDialogueEnd.AddListener(EndDialogueSequence);
   }
 
   /// <summary>
   /// Initiates a dialogue sequence from the given Dialogue.
   /// </summary>
   /// <param name="d">The dialogue to be played</param>
-  public void StartDialogueSequence(Dialogue d)
+  private void StartDialogueSequence(Dialogue d)
   {
     if (_inDialogueSequence)
     {
@@ -46,13 +46,14 @@ public class DialogueInitiator : MonoBehaviour
   /// <summary>
   /// Ends the current dialogue sequence if one has been initiated.
   /// </summary>
-  public void EndDialogueSequence()
+  private void EndDialogueSequence()
   {
-    if (_inDialogueSequence)
+    if (!_inDialogueSequence)
     {
-      _inDialogueSequence = false;
-      dialogueScreen.SetActive(false);
-      GamePauseHandler.setPausedForDialogue(false);
+      return;
     }
+    _inDialogueSequence = false;
+    dialogueScreen.SetActive(false);
+    GamePauseHandler.setPausedForDialogue(false);
   }
 }

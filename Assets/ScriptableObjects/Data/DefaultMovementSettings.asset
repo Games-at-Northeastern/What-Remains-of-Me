@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ee105d27ff24bb7b38c99a0f939d30, type: 3}
+  m_Name: DefaultMovementSettings
+  m_EditorClassIdentifier: 
+  runToIdleSpeed: 0.01
+  jumpLandableTimer: 0.1
+  jumpInitVelY: 6.5
+  jumpInitGravity: 0
+  jumpMaxGravity: 25
+  jumpGravityIncRate: 80
+  jumpMinSpeedY: -10
+  jumpCancelYVelMultiplier: 0.35
+  fallGravity: 20
+  fallMaxSpeedX: 4
+  fallSmoothTimeX: 0.2
+  fallMinSpeedY: -10
+  runMaxSpeed: 4
+  runSmoothTime: 0.1
+  wallSlideSpeed: -1
+  wallJumpLandableTimer: 0.1
+  wallJumpInitVelX: 4
+  wallJumpMaxSpeedX: 4
+  wallJumpSmoothTimeX: 0.3
+  wallJumpInitVelY: 5
+  wallJumpMinSpeedY: -10
+  wallJumpInitGravity: 0
+  wallJumpMaxGravity: 20
+  wallJumpGravityIncRate: 40
+  wallJumpCancelYVelMultiplier: 0.6
+  dashSpeedX: 7
+  dashTime: 0.3
+  wireSwingBounceDecayMultiplier: 0.25
+  wireSwingDecayMultiplier: 1.5
+  wireSwingNaturalAccelMultiplier: 7
+  wireSwingManualAccelMultiplier: 1.7
+  wireSwingAngularVelOfDash: 3
+  wireSwingReferenceWireLength: 5
+  wsrGravity: 20
+  wsrMaxSpeedX: 4
+  wsrSmoothTimeX: 0.5
+  wsrMinSpeedY: -8
+  wireGeneralMaxDistance: 10
+  knockbackVertVel: 6
+  absKnockbackHorizVel: 4
+  knockbackGravity: 25
+  knockbackGravityHorizOnRecovery: 7

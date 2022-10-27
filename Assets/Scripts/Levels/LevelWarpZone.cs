@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class LevelWarpZone : MonoBehaviour
 {
+    [SerializeField] private LevelManager levelManager;
     public int id;
     public string warpDestinationScene;
     public int warpDestinationID;
@@ -22,8 +23,8 @@ public class LevelWarpZone : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if (lm == null) { lm = FindObjectOfType<LevelManager>(); }
-        anim = GameObject.FindGameObjectWithTag("LevelTransition").GetComponent<Animator>();
+        lm = levelManager;
+
     }
 
     /// <summary>

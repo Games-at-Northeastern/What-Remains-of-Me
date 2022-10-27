@@ -27,10 +27,10 @@ public class Idle : AMove
 
     public override void AdvanceTime()
     {
-        if (WT.connectedOutlet != null)
+        if (WT.ConnectedOutlet != null)
         {
             Vector2 origPos = MI.transform.position;
-            Vector2 connectedOutletPos = WT.connectedOutlet.transform.position;
+            Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
             float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
             if (newDistFromOutlet < currDistFromOutlet)
             {

@@ -9,12 +9,7 @@ using UnityEngine;
 public class PlayerSFX : MonoBehaviour
 {
 
-    private SoundController soundController;
-
-    private void Awake()
-    {
-        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
-    }
+    [SerializeField] private SoundController soundController;
 
     /// <summary>
     /// Plays the left foot's walking audio clip at the player's location
