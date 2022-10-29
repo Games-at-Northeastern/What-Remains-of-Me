@@ -9,8 +9,8 @@ using UnityEngine;
 public class PlayerInfo : ScriptableObject
 {
     [Header("Dependency Injection")]
-    [SerializeField] private FloatReactivePropertySO _virusSO;
-    
+    [SerializeField] private PercentageFloatReactivePropertySO _virusSO;
+
     // any information about the player we want tracked can
     // be stored here.
     [Header("Info")]

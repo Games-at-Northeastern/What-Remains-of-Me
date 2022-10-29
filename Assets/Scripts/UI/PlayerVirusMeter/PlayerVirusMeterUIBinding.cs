@@ -16,9 +16,9 @@ namespace UI.PlayerVirusMeter
     {
         #region DependencyInjection
         [SerializeField] private PlayerVirusMeterUI _playerVirusMeterUIMB;
-        [SerializeField] private FloatReactivePropertySO _virusReactivePropertySO;
+        [SerializeField] private PercentageFloatReactivePropertySO _virusReactivePropertySO;
         #endregion
-        
+
         private IPlayerVirusMeterUI _playerVirusMeterUI;
         private IReadOnlyReactiveProperty<float> _virusReactiveProperty;
 
@@ -26,12 +26,12 @@ namespace UI.PlayerVirusMeter
         {
             _playerVirusMeterUI = _playerVirusMeterUIMB;
             _virusReactiveProperty = _virusReactivePropertySO;
-            
+
             // Get the virus UI to sync up with player virus stat when the scene is loaded
             // This only has to happen once, it will automatically update hereafter
             _playerVirusMeterUI.SetCurrVirusPercentage(_virusReactiveProperty.Value);
         }
-        
+
         private void OnEnable()
         {
             _virusReactiveProperty.TakeUntilDisable(this).Subscribe(_playerVirusMeterUI.SetCurrVirusPercentage);

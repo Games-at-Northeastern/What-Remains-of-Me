@@ -10,9 +10,10 @@ namespace SmartScriptableObjects.FloatEvent
 	/// scriptable object via drag and drop through the inspector.
 	/// </summary>
 	[CreateAssetMenu(menuName = "SO Reactive Properties/Float")]
-	public class FloatReactivePropertySO : DescriptionBaseSO, IReactiveProperty<float>, 
-		IDisposable, IOptimizedObservable<float> 
+	public class PercentageFloatReactivePropertySO : DescriptionBaseSO, IReactiveProperty<float>,
+		IDisposable, IOptimizedObservable<float>
 	{
+    [RangeReactiveProperty(0, 1f)]
 		[SerializeField] private FloatReactiveProperty _reactiveProperty;
 
 		public IDisposable Subscribe(IObserver<float> observer)
