@@ -18,10 +18,16 @@ public class PlayerInfo : ScriptableObject
     // be stored here.
     [Header("Info")]
     [HideInInspector] public IReactiveProperty<float> batteryPercentage;
-    public float battery => batteryPercentage.Value * maxBattery;
+
+    public float battery
+    {
+        get => batteryPercentage.Value * maxBattery;
+        set => batteryPercentage.Value = value / maxBattery;
+    }
 
     private float _maxBattery;
-    public float maxBattery {
+    public float maxBattery
+    {
         get => _maxBattery;
         set
         {
@@ -30,6 +36,11 @@ public class PlayerInfo : ScriptableObject
         }
     }
     [HideInInspector] public IReactiveProperty<float> virusPercentage;
+    public float virus
+    {
+        get => virusPercentage.Value * maxVirus;
+        set => virusPercentage.Value = value / maxVirus;
+    }
     public float maxVirus;
     public float iframesTime;
 
