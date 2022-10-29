@@ -19,15 +19,18 @@ namespace UI.PlayerBatteryMeter
         #region DependencyInjection
         [SerializeField] private PlayerBatteryMeterUI _playerBatteryMeterUIMB;
         [SerializeField] private PercentageFloatReactivePropertySO _batteryReactivePropertySO;
+        [SerializeField] private PercentageFloatReactivePropertySO _virusReactivePropertySO;
         #endregion
 
         private IPlayerBatteryMeterUI _playerBatteryMeterUI;
         private IReadOnlyReactiveProperty<float> _batteryReactiveProperty;
+        private IReadOnlyReactiveProperty<float> _virusReactiveProperty;
 
         void Awake()
         {
             _playerBatteryMeterUI = _playerBatteryMeterUIMB;
             _batteryReactiveProperty = _batteryReactivePropertySO;
+            _virusReactiveProperty = _virusReactivePropertySO;
 
             // Get the virus UI to sync up with player virus stat when the scene is loaded
             // This only has to happen once, it will automatically update hereafter
@@ -37,6 +40,7 @@ namespace UI.PlayerBatteryMeter
         private void OnEnable()
         {
             _batteryReactiveProperty.TakeUntilDisable(this).Subscribe(_playerBatteryMeterUI.SetCurrBatteryPercentage);
+            _virusReactiveProperty.TakeUntilDisable(this).Subscribe(_playerBatteryMeterUI.SetCurrVirusPercentage);
         }
     }
 }
