@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Handles the UI view of the player's health.
 /// </summary>
-public class PlayerHealthView : MonoBehaviour
+public class PlayerBatteryMeterUI : MonoBehaviour
 {
     [SerializeField] Slider slider;
     public PlayerInfo playerInfo;
