@@ -1,26 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using UI.PlayerBatteryMeter;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
 /// Handles the UI view of the player's health.
 /// </summary>
-public class PlayerBatteryMeterUI : MonoBehaviour
+public class PlayerBatteryMeterUI : MonoBehaviour, IPlayerBatteryMeterUI
 {
-    [SerializeField] Slider slider;
+    [FormerlySerializedAs("slider")] [SerializeField] private Slider _slider;
     public PlayerInfo playerInfo;
 
-    void Start()
+    public void SetCurrBatteryPercentage(float percentage)
     {
-        //deleted the instace listener that was originally here becuase we are
-        //updating the slider to costantly be the percentage of the battery to
-        //max battery in the scriptable object
-        UpdateHealthView();
+        _slider.value = playerInfo.batteryPercentage.Value * _slider.maxValue;
     }
 
-    void UpdateHealthView()
+    public void SetCurrVirusPercentage(float percentage)
     {
-        slider.value = ((float) playerInfo.battery/playerInfo.maxBattery) * slider.maxValue;
+
     }
 }
