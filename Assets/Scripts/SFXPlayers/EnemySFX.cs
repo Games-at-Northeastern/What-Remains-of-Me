@@ -9,12 +9,7 @@ using UnityEngine;
 public class EnemySFX : MonoBehaviour
 {
 
-    private SoundController soundController;
-
-    private void Awake()
-    {
-        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
-    }
+    [SerializeField] private SoundController soundController;
 
     /// <summary>
     /// Plays the walking audio clip at the enemy's location

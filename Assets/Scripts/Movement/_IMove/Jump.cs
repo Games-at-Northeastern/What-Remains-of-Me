@@ -31,7 +31,7 @@ public class Jump : AMove
         timePassed = 0;
         CS.Player.Dash.performed += _ => dashInput = true;
         WT.onConnect.AddListener(() => connectedInput = true);
-        CS.Player.Jump.performed += _ => { if (WT.connectedOutlet != null) { swingInput = true; } };
+        CS.Player.Jump.performed += _ => { if (WT.ConnectedOutlet != null) { swingInput = true; } };
         PH.OnDamageTaken.AddListener(() => damageInput = true);
     }
 
