@@ -13,13 +13,13 @@ public class MovementExecuter : MonoBehaviour
     [SerializeField] private MovementSettings ms; // Gives constants to move scripts
     [SerializeField] private WireThrower wt; // Gives information about the wire
     [SerializeField] private PlayerHealth ph; // Gives info about player health / damage
-    IMove currentMove; // The move taking place this frame
-    Vector3 respawnPosition;
+    private IMove currentMove; // The move taking place this frame
+    private Vector3 respawnPosition;
 
     // Initialization
     private void Awake()
     {
-        ControlSchemes cs = new ControlSchemes();
+        var cs = new ControlSchemes();
         cs.Enable();
         cs.Debug.Restart.performed += _ => Restart();
         currentMove = new StarterMove(mi, ms, cs, wt, ph);
@@ -41,7 +41,7 @@ public class MovementExecuter : MonoBehaviour
     /// <summary>
     /// Resets the player to their original position. For debugging only.
     /// </summary>
-    void Restart()
+    private void Restart()
     {
         transform.position = respawnPosition;
         currentMove = new Fall();
@@ -51,8 +51,5 @@ public class MovementExecuter : MonoBehaviour
     /// Gives an immutable version of the current move. This allows certain information
     /// about the move to be accessed.
     /// </summary>
-    public IMoveImmutable GetCurrentMove()
-    {
-        return currentMove;
-    }
+    public IMoveImmutable GetCurrentMove() => currentMove;
 }

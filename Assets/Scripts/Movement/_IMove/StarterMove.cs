@@ -14,24 +14,15 @@ public class StarterMove : AMove
     /// to the base class so that they can be accessed by any move classes
     /// in the future.
     /// </summary>
-    public StarterMove(MovementInfo mi, MovementSettings ms, ControlSchemes cs, WireThrower wt, PlayerHealth ph)
-    {
-        base.Initialize(mi, ms, cs, wt, ph);
-    }
+    public StarterMove(MovementInfo mi, MovementSettings ms, ControlSchemes cs, WireThrower wt, PlayerHealth ph) => base.Initialize(mi, ms, cs, wt, ph);
 
     public override void AdvanceTime() { /* Nothing */ }
 
-    public override float XSpeed() { return 0; }
+    public override float XSpeed() => 0;
 
-    public override float YSpeed() { return 0; }
+    public override float YSpeed() => 0;
 
-    public override IMove GetNextMove()
-    {
-        return new Fall();
-    }
+    public override IMove GetNextMove() => new Fall();
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.NONE;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.NONE;
 }

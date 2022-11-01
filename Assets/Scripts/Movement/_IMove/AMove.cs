@@ -21,7 +21,7 @@ public abstract class AMove : IMove
     /// <summary>
     /// Reset variables for scene load.
     /// </summary>
-    void OnSceneLoad(Scene scene, LoadSceneMode mode)
+    private void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
         dashIsReset = false;
         flipped = false;
@@ -57,10 +57,7 @@ public abstract class AMove : IMove
 
     public abstract AnimationType GetAnimationState();
 
-    public virtual bool DisconnectByJumpOkay()
-    {
-        return false;
-    }
+    public virtual bool DisconnectByJumpOkay() => false;
 
     public bool Flipped()
     {

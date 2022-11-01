@@ -8,17 +8,17 @@ using UnityEngine;
 /// </summary>
 public class WireSwing : AMove
 {
-    readonly float initRadius; // Radius from you to wire upon connection
+    private readonly float initRadius; // Radius from you to wire upon connection
 
-    bool disconnected; // To be true the frame the player is disconnected
-    float angularVelocity = 0;
-    float angularAccel;
-    float gravityVel; // Y Vel contributed by gravity during free fall
-    Vector2 vel;
-    bool inBounceMode; // Currently in the process of bouncing off a wall/ceiling?
+    private bool disconnected; // To be true the frame the player is disconnected
+    private float angularVelocity = 0;
+    private float angularAccel;
+    private float gravityVel; // Y Vel contributed by gravity during free fall
+    private Vector2 vel;
+    private bool inBounceMode; // Currently in the process of bouncing off a wall/ceiling?
 
-    bool dashInput; // Lets you dash while connected
-    bool damageInput;
+    private bool dashInput; // Lets you dash while connected
+    private bool damageInput;
 
     // Initializes a wire control move, deciding what angular vel to start with, setting the
     // wire's max distance, and initializing events.
@@ -99,18 +99,12 @@ public class WireSwing : AMove
         }
     }
 
-    public override float XSpeed()
-    {
-        return disconnected ? 0 : vel.x;
-        // If the vel isn't 0 upon disconnect, weird bugs will happen
-    }
+    public override float XSpeed() => disconnected ? 0 : vel.x;
 
-    public override float YSpeed()
-    {
-        return disconnected ? 0 : vel.y;
-        // If the vel isn't 0 upon disconnect, weird bugs will happen
-    }
+    // If the vel isn't 0 upon disconnect, weird bugs will happen
+    public override float YSpeed() => disconnected ? 0 : vel.y;
 
+    // If the vel isn't 0 upon disconnect, weird bugs will happen
     public override IMove GetNextMove()
     {
         if (damageInput)
@@ -130,13 +124,7 @@ public class WireSwing : AMove
         return this;
     }
 
-    public override bool DisconnectByJumpOkay()
-    {
-        return true;
-    }
+    public override bool DisconnectByJumpOkay() => true;
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.WIRE_SWING;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.WIRE_SWING;
 }

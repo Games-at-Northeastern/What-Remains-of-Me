@@ -7,14 +7,14 @@ using UnityEngine;
 /// </summary>
 public class WireSwingRelease : AMove
 {
-    float yVel;
-    float xVel;
-    float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
+    private float yVel;
+    private float xVel;
+    private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
 
-    bool dashInput;
-    bool connectedInput;
-    bool swingInput;
-    bool damageInput;
+    private bool dashInput;
+    private bool connectedInput;
+    private bool swingInput;
+    private bool damageInput;
 
     /// <summary>
     /// Initializes a wire swing release, appropriately setting its vertical velocity to start
@@ -45,15 +45,9 @@ public class WireSwingRelease : AMove
         }
     }
 
-    public override float XSpeed()
-    {
-        return xVel;
-    }
+    public override float XSpeed() => xVel;
 
-    public override float YSpeed()
-    {
-        return yVel;
-    }
+    public override float YSpeed() => yVel;
 
     public override IMove GetNextMove()
     {
@@ -84,8 +78,5 @@ public class WireSwingRelease : AMove
         return this;
     }
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.JUMP_FALLING;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.JUMP_FALLING;
 }

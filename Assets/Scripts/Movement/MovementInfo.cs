@@ -11,16 +11,16 @@ using UnityEngine;
 public class MovementInfo : MonoBehaviour
 {
     // Serialized Fields
-    [SerializeField] CollisionDetector groundDetector;
-    [SerializeField] CollisionDetector ceilingDetector;
-    [SerializeField] CollisionDetector leftWallDetector;
-    [SerializeField] CollisionDetector rightWallDetector;
-    [SerializeField] CollisionDetector damageDetector;
+    [SerializeField] private CollisionDetector groundDetector;
+    [SerializeField] private CollisionDetector ceilingDetector;
+    [SerializeField] private CollisionDetector leftWallDetector;
+    [SerializeField] private CollisionDetector rightWallDetector;
+    [SerializeField] private CollisionDetector damageDetector;
 
     // Accessible Fields
-    public CollisionDetector GroundDetector { get { return groundDetector; } }
-    public CollisionDetector CeilingDetector { get { return ceilingDetector; } }
-    public CollisionDetector LeftWallDetector { get { return leftWallDetector; } }
-    public CollisionDetector RightWallDetector { get { return rightWallDetector; } }
-    public CollisionDetector DamageDetector { get { return damageDetector; } }
+    public CollisionDetector GroundDetector => groundDetector;
+    public CollisionDetector CeilingDetector => ceilingDetector;
+    public CollisionDetector LeftWallDetector => leftWallDetector;
+    public CollisionDetector RightWallDetector => rightWallDetector;
+    public CollisionDetector DamageDetector => damageDetector;
 }

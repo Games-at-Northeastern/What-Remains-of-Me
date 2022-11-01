@@ -8,12 +8,12 @@ using UnityEngine;
 /// </summary>
 public class Dash : AMove
 {
-    float xVel;
-    float timePassed;
+    private float xVel;
+    private float timePassed;
 
-    bool connectedInput;
-    bool swingInput;
-    bool damageInput;
+    private bool connectedInput;
+    private bool swingInput;
+    private bool damageInput;
 
     /// <summary>
     /// Initializes a dash, taking in whether it is going to the right (true)
@@ -28,20 +28,11 @@ public class Dash : AMove
         PH.OnDamageTaken.AddListener(() => damageInput = true);
     }
 
-    public override void AdvanceTime()
-    {
-        timePassed += Time.deltaTime;
-    }
+    public override void AdvanceTime() => timePassed += Time.deltaTime;
 
-    public override float XSpeed()
-    {
-        return xVel;
-    }
+    public override float XSpeed() => xVel;
 
-    public override float YSpeed()
-    {
-        return 0;
-    }
+    public override float YSpeed() => 0;
 
     public override IMove GetNextMove()
     {
@@ -66,8 +57,5 @@ public class Dash : AMove
         return this;
     }
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.DASH;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.DASH;
 }

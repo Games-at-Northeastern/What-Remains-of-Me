@@ -7,13 +7,14 @@ using UnityEngine;
 /// </summary>
 public class Run : AMove
 {
-    float xVel;
-    float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
+    private float xVel;
+    private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
 
-    bool dashInput;
-    bool damageInput;
+    private bool dashInput;
+    private bool jumpPending; // is true if space still being held after last jump
+    private bool damageInput;
 
-    float currDistFromOutlet; // Current position from the player to the outlet, if wire connected
+    private float currDistFromOutlet; // Current position from the player to the outlet, if wire connected
 
     /// <summary>
     /// Constructs a Run move, starting it off with the given horizontal speed.
@@ -22,6 +23,7 @@ public class Run : AMove
     {
         AMove.dashIsReset = true;
         CS.Player.Dash.performed += _ => dashInput = true;
+        jumpPending = (CS.Player.Jump.ReadValue<float>() > 0);
         PH.OnDamageTaken.AddListener(() => damageInput = true);
         xVel = initXVel;
     }
@@ -45,17 +47,17 @@ public class Run : AMove
             }
             currDistFromOutlet = newDistFromOutlet;
         }
+
+        // ready the player for another jump once space has been released
+        if (jumpPending && CS.Player.Jump.ReadValue<float>() == 0)
+        {
+            jumpPending = false;
+        }
     }
 
-    public override float XSpeed()
-    {
-        return xVel;
-    }
+    public override float XSpeed() => xVel;
 
-    public override float YSpeed()
-    {
-        return 0;
-    }
+    public override float YSpeed() => 0;
 
     public override IMove GetNextMove()
     {
@@ -67,7 +69,7 @@ public class Run : AMove
         {
             return new Dash();
         }
-        if (CS.Player.Jump.ReadValue<float>() > 0)
+        if (!jumpPending && CS.Player.Jump.ReadValue<float>() > 0)
         {
             return new Jump(xVel);
         }
@@ -89,8 +91,5 @@ public class Run : AMove
         return this;
     }
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.RUN;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.RUN;
 }
