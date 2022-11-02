@@ -37,12 +37,14 @@ public class WireThrower : MonoBehaviour
 
     private void Awake()
     {
+
+
         // Add left click handling functionality
         _controlSchemes = new ControlSchemes();
         _controlSchemes.Enable();
-        //_controlSchemes.Player.Throw.started += _ => HandleThrowInputHeld();
-        _controlSchemes.Player.ThrowController.started += _ => HandleThrowInputReleasedController();
-        _controlSchemes.Player.ThrowMouse.started += _ => HandleThrowInputReleasedKeyboard();
+        _controlSchemes.Player.Throw.started += _ => HandleThrowInputReleasedKeyboard();
+        //_controlSchemes.Player.ThrowController.canceled += _ => HandleThrowInputReleasedController();
+        //_controlSchemes.Player.ThrowMouse.canceled += _ => HandleThrowInputReleasedKeyboard();
         _controlSchemes.Player.Jump.performed += _ => HandlePotentialDisconnectByJump();
         // Handle line renderer
         _lineRenderer.enabled = false;
@@ -53,15 +55,15 @@ public class WireThrower : MonoBehaviour
     /// <summary>
     /// Function that is passed to the control scheme to handle the start of a throw.
     /// </summary>
-    // void HandleThrowInputHeld()
-    // {
-    //     if (_activePlug == null && ConnectedOutlet == null)
-    //     {
-    //         // Prepare to fire wire
-    //         Time.timeScale = timeScaleForAim;
-    //         _framesHeld = 0;
-    //     }
-    // }
+    void HandleThrowInputHeld()
+    {
+        if (_activePlug == null && ConnectedOutlet == null)
+        {
+            // Prepare to fire wire
+            Time.timeScale = 1;
+            _framesHeld = 0;
+        }
+    }
 
     /// <summary>
     /// Function that is passed to the control scheme to handle cancelling a throw when the
@@ -294,6 +296,7 @@ public class WireThrower : MonoBehaviour
     private void Update()
     {
         HandleLineRendering();
+        HandleThrowInputHeld();
         HandleConnectionPhysics();
         _framesHeld += Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Q)) { _isLockOn = !_isLockOn; }
