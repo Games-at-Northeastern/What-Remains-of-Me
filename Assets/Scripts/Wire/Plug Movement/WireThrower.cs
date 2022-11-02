@@ -40,9 +40,9 @@ public class WireThrower : MonoBehaviour
         // Add left click handling functionality
         _controlSchemes = new ControlSchemes();
         _controlSchemes.Enable();
-        _controlSchemes.Player.Throw.started += _ => HandleThrowInputHeld();
-        _controlSchemes.Player.ThrowController.canceled += _ => HandleThrowInputReleasedController();
-        _controlSchemes.Player.ThrowMouse.canceled += _ => HandleThrowInputReleasedKeyboard();
+        //_controlSchemes.Player.Throw.started += _ => HandleThrowInputHeld();
+        _controlSchemes.Player.ThrowController.started += _ => HandleThrowInputReleasedController();
+        _controlSchemes.Player.ThrowMouse.started += _ => HandleThrowInputReleasedKeyboard();
         _controlSchemes.Player.Jump.performed += _ => HandlePotentialDisconnectByJump();
         // Handle line renderer
         _lineRenderer.enabled = false;
@@ -53,18 +53,18 @@ public class WireThrower : MonoBehaviour
     /// <summary>
     /// Function that is passed to the control scheme to handle the start of a throw.
     /// </summary>
-    void HandleThrowInputHeld()
-    {
-        if (_activePlug == null && ConnectedOutlet == null)
-        {
-            // Prepare to fire wire
-            Time.timeScale = timeScaleForAim;
-            _framesHeld = 0;
-        }
-    }
+    // void HandleThrowInputHeld()
+    // {
+    //     if (_activePlug == null && ConnectedOutlet == null)
+    //     {
+    //         // Prepare to fire wire
+    //         Time.timeScale = timeScaleForAim;
+    //         _framesHeld = 0;
+    //     }
+    // }
 
     /// <summary>
-    /// Function that is passed to the control scheme to handle cancelling a throw when the 
+    /// Function that is passed to the control scheme to handle cancelling a throw when the
     /// keyboard/mouse button for this action is released.
     /// </summary>
     void HandleThrowInputReleasedKeyboard()
@@ -72,17 +72,18 @@ public class WireThrower : MonoBehaviour
         if (_activePlug == null && ConnectedOutlet == null)
         {
             Time.timeScale = 1;
-            if (_framesHeld < 0.1)
-                if (_isLockOn) { FirePlugLockOn(); }
-                else { FirePlugAutoAim(); }
-            else
-                FirePlugMouse();
+            // if (_framesHeld < 0.1)
+            //     if (_isLockOn) { FirePlugLockOn(); }
+            //     else { FirePlugAutoAim(); }
+            // else
+            //     FirePlugMouse();
+            FirePlugAutoAim();
         }
         HandlePotentialDisconnect();
     }
 
     /// <summary>
-    /// Function that is passed to the control scheme to handle cancelling a throw when the 
+    /// Function that is passed to the control scheme to handle cancelling a throw when the
     /// controller button for this action is released.
     /// </summary>
     void HandleThrowInputReleasedController()
@@ -261,7 +262,7 @@ public class WireThrower : MonoBehaviour
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
         PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
         pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
-        
+
         // Play SFX for shooting plug
         src.clip = shootWire;
         src.Play();
