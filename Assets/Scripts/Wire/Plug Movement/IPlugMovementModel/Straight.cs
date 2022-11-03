@@ -28,6 +28,10 @@ public class Straight : IPlugMovementModel
         this.pms = pms;
     }
 
+
+    /// <summary>
+    /// Retracts the plug if it has been flying out past the limit amount of time
+    /// </summary>
     public void AdvanceTime()
     {
         timePassed += Time.deltaTime;
@@ -37,6 +41,9 @@ public class Straight : IPlugMovementModel
         }
     }
 
+    /// <summary>
+    /// Sets the velocity of the plug depending on whether it is flying out or retracting.
+    /// </summary>
     public Vector2 Velocity()
     {
         // First Phase (moving away from origin transform)
@@ -53,6 +60,9 @@ public class Straight : IPlugMovementModel
 
     }
 
+    /// <summary>
+    /// Retracts the plug.
+    /// </summary>
     public void HandleCollision()
     {
         if (!retracting)
@@ -61,6 +71,9 @@ public class Straight : IPlugMovementModel
         }
     }
 
+    /// <summary> 
+    /// Has the plug terminated retracting?
+    /// </summary>
     public bool Terminate()
     {
         return (retracting && Vector2.Distance(myTransform.position, returnTransform.position) < 0.1f)

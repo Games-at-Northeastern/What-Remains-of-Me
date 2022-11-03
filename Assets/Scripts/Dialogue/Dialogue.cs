@@ -8,24 +8,26 @@ using UnityEngine;
 /// </summary>
 public class Dialogue : MonoBehaviour
 {
-    [SerializeField] Transform promptAppearTransform; // Where should the prompt (Press 'this button' to start dialogue) show up?
-    [SerializeField] ADialogueTree dialogueTree; // Actual content of the dialogue
+  // Where should the prompt (Press 'this button' to start dialogue) show up?
+  [SerializeField] private Transform promptAppearTransform;
 
-    /// <summary>
-    /// Gets the actual content of the dialogue from this dialogue-holding
-    /// object.
-    /// </summary>
-    public IDialogueTree GetDialogueTree()
-    {
-        return dialogueTree;
-    }
+  [SerializeField] private ADialogueTree dialogueTree; // Actual content of the dialogue
 
-    /// <summary>
-    /// Gives a transform that indicates where the prompt to start the dialogue
-    /// should spawn.
-    /// </summary>
-    public Transform GetPromptTransform()
-    {
-        return promptAppearTransform;
-    }
+  /// <summary>
+  /// Gets the actual content of the dialogue from this dialogue-holding
+  /// object.
+  /// </summary>
+  public IDialogueTree GetDialogueTree()
+  {
+    return dialogueTree;
+  }
+
+  /// <summary>
+  /// Gives a transform that indicates where the prompt to start the dialogue
+  /// should spawn.
+  /// </summary>
+  public Transform GetPromptTransform()
+  {
+    return promptAppearTransform;
+  }
 }

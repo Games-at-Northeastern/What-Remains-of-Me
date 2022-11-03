@@ -9,108 +9,110 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] float initBattery;
-    [SerializeField] float maxBattery;
-    [SerializeField] float virus;
-    [SerializeField] float iframesTime;
-    static float Battery;
-    static float MaxBattery;
-    public static PlayerHealth instance { get; private set; }
+
+    public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
     bool iframes;
 
+
+    /*
+     * sets the PlayerHealth component to this object and gets the 
+     * and sets the battery and max battery at run time.
+     * 
+     * @throw error     if PlayerHealth already exists
+     * 
+     */
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            Battery = initBattery;
-            MaxBattery = maxBattery;
-        }
-        else
-        {
-            Debug.LogError("Instance already exists for PlayerHealth");
-        }
+
     }
 
-    /// <summary>
-    /// Loses the given amount of energy, not allowing the energy to go above 0 or
-    /// the max amount. If you want to avoid death, this function should not be
-    /// called unless it is known that this amount of energy CAN be lost.
-    /// This function should be called for the sake of energy transmission,
-    /// not taking damage.
-    /// </summary>
+    /*
+     * deducts the amount of energy given up until 0 for energy transmission use
+     * and kills the player if the battery is 0.
+     * 
+     * @param amount        amount of energy to deduct from the battery
+     */
     public void LoseEnergy(float amount)
     {
-        Battery = Mathf.Clamp(Battery - amount, 0, maxBattery);
-        if (Battery == 0)
+        playerInfo.battery = Mathf.Clamp(playerInfo.battery - amount, 0, playerInfo.maxBattery);
+        if (playerInfo.battery == 0)
         {
             Die();
         }
         OnHealthChanged.Invoke();
     }
 
-
-    /// <summary>
-    /// Gains the given amount of energy, not allowing the energy to go above 0 or
-    /// the max amount. If you don't want max energy, this function should
-    /// not be called unless it is known that this amount of energy CAN be gained.
-    /// This function should be called for the sake of energy transmission,
-    /// not taking damage.
-    /// </summary>
+    /*
+     * adds energy up until the maximum amount that is currently able
+     * to be held for use in energy transmission. Kills the player if
+     * battery is 0.
+     * 
+     * 
+     * @param amount        amount of energy to add to the battery
+     */
     public void GainEnergy(float amount)
     {
-        Battery = Mathf.Clamp(Battery + amount, 0, maxBattery);
-        if (Battery == 0)
-        {
-            Die();
-        }
+        playerInfo.battery = Mathf.Clamp(playerInfo.battery + amount, 0, playerInfo.maxBattery);
         OnHealthChanged.Invoke();
     }
 
+    /*
+     * adds the given amount to the virus meter and decreases current battery 
+     * value to the new max if battery is full and kills the player if battery
+     * is 0
+     * 
+     * @param amount        amount to add to the virus and deduct from the max
+     *                      battery
+     */
     public void AddVirus(float amount)
     {
-        virus += amount;
-        MaxBattery -= amount;
-        if (MaxBattery < Battery) { Battery = MaxBattery; }
-        if (Battery == 0) { Die(); }
+        playerInfo.virus += amount;
+        playerInfo.maxBattery -= amount;
+        if (playerInfo.maxBattery < playerInfo.battery) { playerInfo.battery = playerInfo.maxBattery; }
+        if (playerInfo.battery == 0) { Die(); }
     }
 
     public void SubtractVirus(float amount)
     {
-        virus -= amount;
-        MaxBattery += amount;
+        playerInfo.virus -= amount;
+        playerInfo.maxBattery += amount;
     }
 
-    /// <summary>
-    /// Gives the battery amount the player has, from 0 to 1.
-    /// </summary>
-    public static float GetRelativeBattery()
+    /* 
+     * Gives the battery amount the player has, from 0 to 1.
+     */
+    public float GetRelativeBattery()
     {
-        return Battery / MaxBattery;
+        return playerInfo.battery / playerInfo.maxBattery;
     }
 
-    /// <summary>
-    /// Can the player transfer this amount of energy to other things?
-    /// </summary>
-    public static bool CanGiveEnergy(float amount)
+    /*
+     * Can the player transfer this amount of energy to other things?
+     * 
+     * @param amount     the amount of energy being given
+     */
+    public bool CanGiveEnergy(float amount)
     {
-        return Battery >= amount;
+        return playerInfo.battery >= amount;
     }
 
-    /// <summary>
-    /// Can the player take this amount of energy from other things?
-    /// </summary>
-    public static bool CanTakeEnergy(float amount)
+    /*
+     * Can the player take this amount of energy from other things?
+     * 
+     * @param amount    the amount of energy being taken
+     */
+    public bool CanTakeEnergy(float amount)
     {
-        return Battery <= MaxBattery - amount;
+        return playerInfo.battery <= playerInfo.maxBattery - amount;
     }
 
-    /// <summary>
-    /// Makes the player take the given amount of damage
-    /// if they are not immune right now for some reason.
-    /// </summary>
+    /*
+     * Damages the player if there are no Iframes.
+     * 
+     * @param amount     the amount of damage to be deducted
+     */
     public void RequestTakeDamage(float amount)
     {
         if (!iframes)
@@ -119,9 +121,10 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Makes the player take the given amount of damage.
-    /// </summary>
+    /*
+     * activates events for taking damage, depletes
+     * the energy by the set amount and start IFrames
+     */
     private void TakeDamage(float amount)
     {
         OnDamageTaken.Invoke();
@@ -129,19 +132,21 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(IFrameSequence());
     }
 
-    /// <summary>
-    /// Gives the player IFrames for a temporary amount of time. 
-    /// </summary>
+    /*
+     * gives IFrames for the specified amount of time by 
+     * changing the boolean flag.
+     * 
+     */
     IEnumerator IFrameSequence()
     {
         iframes = true;
-        yield return new WaitForSeconds(iframesTime);
+        yield return new WaitForSeconds(playerInfo.iframesTime);
         iframes = false;
     }
 
-    /// <summary>
-    /// Conduct the death sequence.
-    /// </summary>
+    /*
+     * reloads the current scene using the Unity Scene Manager
+     */
     void Die()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

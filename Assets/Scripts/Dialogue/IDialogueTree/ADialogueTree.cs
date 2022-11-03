@@ -8,21 +8,21 @@ using UnityEngine;
 /// </summary>
 public abstract class ADialogueTree : MonoBehaviour, IDialogueTree
 {
-    public abstract void Advance();
+  public abstract void Advance();
 
-    public abstract void AdvanceToEnd();
+  public abstract void AdvanceToEnd();
 
-    public abstract void ChooseResponse(int index);
+  public abstract void ChooseResponse(int index);
 
-    public abstract string[] GetResponses();
+  public abstract string[] GetResponses();
 
-    public abstract string GetText();
+  public abstract string GetText();
 
-    public abstract bool HasNextSegment();
+  public abstract bool HasNextSegment();
 
-    public abstract void NextSegment();
+  public abstract void NextSegment();
 
-    public abstract void Reset();
+  public abstract void Reset();
 
-    public abstract bool SegmentIsComplete();
+  public abstract bool SegmentIsComplete();
 }
