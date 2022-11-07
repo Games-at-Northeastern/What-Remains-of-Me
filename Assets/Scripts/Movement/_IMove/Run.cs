@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +36,17 @@ public class Run : AMove
 
     public override void AdvanceTime()
     {
-        xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(), ref xAccel, MS.RunSmoothTime);
+        if (xVel > MS.RunMaxSpeed)
+        {
+            xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
+                ref xAccel, (float)0.3);
+        }
+        else
+        {
+            xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
+                ref xAccel, MS.RunSmoothTime);
+        }
+
         if (WT.ConnectedOutlet != null)
         {
             Vector2 origPos = MI.transform.position;
@@ -77,13 +88,6 @@ public class Run : AMove
         {
             return new Fall(xVel, 0);
         }
-        /*
-        if ((MI.LeftWallDetector.isColliding() && MI.LeftWallDetector.CollidingWith() != null && MI.LeftWallDetector.CollidingWith().tag == "Ladder") ||
-            (MI.RightWallDetector.isColliding() && MI.RightWallDetector.CollidingWith() != null && MI.RightWallDetector.CollidingWith().tag == "Ladder"))
-        {
-            return new Climb();
-        }
-        */
         if (CS.Player.Move.ReadValue<float>() == 0 && Mathf.Abs(xVel) < MS.RunToIdleSpeed)
         {
             return new Idle();

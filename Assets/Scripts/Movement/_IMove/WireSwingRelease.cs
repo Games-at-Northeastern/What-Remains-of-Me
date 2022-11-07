@@ -59,11 +59,11 @@ public class WireSwingRelease : AMove
         {
             return new WireSwing(xVel, yVel);
         }
-        if (dashInput && AMove.dashIsReset && UpgradeHandler.DashAllowed)
+        if (dashInput && dashIsReset && UpgradeHandler.DashAllowed)
         {
             return new Dash();
         }
-        if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding() && yVel < 0)
+        if (MI.LeftWallDetector.isColliding() || (MI.RightWallDetector.isColliding() && yVel < 0))
         {
             return new WallSlide();
         }

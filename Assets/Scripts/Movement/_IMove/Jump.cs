@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -46,8 +47,16 @@ public class Jump : AMove
         // General
         timePassed += Time.deltaTime;
         // Horizontal
-        xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(),
+        if (xVel > MS.FallMaxSpeedX * 0.85 && !connectedInput)
+        {
+            xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(),
+                ref xAccel, MS.FallSmoothTimeX * 5);
+        }
+        else
+        {
+            xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(),
             ref xAccel, MS.FallSmoothTimeX);
+        }
         // Vertical
         gravity = Mathf.Clamp(gravity + (MS.JumpGravityIncRate * Time.deltaTime),
             MS.JumpInitGravity, MS.JumpMaxGravity);
