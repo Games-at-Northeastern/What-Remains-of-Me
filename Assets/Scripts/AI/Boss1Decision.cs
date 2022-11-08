@@ -26,7 +26,7 @@ public class Boss1Decision : MonoBehaviour
         int index = Random.Range(0, machines.Length);
         Boss1AI selectedMachine = machines[index];
         print(selectedMachine.name + " is chosen by K.E.N.K");
-        selectedMachine.isChosen = true;
+        selectedMachine.Chosen();
        
     }
 

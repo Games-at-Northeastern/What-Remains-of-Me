@@ -16,13 +16,14 @@ public enum FSMStates
 
     [SerializeField] GameObject player;
     public FSMStates currentState;
-    public bool isChosen;
+
     public string name;
 
     private int _trackingTime;
     private int _attackingTime;
     private int _overchargedTime;
     private int _trackingSpeed;
+    private bool _isChosen;
 
 
 
@@ -62,7 +63,7 @@ public enum FSMStates
 
         print("Currently Neutral");
 
-        if (isChosen){
+        if (_isChosen){
 
             currentState = FSMStates.Track;
         }
@@ -95,6 +96,11 @@ public enum FSMStates
         float angle = Mathf.Atan2(distanceBetween.y, distanceBetween.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0,0,angle));
 
+    }
+
+    public void Chosen(){
+
+        _isChosen = true;
     }
 
 
