@@ -91,9 +91,8 @@ public enum FSMStates
 
     void FaceTarget(Vector3 target){
 
-
-        Vector3 targ = target - transform.position;
-        float angle = Mathf.Atan2(targ.y, targ.x) * Mathf.Rad2Deg;
+        Vector3 distanceBetween = target - transform.position;
+        float angle = Mathf.Atan2(distanceBetween.y, distanceBetween.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0,0,angle));
 
     }
