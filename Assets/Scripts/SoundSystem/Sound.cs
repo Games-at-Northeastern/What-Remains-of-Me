@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 //Represents a single sound effect, a song, or a layer in a layered song/sound. Used in tandem with the SoundController.cs
 //class. 
@@ -16,7 +17,9 @@ public class Sound : ScriptableObject
     [Range(0.2f, 3f)]
     public float basePitch = 1;
 
-    public bool loop; // Should this sound loop itself? 
+    public bool loop; // Should this sound loop itself?
+
+    public AudioMixerGroup audioMixerGroup;
 
     [HideInInspector]
     public AudioSource source; // AudioSource associated with this sound.
