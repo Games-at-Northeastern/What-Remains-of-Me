@@ -12,6 +12,7 @@ public class Fall : AMove
     private float yVel;
     private float xVel;
     private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
+    private static float coyoteTimeCounter = MS.CoyoteTime;
 
     private bool dashInput;
     private bool connectedInput;
@@ -39,12 +40,14 @@ public class Fall : AMove
 
     public override void AdvanceTime()
     {
+        var timeChange = Time.deltaTime;
         xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(), ref xAccel, MS.FallSmoothTimeX);
-        yVel -= MS.FallGravity * Time.deltaTime;
+        yVel -= MS.FallGravity * timeChange;
         if (yVel < MS.FallMinSpeedY)
         {
             yVel = MS.FallMinSpeedY;
         }
+        coyoteTimeCounter -= timeChange;
     }
 
     public override float XSpeed() => xVel;
@@ -75,15 +78,23 @@ public class Fall : AMove
         */
         if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding() && yVel < 0)
         {
+            coyoteTimeCounter = MS.CoyoteTime;
             return new WallSlide();
         }
         if (MI.GroundDetector.isColliding() && Mathf.Abs(xVel) < MS.RunToIdleSpeed)
         {
+            coyoteTimeCounter = MS.CoyoteTime;
             return new Idle();
         }
         else if (MI.GroundDetector.isColliding())
         {
+            coyoteTimeCounter = MS.CoyoteTime;
             return new Run(xVel);
+        }
+        if (CS.Player.Jump.ReadValue<float>() > 0 && coyoteTimeCounter > 0.0f)
+        {
+            coyoteTimeCounter = MS.CoyoteTime;
+            return new Jump(xVel);
         }
         return this;
     }
