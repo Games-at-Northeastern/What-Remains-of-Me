@@ -145,7 +145,7 @@ public class WireThrower : MonoBehaviour
         {
             Vector2 closestPos = mainCamera.WorldToScreenPoint(_lockOnOutlet.transform.position);
             fireDir = closestPos - playerScreenPos;
-            
+
         }
 
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
@@ -308,7 +308,7 @@ public class WireThrower : MonoBehaviour
         _framesHeld += Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Q)) { _isLockOn = !_isLockOn; }
         if (_isLockOn && Input.GetKeyDown(KeyCode.E)) { ChangeOutletTarget(); }
-        // lock-on reticle is not visible when the plug has locked on 
+        // lock-on reticle is not visible when the plug has locked on
         if (ConnectedOutlet != null) {
             reticle.GetComponent<Renderer>().enabled = false;
         }
@@ -381,7 +381,7 @@ public class WireThrower : MonoBehaviour
         if (_activePlug != null)
             Destroy(_activePlug);
             reticle.GetComponent<Renderer>().enabled = false;
-        
+
     }
 
     /// <summary>

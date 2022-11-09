@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using SmartScriptableObjects.FloatEvent;
+using SmartScriptableObjects.ReactiveProperties;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
