@@ -47,7 +47,7 @@ public class Dash : AMove
         if (timePassed > MS.DashTime)
         {
             AMove.dashIsReset = false;
-            return new Fall();
+            return new Fall(true);
         }
         if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding())
         {

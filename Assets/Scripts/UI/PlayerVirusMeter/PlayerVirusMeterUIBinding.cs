@@ -1,10 +1,11 @@
 using System;
-using SmartScriptableObjects.FloatEvent;
 using UniRx;
 using UnityEngine;
 
 namespace UI.PlayerVirusMeter
 {
+    using SmartScriptableObjects.ReactiveProperties;
+
     /// <summary>
     /// Allows the player virus meter UI to listen to the player's virus value.
     /// </summary>

@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 //A versititle and flexible system for playing sounds from anywhere in the game that has a refrence to this class. 
 //Works in tandem with the Sound.cs class, and used to play Layered Sounds or Songs. 
@@ -30,6 +30,8 @@ using UnityEngine;
 
 public class SoundController : MonoBehaviour
 {
+    [SerializeField] private AudioMixer masterMixer;
+
     public SoundPackPresets[] soundPresets;
 
     public List<Sound> sounds; //The list of all sounds/songs used in this level, scene etc. There should only be 1 sound of each name.
@@ -81,11 +83,7 @@ public class SoundController : MonoBehaviour
         //Create an audio source for each non-looping sound effect to share. 
         foreach (Sound s in sounds)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clip;
-            s.source.volume = s.baseVolume;
-            s.source.pitch = s.basePitch;
-            s.source.loop = s.loop;
+            GenerateAudioSource(s);
         }     
 
         //Layers in a layered sound must be looping, and each get their own audio source as a result. 
@@ -93,13 +91,20 @@ public class SoundController : MonoBehaviour
         {
             foreach (Sound s in layeredSounds[i].layers)
             {
-                s.source = gameObject.AddComponent<AudioSource>();
-                s.source.clip = s.clip;
-                s.source.volume = s.baseVolume;
-                s.source.pitch = s.basePitch;
-                s.source.loop = s.loop;
+                GenerateAudioSource(s);
             }
         }
+    }
+
+    //Given a Sound, create an AudioSource and add it to the controller object with the specified settings
+    private void GenerateAudioSource(Sound s)
+    {
+        s.source = gameObject.AddComponent<AudioSource>();
+        s.source.clip = s.clip;
+        s.source.volume = s.baseVolume;
+        s.source.pitch = s.basePitch;
+        s.source.loop = s.loop;
+        s.source.outputAudioMixerGroup = s.audioMixerGroup;
     }
 
     public void FixedUpdate()
