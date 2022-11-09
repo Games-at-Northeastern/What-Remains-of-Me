@@ -2,7 +2,7 @@ namespace UI.PlayerBatteryMeter
 {
     using System;
     using PlayerVirusMeter;
-    using SmartScriptableObjects.FloatEvent;
+    using SmartScriptableObjects.ReactiveProperties;
     using UniRx;
     using UnityEngine;
     using UnityEngine.Serialization;

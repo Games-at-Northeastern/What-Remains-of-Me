@@ -1,15 +1,15 @@
-using System;
-using UniRx;
-using UnityEngine;
-
-namespace SmartScriptableObjects.FloatEvent
+namespace SmartScriptableObjects.ReactiveProperties
 {
-	/// <summary>
+    using System;
+    using UniRx;
+    using UnityEngine;
+
+    /// <summary>
 	/// A scriptable object implementation of the int reactive property interface. Thus,
 	/// the int value exists on an asset level and be injected into any MonoBehaviour or
 	/// scriptable object via drag and drop through the inspector.
 	/// </summary>
-	[CreateAssetMenu(menuName = "SO Reactive Properties/Float")]
+	[CreateAssetMenu(menuName = "SO Reactive Properties/Int")]
 	public class IntReactivePropertySO : DescriptionBaseSO, IReactiveProperty<int>,
 		IDisposable, IOptimizedObservable<int>
 	{

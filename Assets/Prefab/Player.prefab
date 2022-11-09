@@ -128,6 +128,52 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &3414942184068313467
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8089295446152967249}
+  - component: {fileID: 6477210705621068200}
+  m_Layer: 7
+  m_Name: EventChannels
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8089295446152967249
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3414942184068313467}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6860228394538578389}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6477210705621068200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3414942184068313467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 370cd45bd8fa41338e3c3e634282b02e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPositionPropertySO: {fileID: 11400000, guid: 2323dec6bca6f4c7783bb9fc9ad75155, type: 2}
+  _playerTransform: {fileID: 6860228394538578389}
 --- !u!1 &6860228393671810181
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,6 +439,7 @@ Transform:
   - {fileID: 7803416330563633430}
   - {fileID: 7803416329750760595}
   - {fileID: 2282522661473750811}
+  - {fileID: 8089295446152967249}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -802,7 +849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326b23119f03c4f4f89803f2ad16c3f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundController: {fileID: 0}
+  soundController: {fileID: 6242244022728779758, guid: 01bd1d90e1d8b4ef4bb3a9e4f8949464, type: 3}
 --- !u!1 &7803416329056728452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1364,7 +1411,7 @@ MonoBehaviour:
   src: {fileID: 1065947360339903343}
   shootWire: {fileID: 8300000, guid: 032270fced469634b93f4e8e709a2421, type: 3}
   aimDistance: 0
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 5895965481160251236, guid: 3ed613a6609904d9a9e7a3ff5248c5a3, type: 3}
   plugPrefab: {fileID: 4615177501490907055, guid: a647468d1f59f4cadb7ddfc0f20951b3, type: 3}
   timeScaleForAim: 0.3
   _plugMovementSettings: {fileID: 7803416329712722703}

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using SmartScriptableObjects.FloatEvent;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;

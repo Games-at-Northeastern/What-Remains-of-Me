@@ -1,10 +1,10 @@
-using System;
-using UniRx;
-using UnityEngine;
-
-namespace SmartScriptableObjects.FloatEvent
+namespace SmartScriptableObjects.ReactiveProperties
 {
-	/// <summary>
+    using System;
+    using UniRx;
+    using UnityEngine;
+
+    /// <summary>
 	/// A scriptable object implementation of the float reactive property interface. Thus,
 	/// the float value exists on an asset level and be injected into any MonoBehaviour or
 	/// scriptable object via drag and drop through the inspector.
