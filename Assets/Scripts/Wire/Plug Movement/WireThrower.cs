@@ -17,6 +17,7 @@ public class WireThrower : MonoBehaviour
     // Non-accessible fields
     [SerializeField] Camera mainCamera;
     [SerializeField] GameObject plugPrefab;
+    private GameObject reticle;
     [SerializeField] float timeScaleForAim;
     private GameObject _activePlug;
     private ControlSchemes _controlSchemes;
@@ -50,6 +51,8 @@ public class WireThrower : MonoBehaviour
         _lineRenderer.enabled = false;
         ConnectedOutlet = null;
         _framesHeld = 0;
+        reticle = GameObject.Find("HUD Canvas/Reticle");
+        reticle.GetComponent<Renderer>().enabled = false;
     }
 
     /// <summary>
@@ -142,6 +145,7 @@ public class WireThrower : MonoBehaviour
         {
             Vector2 closestPos = mainCamera.WorldToScreenPoint(_lockOnOutlet.transform.position);
             fireDir = closestPos - playerScreenPos;
+            
         }
 
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
@@ -179,6 +183,9 @@ public class WireThrower : MonoBehaviour
 
         if (closest != null)
         {
+            Debug.Log("FOUND");
+            reticle.transform.position = closest.transform.position;
+            reticle.GetComponent<Renderer>().enabled = true;
             Vector2 closestPos = mainCamera.WorldToScreenPoint(closest.transform.position);
             fireDir = closestPos - playerScreenPos;
         }
@@ -301,6 +308,12 @@ public class WireThrower : MonoBehaviour
         _framesHeld += Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Q)) { _isLockOn = !_isLockOn; }
         if (_isLockOn && Input.GetKeyDown(KeyCode.E)) { ChangeOutletTarget(); }
+        // lock-on reticle is not visible when the plug has locked on 
+        if (ConnectedOutlet != null) {
+            reticle.GetComponent<Renderer>().enabled = false;
+        }
+
+
     }
 
     /// <summary>
@@ -367,6 +380,8 @@ public class WireThrower : MonoBehaviour
     {
         if (_activePlug != null)
             Destroy(_activePlug);
+            reticle.GetComponent<Renderer>().enabled = false;
+        
     }
 
     /// <summary>
