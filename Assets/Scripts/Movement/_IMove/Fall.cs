@@ -33,6 +33,11 @@ public class Fall : AMove
         PH.OnDamageTaken.AddListener(() => damageInput = true);
     }
 
+    public Fall(bool disableCoyote)
+    {
+        coyoteTimeCounter = 0.0f;
+    }
+
     public Fall() : this(0, 0)
     {
         // Default Constructor
@@ -66,6 +71,7 @@ public class Fall : AMove
         }
         if (dashInput && AMove.dashIsReset && UpgradeHandler.DashAllowed)
         {
+            coyoteTimeCounter = MS.CoyoteTime;
             return new Dash();
         }
         /*

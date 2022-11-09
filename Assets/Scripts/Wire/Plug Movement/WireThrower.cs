@@ -40,6 +40,8 @@ public class WireThrower : MonoBehaviour
     {
 
 
+
+
         // Add left click handling functionality
         _controlSchemes = new ControlSchemes();
         _controlSchemes.Enable();
@@ -74,6 +76,7 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void HandleThrowInputReleasedKeyboard()
     {
+        Debug.Log("LOCKED ON: " + _isLockOn);
         if (_activePlug == null && ConnectedOutlet == null)
         {
             Time.timeScale = 1;
@@ -82,7 +85,15 @@ public class WireThrower : MonoBehaviour
             //     else { FirePlugAutoAim(); }
             // else
             //     FirePlugMouse();
-            FirePlugAutoAim();
+            if (_isLockOn)
+            {
+                FirePlugLockOn();
+            }
+            else
+            {
+                FirePlugMouse();
+            }
+
         }
         HandlePotentialDisconnect();
     }
@@ -145,7 +156,7 @@ public class WireThrower : MonoBehaviour
         {
             Vector2 closestPos = mainCamera.WorldToScreenPoint(_lockOnOutlet.transform.position);
             fireDir = closestPos - playerScreenPos;
-            
+
         }
 
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
@@ -206,17 +217,19 @@ public class WireThrower : MonoBehaviour
             GameObject[] gos;
             gos = GameObject.FindGameObjectsWithTag("Outlet");
             GameObject closest = null;
-            float distance = Mathf.Infinity;
             Vector3 position = transform.position;
             foreach (GameObject go in gos)
             {
                 Vector3 diff = go.transform.position - position;
                 float curDistance = diff.sqrMagnitude;
-                if (curDistance < distance)
+                if (go.GetComponent<SpriteRenderer>().isVisible)
                 {
                     closest = go;
-                    distance = curDistance;
+                    reticle.transform.position = closest.transform.position;
+                    reticle.GetComponent<Renderer>().enabled = true;
+                    //distance = curDistance;
                     _lockOnOutlet = closest;
+                    _isLockOn = true;
                 }
             }
         }
@@ -226,33 +239,33 @@ public class WireThrower : MonoBehaviour
             gos = GameObject.FindGameObjectsWithTag("Outlet");
             GameObject closest = null;
             float originalDistance = Vector2.Distance(this.transform.position, _lockOnOutlet.transform.position);
-            float distance = Mathf.Infinity;
+            bool hasOutletsOnScreen = false;
             Vector3 position = transform.position;
             foreach (GameObject go in gos)
             {
                 Vector3 diff = go.transform.position - position;
-                float curDistance = diff.sqrMagnitude;
-                if (go.GetComponent<SpriteRenderer>().isVisible && curDistance < distance)
+                float curDistance = Vector2.Distance(this.transform.position, go.transform.position);
+                if (go.GetComponent<SpriteRenderer>().isVisible)
                 {
-                    if (_lastRecordedPosition == new Vector2(this.transform.position.x, this.transform.position.y))
+                    hasOutletsOnScreen = true;
+                    if (curDistance < originalDistance)
                     {
-                        if (curDistance > originalDistance)
-                        {
-                            closest = go;
-                            distance = curDistance;
-                            _lockOnOutlet = closest;
-                        }
-                    }
-                    else
-                    {
-                        if (go != _lockOnOutlet)
-                        {
-                            closest = go;
-                            distance = curDistance;
-                            _lockOnOutlet = closest;
-                        }
+                        closest = go;
+                        reticle.transform.position = closest.transform.position;
+                        reticle.GetComponent<Renderer>().enabled = true;
+                        //distance = curDistance;
+                        _lockOnOutlet = closest;
+                        originalDistance = curDistance;
                     }
                 }
+            }
+
+            if (!hasOutletsOnScreen)
+            {
+                reticle.GetComponent<Renderer>().enabled = false;
+                //distance = curDistance;
+                _lockOnOutlet = null;
+                _isLockOn = false;
             }
         }
         _lastRecordedPosition = transform.position;
@@ -302,16 +315,18 @@ public class WireThrower : MonoBehaviour
 
     private void Update()
     {
+        ChangeOutletTarget();
         HandleLineRendering();
         HandleThrowInputHeld();
         HandleConnectionPhysics();
         _framesHeld += Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Q)) { _isLockOn = !_isLockOn; }
-        if (_isLockOn && Input.GetKeyDown(KeyCode.E)) { ChangeOutletTarget(); }
-        // lock-on reticle is not visible when the plug has locked on 
-        if (ConnectedOutlet != null) {
-            reticle.GetComponent<Renderer>().enabled = false;
-        }
+        // REMOVED THIS AND REPLACED THIS WITH AUTO TARGETING RETICLE
+        //if (Input.GetKeyDown(KeyCode.Q)) { _isLockOn = !_isLockOn; }
+        // if (_isLockOn && Input.GetKeyDown(KeyCode.E)) { ChangeOutletTarget(); }
+        // // lock-on reticle is not visible when the plug has locked on
+        // if (ConnectedOutlet != null) {
+        //     reticle.GetComponent<Renderer>().enabled = false;
+        // }
 
 
     }
@@ -381,7 +396,7 @@ public class WireThrower : MonoBehaviour
         if (_activePlug != null)
             Destroy(_activePlug);
             reticle.GetComponent<Renderer>().enabled = false;
-        
+
     }
 
     /// <summary>
