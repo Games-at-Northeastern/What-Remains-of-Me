@@ -16,11 +16,12 @@ public class DialogueManager : MonoBehaviour
     {
         this.sentences = new Queue<string>();
         this._name = "";
+        this.gameObject.SetActive(false);
     }
 
     public void StartDialogue(DialogueSO dialogue)
     {
-        sentences.Clear();
+        this.sentences.Clear();
         this._textBox.SetActive(true);
         foreach (var sentence in dialogue.Sentences)
         {
