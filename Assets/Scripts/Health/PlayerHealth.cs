@@ -25,6 +25,11 @@ public class PlayerHealth : MonoBehaviour
     {
     }
 
+    private void Start()
+    {
+        playerInfo.ResetMaxBattery();
+    }
+
     /*
      * deducts the amount of energy given up until 0 for energy transmission use
      * and kills the player if the battery is 0.

@@ -20,11 +20,14 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void GainEnergy(float amount)
     {
+        Debug.Log("Amount: " + amount + ", Battery: " + playerInfo.battery);
         if (playerInfo.battery > amount)
         {
             float initEnergy = energy;
             energy = Mathf.Clamp(energy + amount, 0, maxEnergy);
-            playerInfo.batteryPercentage.Value -= (energy - initEnergy) / playerInfo.maxBattery;
+            // playerInfo.batteryPercentage.Value -= (energy - initEnergy) / playerInfo.maxBattery;
+            Debug.Log(energy + " " + initEnergy);
+            playerInfo.battery -= (energy - initEnergy);
         }
     }
 
