@@ -1,0 +1,31 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Levels.Objects.Platform;
+using UnityEngine;
+
+/// <summary>
+/// If this controllable gets enough energy, it tells the given platforms to activate.
+/// </summary>
+public class ControllablePlatform : AControllable
+{
+    [SerializeField] private Platform[] _platforms;
+
+    private bool hasMoved = false;
+
+    /// <summary>
+    /// Updates the platforms by moving them when the battery percentage of the platform is full or empty.
+    /// </summary>
+    private void Update()
+    {
+        if ((Math.Abs(GetPercentFull() - 1) < 0.01f || GetPercentFull() == 0) && !hasMoved)
+        {
+            Array.ForEach(_platforms, platform => platform.Activate());
+            hasMoved = true;
+        }
+        else if (!(Math.Abs(GetPercentFull() - 1) < 0.01f || GetPercentFull() == 0))
+        {
+            hasMoved = false;
+        }
+    }
+}
