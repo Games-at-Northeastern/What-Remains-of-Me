@@ -17,7 +17,6 @@ public class WireThrower : MonoBehaviour
     // Non-accessible fields
     [SerializeField] Camera mainCamera;
     [SerializeField] GameObject plugPrefab;
-    private GameObject reticle;
     [SerializeField] float timeScaleForAim;
     private GameObject _activePlug;
     private ControlSchemes _controlSchemes;
@@ -25,6 +24,7 @@ public class WireThrower : MonoBehaviour
     [SerializeField] private MovementExecuter _movementExecuter;
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private DistanceJoint2D _distanceJoint;
+    [SerializeField] private GameObject reticle;
     private float _framesHeld;
     private bool _isLockOn = false; // Whether or not Atlas is locking on to an outlet
     private GameObject _lockOnOutlet;
@@ -53,7 +53,6 @@ public class WireThrower : MonoBehaviour
         _lineRenderer.enabled = false;
         ConnectedOutlet = null;
         _framesHeld = 0;
-        reticle = GameObject.Find("HUD Canvas/Reticle");
         reticle.GetComponent<Renderer>().enabled = false;
     }
 
