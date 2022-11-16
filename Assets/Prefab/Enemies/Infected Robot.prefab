@@ -172,14 +172,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   battery: {fileID: 5890332256973139031}
-  followRadius: 0
-  attackRadius: 0
+  followRadius: 5
+  attackRadius: 2
   walkSpeed: 2
   pauseTime: 1
-  attackTime: 0
+  attackTime: 1
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 4097
+  rb: {fileID: 180451535942715985}
+  boxCollider2D: {fileID: 180451535942715987}
+  anim: {fileID: 180451535942715984}
+  sr: {fileID: 180451535942715986}
 --- !u!114 &2047940707329529374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,11 +196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f021691f3113a654baaa6e63c03219e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  src: {fileID: 2991279134679764380}
-  walk: {fileID: 8300000, guid: 307cf4fa1d767834981bd7efce4a9ee4, type: 3}
-  attack: {fileID: 8300000, guid: 342ca7df7e364d741aa026b3f06314df, type: 3}
-  overloaded: {fileID: 8300000, guid: 574d1f08e879c8849ae2f7b00ade6a26, type: 3}
-  drained: {fileID: 8300000, guid: 97be2ed270463484e830394c59223658, type: 3}
+  soundController: {fileID: 0}
 --- !u!82 &2991279134679764380
 AudioSource:
   m_ObjectHideFlags: 0
@@ -308,3 +308,4 @@ MonoBehaviour:
   energy: 30
   maxEnergy: 30
   virus: 15
+  playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
