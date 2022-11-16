@@ -17,13 +17,44 @@ public enum FSMStates
     [SerializeField] GameObject player;
     public FSMStates currentState;
 
-    public string name;
+    public SpriteRenderer body;
 
-    private int _trackingTime;
-    private int _attackingTime;
-    private int _overchargedTime;
-    private int _trackingSpeed;
-    private bool _isChosen;
+    private int _trackingTime = 5;
+    private int _attackingTime = 5;
+    private int _overchargedTime = 5;
+
+    public float trackingTimer {get; set;}
+    public float attackingTimer {get; set;}
+    public float overchargedTimer {get; set;}
+
+
+
+    private int _trackingSpeed; //not currently
+    public bool _isChosen;
+
+
+
+
+    /*
+
+    public float Timer { get; set; }
+
+private Update()
+{
+    if(Timer > 0.0f)
+    {
+        Timer -= Time.deltaTime;
+        if(Timer <= 0)
+        {
+            /// SWITCH STATE 
+        }
+    }
+}
+
+
+
+
+    */
 
 
 
@@ -62,9 +93,11 @@ public enum FSMStates
     void UpdateNeutralState(){
 
         print("Currently Neutral");
+        body.color = Color.white;
 
         if (_isChosen){
 
+            trackingTimer = _trackingTime;
             currentState = FSMStates.Track;
         }
  
@@ -75,18 +108,51 @@ public enum FSMStates
         print("Currently Tracking");
 
         FaceTarget(player.transform.position);
+        body.color = Color.yellow;
+
+        if(trackingTimer > 0.0f)
+    {
+        trackingTimer -= Time.deltaTime;
+        if(trackingTimer <= 0)
+        {
+            attackingTimer = _attackingTime;
+            currentState = FSMStates.Attack;
+        }
+    }
  
     }
 
     void UpdateAttackState(){
 
         print("Currently Attacking");
+        body.color = Color.red;
+
+           if(attackingTimer > 0.0f)
+    {
+        attackingTimer -= Time.deltaTime;
+        if(attackingTimer <= 0)
+        {
+            overchargedTimer = _overchargedTime;
+            currentState = FSMStates.Overcharged;
+        }
+    }
  
     }
 
     void UpdateOverchargedState(){
 
         print("Currently Overcharged");
+        body.color = Color.blue;
+
+           if(overchargedTimer > 0.0f)
+    {
+        overchargedTimer -= Time.deltaTime;
+        if(overchargedTimer <= 0)
+        {
+            currentState = FSMStates.Neutral;
+            _isChosen = false;
+        }
+    }
  
     }
 
