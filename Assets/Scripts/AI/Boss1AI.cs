@@ -18,13 +18,16 @@ public enum FSMStates
     public FSMStates currentState;
 
     public SpriteRenderer body;
+    public GameObject lazer;
 
     private int _trackingTime = 5;
     private int _attackingTime = 5;
+    private int _lazerTime = 1;
     private int _overchargedTime = 5;
 
     public float trackingTimer {get; set;}
     public float attackingTimer {get; set;}
+    public float lazerTimer {get; set;}
     public float overchargedTimer {get; set;}
 
 
@@ -116,6 +119,7 @@ private Update()
         if(trackingTimer <= 0)
         {
             attackingTimer = _attackingTime;
+            lazerTimer = _lazerTime;
             currentState = FSMStates.Attack;
         }
     }
@@ -127,6 +131,17 @@ private Update()
         print("Currently Attacking");
         body.color = Color.red;
 
+        if(lazerTimer > 0.0f)
+    {
+        lazerTimer -= Time.deltaTime;
+        if(lazerTimer <= 0)
+        {
+            lazer.SetActive(true);
+            
+        }
+    }
+        
+
            if(attackingTimer > 0.0f)
     {
         attackingTimer -= Time.deltaTime;
@@ -135,14 +150,17 @@ private Update()
             overchargedTimer = _overchargedTime;
             currentState = FSMStates.Overcharged;
         }
-    }
+
+
  
+    }
     }
 
     void UpdateOverchargedState(){
 
         print("Currently Overcharged");
         body.color = Color.blue;
+        lazer.SetActive(false);
 
            if(overchargedTimer > 0.0f)
     {
