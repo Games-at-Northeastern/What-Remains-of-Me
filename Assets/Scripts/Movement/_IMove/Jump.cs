@@ -50,7 +50,7 @@ public class Jump : AMove
         if (xVel > MS.FallMaxSpeedX * 0.85 && !connectedInput)
         {
             xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(),
-                ref xAccel, MS.FallSmoothTimeX * 5);
+                ref xAccel, MS.FallSmoothTimeX * 10);
         }
         else
         {
