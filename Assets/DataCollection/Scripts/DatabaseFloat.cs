@@ -15,6 +15,6 @@ public class DatabaseFloat : DataBaseRecord
 
     public void IncrementByDeltaTime()
     {
-        Value += Time.deltaTime;
+        FloatValue += Time.deltaTime;
     }
 }

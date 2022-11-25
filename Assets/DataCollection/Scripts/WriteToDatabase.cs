@@ -16,6 +16,7 @@ public class WriteToDatabase : MonoBehaviour
 
     [SerializeField] private StringVariable _playerID;
     [SerializeField] private DatabaseInt[] _databaseIntsToWrite;
+    [SerializeField] private DatabaseFloat[] _databaseFloatsToWrite;
     [SerializeField] private DataBaseRecord[] _databaseStringsToWrite;
 
     public void PostData()
@@ -24,6 +25,11 @@ public class WriteToDatabase : MonoBehaviour
         {
             StartCoroutine(PostDataRoutine(dbInt.DataName,
                 dbInt.DataDescription, dbInt.GetValue()));
+        }
+        foreach (DatabaseFloat dbFloat in _databaseFloatsToWrite)
+        {
+            StartCoroutine(PostDataRoutine(dbFloat.DataName,
+                dbFloat.DataDescription, dbFloat.GetValue()));
         }
     }
 
