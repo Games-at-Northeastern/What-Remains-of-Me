@@ -9,6 +9,7 @@ using UnityEngine;
 public class LevelWarpZone : MonoBehaviour
 {
     [SerializeField] private LevelManager levelManager;
+    [SerializeField] private Animator anim;
     public int id;
     public string warpDestinationScene;
     public int warpDestinationID;
@@ -16,7 +17,7 @@ public class LevelWarpZone : MonoBehaviour
 
     private LevelManager lm;
     private float transitionTime;
-    private Animator anim;
+    
     
     /// <summary> 
     /// Finds the LevelManager and the Animator component in this scene. 
@@ -45,7 +46,7 @@ public class LevelWarpZone : MonoBehaviour
     /// </summary>
     IEnumerator LoadLevel()
     {
-        anim.SetTrigger("Start");
+        //anim.SetTrigger("Start");
         lm.SetWarpID(warpDestinationScene, warpDestinationID);
         yield return new WaitForSeconds(transitionTime);
         lm.WarpToScene();
