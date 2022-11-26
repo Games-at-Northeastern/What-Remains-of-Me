@@ -41,10 +41,7 @@ public class WallSlide : AMove
         {
             return new Fall(0, MS.WallSlideSpeed);
         }
-        if (wallJumpPending)
-        {
-            return new WallJump(MI.LeftWallDetector.isColliding());
-        }
+
         if (MI.GroundDetector.isColliding())
         {
             return new Idle();

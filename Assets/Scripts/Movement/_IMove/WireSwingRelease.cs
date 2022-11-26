@@ -63,10 +63,14 @@ public class WireSwingRelease : AMove
         {
             return new Dash();
         }
-        if (MI.LeftWallDetector.isColliding() || (MI.RightWallDetector.isColliding() && yVel < 0))
+
+         // Deprecated code for wall jumping. 
+        /*if (MI.LeftWallDetector.isColliding() || (MI.RightWallDetector.isColliding() && yVel < 0))
         {
             return new WallSlide();
         }
+        */
+        
         if (MI.GroundDetector.isColliding() && Mathf.Abs(xVel) < MS.RunToIdleSpeed)
         {
             return new Idle();

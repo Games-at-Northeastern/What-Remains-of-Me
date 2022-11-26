@@ -115,10 +115,11 @@ public class Jump : AMove
             return new Dash();
         }
 
-        if ((MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding()) && yVel < 0)
+         // Deprecated code for wall jumping. 
+        /*if ((MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding()) && yVel < 0)
         {
             return new WallSlide();
-        }
+        }*/
 
         if (timePassed > MS.JumpLandableTimer && MI.GroundDetector.isColliding() &&
             Mathf.Abs(xVel) < MS.RunToIdleSpeed)

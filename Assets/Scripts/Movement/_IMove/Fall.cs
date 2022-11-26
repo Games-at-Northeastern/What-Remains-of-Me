@@ -82,11 +82,14 @@ public class Fall : AMove
             return new Climb();
         }
         */
-        if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding() && yVel < 0)
+        
+
+        // Deprecated code for wall jumping. 
+        /*if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding() && yVel < 0)
         {
             coyoteTimeCounter = MS.CoyoteTime;
             return new WallSlide();
-        }
+        }*/
         if (MI.GroundDetector.isColliding() && Mathf.Abs(xVel) < MS.RunToIdleSpeed)
         {
             coyoteTimeCounter = MS.CoyoteTime;

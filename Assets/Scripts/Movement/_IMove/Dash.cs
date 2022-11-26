@@ -49,11 +49,14 @@ public class Dash : AMove
             AMove.dashIsReset = false;
             return new Fall(true);
         }
-        if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding())
+
+         // Deprecated code for wall jumping. 
+        /*if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding())
         {
             AMove.dashIsReset = false;
             return new WallSlide();
         }
+        */
         return this;
     }
 
