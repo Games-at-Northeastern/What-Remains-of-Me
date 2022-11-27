@@ -225,7 +225,7 @@ public class WireThrower : MonoBehaviour
                 {
                     closest = go;
                     // reticle.transform.position = closest.transform.position;
-                    reticle.GetComponent<Renderer>().enabled = true;
+                    // reticle.GetComponent<Renderer>().enabled = true;
                     //distance = curDistance;
                     _lockOnOutlet = closest;
                     _isLockOn = true;
@@ -251,7 +251,7 @@ public class WireThrower : MonoBehaviour
                     {
                         closest = go;
                         // reticle.transform.position = closest.transform.position;
-                        reticle.GetComponent<Renderer>().enabled = true;
+                        // reticle.GetComponent<Renderer>().enabled = true;
                         //distance = curDistance;
                         _lockOnOutlet = closest;
                         originalDistance = curDistance;
@@ -261,7 +261,6 @@ public class WireThrower : MonoBehaviour
 
             if (!hasOutletsOnScreen)
             {
-                reticle.GetComponent<Renderer>().enabled = false;
                 //distance = curDistance;
                 _lockOnOutlet = null;
                 _isLockOn = false;
@@ -318,6 +317,7 @@ public class WireThrower : MonoBehaviour
         // sets reticle to targe the locked on outlet at all times
         if (_lockOnOutlet != null) {
             reticle.transform.position = _lockOnOutlet.transform.position;
+            reticle.GetComponent<Renderer>().enabled = true;
         }
         HandleLineRendering();
         HandleThrowInputHeld();
@@ -398,8 +398,6 @@ public class WireThrower : MonoBehaviour
     {
         if (_activePlug != null)
             Destroy(_activePlug);
-            reticle.GetComponent<Renderer>().enabled = false;
-
     }
 
     /// <summary>
