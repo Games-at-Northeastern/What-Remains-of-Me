@@ -224,7 +224,7 @@ public class WireThrower : MonoBehaviour
                 if (go.GetComponent<SpriteRenderer>().isVisible)
                 {
                     closest = go;
-                    reticle.transform.position = closest.transform.position;
+                    // reticle.transform.position = closest.transform.position;
                     reticle.GetComponent<Renderer>().enabled = true;
                     //distance = curDistance;
                     _lockOnOutlet = closest;
@@ -250,7 +250,7 @@ public class WireThrower : MonoBehaviour
                     if (curDistance < originalDistance)
                     {
                         closest = go;
-                        reticle.transform.position = closest.transform.position;
+                        // reticle.transform.position = closest.transform.position;
                         reticle.GetComponent<Renderer>().enabled = true;
                         //distance = curDistance;
                         _lockOnOutlet = closest;
@@ -315,6 +315,10 @@ public class WireThrower : MonoBehaviour
     private void Update()
     {
         ChangeOutletTarget();
+        // sets reticle to targe the locked on outlet at all times
+        if (_lockOnOutlet != null) {
+            reticle.transform.position = _lockOnOutlet.transform.position;
+        }
         HandleLineRendering();
         HandleThrowInputHeld();
         HandleConnectionPhysics();
