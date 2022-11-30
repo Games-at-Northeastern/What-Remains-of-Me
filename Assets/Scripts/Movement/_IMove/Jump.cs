@@ -17,6 +17,7 @@ public class Jump : AMove
     private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
     private float xVel;
     private float yVel;
+    private static float jumpBufferCounter = MS.JumpBuffer;
 
     /// <summary>
     ///     Initializes a jump, appropriately setting its horizontal velocity to start
@@ -44,8 +45,9 @@ public class Jump : AMove
 
     public override void AdvanceTime()
     {
+        float timeChange = Time.deltaTime;
         // General
-        timePassed += Time.deltaTime;
+        timePassed += timeChange;
         // Horizontal
         if (xVel > MS.FallMaxSpeedX * 0.85 && !connectedInput)
         {
@@ -75,6 +77,15 @@ public class Jump : AMove
         if (!jumpCanceled && MI.CeilingDetector.isColliding())
         {
             CancelJump(true);
+        }
+
+        if (CS.Player.Jump.ReadValue<float>() > 0)
+        {
+            jumpBufferCounter -= timeChange;
+        }
+        else
+        {
+            jumpBufferCounter = MS.JumpBuffer;
         }
     }
 
@@ -120,6 +131,11 @@ public class Jump : AMove
             return new WallSlide();
         }
 
+        if (MI.GroundDetector.isColliding() && jumpBufferCounter > 0 && jumpBufferCounter < MS.JumpBuffer)
+        {
+            return new Jump(xVel);
+        }
+
         if (timePassed > MS.JumpLandableTimer && MI.GroundDetector.isColliding() &&
             Mathf.Abs(xVel) < MS.RunToIdleSpeed)
         {
@@ -130,6 +146,8 @@ public class Jump : AMove
         {
             return new Run(xVel);
         }
+
+
 
         return this;
     }

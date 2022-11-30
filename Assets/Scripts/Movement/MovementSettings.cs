@@ -27,6 +27,7 @@ public class MovementSettings : ScriptableObject
     [SerializeField] private float jumpMinSpeedY;
     [SerializeField] private float jumpCancelYVelMultiplier;
     [SerializeField] private float coyoteTime;
+    [SerializeField] private float jumpBuffer;
 
     [Header("Fall")]
     [SerializeField] private float fallGravity;
@@ -94,6 +95,8 @@ public class MovementSettings : ScriptableObject
     public float JumpMinSpeedY => jumpMinSpeedY;
     public float JumpCancelYVelMultiplier => jumpCancelYVelMultiplier;
     public float CoyoteTime => coyoteTime;
+
+    public float JumpBuffer => jumpBuffer;
     // Fall
     public float FallGravity => fallGravity;
     public float FallMaxSpeedX => fallMaxSpeedX;
