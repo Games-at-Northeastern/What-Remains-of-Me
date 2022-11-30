@@ -18,13 +18,14 @@ public class ControllablePlatform : AControllable
     /// </summary>
     private void Update()
     {
-        if ((Math.Abs(GetPercentFull() - 1) < 0.01f || GetPercentFull() == 0) && !hasMoved)
+        if (Math.Abs(GetPercentFull() - 1) < 0.01f && !hasMoved)
         {
             Array.ForEach(_platforms, platform => platform.Activate());
             hasMoved = true;
         }
-        else if (!(Math.Abs(GetPercentFull() - 1) < 0.01f || GetPercentFull() == 0))
+        else if (GetPercentFull()  < 0.999f)
         {
+            Array.ForEach(_platforms, platform => platform.Deactivate());
             hasMoved = false;
         }
     }

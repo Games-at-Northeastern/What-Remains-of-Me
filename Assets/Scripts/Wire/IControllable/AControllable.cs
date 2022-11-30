@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,12 +21,17 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void GainEnergy(float amount)
     {
-        if (playerInfo.battery > amount)
+        if (amount <= 0 || energy >= maxEnergy || playerInfo.batteryPercentage.Value <= 0)
         {
-            float initEnergy = energy;
-            energy = Mathf.Clamp(energy + amount, 0, maxEnergy);
-            playerInfo.battery -= (energy - initEnergy);
+            return;
         }
+
+        // Can only accept what the player can offer
+        amount = Mathf.Min(amount, playerInfo.battery);
+
+        playerInfo.battery -= amount;
+
+        energy = Mathf.Clamp(energy + amount, 0, maxEnergy);
     }
 
     /// <summary>
@@ -34,17 +40,20 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void LoseEnergy(float amount)
     {
-        if (playerInfo.battery > amount)
+        if (amount <= 0 || energy <= 0 || playerInfo.batteryPercentage.Value >= 1f)
         {
-            // Can lose none / some of energy being taken by player
-            float initEnergy = energy;
-            float initVirus = virus;
-            energy = Mathf.Clamp(energy - amount, 0, maxEnergy);
-            virus = Mathf.Clamp(virus - amount, 0, virus);
-            playerInfo.batteryPercentage.Value += (initEnergy - energy) / playerInfo.maxBattery;
-            playerInfo.virusPercentage.Value = Mathf.Clamp(playerInfo.virusPercentage.Value + (initVirus - virus) / playerInfo.maxVirus,
-                0, 1f);
+            return;
         }
+
+        // Can only provide what the player can take
+        float remainingEmptyBatteryAmount = playerInfo.maxBattery - playerInfo.battery;
+        amount = Mathf.Min(remainingEmptyBatteryAmount, amount);
+
+        playerInfo.battery += amount;
+        playerInfo.virus += amount;
+
+        energy = Mathf.Clamp(energy - amount, 0, maxEnergy);
+        virus = Mathf.Clamp(virus - amount, 0, virus);
     }
 
     /// <summary>
