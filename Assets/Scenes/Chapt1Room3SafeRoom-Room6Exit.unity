@@ -146670,12 +146670,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3185158783656202759, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
+      propertyPath: id
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3185158783656202759, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1355251199}
+    - target: {fileID: 3185158783656202759, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
+      propertyPath: levelManager
+      value: 
+      objectReference: {fileID: 1597210291}
+    - target: {fileID: 3185158783656202759, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
       propertyPath: warpDestinationID
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3185158783656202759, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
       propertyPath: warpDestinationScene
-      value: Chapt1Room2IntroToDrainAndOverload
+      value: Chapt1Room4Puzzle
       objectReference: {fileID: 0}
     - target: {fileID: 3249941585411396547, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
       propertyPath: m_RootOrder
@@ -146683,11 +146695,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3249941585411396547, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.06
+      value: 77.7
       objectReference: {fileID: 0}
     - target: {fileID: 3249941585411396547, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.54
+      value: 3.8
       objectReference: {fileID: 0}
     - target: {fileID: 3249941585411396547, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -146731,6 +146743,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
+--- !u!95 &1355251199 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7125017112705964332, guid: 67d9e3046ca16e64c989958007789f1f, type: 3}
+  m_PrefabInstance: {fileID: 1355251198}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1364898318
 GameObject:
   m_ObjectHideFlags: 0
@@ -147812,6 +147829,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1597210290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1597210292}
+  - component: {fileID: 1597210291}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1597210291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597210290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18e2be21721e3af4d8e5a112398de5db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1154280041}
+--- !u!4 &1597210292
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597210290}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 38.657745, y: 8.357516, z: -0.40916765}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1619306061
 GameObject:
   m_ObjectHideFlags: 0
