@@ -17,6 +17,7 @@ public class Jump : AMove
     private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
     private float xVel;
     private float yVel;
+    private static float jumpBufferCounter = MS.JumpBuffer;
 
     /// <summary>
     ///     Initializes a jump, appropriately setting its horizontal velocity to start
@@ -44,8 +45,9 @@ public class Jump : AMove
 
     public override void AdvanceTime()
     {
+        var timeChange = Time.deltaTime;
         // General
-        timePassed += Time.deltaTime;
+        timePassed += timeChange;
         // Horizontal
         if (xVel > MS.FallMaxSpeedX * 0.85 && !connectedInput)
         {
@@ -58,9 +60,9 @@ public class Jump : AMove
             ref xAccel, MS.FallSmoothTimeX);
         }
         // Vertical
-        gravity = Mathf.Clamp(gravity + (MS.JumpGravityIncRate * Time.deltaTime),
+        gravity = Mathf.Clamp(gravity + (MS.JumpGravityIncRate * timeChange),
             MS.JumpInitGravity, MS.JumpMaxGravity);
-        yVel -= gravity * Time.deltaTime;
+        yVel -= gravity * timeChange;
         if (yVel < MS.JumpMinSpeedY)
         {
             yVel = MS.JumpMinSpeedY;
@@ -75,6 +77,16 @@ public class Jump : AMove
         if (!jumpCanceled && MI.CeilingDetector.isColliding())
         {
             CancelJump(true);
+        }
+
+        // Jump Buffer
+        if (CS.Player.Jump.ReadValue<float>() > 0)
+        {
+            jumpBufferCounter -= timeChange;
+        }
+        else
+        {
+            jumpBufferCounter = MS.JumpBuffer;
         }
     }
 
@@ -115,11 +127,16 @@ public class Jump : AMove
             return new Dash();
         }
 
-         // Deprecated code for wall jumping. 
+         // Deprecated code for wall jumping.
         /*if ((MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding()) && yVel < 0)
         {
             return new WallSlide();
         }*/
+
+        if (MI.GroundDetector.isColliding() && jumpBufferCounter > 0 && jumpBufferCounter < MS.JumpBuffer)
+        {
+            return new Jump(xVel);
+        }
 
         if (timePassed > MS.JumpLandableTimer && MI.GroundDetector.isColliding() &&
             Mathf.Abs(xVel) < MS.RunToIdleSpeed)

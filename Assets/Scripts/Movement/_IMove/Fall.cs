@@ -13,6 +13,7 @@ public class Fall : AMove
     private float xVel;
     private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
     private static float coyoteTimeCounter = MS.CoyoteTime;
+    private static float jumpBufferCounter = MS.JumpBuffer;
 
     private bool dashInput;
     private bool connectedInput;
@@ -52,7 +53,19 @@ public class Fall : AMove
         {
             yVel = MS.FallMinSpeedY;
         }
+
+        // Tracking Coyote Time
         coyoteTimeCounter -= timeChange;
+
+        // Jump Buffer
+        if (CS.Player.Jump.ReadValue<float>() > 0)
+        {
+            jumpBufferCounter -= timeChange;
+        }
+        else
+        {
+            jumpBufferCounter = MS.JumpBuffer;
+        }
     }
 
     public override float XSpeed() => xVel;
@@ -82,28 +95,32 @@ public class Fall : AMove
             return new Climb();
         }
         */
-        
 
-        // Deprecated code for wall jumping. 
+
+        // Deprecated code for wall jumping.
         /*if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding() && yVel < 0)
         {
             coyoteTimeCounter = MS.CoyoteTime;
             return new WallSlide();
         }*/
-        if (MI.GroundDetector.isColliding() && Mathf.Abs(xVel) < MS.RunToIdleSpeed)
+        if (MI.GroundDetector.isColliding() && jumpBufferCounter > 0 && jumpBufferCounter < MS.JumpBuffer)
         {
-            coyoteTimeCounter = MS.CoyoteTime;
-            return new Idle();
-        }
-        else if (MI.GroundDetector.isColliding())
-        {
-            coyoteTimeCounter = MS.CoyoteTime;
-            return new Run(xVel);
+            return new Jump(xVel);
         }
         if (CS.Player.Jump.ReadValue<float>() > 0 && coyoteTimeCounter > 0.0f)
         {
             coyoteTimeCounter = MS.CoyoteTime;
             return new Jump(xVel);
+        }
+        if (MI.GroundDetector.isColliding() && Mathf.Abs(xVel) < MS.RunToIdleSpeed)
+        {
+            coyoteTimeCounter = MS.CoyoteTime;
+            return new Idle();
+        }
+        if (MI.GroundDetector.isColliding())
+        {
+            coyoteTimeCounter = MS.CoyoteTime;
+            return new Run(xVel);
         }
         return this;
     }
