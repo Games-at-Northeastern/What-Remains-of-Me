@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// The main script for handling wire controls. Spawns/Fires, despawns, and
@@ -45,15 +48,21 @@ public class WireThrower : MonoBehaviour
         // Add left click handling functionality
         _controlSchemes = new ControlSchemes();
         _controlSchemes.Enable();
-        _controlSchemes.Player.Throw.started += _ => HandleThrowInputReleasedKeyboard();
+        _controlSchemes.Player.Throw.started += HandleThrowInputReleasedKeyboard;
         //_controlSchemes.Player.ThrowController.canceled += _ => HandleThrowInputReleasedController();
         //_controlSchemes.Player.ThrowMouse.canceled += _ => HandleThrowInputReleasedKeyboard();
-        _controlSchemes.Player.Jump.performed += _ => HandlePotentialDisconnectByJump();
+        _controlSchemes.Player.Jump.performed += HandlePotentialDisconnectByJump;
         // Handle line renderer
         _lineRenderer.enabled = false;
         ConnectedOutlet = null;
         _framesHeld = 0;
         reticle.GetComponent<Renderer>().enabled = false;
+    }
+
+    private void OnDestroy()
+    {
+        _controlSchemes.Player.Throw.started -= HandleThrowInputReleasedKeyboard;
+        _controlSchemes.Player.Jump.performed -= HandlePotentialDisconnectByJump;
     }
 
     /// <summary>
@@ -73,7 +82,7 @@ public class WireThrower : MonoBehaviour
     /// Function that is passed to the control scheme to handle cancelling a throw when the
     /// keyboard/mouse button for this action is released.
     /// </summary>
-    void HandleThrowInputReleasedKeyboard()
+    void HandleThrowInputReleasedKeyboard(InputAction.CallbackContext ctx)
     {
         Debug.Log("LOCKED ON: " + _isLockOn);
         if (_activePlug == null && ConnectedOutlet == null)
@@ -118,7 +127,7 @@ public class WireThrower : MonoBehaviour
     /// <summary>
     /// Function passed to the control scheme to handle disconnecting the wire when jumping.
     /// </summary>
-    void HandlePotentialDisconnectByJump()
+    void HandlePotentialDisconnectByJump(InputAction.CallbackContext ctx)
     {
         if (_movementExecuter.GetCurrentMove().DisconnectByJumpOkay())
         {
