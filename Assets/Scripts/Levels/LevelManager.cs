@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-/// <summary> 
-/// This class provides the functionalities for the LevelManager singleton, 
+/// <summary>
+/// This class provides the functionalities for the LevelManager singleton,
 /// which is used to manage the scene and warp the player between scenes.
 /// </summary>
 public class LevelManager : MonoBehaviour
@@ -20,9 +20,9 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance { get; private set; }
 
     /// <summary>
-    /// Since the LevelManager is a singleton, makes sure to keep the same instance 
+    /// Since the LevelManager is a singleton, makes sure to keep the same instance
     /// of this game object
-    /// </summary> 
+    /// </summary>
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -50,7 +50,7 @@ public class LevelManager : MonoBehaviour
     /// If there is no player reference, sets the player reference to the player game object.
     /// If the player is supposed to load into a new scene, loads the player game object
     /// into the scene at the scene's set load in position.
-    /// If the player presses the "R" key, resets the player at the tutorial scene. 
+    /// If the player presses the "R" key, resets the player at the tutorial scene.
     /// </summary>
     private void Update()
     {
@@ -70,16 +70,16 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.RightBracket))
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
-    /// <summary> 
+    /// <summary>
     /// Sets the warp destination.
     /// <param name="warpDestination">the string name of the scene to warp to</param>
-    /// <param name="id">an integer id for the scene to warp to</param> 
+    /// <param name="id">an integer id for the scene to warp to</param>
     /// </summary>
     public void SetWarpID(string warpDestination, int id)
     {

@@ -377,7 +377,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4537cf94-5a0a-49cd-987a-5681943eddbc"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/rightBracket"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
