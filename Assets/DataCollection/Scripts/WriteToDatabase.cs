@@ -15,6 +15,7 @@ public class WriteToDatabase : MonoBehaviour
         "https://patternlanguageforgamedesign.com/WRoM/wrom_data_collection.php";
 
     [SerializeField] private StringVariable _playerID;
+    [SerializeField] private StringVariable _versionNum;
     [SerializeField] private DatabaseInt[] _databaseIntsToWrite;
     [SerializeField] private DatabaseFloat[] _databaseFloatsToWrite;
     [SerializeField] private DataBaseRecord[] _databaseStringsToWrite;
@@ -43,6 +44,7 @@ public class WriteToDatabase : MonoBehaviour
         form.AddField("timestamp", DateTime.Now.ToString());
         form.AddField("user_id", _playerID.Value);
         form.AddField("user_ip_address", GetLocalIPv4());
+        form.AddField("version_num", _versionNum.Value);
         form.AddField("scene_name", SceneManager.GetActiveScene().name);
         form.AddField("data_name", dataName);
         form.AddField("data_description", dataDescription);
