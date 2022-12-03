@@ -11,8 +11,8 @@ public class PlayerInfo : ScriptableObject
 {
     [Header("Dependency Injection")]
     [FormerlySerializedAs("_virusSO")]
-    [SerializeField] private PercentageFloatReactivePropertySO _virusPercentageSO;
-    [SerializeField] private PercentageFloatReactivePropertySO _batteryPercentageSO;
+    public PercentageFloatReactivePropertySO _virusPercentageSO;
+    public PercentageFloatReactivePropertySO _batteryPercentageSO;
 
     // any information about the player we want tracked can
     // be stored here.
@@ -47,8 +47,8 @@ public class PlayerInfo : ScriptableObject
 
     private void OnValidate()
     {
-        batteryPercentage = _batteryPercentageSO;
-        virusPercentage = _virusPercentageSO;
+        // batteryPercentage = _batteryPercentageSO;
+        // virusPercentage = _virusPercentageSO;
     }
 
     public void ResetMaxBattery()
