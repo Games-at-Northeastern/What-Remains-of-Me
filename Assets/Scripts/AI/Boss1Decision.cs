@@ -6,10 +6,13 @@ public class Boss1Decision : MonoBehaviour
 {
 
     [SerializeField] Boss1AI[] machines;
+    [SerializeField] int _decisionTime = 20;
 
     public float timer { get; set; }
 
-    private int _decisionTime = 20;
+    
+    
+
 
 
     // Start is called before the first frame update
@@ -24,6 +27,7 @@ public class Boss1Decision : MonoBehaviour
     void Update()
     {
 
+        
         if(timer > 0.0f)
     {
         timer -= Time.deltaTime;
@@ -36,8 +40,17 @@ public class Boss1Decision : MonoBehaviour
     }
 
     void randomizedDecision(){
-        int index = Random.Range(0, machines.Length);
-        Boss1AI selectedMachine = machines[index];
+
+        List<Boss1AI> possibleMachines = new List<Boss1AI>();
+
+        foreach(Boss1AI m in machines){
+            if(!m._isChosen){
+                possibleMachines.Add(m);
+            }
+
+        }
+        int index = Random.Range(0, possibleMachines.Count);
+        Boss1AI selectedMachine = possibleMachines[index];
         selectedMachine.Chosen();
         timer = _decisionTime;
        

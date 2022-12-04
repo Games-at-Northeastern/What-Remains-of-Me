@@ -11,10 +11,12 @@ public enum FSMStates
         Neutral, 
         Track,
         Attack,
-        Overcharged
+        Overcharged,
+        Hit
     }
 
     [SerializeField] GameObject player;
+    [SerializeField] Boss1Health bossHealth;
     public FSMStates currentState;
 
     public SpriteRenderer body;
@@ -24,41 +26,19 @@ public enum FSMStates
     private int _attackingTime = 5;
     private int _lazerTime = 1;
     private int _overchargedTime = 5;
+    private int _hitTime = 2;
 
     public float trackingTimer {get; set;}
     public float attackingTimer {get; set;}
     public float lazerTimer {get; set;}
     public float overchargedTimer {get; set;}
+    public float hitTimer {get; set;}
 
 
 
-    private int _trackingSpeed; //not currently
+    private int _trackingSpeed; //not currently used
     public bool _isChosen;
-
-
-
-
-    /*
-
-    public float Timer { get; set; }
-
-private Update()
-{
-    if(Timer > 0.0f)
-    {
-        Timer -= Time.deltaTime;
-        if(Timer <= 0)
-        {
-            /// SWITCH STATE 
-        }
-    }
-}
-
-
-
-
-    */
-
+    public bool _hitWithValve;
 
 
     // Start is called before the first frame update
@@ -66,6 +46,8 @@ private Update()
     {
 
         currentState = FSMStates.Neutral;
+        _hitWithValve = false;
+        _isChosen = false;
         
     }
 
@@ -87,11 +69,13 @@ private Update()
             case FSMStates.Overcharged:
                 UpdateOverchargedState();
                 break;
+            case FSMStates.Hit:
+                UpdateHitState();
+                break;
 
         }
 
     }
-
 
     void UpdateNeutralState(){
 
@@ -162,6 +146,14 @@ private Update()
         body.color = Color.blue;
         lazer.SetActive(false);
 
+        if(_hitWithValve){
+
+            overchargedTimer = 0;
+            currentState = FSMStates.Hit;
+            hitTimer = _hitTime;
+            bossHealth.TakeDamage();
+        }
+
            if(overchargedTimer > 0.0f)
     {
         overchargedTimer -= Time.deltaTime;
@@ -172,6 +164,29 @@ private Update()
         }
     }
  
+    }
+
+    void UpdateHitState(){
+
+        print("Currently Hit");
+        body.color = Color.black;
+        
+
+
+         if(hitTimer > 0.0f)
+    {
+        hitTimer -= Time.deltaTime;
+        if(hitTimer <= 0)
+        {
+            currentState = FSMStates.Neutral;
+            _isChosen = false;
+            _hitWithValve = false;
+        }
+    }
+
+
+ 
+
     }
 
     void FaceTarget(Vector3 target){
