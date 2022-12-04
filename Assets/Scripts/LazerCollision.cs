@@ -4,23 +4,16 @@ using UnityEngine;
 
 public class LazerCollision : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public PlayerInfo player;
+    public int energyAmount;
 
-     void OnTriggerEnter2D (Collider2D other)
+
+     void OnTriggerStay2D (Collider2D other)
      {
          if (other.gameObject.tag == "Player")
          {
-         print("Hit Player");
-         }
+            player.battery += energyAmount * Time.fixedDeltaTime;
+     }
      }
 }

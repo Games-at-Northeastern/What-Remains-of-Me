@@ -21,9 +21,6 @@ public class Valve : AControllable
     // Update is called once per frame
     void Update()
     {
-        if(energy > 0){
-            print("AAAAAA" + energy);
-        }
 
         if (energy == maxEnergy && !_activated)
         {
