@@ -13,6 +13,11 @@ public class DatabaseInt : DataBaseRecord
         return IntValue.ToString();
     }
 
+    public void SetValue(int newValue)
+    {
+        IntValue = newValue;
+    }
+
     public void Increment()
     {
         IntValue++;

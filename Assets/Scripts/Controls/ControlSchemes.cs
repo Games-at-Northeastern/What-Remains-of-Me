@@ -125,6 +125,15 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Quit"",
+                    ""type"": ""Button"",
+                    ""id"": ""4778d5a3-7873-4eb4-8e76-0936313f86b2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -347,6 +356,17 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""action"": ""Dialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c9bb5a6-132f-4624-8f8e-05f10cdd0648"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -414,6 +434,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
         m_Player_GiveEnergy = m_Player.FindAction("GiveEnergy", throwIfNotFound: true);
         m_Player_TakeEnergy = m_Player.FindAction("TakeEnergy", throwIfNotFound: true);
         m_Player_Dialogue = m_Player.FindAction("Dialogue", throwIfNotFound: true);
+        m_Player_Quit = m_Player.FindAction("Quit", throwIfNotFound: true);
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_Restart = m_Debug.FindAction("Restart", throwIfNotFound: true);
@@ -488,6 +509,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_GiveEnergy;
     private readonly InputAction m_Player_TakeEnergy;
     private readonly InputAction m_Player_Dialogue;
+    private readonly InputAction m_Player_Quit;
     public struct PlayerActions
     {
         private @ControlSchemes m_Wrapper;
@@ -503,6 +525,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
         public InputAction @GiveEnergy => m_Wrapper.m_Player_GiveEnergy;
         public InputAction @TakeEnergy => m_Wrapper.m_Player_TakeEnergy;
         public InputAction @Dialogue => m_Wrapper.m_Player_Dialogue;
+        public InputAction @Quit => m_Wrapper.m_Player_Quit;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -545,6 +568,9 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 @Dialogue.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDialogue;
                 @Dialogue.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDialogue;
                 @Dialogue.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDialogue;
+                @Quit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuit;
+                @Quit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuit;
+                @Quit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuit;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -582,6 +608,9 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 @Dialogue.started += instance.OnDialogue;
                 @Dialogue.performed += instance.OnDialogue;
                 @Dialogue.canceled += instance.OnDialogue;
+                @Quit.started += instance.OnQuit;
+                @Quit.performed += instance.OnQuit;
+                @Quit.canceled += instance.OnQuit;
             }
         }
     }
@@ -640,6 +669,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
         void OnGiveEnergy(InputAction.CallbackContext context);
         void OnTakeEnergy(InputAction.CallbackContext context);
         void OnDialogue(InputAction.CallbackContext context);
+        void OnQuit(InputAction.CallbackContext context);
     }
     public interface IDebugActions
     {

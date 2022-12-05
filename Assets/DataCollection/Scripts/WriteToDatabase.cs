@@ -5,9 +5,12 @@ using System.Net;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class WriteToDatabase : MonoBehaviour
 {
+    public bool QuitAfterPost = false;
+
     /// <summary>
     /// URL at which the .php file interfacing with the SQL database is stored.
     /// </summary>
@@ -20,24 +23,54 @@ public class WriteToDatabase : MonoBehaviour
     [SerializeField] private DatabaseFloat[] _databaseFloatsToWrite;
     [SerializeField] private DataBaseRecord[] _databaseStringsToWrite;
 
-    public void PostData()
+    private IEnumerator PostDataRoutineStart()
+    {
+        for (int i = 0; i < _databaseIntsToWrite.Length; i++)
+        {
+            DatabaseInt dbInt = _databaseIntsToWrite[i];
+            yield return StartCoroutine(PostDataRoutine(dbInt.DataName,
+                dbInt.DataDescription, dbInt.GetValue(), false));
+        }
+        for (int i = 0; i < _databaseIntsToWrite.Length; i++)
+        {
+            DatabaseFloat dbFloat = _databaseFloatsToWrite[i];
+            yield return StartCoroutine(PostDataRoutine(dbFloat.DataName,
+                dbFloat.DataDescription, dbFloat.GetValue(), true));
+        }
+    }
+
+    private void PostData()
     {
         foreach (DatabaseInt dbInt in _databaseIntsToWrite)
         {
             StartCoroutine(PostDataRoutine(dbInt.DataName,
-                dbInt.DataDescription, dbInt.GetValue()));
+                dbInt.DataDescription, dbInt.GetValue(), false));
         }
         foreach (DatabaseFloat dbFloat in _databaseFloatsToWrite)
         {
             StartCoroutine(PostDataRoutine(dbFloat.DataName,
-                dbFloat.DataDescription, dbFloat.GetValue()));
+                dbFloat.DataDescription, dbFloat.GetValue(), true));
         }
+    }
+
+    public void PostDataAndQuit(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            QuitAfterPost = true;
+            StartCoroutine(PostDataRoutineStart());
+        }
+    }
+    public void PostDataAndContinue()
+    {
+        QuitAfterPost = false;
+        PostData();
     }
 
     /// <summary>
     /// Routine to post logged data to online database
     /// </summary>
-    private IEnumerator PostDataRoutine(string dataName, string dataDescription, string value)
+    private IEnumerator PostDataRoutine(string dataName, string dataDescription, string value, bool quitAfter)
     {
         WWWForm form = new WWWForm();
         form.AddField("post_data", "true");
@@ -68,6 +101,11 @@ public class WriteToDatabase : MonoBehaviour
             {
                 Debug.Log("Successfully posted score!");
             }
+        }
+
+        if (QuitAfterPost && quitAfter)
+        {
+            Application.Quit();
         }
     }
 
