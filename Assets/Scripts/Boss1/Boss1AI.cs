@@ -22,11 +22,11 @@ public enum FSMStates
     public SpriteRenderer body;
     public GameObject lazer;
 
-    private int _trackingTime = 5;
-    private int _attackingTime = 5;
-    private int _lazerTime = 1;
-    private int _overchargedTime = 5;
-    private int _hitTime = 2;
+    [SerializeField] int _trackingTime = 5;
+    [SerializeField] int _attackingTime = 5;
+    [SerializeField] int _lazerDelay = 1;
+    [SerializeField] int _overchargedTime = 5;
+    [SerializeField] int _hitTime = 2;
 
     public float trackingTimer {get; set;}
     public float attackingTimer {get; set;}
@@ -79,7 +79,7 @@ public enum FSMStates
 
     void UpdateNeutralState(){
 
-        print("Currently Neutral");
+        //print("Currently Neutral");
         body.color = Color.white;
 
         if (_isChosen){
@@ -92,7 +92,7 @@ public enum FSMStates
 
     void UpdateTrackState(){
 
-        print("Currently Tracking");
+        //print("Currently Tracking");
 
         FaceTarget(player.transform.position);
         body.color = Color.yellow;
@@ -103,7 +103,7 @@ public enum FSMStates
         if(trackingTimer <= 0)
         {
             attackingTimer = _attackingTime;
-            lazerTimer = _lazerTime;
+            lazerTimer = _lazerDelay;
             currentState = FSMStates.Attack;
         }
     }
@@ -112,7 +112,7 @@ public enum FSMStates
 
     void UpdateAttackState(){
 
-        print("Currently Attacking");
+        //print("Currently Attacking");
         body.color = Color.red;
 
         if(lazerTimer > 0.0f)
@@ -142,7 +142,7 @@ public enum FSMStates
 
     void UpdateOverchargedState(){
 
-        print("Currently Overcharged");
+        //print("Currently Overcharged");
         body.color = Color.blue;
         lazer.SetActive(false);
 
@@ -168,7 +168,7 @@ public enum FSMStates
 
     void UpdateHitState(){
 
-        print("Currently Hit");
+        //print("Currently Hit");
         body.color = Color.black;
         
 
