@@ -13,18 +13,19 @@ public class DamageEnactor : MonoBehaviour
     [SerializeField] MovementInfo MI;
     [SerializeField] PlayerHealth PH;
     [SerializeField] float damageAmount;
+    [SerializeField] Animator a;
 
-
-    /*
-     * checks if this gameObject is colliding with any other colliders
-     * and calls for damage to be take through the PlayerHealth component
-     * 
-     */
+    /// <summary>
+    /// checks if this gameObject is colliding with any other colliders
+    /// and calls for damage to be take through the PlayerHealth component.
+    /// also calls the PlayerDamaged animation
+    /// </summary>
     private void Update()
     {
         if (MI.DamageDetector.isColliding())
         {
             PH.RequestTakeDamage(damageAmount);
+            a.Play("PlayerDamaged");
         }
     }
 }
