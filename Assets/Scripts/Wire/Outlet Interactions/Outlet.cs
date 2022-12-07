@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Outlet : MonoBehaviour
 {
+    private SoundController soundController;
+
     [Header("SFX")]
     public AudioSource src;
     public AudioClip giving;
@@ -24,6 +26,8 @@ public class Outlet : MonoBehaviour
         CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); } };
         CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); } };
         CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); } };
+
+        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
     }
 
     /// <summary>
@@ -32,6 +36,7 @@ public class Outlet : MonoBehaviour
     public void Connect()
     {
         CS.Enable();
+        soundController.PlaySound("Plug_In");
     }
 
     /// <summary>

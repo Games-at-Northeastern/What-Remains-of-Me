@@ -47,8 +47,8 @@ public class PlayerInfo : ScriptableObject
 
     private void OnValidate()
     {
-        // batteryPercentage = _batteryPercentageSO;
-        // virusPercentage = _virusPercentageSO;
+        //batteryPercentage = _batteryPercentageSO;
+        //virusPercentage = _virusPercentageSO;
     }
 
     public void ResetMaxBattery()

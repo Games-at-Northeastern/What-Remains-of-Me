@@ -77,6 +77,9 @@ public class SoundController : MonoBehaviour
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Enemy_Overloaded"));
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Enemy_Drained"));
                     break;
+                case SoundPackPresets.WireSystem:
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Plug_In"));
+                    break;
             }
         }
 
@@ -434,5 +437,6 @@ public class SoundController : MonoBehaviour
 public enum SoundPackPresets
 {
     Player,
-    Enemy
+    Enemy,
+    WireSystem
 }
