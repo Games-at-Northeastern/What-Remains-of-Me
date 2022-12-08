@@ -54,7 +54,7 @@ public class DialogueSO : ScriptableObject
     /// <returns>true if the file is successfully loaded, false if it needs to be created before loading</returns>
     private bool LoadFromFile(string fileName, out string result)
     {
-        var fullPath = Path.Combine(Application.persistentDataPath, fileName);
+        var fullPath = "Assets/Scripts/Dialogue/DialogueJsons/" + fileName;
 
         try
         {
