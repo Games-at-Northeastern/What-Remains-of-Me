@@ -9,13 +9,15 @@ using UnityEngine;
 public class TrueParallax : MonoBehaviour
 {
 
-    private float lenght, startpos;
+    private float lenght, startpos , startpos2, yMultiple;
     public GameObject cam;
     public float parallaxEffect;
     // Start is called before the first frame update
     void Start()
     {
         startpos = transform.position.x;
+        startpos2 = transform.position.y;
+        yMultiple = 0.05f;
         lenght = GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
@@ -23,10 +25,10 @@ public class TrueParallax : MonoBehaviour
     // needs to be a LateUpdate because the camera uses LateUpdate (otherwise some layers studder)
     void LateUpdate()
     {
-        float temp = (cam.transform.position.x * (1 - parallaxEffect));
-        float dist = (cam.transform.position.x * parallaxEffect);
+        var temp = (cam.transform.position.x * (1 - parallaxEffect));
+        var dist = (cam.transform.position.x * parallaxEffect);
 
-        transform.position = new Vector3(startpos + dist, transform.position.y, transform.position.z);
+        transform.position = new Vector3(startpos + dist, startpos2 + (transform.position.y * yMultiple), transform.position.z);
 
         if (temp > startpos + lenght)
         {
