@@ -9,9 +9,9 @@ using UnityEngine;
 public class TrueParallax : MonoBehaviour
 {
 
-    private float lenght, startpos , startpos2, yMultiple;
-    public GameObject cam;
-    public float parallaxEffect;
+    private float lenght, startpos, startpos2, yMultiple;
+    [SerializeField] private GameObject cam;
+    [SerializeField] private float parallaxEffect;
     // Start is called before the first frame update
     void Start()
     {
