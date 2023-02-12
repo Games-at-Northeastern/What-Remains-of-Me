@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEditor.Build;
 using UnityEngine;
 
+// if any questions come up @Thomas Belk in discord
+// additionally, this script comes from this tutorial with some light modifications to better suit our game
+// https://www.youtube.com/watch?v=zit45k6CUMk&t=317s 
 public class TrueParallax : MonoBehaviour
 {
 
@@ -16,8 +19,9 @@ public class TrueParallax : MonoBehaviour
         lenght = GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
-    // Update is called once per frame
-    void Update()
+    // 
+    // needs to be a LateUpdate because the camera uses LateUpdate (otherwise some layers studder)
+    void LateUpdate()
     {
         float temp = (cam.transform.position.x * (1 - parallaxEffect));
         float dist = (cam.transform.position.x * parallaxEffect);
