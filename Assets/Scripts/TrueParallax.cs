@@ -12,6 +12,9 @@ public class TrueParallax : MonoBehaviour
     private float lenght, startpos, startpos2, yMultiple;
     [SerializeField] private GameObject cam;
     [SerializeField] private float parallaxEffect;
+    public int accForTrueParallax;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,14 +22,26 @@ public class TrueParallax : MonoBehaviour
         startpos2 = transform.position.y;
         yMultiple = 0.05f;
         lenght = GetComponent<SpriteRenderer>().bounds.size.x;
+
+        // creates two extra versions of the backround and places them next to the right and left of the original
+        // (makes implementation easier, because previously you had to make 2 copies of each backround element in
+        // order to make sure you didn't run out of image.
+        if (accForTrueParallax == 1)
+        {
+            accForTrueParallax = 0;
+            var g1 = Instantiate(gameObject, new Vector3(startpos - lenght, startpos2, 0), Quaternion.identity);
+            var g2 = Instantiate(gameObject, new Vector3(startpos + lenght, startpos2, 0), Quaternion.identity);
+
+        }
+
     }
 
     // 
     // needs to be a LateUpdate because the camera uses LateUpdate (otherwise some layers studder)
     void LateUpdate()
     {
-        var temp = (cam.transform.position.x * (1 - parallaxEffect));
-        var dist = (cam.transform.position.x * parallaxEffect);
+        var temp = cam.transform.position.x * (1 - parallaxEffect);
+        var dist = cam.transform.position.x * parallaxEffect;
 
         transform.position = new Vector3(startpos + dist, startpos2 + (transform.position.y * yMultiple), transform.position.z);
 
@@ -39,4 +54,5 @@ public class TrueParallax : MonoBehaviour
             startpos -= lenght;
         }
     }
+
 }
