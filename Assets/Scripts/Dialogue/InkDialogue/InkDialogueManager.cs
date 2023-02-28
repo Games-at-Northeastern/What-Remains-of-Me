@@ -64,7 +64,7 @@ public class InkDialogueManager : MonoBehaviour
 
         // handle continuing to the next line in the dialogue when submit is pressed
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
-        if (currentStory.currentChoices.Count == 0 && _cs.Player.Dialogue.WasReleasedThisFrame())
+        if (currentStory.currentChoices.Count == 0 && _cs.Player.Jump.WasPerformedThisFrame())
         {
             ContinueStory();
         }
@@ -79,9 +79,10 @@ public class InkDialogueManager : MonoBehaviour
         ContinueStory();
     }
 
+
     private IEnumerator ExitDialogueMode()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.2f); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
 
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
@@ -95,6 +96,7 @@ public class InkDialogueManager : MonoBehaviour
             // set text for the current dialogue line
             dialogueText.text = currentStory.Continue();
             // display choices, if any, for this dialogue line
+            DisplayChoices();
         }
         else
         {
@@ -102,8 +104,49 @@ public class InkDialogueManager : MonoBehaviour
         }
     }
 
-  
+    private void DisplayChoices()
+    {
+        List<Choice> currentChoices = currentStory.currentChoices;
 
-  
+        // defensive check to make sure our UI can support the number of choices coming in
+        if (currentChoices.Count > choices.Length)
+        {
+            Debug.LogError("More choices were given than the UI can support. Number of choices given: "
+                + currentChoices.Count);
+        }
+
+        int index = 0;
+        // enable and initialize the choices up to the amount of choices for this line of dialogue
+        foreach (Choice choice in currentChoices)
+        {
+            choices[index].gameObject.SetActive(true);
+            choicesText[index].text = choice.text;
+            index++;
+        }
+        // go through the remaining choices the UI supports and make sure they're hidden
+        for (int i = index; i < choices.Length; i++)
+        {
+            choices[i].gameObject.SetActive(false);
+        }
+
+        StartCoroutine(SelectFirstChoice());
+    }
+
+    private IEnumerator SelectFirstChoice()
+    {
+        // Event System requires we clear it first, then wait
+        // for at least one frame before we set the current selected object.
+        EventSystem.current.SetSelectedGameObject(null);
+        yield return new WaitForEndOfFrame();
+        EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
+    }
+
+    public void MakeChoice(int choiceIndex)
+    {
+        currentStory.ChooseChoiceIndex(choiceIndex);
+        // NOTE: The below two lines were added to fix a bug after the Youtube video was made
+        // this is specific to my InputManager script
+        ContinueStory();
+    }
 
 }

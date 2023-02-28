@@ -34,7 +34,7 @@ public class InkDialogueTrigger : MonoBehaviour
         if (playerInRange && !InkDialogueManager.GetInstance().dialogueIsPlaying)
         {
             visualCue.SetActive(true);  
-            if (_cs.Player.Dialogue.WasReleasedThisFrame())
+            if (_cs.Player.Jump.WasReleasedThisFrame())
             {
                 InkDialogueManager.GetInstance().EnterDialogueMode(inkJSON);
             }
