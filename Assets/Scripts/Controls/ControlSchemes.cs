@@ -125,6 +125,15 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UI Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""be20ef65-4008-458f-a79c-844a47b2ca83"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -347,6 +356,61 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""action"": ""Dialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""b37b502a-0506-4b51-acc7-095da763c856"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f45ed29b-63bb-47f2-b890-095b6ad4860e"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""316ebc00-6efa-49bd-9f26-82bf11257489"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""8a7bc391-e088-4cd2-a504-2fb3b6acf46f"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""113c6717-4df5-408e-ad55-9eb6f4793fdc"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -414,6 +478,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
         m_Player_GiveEnergy = m_Player.FindAction("GiveEnergy", throwIfNotFound: true);
         m_Player_TakeEnergy = m_Player.FindAction("TakeEnergy", throwIfNotFound: true);
         m_Player_Dialogue = m_Player.FindAction("Dialogue", throwIfNotFound: true);
+        m_Player_UIMovement = m_Player.FindAction("UI Movement", throwIfNotFound: true);
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_Restart = m_Debug.FindAction("Restart", throwIfNotFound: true);
@@ -488,6 +553,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_GiveEnergy;
     private readonly InputAction m_Player_TakeEnergy;
     private readonly InputAction m_Player_Dialogue;
+    private readonly InputAction m_Player_UIMovement;
     public struct PlayerActions
     {
         private @ControlSchemes m_Wrapper;
@@ -503,6 +569,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
         public InputAction @GiveEnergy => m_Wrapper.m_Player_GiveEnergy;
         public InputAction @TakeEnergy => m_Wrapper.m_Player_TakeEnergy;
         public InputAction @Dialogue => m_Wrapper.m_Player_Dialogue;
+        public InputAction @UIMovement => m_Wrapper.m_Player_UIMovement;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -545,6 +612,9 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 @Dialogue.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDialogue;
                 @Dialogue.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDialogue;
                 @Dialogue.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDialogue;
+                @UIMovement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUIMovement;
+                @UIMovement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUIMovement;
+                @UIMovement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUIMovement;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -582,6 +652,9 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 @Dialogue.started += instance.OnDialogue;
                 @Dialogue.performed += instance.OnDialogue;
                 @Dialogue.canceled += instance.OnDialogue;
+                @UIMovement.started += instance.OnUIMovement;
+                @UIMovement.performed += instance.OnUIMovement;
+                @UIMovement.canceled += instance.OnUIMovement;
             }
         }
     }
@@ -640,6 +713,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
         void OnGiveEnergy(InputAction.CallbackContext context);
         void OnTakeEnergy(InputAction.CallbackContext context);
         void OnDialogue(InputAction.CallbackContext context);
+        void OnUIMovement(InputAction.CallbackContext context);
     }
     public interface IDebugActions
     {
