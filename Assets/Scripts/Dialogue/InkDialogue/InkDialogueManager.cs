@@ -11,6 +11,7 @@ public class InkDialogueManager : MonoBehaviour
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
+    [SerializeField] private TextMeshProUGUI displayNameText;
 
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
@@ -22,6 +23,15 @@ public class InkDialogueManager : MonoBehaviour
     private static InkDialogueManager instance;
 
     private ControlSchemes _cs;
+
+    // constants for ink tags (ink tags allow you to change the state of the game from ink json files)
+
+    private const string SPEAKER_TAG = "speaker";
+
+    private const string PORTRAIT_TAG = "portrait";
+
+    private const string LAYOUT_TAG = "layout";
+
 
     private void Awake()
     {
@@ -97,10 +107,46 @@ public class InkDialogueManager : MonoBehaviour
             dialogueText.text = currentStory.Continue();
             // display choices, if any, for this dialogue line
             DisplayChoices();
+
+            // handles current tags
+            HandleTags(currentStory.currentTags);
         }
         else
         {
             StartCoroutine(ExitDialogueMode());
+        }
+    }
+
+    private void HandleTags(List<string> currentTags)
+    {
+        // loop through current tags
+        foreach(string tag in currentTags)
+        {
+            string[] splitTag = tag.Split(':');
+            if (splitTag.Length != 2)
+            {
+                Debug.LogError("Tag could not be parsed:" + tag);
+            }
+            string tagKey = splitTag[0].Trim();
+            string tagValue = splitTag[1].Trim();
+
+            // handle the tag
+            switch (tagKey)
+            {
+                case SPEAKER_TAG:
+                    displayNameText.text = tagValue;
+                    Debug.Log("Speaker = " + tagValue);
+                    break;
+                case PORTRAIT_TAG:
+                    Debug.Log("Potrait = " + tagValue);
+                    break;
+                case LAYOUT_TAG:
+                    Debug.Log("Layout = " + tagValue);
+                    break;
+                default:
+                    Debug.LogWarning("Tag came in but isn't being handled" + tag);
+                    break;
+            }
         }
     }
 
