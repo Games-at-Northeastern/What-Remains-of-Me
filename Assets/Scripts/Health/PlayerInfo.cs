@@ -53,6 +53,6 @@ public class PlayerInfo : ScriptableObject
 
     public void ResetMaxBattery()
     {
-        maxBattery = initialMaxBattery;
+        _maxBattery = initialMaxBattery;
     }
 }

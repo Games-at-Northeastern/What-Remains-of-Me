@@ -54,7 +54,10 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        //if (playerRef == null) { playerRef = GameObject.FindGameObjectWithTag("Player"); }
+        if (playerRef == null && GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            playerRef = GameObject.FindGameObjectWithTag("Player");
+        }
         if (loadedNewScene)
         {
             GameObject[] warpZones = GameObject.FindGameObjectsWithTag("WarpZone");
