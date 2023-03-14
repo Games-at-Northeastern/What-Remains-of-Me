@@ -1,4 +1,4 @@
-Hey, look at me! #speaker:green #portrait:green_neutral #layout:left
+Hey, look at me! #speaker:green #portrait:default #layout:left
 I am green!
 -> first
 
@@ -11,13 +11,13 @@ What color are you?
 Really, well, I guess you can be whatever you want to be!
 -> END
 === interjection === 
-Hmm, I feel like you are more of a brown color. #speaker:yellow #portrait:yellow_neutral #layout:right
+Hmm, I feel like you are more of a brown color. #speaker:yellow #portrait:TestCharacter #layout:right
 -> grr
 
 === grr ===
-Butt out you poo poo. #speaker:green #portrait:green_neutral #layout:left
+Butt out you poo poo. #speaker:green #portrait:default #layout:left
 -> gr 
 
 === gr ===
-Fine! #speaker:yellow #portrait:yellow_neutral #layout:right
+Fine! #speaker:yellow #portrait:TestCharacter #layout:right
 -> END
