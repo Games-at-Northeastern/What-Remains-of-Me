@@ -14,6 +14,8 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI displayNameText;
     [SerializeField] private Animator portraitAnimator;
 
+    private Animator layoutAnimator;
+
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
     private TextMeshProUGUI[] choicesText;
@@ -54,6 +56,8 @@ public class InkDialogueManager : MonoBehaviour
         _cs.Enable();
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
+
+        layoutAnimator = dialoguePanel.GetComponent<Animator>();
 
         // get all of the choices text 
         choicesText = new TextMeshProUGUI[choices.Length];
@@ -143,6 +147,7 @@ public class InkDialogueManager : MonoBehaviour
                     Debug.Log("Potrait = " + tagValue);
                     break;
                 case LAYOUT_TAG:
+                    layoutAnimator.Play(tagValue);
                     Debug.Log("Layout = " + tagValue);
                     break;
                 default:
