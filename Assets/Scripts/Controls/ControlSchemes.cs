@@ -272,7 +272,18 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c1dd4a3a-f438-4592-9bfd-441c6c85286f"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GiveEnergy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2130c77-c2f1-4fd5-80f0-64f8f91a0745"",
+                    ""path"": ""<Gamepad>/dpad/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -295,6 +306,17 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""63e570c2-a97a-49eb-ac8b-a9b03462b1d2"",
                     ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TakeEnergy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30b90f32-1873-41ea-bc2c-bc246531a275"",
+                    ""path"": ""<Gamepad>/dpad/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
