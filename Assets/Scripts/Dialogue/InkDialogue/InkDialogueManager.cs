@@ -4,20 +4,30 @@ using UnityEngine;
 using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 public class InkDialogueManager : MonoBehaviour
 {
+    [Header("Parms")]
+    [SerializeField] private float typingSpeed = 0.04f;
 
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI displayNameText;
+    [SerializeField] private Animator portraitAnimator;
+
+    private Animator layoutAnimator;
 
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
     private TextMeshProUGUI[] choicesText;
 
     private Story currentStory;
+
+    private Coroutine displayLineCoroutine;
+
+    private bool canContinueToNextLine = false;
     public bool dialogueIsPlaying { get; private set; }
 
     private static InkDialogueManager instance;
@@ -54,6 +64,8 @@ public class InkDialogueManager : MonoBehaviour
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
 
+        layoutAnimator = dialoguePanel.GetComponent<Animator>();
+
         // get all of the choices text 
         choicesText = new TextMeshProUGUI[choices.Length];
         int index = 0;
@@ -74,7 +86,9 @@ public class InkDialogueManager : MonoBehaviour
 
         // handle continuing to the next line in the dialogue when submit is pressed
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
-        if (currentStory.currentChoices.Count == 0 && _cs.Player.Jump.WasPerformedThisFrame())
+        if (canContinueToNextLine
+            && currentStory.currentChoices.Count == 0
+            && _cs.Player.Jump.WasPerformedThisFrame())
         {
             ContinueStory();
         }
@@ -85,6 +99,11 @@ public class InkDialogueManager : MonoBehaviour
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
+
+        // resets to defaults (makes sure that ink tags don't carry over between npcs)
+        displayNameText.text = "???";
+        portraitAnimator.Play("default");
+        layoutAnimator.Play("right");
 
         ContinueStory();
     }
@@ -103,10 +122,12 @@ public class InkDialogueManager : MonoBehaviour
     {
         if (currentStory.canContinue)
         {
+            if (displayLineCoroutine != null)
+            {
+                StopCoroutine(displayLineCoroutine);
+            }
             // set text for the current dialogue line
-            dialogueText.text = currentStory.Continue();
-            // display choices, if any, for this dialogue line
-            DisplayChoices();
+            displayLineCoroutine = StartCoroutine(DisplayLine(currentStory.Continue()));
 
             // handles current tags
             HandleTags(currentStory.currentTags);
@@ -114,6 +135,38 @@ public class InkDialogueManager : MonoBehaviour
         else
         {
             StartCoroutine(ExitDialogueMode());
+        }
+    }
+
+    private IEnumerator DisplayLine(string line)
+    {
+        // empty dialogue text
+        dialogueText.text = "";
+
+        canContinueToNextLine = false;
+
+        //hide previous choices
+        HideChoices();
+
+        // display 1 letter at a time
+        foreach (char letter in line.ToCharArray())
+        {
+
+            dialogueText.text += letter;
+            yield return new WaitForSeconds(typingSpeed);
+        }
+
+        // display choices, if any, for this dialogue line
+        DisplayChoices();
+
+        canContinueToNextLine = true;
+    }
+
+    private void HideChoices()
+    {
+        foreach (GameObject choicebutton in choices)
+        {
+            choicebutton.SetActive(false);
         }
     }
 
@@ -138,9 +191,11 @@ public class InkDialogueManager : MonoBehaviour
                     Debug.Log("Speaker = " + tagValue);
                     break;
                 case PORTRAIT_TAG:
+                    portraitAnimator.Play(tagValue);
                     Debug.Log("Potrait = " + tagValue);
                     break;
                 case LAYOUT_TAG:
+                    layoutAnimator.Play(tagValue);
                     Debug.Log("Layout = " + tagValue);
                     break;
                 default:
@@ -189,10 +244,12 @@ public class InkDialogueManager : MonoBehaviour
 
     public void MakeChoice(int choiceIndex)
     {
-        currentStory.ChooseChoiceIndex(choiceIndex);
-        // NOTE: The below two lines were added to fix a bug after the Youtube video was made
-        // this is specific to my InputManager script
-        ContinueStory();
+        if (canContinueToNextLine)
+        {
+            currentStory.ChooseChoiceIndex(choiceIndex);
+
+            ContinueStory();
+        }
     }
 
 }
