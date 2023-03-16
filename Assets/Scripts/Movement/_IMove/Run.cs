@@ -38,11 +38,7 @@ public class Run : AMove
 
     public override void AdvanceTime()
     {
-        if (InkDialogueManager.GetInstance().dialogueIsPlaying)
-        {
-            xVel = 0;
-        }
-        else if (xVel > MS.RunMaxSpeed)
+        if (xVel > MS.RunMaxSpeed)
         {
             xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
                 ref xAccel, (float)0.3);
