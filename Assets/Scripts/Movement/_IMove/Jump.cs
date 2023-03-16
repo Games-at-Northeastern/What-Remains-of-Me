@@ -49,11 +49,7 @@ public class Jump : AMove
         // General
         timePassed += timeChange;
         // Horizontal
-        if (InkDialogueManager.GetInstance().dialogueIsPlaying)
-        {
-            yVel = 0;
-        }
-        else if (xVel > MS.FallMaxSpeedX * 0.85 && !connectedInput)
+        if (xVel > MS.FallMaxSpeedX * 0.85 && !connectedInput)
         {
             xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(),
                 ref xAccel, MS.FallSmoothTimeX * 5);
