@@ -57,5 +57,13 @@ public class PlayerSFX : MonoBehaviour
     {
         soundController.PlaySound("Player_Damaged");
     }
+	
+	/// <summary>
+    /// Plays the death audio clip at the player's location
+    /// <summary>
+    void Died()
+    {
+        soundController.PlaySound("Player_Die");
+    }
 
 }

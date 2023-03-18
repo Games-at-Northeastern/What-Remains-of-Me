@@ -70,6 +70,7 @@ public class SoundController : MonoBehaviour
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Player_JumpUp"));
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Swing"));
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Damaged"));
+					sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Die"));
                     break;
                 case SoundPackPresets.Enemy:
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Enemy_Walk"));
