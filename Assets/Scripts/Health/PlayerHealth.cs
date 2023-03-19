@@ -54,11 +54,12 @@ public class PlayerHealth : MonoBehaviour
      *
      * @param amount        amount of energy to add to the battery
      */
-    public void GainEnergy(float amount)
-    {
-        playerInfo.battery += amount;
-        OnHealthChanged.Invoke();
-    }
+
+    // public void GainEnergy(float amount)
+    // {
+    //     playerInfo.battery += amount;
+    //     OnHealthChanged.Invoke();
+    // }
 
     /*
      * adds the given amount to the virus meter and decreases current battery
@@ -72,7 +73,10 @@ public class PlayerHealth : MonoBehaviour
     {
         playerInfo.virus += amount;
         playerInfo.maxBattery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0.01f) { Die(); }
+        if (playerInfo.batteryPercentage.Value <= 0.01f) 
+        {
+            Die(); 
+        }
     }
 
     public void SubtractVirus(float amount) {
