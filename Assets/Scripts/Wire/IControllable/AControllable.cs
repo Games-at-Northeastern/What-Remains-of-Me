@@ -13,6 +13,8 @@ public abstract class AControllable : MonoBehaviour, IControllable
     [SerializeField] protected float energy;
     [SerializeField] protected float maxEnergy;
     [SerializeField] protected float virus;
+    [SerializeField] protected float maxVirus;
+
     public PlayerInfo playerInfo;
 
     /// <summary>
@@ -35,6 +37,25 @@ public abstract class AControllable : MonoBehaviour, IControllable
     }
 
     /// <summary>
+    /// This controllable gains the given amount of virus and takes it to the player health.
+    /// <param name="amount"> float amount of virus for this controllable to gain </param>
+    /// </summary>
+    public void GainVirus(float amount)
+    {
+        if (amount <= 0 || virus >= maxVirus || playerInfo.virusPercentage.Value <= 0)
+        {
+            return;
+        }
+
+        // Can only accept what the player can offer
+        amount = Mathf.Min(amount, playerInfo.virus);
+
+        playerInfo.virus -= amount;
+
+        virus = Mathf.Clamp(virus + amount, 0, maxVirus);
+    }
+
+    /// <summary>
     /// This controllable loses the given amount of energy and gives it to the player health.
     /// <param name="amount"> float amount of energy for this controllable to lose </param>
     /// </summary>
@@ -50,10 +71,28 @@ public abstract class AControllable : MonoBehaviour, IControllable
         amount = Mathf.Min(remainingEmptyBatteryAmount, amount);
 
         playerInfo.battery += amount;
-        playerInfo.virus += amount;
 
         energy = Mathf.Clamp(energy - amount, 0, maxEnergy);
-        virus = Mathf.Clamp(virus - amount, 0, virus);
+    }
+
+    /// <summary>
+    /// This controllable loses the given amount of virus and gives it to the player health.
+    /// <param name="amount"> float amount of virus for this controllable to lose </param>
+    /// </summary>
+    public void LoseVirus(float amount)
+    {
+        if (amount <= 0 || virus <= 0 || playerInfo.virusPercentage.Value >= 1f)
+        {
+            return;
+        }
+
+        // Can only provide what the player can take
+        float remainingEmptyVirusAmount = playerInfo.maxVirus - playerInfo.virus;
+        amount = Mathf.Min(remainingEmptyVirusAmount, amount);
+
+        playerInfo.virus += amount;
+
+        virus = Mathf.Clamp(virus - amount, 0, maxVirus);
     }
 
     /// <summary>
