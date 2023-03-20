@@ -134,6 +134,24 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""GiveVirus"",
+                    ""type"": ""Button"",
+                    ""id"": ""f0cdd94c-a7d4-4a11-ae65-780da11069f3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TakeVirus"",
+                    ""type"": ""Button"",
+                    ""id"": ""7cedad7e-3066-48ce-8857-2f41672f5029"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -433,6 +451,72 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""action"": ""UI Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6e66fdf-91ce-4bea-8ac4-c472dd323e82"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GiveVirus"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a0abc9d-dfbf-447a-b06e-912e1da62439"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GiveVirus"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6f41ded1-986b-4635-8a7f-ff3215a4a6cd"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GiveVirus"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0579a3da-2f73-4cc3-b65d-fdc0c5515f66"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TakeVirus"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3e74cf07-38e7-4ced-bc77-9384738a5ccd"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TakeVirus"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c9601ad0-ebed-4c0f-a73d-2212309783b7"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TakeVirus"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -501,6 +585,8 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
         m_Player_TakeEnergy = m_Player.FindAction("TakeEnergy", throwIfNotFound: true);
         m_Player_Dialogue = m_Player.FindAction("Dialogue", throwIfNotFound: true);
         m_Player_UIMovement = m_Player.FindAction("UI Movement", throwIfNotFound: true);
+        m_Player_GiveVirus = m_Player.FindAction("GiveVirus", throwIfNotFound: true);
+        m_Player_TakeVirus = m_Player.FindAction("TakeVirus", throwIfNotFound: true);
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_Restart = m_Debug.FindAction("Restart", throwIfNotFound: true);
@@ -576,6 +662,8 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_TakeEnergy;
     private readonly InputAction m_Player_Dialogue;
     private readonly InputAction m_Player_UIMovement;
+    private readonly InputAction m_Player_GiveVirus;
+    private readonly InputAction m_Player_TakeVirus;
     public struct PlayerActions
     {
         private @ControlSchemes m_Wrapper;
@@ -592,6 +680,8 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
         public InputAction @TakeEnergy => m_Wrapper.m_Player_TakeEnergy;
         public InputAction @Dialogue => m_Wrapper.m_Player_Dialogue;
         public InputAction @UIMovement => m_Wrapper.m_Player_UIMovement;
+        public InputAction @GiveVirus => m_Wrapper.m_Player_GiveVirus;
+        public InputAction @TakeVirus => m_Wrapper.m_Player_TakeVirus;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -637,6 +727,12 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 @UIMovement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUIMovement;
                 @UIMovement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUIMovement;
                 @UIMovement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUIMovement;
+                @GiveVirus.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGiveVirus;
+                @GiveVirus.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGiveVirus;
+                @GiveVirus.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGiveVirus;
+                @TakeVirus.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTakeVirus;
+                @TakeVirus.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTakeVirus;
+                @TakeVirus.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTakeVirus;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -677,6 +773,12 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 @UIMovement.started += instance.OnUIMovement;
                 @UIMovement.performed += instance.OnUIMovement;
                 @UIMovement.canceled += instance.OnUIMovement;
+                @GiveVirus.started += instance.OnGiveVirus;
+                @GiveVirus.performed += instance.OnGiveVirus;
+                @GiveVirus.canceled += instance.OnGiveVirus;
+                @TakeVirus.started += instance.OnTakeVirus;
+                @TakeVirus.performed += instance.OnTakeVirus;
+                @TakeVirus.canceled += instance.OnTakeVirus;
             }
         }
     }
@@ -736,6 +838,8 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
         void OnTakeEnergy(InputAction.CallbackContext context);
         void OnDialogue(InputAction.CallbackContext context);
         void OnUIMovement(InputAction.CallbackContext context);
+        void OnGiveVirus(InputAction.CallbackContext context);
+        void OnTakeVirus(InputAction.CallbackContext context);
     }
     public interface IDebugActions
     {
