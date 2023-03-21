@@ -37,6 +37,7 @@ public class MovementExecuter : MonoBehaviour
         {
             if (InkDialogueManager.GetInstance().dialogueIsPlaying)
             {
+                rb.velocity = Vector2.zero;
                 return;
             }
             else
