@@ -3,10 +3,10 @@ Glad to see that you are back for another try!
 -> anothertry
 
 === anothertry === 
-+ Another try? #layout:right #portrait:default #speaker:Atlas
++ Another try? #layout:right #portrait:atlaspuzzled #speaker:Atlas
 How many times have I talked to you? 
 -> amountoftimes
-+ Me too! #layout:right #portrait:default #speaker:Atlas
++ Me too! #layout:right #portrait:atlasexcited #speaker:Atlas
 -> END
 
 === amountoftimes ===
@@ -15,9 +15,9 @@ Do you remember your mission?
 -> mission
 
 === mission === 
-+ Yes #layout:right #portrait:default #speaker:Atlas
++ Yes #layout:right #portrait:atlashappy #speaker:Atlas
 -> great
-+ No #layout:right #portrait:default #speaker:Atlas
++ No #layout:right #portrait:atlaspuzzled #speaker:Atlas
 -> ugh
 
 === ugh ===
