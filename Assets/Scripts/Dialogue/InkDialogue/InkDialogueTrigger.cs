@@ -23,7 +23,7 @@ public class InkDialogueTrigger : MonoBehaviour
         _cs.Enable();
     }
 
-        private void Awake()
+    private void Awake()
     {
         playerInRange = false;
         visualCue.SetActive(false);
@@ -33,8 +33,8 @@ public class InkDialogueTrigger : MonoBehaviour
     {
         if (playerInRange && !InkDialogueManager.GetInstance().dialogueIsPlaying)
         {
-            visualCue.SetActive(true);  
-            if (_cs.Player.Jump.WasReleasedThisFrame())
+            visualCue.SetActive(true);
+            if (_cs.Player.Dialogue.WasReleasedThisFrame())
             {
                 InkDialogueManager.GetInstance().EnterDialogueMode(inkJSON);
             }

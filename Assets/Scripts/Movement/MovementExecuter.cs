@@ -39,13 +39,24 @@ public class MovementExecuter : MonoBehaviour
             {
                 return;
             }
+            else
+            {
+                DoMove();
+            }
         }
         else
         {
-            currentMove.AdvanceTime();
-            rb.velocity = new Vector2(currentMove.XSpeed(), currentMove.YSpeed());
-            currentMove = currentMove.GetNextMove();
+            DoMove();
         }
+    }
+
+
+    // executes the movement this frame
+    private void DoMove()
+    {
+        currentMove.AdvanceTime();
+        rb.velocity = new Vector2(currentMove.XSpeed(), currentMove.YSpeed());
+        currentMove = currentMove.GetNextMove();
     }
 
     /// <summary>
