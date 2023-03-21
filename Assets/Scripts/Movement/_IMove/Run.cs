@@ -38,38 +38,35 @@ public class Run : AMove
 
     public override void AdvanceTime()
     {
-        if (InkDialogueManager.GetInstance().dialogueIsPlaying)
-        {
-            xVel = 0;
-        }
-        else if (xVel > MS.RunMaxSpeed)
-        {
-            xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
-                ref xAccel, (float)0.3);
-        }
-        else
-        {
-            xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
-                ref xAccel, MS.RunSmoothTime);
-        }
 
-        if (WT.ConnectedOutlet != null)
-        {
-            Vector2 origPos = MI.transform.position;
-            Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
-            float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
-            if (newDistFromOutlet < currDistFromOutlet)
+            if (xVel > MS.RunMaxSpeed)
             {
-                WT.SetMaxWireLength(newDistFromOutlet);
+                xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
+                    ref xAccel, (float)0.3);
             }
-            currDistFromOutlet = newDistFromOutlet;
-        }
+            else
+            {
+                xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
+                    ref xAccel, MS.RunSmoothTime);
+            }
 
-        // ready the player for another jump once space has been released
-        if (jumpPending && CS.Player.Jump.ReadValue<float>() == 0)
-        {
-            jumpPending = false;
-        }
+            if (WT.ConnectedOutlet != null)
+            {
+                Vector2 origPos = MI.transform.position;
+                Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
+                float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
+                if (newDistFromOutlet < currDistFromOutlet)
+                {
+                    WT.SetMaxWireLength(newDistFromOutlet);
+                }
+                currDistFromOutlet = newDistFromOutlet;
+            }
+
+            // ready the player for another jump once space has been released
+            if (jumpPending && CS.Player.Jump.ReadValue<float>() == 0)
+            {
+                jumpPending = false;
+            }
     }
 
     public override float XSpeed() => xVel;

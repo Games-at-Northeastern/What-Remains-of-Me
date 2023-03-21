@@ -33,9 +33,19 @@ public class MovementExecuter : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        currentMove.AdvanceTime();
-        rb.velocity = new Vector2(currentMove.XSpeed(), currentMove.YSpeed());
-        currentMove = currentMove.GetNextMove();
+        if (InkDialogueManager.GetInstance() != null)
+        {
+            if (InkDialogueManager.GetInstance().dialogueIsPlaying)
+            {
+                return;
+            }
+        }
+        else
+        {
+            currentMove.AdvanceTime();
+            rb.velocity = new Vector2(currentMove.XSpeed(), currentMove.YSpeed());
+            currentMove = currentMove.GetNextMove();
+        }
     }
 
     /// <summary>
