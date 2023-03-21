@@ -15,6 +15,17 @@ public class SpriteFlipper : MonoBehaviour
 
     private void Update()
     {
+        if (InkDialogueManager.GetInstance() != null)
+        {
+            if (InkDialogueManager.GetInstance().dialogueIsPlaying)
+            {
+                return;
+            }
+            else
+            {
+                HandleFlipping();
+            }
+        }
         HandleFlipping();
     }
 

@@ -88,7 +88,7 @@ public class InkDialogueManager : MonoBehaviour
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
         if (canContinueToNextLine
             && currentStory.currentChoices.Count == 0
-            && _cs.Player.Jump.WasPerformedThisFrame())
+            && _cs.Player.Dialogue.WasReleasedThisFrame())
         {
             ContinueStory();
         }
