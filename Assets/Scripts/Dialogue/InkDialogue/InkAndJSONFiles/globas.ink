@@ -1,0 +1,1 @@
+VAR deathCount = 0

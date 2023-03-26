@@ -23,6 +23,9 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private GameObject[] choices;
     private TextMeshProUGUI[] choicesText;
 
+    [Header("Load Globals JSON")]
+    [SerializeField] private TextAsset globalsJSON;
+
     private Story currentStory;
 
     private Coroutine displayLineCoroutine;
@@ -42,6 +45,10 @@ public class InkDialogueManager : MonoBehaviour
 
     private const string LAYOUT_TAG = "layout";
 
+    // dialogue variables
+
+    private InkDialogueVariables dialogueVariables;
+
 
     private void Awake()
     {
@@ -50,6 +57,8 @@ public class InkDialogueManager : MonoBehaviour
             Debug.LogWarning("Found more than one Dialogue Manager in the scene");
         }
         instance = this;
+
+        dialogueVariables = new InkDialogueVariables(globalsJSON);
     }
 
     public static InkDialogueManager GetInstance()
@@ -100,6 +109,8 @@ public class InkDialogueManager : MonoBehaviour
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
 
+        dialogueVariables.StartListening(currentStory);
+
         // resets to defaults (makes sure that ink tags don't carry over between npcs)
         displayNameText.text = "???";
         portraitAnimator.Play("default");
@@ -112,6 +123,8 @@ public class InkDialogueManager : MonoBehaviour
     private IEnumerator ExitDialogueMode()
     {
         yield return new WaitForSeconds(0.2f); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+
+        dialogueVariables.StopListening(currentStory);
 
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
@@ -249,6 +262,32 @@ public class InkDialogueManager : MonoBehaviour
             currentStory.ChooseChoiceIndex(choiceIndex);
 
             ContinueStory();
+        }
+    }
+
+    public Ink.Runtime.Object GetVariableState(string variableName)
+    {
+        Ink.Runtime.Object result = null;
+        dialogueVariables.variables.TryGetValue(variableName, out result);
+        if (result == null)
+        {
+            Debug.LogWarning("Ink Variable was found to be null" + variableName);
+        }
+        return result;
+    }
+
+    public void ChangeVariableState(string variableName, Ink.Runtime.Object newValue)
+    {
+        Ink.Runtime.Object result = null;
+        dialogueVariables.variables.TryGetValue(variableName, out result);
+        if (result == null)
+        {
+            Debug.LogWarning("Ink Variable was found to be null. You may have to add the variable to globas.ink" + variableName);
+        }
+        else
+        {
+            dialogueVariables.variables.Remove(variableName);
+            dialogueVariables.variables.Add(variableName, newValue);
         }
     }
 

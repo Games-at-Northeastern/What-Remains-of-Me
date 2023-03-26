@@ -1,5 +1,7 @@
+INCLUDE globas.ink
+
 Hey, look at me! #speaker:green #portrait:default #layout:left
-I am green!
+I am green! You have died {deathCount}
 -> first
 
 === first ===
