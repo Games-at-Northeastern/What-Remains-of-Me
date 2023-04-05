@@ -155,7 +155,7 @@ Transform:
   m_GameObject: {fileID: 2476191629135710749}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7803416330169813703}
@@ -202,7 +202,7 @@ SpriteRenderer:
   m_SortingLayerID: 565412307
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 14afd8965f9fd93458e7ca7d05a92a4e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 184f56740c188f74194e907aebb17c55, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -526,7 +526,7 @@ Transform:
   m_GameObject: {fileID: 6860228394538578391}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7803416329029818618}
@@ -916,7 +916,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &7803416329029818619
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -933,7 +933,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &2102413086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -946,7 +946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326b23119f03c4f4f89803f2ad16c3f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundController: {fileID: 6242244022728779758, guid: 01bd1d90e1d8b4ef4bb3a9e4f8949464, type: 3}
+  soundController: {fileID: 0}
 --- !u!1 &7803416329056728452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,7 +1509,7 @@ MonoBehaviour:
   src: {fileID: 1065947360339903343}
   shootWire: {fileID: 8300000, guid: 032270fced469634b93f4e8e709a2421, type: 3}
   aimDistance: 0
-  mainCamera: {fileID: 5895965481160251236, guid: 3ed613a6609904d9a9e7a3ff5248c5a3, type: 3}
+  mainCamera: {fileID: 0}
   plugPrefab: {fileID: 4615177501490907055, guid: a647468d1f59f4cadb7ddfc0f20951b3, type: 3}
   timeScaleForAim: 0.3
   _plugMovementSettings: {fileID: 7803416329712722703}
@@ -1584,6 +1584,14 @@ PrefabInstance:
     - target: {fileID: 4900074160707081836, guid: a490a8a71a6f1474586f294234461f30, type: 3}
       propertyPath: m_Name
       value: Dialogue Prompt
+      objectReference: {fileID: 0}
+    - target: {fileID: 4900074160707081836, guid: a490a8a71a6f1474586f294234461f30, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4900074160707081838, guid: a490a8a71a6f1474586f294234461f30, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4900074160707081839, guid: a490a8a71a6f1474586f294234461f30, type: 3}
       propertyPath: m_RootOrder
