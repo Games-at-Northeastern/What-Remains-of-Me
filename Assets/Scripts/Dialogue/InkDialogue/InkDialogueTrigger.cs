@@ -10,6 +10,8 @@ public class InkDialogueTrigger : MonoBehaviour
 
     [Header("inkJSON")]
     [SerializeField] private TextAsset inkJSON;
+    [Header("Force Dialogue")]
+    [SerializeField] private bool forceDialogue;
 
     private bool playerInRange;
 
@@ -34,8 +36,9 @@ public class InkDialogueTrigger : MonoBehaviour
         if (playerInRange && !InkDialogueManager.GetInstance().dialogueIsPlaying)
         {
             visualCue.SetActive(true);
-            if (_cs.Player.Dialogue.WasReleasedThisFrame())
+            if (_cs.Player.Dialogue.WasReleasedThisFrame() || forceDialogue)
             {
+                forceDialogue = false;
                 InkDialogueManager.GetInstance().EnterDialogueMode(inkJSON);
             }
         }
