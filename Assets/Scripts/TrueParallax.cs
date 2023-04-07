@@ -8,16 +8,19 @@ using UnityEngine;
 public class TrueParallax : MonoBehaviour
 {
 
-    private float lenght, startpos, startpos2, yMultiple;
+    private float lengthX, lengthY, startpos, startpos2, yMultiple;
     [SerializeField] private GameObject cam;
     [SerializeField] private float parallaxEffect;
+    [SerializeField] private bool enableVerticleParallax = false;
+
     // Start is called before the first frame update
     void Start()
     {
         startpos = transform.position.x;
         startpos2 = transform.position.y;
-        yMultiple = 0.05f;
-        lenght = GetComponent<SpriteRenderer>().bounds.size.x;
+        yMultiple = 0.1f;
+        lengthX = GetComponent<SpriteRenderer>().bounds.size.x;
+        lengthY = GetComponent<SpriteRenderer>().bounds.size.y;
 
     }
 
@@ -26,17 +29,33 @@ public class TrueParallax : MonoBehaviour
     void LateUpdate()
     {
         float temp = cam.transform.position.x * (1 - parallaxEffect);
+        float temp2 = cam.transform.position.y * yMultiple;
         float dist = cam.transform.position.x * parallaxEffect;
+        float moveY = startpos2;
 
-        transform.position = new Vector3(startpos + dist, startpos2, transform.position.z);
-
-        if (temp > startpos + lenght)
+        if (enableVerticleParallax)
         {
-            startpos += lenght;
+            moveY = startpos2 + temp2;
         }
-        else if (temp < startpos - lenght)
+
+        transform.position = new Vector3(startpos + dist, moveY, transform.position.z);
+
+        if (temp > startpos + lengthX)
         {
-            startpos -= lenght;
+            startpos += lengthX;
+        }
+        else if (temp < startpos - lengthX)
+        {
+            startpos -= lengthX;
+        }
+
+        if (temp2 > startpos2 + lengthY)
+        {
+            startpos2 += lengthY;
+        }
+        else if (temp2 < startpos2 - lengthY)
+        {
+            startpos2 -= lengthY;
         }
     }
 
