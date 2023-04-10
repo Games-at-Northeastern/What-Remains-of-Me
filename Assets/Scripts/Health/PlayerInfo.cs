@@ -41,7 +41,6 @@ public class PlayerInfo : ScriptableObject
         get => virusPercentage.Value * maxCharge;
         set => virusPercentage.Value = value / maxCharge;
     }
-    
     [SerializeField] private float initialMaxBattery;
     public float iframesTime;
 

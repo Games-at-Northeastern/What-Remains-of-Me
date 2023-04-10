@@ -47,7 +47,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void GainVirus(float amount)
     {
-        if (amount <= 0 || (energy + virus) >= maxCharge || playerInfo.virusPercentage.Value <= 0)
+        if (amount <= 0 || virus >= maxCharge || playerInfo.virusPercentage.Value <= 0)
         {
             return;
         }
@@ -72,7 +72,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         }
 
         // Can only provide what the player can take
-        float remainingEmptyBatteryAmount = playerInfo.maxCharge - playerInfo.battery;
+        float remainingEmptyBatteryAmount = maxCharge- playerInfo.battery * 100;
         amount = Mathf.Min(remainingEmptyBatteryAmount, amount);
 
         playerInfo.battery += amount;
@@ -92,7 +92,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         }
 
         // Can only provide what the player can take
-        float remainingEmptyVirusAmount = playerInfo.maxCharge - playerInfo.virus;
+        float remainingEmptyVirusAmount = maxCharge - playerInfo.virus * 100;
         amount = Mathf.Min(remainingEmptyVirusAmount, amount);
 
         playerInfo.virus += amount;
