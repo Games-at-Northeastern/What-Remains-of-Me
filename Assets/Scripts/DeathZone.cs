@@ -33,7 +33,7 @@ public class DeathZone : MonoBehaviour
             switch (zoneType)
             {
                 case DeathZoneType.instakill:
-                    playerHealthScript.LoseEnergy(playerHealthScript.playerInfo.maxBattery);
+                    playerHealthScript.LoseEnergy(playerHealthScript.playerInfo.maxCharge);
                     break;
                 case DeathZoneType.damage:
                     playerHealthScript.LoseEnergy(batteryDamage);
@@ -51,7 +51,7 @@ public class DeathZone : MonoBehaviour
     {
         canDieToPit = false;
         yield return new WaitForSecondsRealtime(pitDelay);
-        playerHealthScript.LoseEnergy(playerHealthScript.playerInfo.maxBattery);
+        playerHealthScript.LoseEnergy(playerHealthScript.playerInfo.maxCharge);
         canDieToPit = true;
     }
 }

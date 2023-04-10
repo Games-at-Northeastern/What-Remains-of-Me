@@ -11,9 +11,14 @@ using UnityEngine;
 public abstract class AControllable : MonoBehaviour, IControllable
 {
     [SerializeField] protected float energy;
-    [SerializeField] protected float maxEnergy;
+    //[SerializeField] protected float maxEnergy;
     [SerializeField] protected float virus;
-    [SerializeField] protected float maxVirus;
+    //[SerializeField] protected float maxVirus;
+
+    [SerializeField] protected float maxCharge;
+
+    //static float totalCharge = energy + virus;
+    //static float percentVirus = virus / totalCharge;
 
     public PlayerInfo playerInfo;
 
@@ -23,7 +28,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void GainEnergy(float amount)
     {
-        if (amount <= 0 || energy >= maxEnergy || playerInfo.batteryPercentage.Value <= 0)
+        if (amount <= 0 || (energy + virus) >= maxCharge || playerInfo.batteryPercentage.Value <= 0)
         {
             return;
         }
@@ -33,7 +38,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
 
         playerInfo.battery -= amount;
 
-        energy = Mathf.Clamp(energy + amount, 0, maxEnergy);
+        energy = Mathf.Clamp(energy + amount, 0, maxCharge);
     }
 
     /// <summary>
@@ -42,7 +47,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void GainVirus(float amount)
     {
-        if (amount <= 0 || virus >= maxVirus || playerInfo.virusPercentage.Value <= 0)
+        if (amount <= 0 || virus >= maxCharge || playerInfo.virusPercentage.Value <= 0)
         {
             return;
         }
@@ -52,7 +57,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
 
         playerInfo.virus -= amount;
 
-        virus = Mathf.Clamp(virus + amount, 0, maxVirus);
+        virus = Mathf.Clamp(virus + amount, 0, maxCharge);
     }
 
     /// <summary>
@@ -67,12 +72,12 @@ public abstract class AControllable : MonoBehaviour, IControllable
         }
 
         // Can only provide what the player can take
-        float remainingEmptyBatteryAmount = playerInfo.maxBattery - playerInfo.battery;
+        float remainingEmptyBatteryAmount = maxCharge- playerInfo.battery * 100;
         amount = Mathf.Min(remainingEmptyBatteryAmount, amount);
 
         playerInfo.battery += amount;
 
-        energy = Mathf.Clamp(energy - amount, 0, maxEnergy);
+        energy = Mathf.Clamp(energy - amount, 0, maxCharge);
     }
 
     /// <summary>
@@ -87,12 +92,12 @@ public abstract class AControllable : MonoBehaviour, IControllable
         }
 
         // Can only provide what the player can take
-        float remainingEmptyVirusAmount = playerInfo.maxVirus - playerInfo.virus;
+        float remainingEmptyVirusAmount = maxCharge - playerInfo.virus * 100;
         amount = Mathf.Min(remainingEmptyVirusAmount, amount);
 
         playerInfo.virus += amount;
 
-        virus = Mathf.Clamp(virus - amount, 0, maxVirus);
+        virus = Mathf.Clamp(virus - amount, 0, maxCharge);
     }
 
     /// <summary>
@@ -100,7 +105,23 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public float GetPercentFull()
     {
-        return energy / maxEnergy;
+        return energy / maxCharge;
+    }
+
+    /// <summary>
+    /// Returns the total charge of the object
+    /// </summary>
+    public float GetTotalCharge()
+    {
+        return energy + virus;
+    }
+
+    /// <summary>
+    /// Returns the total virus percentage of the batter
+    /// </summary>
+    public float GetVirusPercent()
+    {
+        return virus / GetTotalCharge();
     }
 
     /// <summary>
@@ -119,6 +140,6 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     bool canGainEnergy(float amount)
     {
-        return energy <= maxEnergy - amount;
+        return energy <= maxCharge - amount;
     }
 }
