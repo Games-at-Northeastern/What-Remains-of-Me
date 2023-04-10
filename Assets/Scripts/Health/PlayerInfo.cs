@@ -21,26 +21,27 @@ public class PlayerInfo : ScriptableObject
 
     public float battery
     {
-        get => batteryPercentage.Value * maxCharge;
-        set => batteryPercentage.Value = value / maxCharge;
+        get => batteryPercentage.Value * maxBattery;
+        set => batteryPercentage.Value = value / maxBattery;
     }
 
-    private float _maxCharge;
-    public float maxCharge
+    private float _maxBattery;
+    public float maxBattery
     {
-        get => _maxCharge;
+        get => _maxBattery;
         set
         {
             batteryPercentage.Value = battery / value;
-            _maxCharge = value;
+            _maxBattery = value;
         }
     }
     [HideInInspector] public IReactiveProperty<float> virusPercentage;
     public float virus
     {
-        get => virusPercentage.Value * maxCharge;
-        set => virusPercentage.Value = value / maxCharge;
+        get => virusPercentage.Value * maxVirus;
+        set => virusPercentage.Value = value / maxVirus;
     }
+    public float maxVirus;
     [SerializeField] private float initialMaxBattery;
     public float iframesTime;
 
@@ -52,6 +53,6 @@ public class PlayerInfo : ScriptableObject
 
     public void ResetMaxBattery()
     {
-        _maxCharge = initialMaxBattery;
+        _maxBattery = initialMaxBattery;
     }
 }

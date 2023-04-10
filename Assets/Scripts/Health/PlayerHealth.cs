@@ -27,7 +27,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
-        //playerInfo.ResetMaxBattery();
+        playerInfo.ResetMaxBattery();
     }
 
     /*
@@ -72,7 +72,7 @@ public class PlayerHealth : MonoBehaviour
     public void AddVirus(float amount)
     {
         playerInfo.virus += amount;
-        playerInfo.maxCharge -= amount;
+        playerInfo.maxBattery -= amount;
         if (playerInfo.batteryPercentage.Value <= 0.01f) 
         {
             Die(); 
@@ -81,7 +81,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void SubtractVirus(float amount) {
         playerInfo.virus -= amount;
-        playerInfo.maxCharge += amount;
+        playerInfo.maxBattery += amount;
     }
 
     /*
@@ -103,7 +103,7 @@ public class PlayerHealth : MonoBehaviour
      */
     public bool CanTakeEnergy(float amount)
     {
-        return playerInfo.battery <= playerInfo.maxCharge - amount;
+        return playerInfo.battery <= playerInfo.maxBattery - amount;
     }
 
     /*
