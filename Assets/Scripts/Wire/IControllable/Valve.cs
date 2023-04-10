@@ -22,7 +22,7 @@ public class Valve : AControllable
     void Update()
     {
 
-        if (energy == maxEnergy && !_activated)
+        if (energy == maxCharge && !_activated)
         {
             body.color = Color.blue;
             print("Valve fully charged");
