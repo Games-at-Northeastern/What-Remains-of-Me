@@ -496,7 +496,7 @@ TilemapRenderer:
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
-  m_Mode: 0
+  m_Mode: 1
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
 --- !u!1839735485 &532517352
@@ -8640,8 +8640,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
+      propertyPath: virus
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
+      propertyPath: energy
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
       propertyPath: maxVirus
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
+      propertyPath: maxCharge
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
+      propertyPath: maxEnergy
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
       propertyPath: playerInfo
@@ -8657,7 +8673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5944958018626728825, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.47
+      value: -0.27
       objectReference: {fileID: 0}
     - target: {fileID: 5944958018626728825, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8759,7 +8775,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 39a60d1deb5ec456085652b6c0d0b794, type: 2}
     - target: {fileID: 8650591018025693005, guid: fe49bb533012564428840644767ee6a0, type: 3}
       propertyPath: PlayerVirusStartingValue
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8650591018025693005, guid: fe49bb533012564428840644767ee6a0, type: 3}
       propertyPath: PlayerEnergyStartingValue
