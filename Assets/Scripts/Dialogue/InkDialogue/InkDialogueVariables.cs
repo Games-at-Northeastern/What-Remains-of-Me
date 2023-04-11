@@ -7,6 +7,8 @@ public class InkDialogueVariables
     // dictionary where vars are stored
     public Dictionary<string, Ink.Runtime.Object> variables { get; private set; }
 
+    public static int deathCount;
+
     // constructor
     public InkDialogueVariables(TextAsset textAsset)
     {
@@ -22,6 +24,10 @@ public class InkDialogueVariables
         }
     }
 
+    void start()
+    {
+        deathCount = 0;
+    }
 
     // maintains variables that are initialized in the dictionary
     private void VariableChanged(string name, Ink.Runtime.Object value)
@@ -50,5 +56,10 @@ public class InkDialogueVariables
     public void StopListening(Story story)
     {
         story.variablesState.variableChangedEvent -= VariableChanged;
+    }
+
+    public static void updateDeathCount(Story s)
+    {
+        s.EvaluateFunction("getDeathCount", deathCount);
     }
 }
