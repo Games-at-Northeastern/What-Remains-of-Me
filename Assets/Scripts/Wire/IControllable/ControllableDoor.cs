@@ -22,6 +22,6 @@ public class ControllableDoor : AControllable
     /// </summary>
     void Update()
     {
-        transform.position = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, energy / maxCharge);
+        transform.position = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, energy / maxEnergy);
     }
 }
