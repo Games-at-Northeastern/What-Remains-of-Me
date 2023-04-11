@@ -49,6 +49,7 @@ public class InkDialogueManager : MonoBehaviour
 
     private InkDialogueVariables dialogueVariables;
 
+    public bool stopMovement;
 
     private void Awake()
     {
@@ -72,6 +73,7 @@ public class InkDialogueManager : MonoBehaviour
         _cs.Enable();
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
+        stopMovement = true;
 
         layoutAnimator = dialoguePanel.GetComponent<Animator>();
 

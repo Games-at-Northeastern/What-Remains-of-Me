@@ -12,6 +12,7 @@ public class InkDialogueTrigger : MonoBehaviour
     [SerializeField] private TextAsset inkJSON;
     [Header("Force Dialogue")]
     [SerializeField] private bool forceDialogue;
+    [SerializeField] private bool stopMovement = true;
 
     private bool playerInRange;
 
@@ -39,7 +40,9 @@ public class InkDialogueTrigger : MonoBehaviour
             if (_cs.Player.Dialogue.WasReleasedThisFrame() || forceDialogue)
             {
                 forceDialogue = false;
-                InkDialogueManager.GetInstance().EnterDialogueMode(inkJSON);
+                var i = InkDialogueManager.GetInstance();
+                i.EnterDialogueMode(inkJSON);
+                i.stopMovement = this.stopMovement;
             }
         }
         else
