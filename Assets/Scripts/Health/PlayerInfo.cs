@@ -39,7 +39,7 @@ public class PlayerInfo : ScriptableObject
     public float virus
     {
         get => virusPercentage.Value * maxVirus;
-        set => virusPercentage.Value = value / maxVirus;
+        set => virusPercentage.Value = (value / maxVirus);
     }
     public float maxVirus;
     [SerializeField] private float initialMaxBattery;
