@@ -23,3 +23,4 @@ Butt out you poo poo. #speaker:green #portrait:default #layout:left
 === gr ===
 Fine! #speaker:yellow #portrait:TestCharacter #layout:right
 -> END
+
