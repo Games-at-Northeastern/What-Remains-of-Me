@@ -51,4 +51,20 @@ public class InkDialogueVariables
     {
         story.variablesState.variableChangedEvent -= VariableChanged;
     }
+<<<<<<< HEAD
+=======
+
+    public void updateDeathCount(Story s)
+    {
+        if (variables.ContainsKey("deathCount"))
+        {
+            StartListening(s);
+            s.variablesState["deathCount"] = deathCount;
+            StopListening(s);
+        }
+        //s.EvaluateFunction("updateDeathCount", deathCount);
+    }
+
+
+>>>>>>> parent of d460dda (implementation)
 }
