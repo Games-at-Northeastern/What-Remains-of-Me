@@ -148,6 +148,10 @@ public class PlayerHealth : MonoBehaviour
     void Die()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        InkDialogueVariables.deathCount++;
+        if (InkDialogueManager.GetInstance() != null)
+        {
+            var i = InkDialogueManager.GetInstance();
+            i.ChangeVariableState("deathCount", i.GetVariableState("deathCount"));
+        }
     }
 }
