@@ -22,6 +22,7 @@ public class SpikeTeleport : MonoBehaviour
          if (other.gameObject.tag == "Player")
          {
             other.transform.position = teleportLocation.position;
+            InkDialogueVariables.deathCount++;
 			//play the player death sound using PlayerSFX
 			sfx.Died();
          }
