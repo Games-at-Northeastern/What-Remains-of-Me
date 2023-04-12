@@ -1,4 +1,4 @@
-VAR deathCount = 0
+INCLUDE globas.ink
 
 Hey, look at me! #speaker:green #portrait:default #layout:left
 I am green! You have died {deathCount}
@@ -24,5 +24,3 @@ Butt out you poo poo. #speaker:green #portrait:default #layout:left
 Fine! #speaker:yellow #portrait:TestCharacter #layout:right
 -> END
 
-===function getDeathCount(newCount)===
-~deathCount = newCount

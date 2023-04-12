@@ -5,6 +5,7 @@ using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
+using System.Runtime.CompilerServices;
 
 public class InkDialogueManager : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class InkDialogueManager : MonoBehaviour
 
     [Header("Load Globals JSON")]
     [SerializeField] private TextAsset globalsJSON;
+    private Story globalsStory;
 
     private Story currentStory;
 
@@ -72,6 +74,7 @@ public class InkDialogueManager : MonoBehaviour
         _cs.Enable();
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
+        //globalsStory = new Story(globalsJSON.text);
 
         layoutAnimator = dialoguePanel.GetComponent<Animator>();
 
@@ -110,7 +113,7 @@ public class InkDialogueManager : MonoBehaviour
         dialoguePanel.SetActive(true);
 
         dialogueVariables.StartListening(currentStory);
-        InkDialogueVariables.updateDeathCount(currentStory);
+        dialogueVariables.updateDeathCount(currentStory);
 
         // resets to defaults (makes sure that ink tags don't carry over between npcs)
         displayNameText.text = "???";

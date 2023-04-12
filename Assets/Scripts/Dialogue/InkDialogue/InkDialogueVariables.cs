@@ -22,11 +22,18 @@ public class InkDialogueVariables
             variables.Add(name, value);
             Debug.Log("Initialized global dialouge variable: " + name + "=" + value);
         }
+
+ //       globalVars.BindExternalFunction("getCountTest", () => {
+   //         StartListening(globalVars);
+     //       
+       // });
     }
 
     void start()
     {
         deathCount = 0;
+
+
     }
 
     // maintains variables that are initialized in the dictionary
@@ -58,8 +65,16 @@ public class InkDialogueVariables
         story.variablesState.variableChangedEvent -= VariableChanged;
     }
 
-    public static void updateDeathCount(Story s)
+    public void updateDeathCount(Story s)
     {
-        s.EvaluateFunction("getDeathCount", deathCount);
+        if (variables.ContainsKey("deathCount"))
+        {
+            StartListening(s);
+            s.variablesState["deathCount"] = deathCount;
+            StopListening(s);
+        }
+        //s.EvaluateFunction("updateDeathCount", deathCount);
     }
+
+
 }
