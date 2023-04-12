@@ -113,7 +113,7 @@ public class InkDialogueManager : MonoBehaviour
         dialoguePanel.SetActive(true);
 
         dialogueVariables.StartListening(currentStory);
-        dialogueVariables.updateDeathCount(currentStory);
+        dialogueVariables.updateInkVarsFromInGameEvents(currentStory);
 
         // resets to defaults (makes sure that ink tags don't carry over between npcs)
         displayNameText.text = "???";

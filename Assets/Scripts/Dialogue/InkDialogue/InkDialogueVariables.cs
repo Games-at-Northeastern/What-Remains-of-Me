@@ -65,6 +65,12 @@ public class InkDialogueVariables
         story.variablesState.variableChangedEvent -= VariableChanged;
     }
 
+    // called to update all of the ink vars that are updated by gameplay events
+    public void updateInkVarsFromInGameEvents(Story story)
+    {
+        updateDeathCount(story);
+    }
+
     public void updateDeathCount(Story s)
     {
         if (variables.ContainsKey("deathCount"))
@@ -73,7 +79,6 @@ public class InkDialogueVariables
             s.variablesState["deathCount"] = deathCount;
             StopListening(s);
         }
-        //s.EvaluateFunction("updateDeathCount", deathCount);
     }
 
 
