@@ -7,8 +7,6 @@ public class InkDialogueVariables
     // dictionary where vars are stored
     public Dictionary<string, Ink.Runtime.Object> variables { get; private set; }
 
-    public static int deathCount;
-
     // constructor
     public InkDialogueVariables(TextAsset textAsset)
     {
@@ -22,19 +20,8 @@ public class InkDialogueVariables
             variables.Add(name, value);
             Debug.Log("Initialized global dialouge variable: " + name + "=" + value);
         }
-
- //       globalVars.BindExternalFunction("getCountTest", () => {
-   //         StartListening(globalVars);
-     //       
-       // });
     }
 
-    void start()
-    {
-        deathCount = 0;
-
-
-    }
 
     // maintains variables that are initialized in the dictionary
     private void VariableChanged(string name, Ink.Runtime.Object value)
@@ -64,22 +51,4 @@ public class InkDialogueVariables
     {
         story.variablesState.variableChangedEvent -= VariableChanged;
     }
-
-    // called to update all of the ink vars that are updated by gameplay events
-    public void updateInkVarsFromInGameEvents(Story story)
-    {
-        updateDeathCount(story);
-    }
-
-    public void updateDeathCount(Story s)
-    {
-        if (variables.ContainsKey("deathCount"))
-        {
-            StartListening(s);
-            s.variablesState["deathCount"] = deathCount;
-            StopListening(s);
-        }
-    }
-
-
 }
