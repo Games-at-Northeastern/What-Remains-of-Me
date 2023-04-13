@@ -28,3 +28,7 @@ I %:;&::%:;%:& you to reclaim this lab. %:;&::%:;%:& fate of humanity %:;&::%:;%
 ->END
 
 //%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler
+
+
+//=== hasModule ===
+//this is the branch that plays if the player comes back after beating Jones
