@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.56923413, b: 0.89411765, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1446,6 +1446,7 @@ MonoBehaviour:
   - {fileID: 7855292156012907102}
   - {fileID: 7855292155883002000}
   globalsJSON: {fileID: 4900000, guid: 67b16f7cf446e3f4ebc0b0cd5c8a735c, type: 3}
+  stopMovement: 0
 --- !u!1 &7855292156951068107
 GameObject:
   m_ObjectHideFlags: 0
@@ -1513,7 +1514,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9a2c345b0237cd843a7f220e57c0dc30, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 384c212da504c3f44875b84fbe217a42, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1531,7 +1532,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7855292156951068107}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: f8bbc12e6dacf9342b5261f38695db81, type: 2}
   m_CullingMode: 0
