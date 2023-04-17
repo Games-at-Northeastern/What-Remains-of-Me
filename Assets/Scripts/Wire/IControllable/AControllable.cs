@@ -54,6 +54,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         playerInfo.battery -= amount;
 
 
+
         virus = Mathf.Clamp(virus + amount, 0, maxCharge);
     }
 
