@@ -34,10 +34,10 @@ public class BasicEnemyAI : MonoBehaviour, IBehaviorTree
     public void Start()
     {
         InitializeBehaviorTree();
-        //rb = this.GetComponent<Rigidbody2D>();
-        //boxCollider2D = this.GetComponent<BoxCollider2D>();
-        //anim = this.GetComponent<Animator>();
-        //if (battery == null) battery = this.gameObject.GetComponent<EnemyBattery>();
+        rb = this.GetComponent<Rigidbody2D>();
+        boxCollider2D = this.GetComponent<BoxCollider2D>();
+        anim = this.GetComponent<Animator>();
+        if (battery == null) battery = this.gameObject.GetComponent<EnemyBattery>();
     }
 
 
