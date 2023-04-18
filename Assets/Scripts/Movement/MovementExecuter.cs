@@ -37,8 +37,9 @@ public class MovementExecuter : MonoBehaviour
         {
             if (InkDialogueManager.GetInstance().dialogueIsPlaying && InkDialogueManager.GetInstance().stopMovement)
             {
+                currentMove.AdvanceTime();
                 rb.velocity = Vector2.zero;
-                return;
+                currentMove = new Idle();
             }
             else
             {
