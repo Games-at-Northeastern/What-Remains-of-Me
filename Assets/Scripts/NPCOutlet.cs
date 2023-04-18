@@ -7,6 +7,8 @@ public class NPCOutlet : AControllable
     [SerializeField] private InkDialogueTrigger dialogueTrigger;
     [SerializeField] private TextAsset cleanScript;
     [SerializeField] private TextAsset infectedScript;
+    [SerializeField] private int virusLevelUpdate;
+
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +19,7 @@ public class NPCOutlet : AControllable
     // Update is called once per frame
     void Update()
     {
-        if(virus > 20) {
+        if(virus > virusLevelUpdate) {
             dialogueTrigger.inkJSON = infectedScript;
         } else {
             dialogueTrigger.inkJSON = cleanScript;
