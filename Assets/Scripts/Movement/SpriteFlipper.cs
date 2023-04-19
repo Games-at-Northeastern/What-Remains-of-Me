@@ -17,7 +17,7 @@ public class SpriteFlipper : MonoBehaviour
     {
         if (InkDialogueManager.GetInstance() != null)
         {
-            if (InkDialogueManager.GetInstance().dialogueIsPlaying)
+            if (InkDialogueManager.GetInstance().dialogueIsPlaying && InkDialogueManager.GetInstance().stopMovement)
             {
                 return;
             }
