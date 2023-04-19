@@ -22,6 +22,9 @@ I will now upload a local patch on you, which can show how much virus you are in
 
 [Uploading…] ............. [Upload complete] #layout:right #portrait:Terminal #speaker:Terminal
 
+~canDetectVirus = true
+
+
 Now, you should be seeing a purple bar on the top left of your visual panel. #layout:left #portrait:Handler #speaker:The Handler
 
 Once the virus bar is full, you will lose all control of your body.
