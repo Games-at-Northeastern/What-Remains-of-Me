@@ -499,6 +499,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ebb4fb7899f2c4798f3cc8e48d619b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  energy: 0
+  maxCharge: 100
+  virus: 0
+  maxVirus: 100
+  playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
+  dialogueTrigger: {fileID: 116726987}
+  cleanScript: {fileID: 4900000, guid: 7d3cf77a7d0c108438113f5ba0b5d089, type: 3}
+  infectedScript: {fileID: 4900000, guid: 43c16c9bcce3e704abd79638d69dd824, type: 3}
+  virusLevelUpdate: 20
+--- !u!114 &116726987 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 238317058334800585, guid: d8b7fe143d924ec4d9fadffc67b8762d, type: 3}
+  m_PrefabInstance: {fileID: 1705649557}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116726984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68e92d1b2e1768b4ab8758d03d0d8558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &116726988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,7 +534,7 @@ MonoBehaviour:
   src: {fileID: 1690602724}
   giving: {fileID: 8300000, guid: 0d92c283fb18f5a4fb964301a3cb1a16, type: 3}
   taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
-  controlled: {fileID: 0}
+  controlled: {fileID: 116726986}
   energyTransferSpeed: 20
 --- !u!1001 &120631419
 PrefabInstance:
@@ -1033,6 +1053,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 238317058334800586, guid: d8b7fe143d924ec4d9fadffc67b8762d, type: 3}
   m_PrefabInstance: {fileID: 1249015429}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &794680084 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 238317058334800585, guid: d8b7fe143d924ec4d9fadffc67b8762d, type: 3}
+  m_PrefabInstance: {fileID: 1249015429}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794680082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68e92d1b2e1768b4ab8758d03d0d8558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &794680087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1048,7 +1079,7 @@ MonoBehaviour:
   src: {fileID: 1690602724}
   giving: {fileID: 8300000, guid: 0d92c283fb18f5a4fb964301a3cb1a16, type: 3}
   taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
-  controlled: {fileID: 0}
+  controlled: {fileID: 794680088}
   energyTransferSpeed: 20
 --- !u!114 &794680088
 MonoBehaviour:
@@ -1062,6 +1093,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ebb4fb7899f2c4798f3cc8e48d619b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  energy: 0
+  maxCharge: 100
+  virus: 0
+  maxVirus: 100
+  playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
+  dialogueTrigger: {fileID: 794680084}
+  cleanScript: {fileID: 4900000, guid: 7d3cf77a7d0c108438113f5ba0b5d089, type: 3}
+  infectedScript: {fileID: 4900000, guid: 43c16c9bcce3e704abd79638d69dd824, type: 3}
+  virusLevelUpdate: 200
 --- !u!1001 &879170509
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1655,11 +1695,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
       propertyPath: virus
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
-      propertyPath: energy
-      value: 30
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
       propertyPath: maxVirus

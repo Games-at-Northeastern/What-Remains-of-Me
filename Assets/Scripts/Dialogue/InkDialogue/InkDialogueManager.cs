@@ -51,6 +51,10 @@ public class InkDialogueManager : MonoBehaviour
 
     public bool stopMovement;
 
+    public bool goNextPiece;
+
+    public int waitBeforePageTurn = 2;
+
     private void Awake()
     {
         if (instance != null)
@@ -74,6 +78,7 @@ public class InkDialogueManager : MonoBehaviour
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
         stopMovement = true;
+        stopMovement = false;
 
         layoutAnimator = dialoguePanel.GetComponent<Animator>();
 
@@ -99,10 +104,21 @@ public class InkDialogueManager : MonoBehaviour
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
         if (canContinueToNextLine
             && currentStory.currentChoices.Count == 0
-            && _cs.Player.Dialogue.WasReleasedThisFrame())
+            && (_cs.Player.Dialogue.WasReleasedThisFrame() || goNextPiece))
         {
             ContinueStory();
         }
+        if (canContinueToNextLine
+            && currentStory.currentChoices.Count == 0 && goNextPiece)
+        {
+            StartCoroutine(ContinueWithDelay());
+        }
+    }
+
+    private IEnumerator ContinueWithDelay()
+    {
+        yield return new WaitForSeconds(100f);
+        ContinueStory();
     }
 
     public void EnterDialogueMode(TextAsset inkJSON)
@@ -136,6 +152,7 @@ public class InkDialogueManager : MonoBehaviour
 
     private void ContinueStory()
     {
+        StopCoroutine(ContinueWithDelay());
         if (currentStory.canContinue)
         {
             if (displayLineCoroutine != null)
@@ -153,6 +170,7 @@ public class InkDialogueManager : MonoBehaviour
             StartCoroutine(ExitDialogueMode());
         }
     }
+
 
     private IEnumerator DisplayLine(string line)
     {
