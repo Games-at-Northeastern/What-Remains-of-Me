@@ -1,12 +1,10 @@
 INCLUDE globas.ink
 
-{virusMeterObtained:
+{voiceModuleObtained:
     ->voiceModule
   - else:
     ->noVoiceModule
 }
-
-
 
 
 ===noVoiceModule===
@@ -23,7 +21,9 @@ But now, you have been slightly infected since you have made transmissions with 
 I will now upload a local patch on you, which can show how much virus you are infected with.
 
 [Uploading…] ............. [Upload complete] #layout:right #portrait:Terminal #speaker:Terminal
-~virusMeterObtained = true 
+
+~canDetectVirus = true
+
 
 Now, you should be seeing a purple bar on the top left of your visual panel. #layout:left #portrait:Handler #speaker:The Handler
 

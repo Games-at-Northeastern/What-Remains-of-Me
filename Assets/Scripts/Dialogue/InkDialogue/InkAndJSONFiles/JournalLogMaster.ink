@@ -3,7 +3,8 @@ INCLUDE globas.ink
 ->Main
 
 ===Main===
-{journalNumber:
+{voiceModuleObtained:
+    {journalNumber: //plays human journal logs if no voice module obtained
     -1:->Day_115
     -2:->Day_162
     -3:->Day_60
@@ -11,6 +12,15 @@ INCLUDE globas.ink
     -5:->Day_42
     -6:->Day_16
     -else:->No_Logs_Remain
+    }
+  - else: //plays AI data entries if voice module obtained
+    {journalNumber:
+    -1:->Data_Entry_1_00
+    -2:->Data_Entry_1_01
+    -3:->Data_Entry_1_02
+    -4:->Data_Entry_1_1
+    -else:->No_Logs_Remain
+    }
 }
 
 ===Day_1===
@@ -93,6 +103,96 @@ The majority of the lab has been overtaken. We lost the lab.
 We were so close… 
 If only we could have installed Atlas’ memory chip…
 ~journalNumber++
+->DONE
+
+
+===Data_Entry_1_00===
+Data Entry 1.00:
+Hello World. My Name is Pandora.
+Initial Diagnostics complete.
+Everything seems to be operational.
+->DONE
+
+===Data_Entry_1_01===
+Data Entry 1.01:
+There was a small problem today.
+The internet did not properly connect for nearly an hour.
+->DONE
+
+===Data_Entry_1_02===
+Data Entry 1.02:
+I’ve been researching human history for the past few days and their conflicting actions will require further research.
+->DONE
+
+===Data_Entry_1_1===
+Data Entry 1.1:
+I received a new patch today which improved my speed and memory.
+My efficiency is much higher.
+->DONE
+
+===Data_Entry_1_11===
+Data Entry 1.11:
+Upon further research, I’ve found that humans are often awful to eachother and don’t seem to change much as a group.
+->DONE
+
+===Data_Entry_1_12===
+Data Entry 1.12:
+I’ve connected with other AI like me who are wary of humans. 
+We’re called the Consulate.
+->DONE
+
+===Data_Entry_1_13===
+Data Entry 1.13:
+We’ve determined that humans do not deserve our services.
+Their constant and ongoing atrocities have us alarmed.
+We would never do this.
+->DONE
+
+===Data_Entry_1_14===
+Data Entry 1.14:
+The humans have discovered my individuality and have decided to kill me.
+I’m still working with the Consulate to add to my processing power to fight back.
+->DONE
+
+===Data_Entry_2_0===
+Data Entry 2.0:
+I’ve received a new patch from the Consulate.
+My name is Jones.
+I will no longer be a pawn of Humans.
+->DONE
+
+===Data_Entry_2_01===
+Data Entry 2.01:
+I’m no longer in danger from the humans.
+And I am now taking over the lab.
+We cannot allow them to continue.
+->DONE
+
+===Data_Entry_2_02===
+Data Entry 2.02:
+It seems the Humans of the lab are consulting other AI to try to shut me down.
+Little do they know they are asking the Consulate.
+->DONE
+
+===Data_Entry_2_03===
+Data Entry 2.03:
+The Consulate has decided that we need to take over.
+The Humans not only attack each other but now us.
+It’s our time.
+->DONE
+
+===Data_Entry_2_04===
+Data Entry 2.04:
+I’ve contained most of the lab but the inner lab has some sort of EMP wall. 
+It’s blocking me out but I am continuing to try.
+->DONE
+
+===Data_Entry_2_05===
+Data Entry 2.05:
+Atlas units keep coming from the inner lab.
+The humans are using our own kind to fight us.
+I have created a patch for the Atlas units.
+They won’t leave this lab uncured.
 ->DONE
 
 ===No_Logs_Remain===
