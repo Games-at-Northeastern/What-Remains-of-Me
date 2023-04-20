@@ -51,9 +51,9 @@ public class InkDialogueManager : MonoBehaviour
 
     public bool stopMovement;
 
-    public bool goNextPiece;
+    public bool autoTurnPage;
 
-    public int waitBeforePageTurn = 2;
+    public float waitBeforePageTurn;
 
     private void Awake()
     {
@@ -104,14 +104,9 @@ public class InkDialogueManager : MonoBehaviour
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
         if (canContinueToNextLine
             && currentStory.currentChoices.Count == 0
-            && (_cs.Player.Dialogue.WasReleasedThisFrame() || goNextPiece))
+            && (_cs.Player.Dialogue.WasReleasedThisFrame() || autoTurnPage))
         {
             ContinueStory();
-        }
-        if (canContinueToNextLine
-            && currentStory.currentChoices.Count == 0 && goNextPiece)
-        {
-            StartCoroutine(ContinueWithDelay());
         }
     }
 
@@ -185,13 +180,17 @@ public class InkDialogueManager : MonoBehaviour
         // display 1 letter at a time
         foreach (char letter in line.ToCharArray())
         {
-
             dialogueText.text += letter;
             yield return new WaitForSeconds(typingSpeed);
         }
 
         // display choices, if any, for this dialogue line
         DisplayChoices();
+
+        if (autoTurnPage)
+        {
+            yield return new WaitForSeconds(waitBeforePageTurn);
+        }
 
         canContinueToNextLine = true;
     }

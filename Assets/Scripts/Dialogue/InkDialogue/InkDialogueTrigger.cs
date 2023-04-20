@@ -13,8 +13,8 @@ public class InkDialogueTrigger : MonoBehaviour
     [Header("Force Dialogue")]
     [SerializeField] private bool forceDialogue;
     [SerializeField] private bool stopMovement = true;
-    [SerializeField] private bool goNextPiece = false;
-    [SerializeField] private int waitForPageTurn = 2;
+    [SerializeField] private bool autoTurnPage = false;
+    [SerializeField] private float waitForPageTurn = 2f;
 
     private bool playerInRange;
 
@@ -45,7 +45,7 @@ public class InkDialogueTrigger : MonoBehaviour
                 var i = InkDialogueManager.GetInstance();
                 i.EnterDialogueMode(inkJSON);
                 i.stopMovement = this.stopMovement;
-                i.goNextPiece = this.goNextPiece;
+                i.autoTurnPage = this.autoTurnPage;
                 i.waitBeforePageTurn = this.waitForPageTurn;
             }
 
