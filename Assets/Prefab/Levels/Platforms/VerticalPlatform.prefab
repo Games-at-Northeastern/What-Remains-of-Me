@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 1356603267965378351}
   - component: {fileID: 1356603267965378345}
   - component: {fileID: 1356603267965378350}
+  - component: {fileID: 1316763705}
   m_Layer: 0
   m_Name: PlatformObject
   m_TagString: Untagged
@@ -245,6 +246,28 @@ MonoBehaviour:
   _points:
   - {fileID: 3175746268635689118}
   - {fileID: 3175746269257402529}
+  movementExecuter: {fileID: 0}
+--- !u!50 &1316763705
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356603267965378348}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1356603268563238730
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,7 +613,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3175746268635689119}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.47, z: 0}
+  m_LocalPosition: {x: 0, y: 4.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -621,7 +644,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3175746269257402530}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.34, z: 0}
+  m_LocalPosition: {x: 0, y: -2.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -677,9 +700,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   energy: 10
-  maxCharge: 0
-  virus: 20
-  maxVirus: 0
+  maxCharge: 20
+  virus: 0
+  maxVirus: 100
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
   _platforms:
   - {fileID: 1356603267965378350}

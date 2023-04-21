@@ -16,9 +16,21 @@ namespace Levels.Objects.Platform
         private int _currPointIndex;
         private bool _shouldMove;
 
+        
+        Rigidbody2D rb;
+        Vector3 moveDirection;
+
+        [SerializeField] private GameObject movementExecuter;
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+
         private void Start()
         {
             transform.position = _points[0].position;
+            moveDirection = new Vector3().normalized;
         }
 
         private void Update()
@@ -36,11 +48,26 @@ namespace Levels.Objects.Platform
                 {
                     _currPointIndex = 0;
                 }
+                DirectionCalculate();
             }
 
-            transform.position = Vector2.MoveTowards(transform.position,
-                _points[_currPointIndex].position,
-                _speed * Time.deltaTime);
+            //transform.position = Vector2.MoveTowards(transform.position,
+            //    _points[_currPointIndex].position,
+            //    _speed * Time.deltaTime);
+        }
+
+        private void FixedUpdate()
+        {
+            if (_shouldMove)
+            {
+                rb.velocity = moveDirection * _speed;
+            }
+            
+        }
+
+        private void DirectionCalculate()
+        {
+            moveDirection = (_points[_currPointIndex].position - transform.position).normalized;
         }
 
         public void Activate()
@@ -55,12 +82,15 @@ namespace Levels.Objects.Platform
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            collision.transform.SetParent(transform);
+            movementExecuter.GetComponent<MovementExecuter>().isOnAPlatform = true;
+            movementExecuter.GetComponent<MovementExecuter>().platformRb = rb;
+            //movementExecuter.isOnAPlatform = true;
+            //movementExecuter.platformRb = rb;
         }
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            collision.transform.SetParent(null);
+            movementExecuter.GetComponent<MovementExecuter>().isOnAPlatform = false;
         }
     }
 }

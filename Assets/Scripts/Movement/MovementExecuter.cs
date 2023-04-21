@@ -15,6 +15,8 @@ public class MovementExecuter : MonoBehaviour
     [SerializeField] private PlayerHealth ph; // Gives info about player health / damage
     private IMove currentMove; // The move taking place this frame
     private Vector3 respawnPosition;
+    public bool isOnAPlatform;
+    public Rigidbody2D platformRb;
 
     // Initialization
     private void Awake()
@@ -24,6 +26,7 @@ public class MovementExecuter : MonoBehaviour
         cs.Debug.Restart.performed += _ => Restart();
         currentMove = new StarterMove(mi, ms, cs, wt, ph);
         respawnPosition = transform.position;
+
     }
 
     /// <summary>
@@ -38,8 +41,14 @@ public class MovementExecuter : MonoBehaviour
             if (InkDialogueManager.GetInstance().dialogueIsPlaying && InkDialogueManager.GetInstance().stopMovement)
             {
                 currentMove.AdvanceTime();
-                rb.velocity = Vector2.zero;
+                rb.velocity = new Vector2(0, rb.velocity.y);
                 currentMove = new Idle();
+            }
+            else if (isOnAPlatform)
+            {
+                currentMove.AdvanceTime();
+                rb.velocity = new Vector2(currentMove.XSpeed() + platformRb.velocity.x, currentMove.YSpeed());
+                currentMove = currentMove.GetNextMove();
             }
             else
             {
