@@ -20,11 +20,12 @@ namespace Levels.Objects.Platform
         Rigidbody2D rb;
         Vector3 moveDirection;
 
-        [SerializeField] private GameObject movementExecuter;
+        private MovementExecuter movementExecuter;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            movementExecuter = GameObject.FindGameObjectsWithTag("Player")[0].GetComponentInChildren<MovementExecuter>();
         }
 
         private void Start()
@@ -82,15 +83,15 @@ namespace Levels.Objects.Platform
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            movementExecuter.GetComponent<MovementExecuter>().isOnAPlatform = true;
-            movementExecuter.GetComponent<MovementExecuter>().platformRb = rb;
+            movementExecuter.isOnAPlatform = true;
+            movementExecuter.platformRb = rb;
             //movementExecuter.isOnAPlatform = true;
             //movementExecuter.platformRb = rb;
         }
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            movementExecuter.GetComponent<MovementExecuter>().isOnAPlatform = false;
+            movementExecuter.isOnAPlatform = false;
         }
     }
 }
