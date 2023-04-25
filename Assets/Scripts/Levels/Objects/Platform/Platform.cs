@@ -40,12 +40,7 @@ namespace Levels.Objects.Platform
             if (!_shouldMove)
             {
                 return;
-            }
-
-            if (_shouldMove)
-            {
-               rb.velocity = moveDirection * _speed;
-            }   
+            } 
 
 
             if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.02f)
@@ -62,6 +57,14 @@ namespace Levels.Objects.Platform
             //transform.position = Vector2.MoveTowards(transform.position,
             //    _points[_currPointIndex].position,
             //    _speed * Time.deltaTime);
+        }
+
+        private void FixedUpdate()
+        {
+            if (_shouldMove)
+            {
+                rb.velocity = moveDirection * _speed;
+            }
         }
 
         private void DirectionCalculate()
