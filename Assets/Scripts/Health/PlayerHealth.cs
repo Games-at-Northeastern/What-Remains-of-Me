@@ -73,9 +73,9 @@ public class PlayerHealth : MonoBehaviour
     {
         playerInfo.virus += amount;
         playerInfo.maxBattery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0.01f) 
+        if (playerInfo.batteryPercentage.Value <= 0.01f || playerInfo.virusPercentage.Value >= 0.99f)
         {
-            Die(); 
+            Die();
         }
     }
 

@@ -15,7 +15,6 @@ public class PlayerVirusDeath : MonoBehaviour
         sfx = sfx_holder.GetComponent<PlayerSFX>();
     }
 
-    // Update is called once per frame
     void Update(PlayerInfo playerInfo, Collider2D other)
     {
         if (playerInfo.virus == 100)
