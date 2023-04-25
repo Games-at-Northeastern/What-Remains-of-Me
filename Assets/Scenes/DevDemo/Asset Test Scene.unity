@@ -812,6 +812,7 @@ MonoBehaviour:
   stopMovement: 1
   autoTurnPage: 0
   waitForPageTurn: 2
+  dialogueActive: 1
 --- !u!61 &337690020
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -914,8 +915,44 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 8007943749582952256, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -6.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007943749582952257, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -6914787052752800274, guid: c825fa7a5677345c297903d8e1e74624, type: 3}
+    - target: {fileID: 8007943749952028883, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -6914787052752800274, guid: c825fa7a5677345c297903d8e1e74624, type: 3}
     - target: {fileID: 8007943750124457778, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
       propertyPath: _maxVirusUntransparency
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007943750783530189, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8129495079471564520, guid: c825fa7a5677345c297903d8e1e74624, type: 3}
+    - target: {fileID: 8007943750871788861, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -5529497820723430767, guid: c825fa7a5677345c297903d8e1e74624, type: 3}
+    - target: {fileID: 8007943750871788861, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: m_Color.b
+      value: 0.6037736
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007943750871788861, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: m_Color.g
+      value: 0.064934105
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007943750871788861, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: m_Color.r
+      value: 0.434812
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007943750871788863, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: _sprites.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8007943750910276932, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
@@ -1926,6 +1963,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1809131547}
     m_Modifications:
+    - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
+      propertyPath: virus
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
+      propertyPath: maxVirus
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944958018282870456, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
+      propertyPath: maxCharge
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 5944958018626728825, guid: 867823080cc2044f38e330b4de08ace7, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -2240,7 +2289,6 @@ MonoBehaviour:
   dialogueTrigger: {fileID: 337690019}
   cleanScript: {fileID: 4900000, guid: a112674e5ce502740b916e17aefd31b9, type: 3}
   infectedScript: {fileID: 4900000, guid: e3386ca8bea3fc14bb829e780aeb52a1, type: 3}
-  noPowerScript: {fileID: 4900000, guid: d9f1db69604bc1044a1b5382531fb94f, type: 3}
   spriteRenderer: {fileID: 880464711}
   deadRobot: {fileID: 21300000, guid: 15873c8bbceaf47669e85bcc93a80c91, type: 3}
   chargedRobot: {fileID: 21300000, guid: 7940670b3e5c847f9823d4cc782b15ae, type: 3}

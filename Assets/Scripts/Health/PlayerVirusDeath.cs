@@ -15,14 +15,15 @@ public class PlayerVirusDeath : MonoBehaviour
         sfx = sfx_holder.GetComponent<PlayerSFX>();
     }
 
-    void Update(PlayerInfo playerInfo, Collider2D other)
+    void Update()
+        //PlayerInfo playerInfo, Collider2D other)
     {
-        if (playerInfo.virus == 100)
-        {
-            other.transform.position = teleportLocation.position;
-            InkDialogueVariables.deathCount++;
+        //if (playerInfo.virus == 100)
+        //{
+        //    other.transform.position = teleportLocation.position;
+        //    InkDialogueVariables.deathCount++;
             //play the player death sound using PlayerSFX
-            sfx.Died();
-        }
+        //    sfx.Died();
+        //}
     }
 }
