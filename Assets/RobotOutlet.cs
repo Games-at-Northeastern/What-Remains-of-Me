@@ -21,16 +21,23 @@ public class RobotOutlet : AControllable
     // Update is called once per frame
     void Update()
     {
-        if(energy <= 0) {
+        if(energy <= 1) {
             spriteRenderer.sprite = deadRobot;
         } else {
             spriteRenderer.sprite = chargedRobot;
         }
         
-        if(virus > virusLevelUpdate) {
+        if(energy <= 1) {
+            dialogueTrigger.setDialogueActive(false);
+        } else if(virus > virusLevelUpdate) {
             dialogueTrigger.inkJSON = infectedScript;
+            dialogueTrigger.setDialogueActive(true);
+
         } else {
             dialogueTrigger.inkJSON = cleanScript;
+            dialogueTrigger.setDialogueActive(true);
         }
+
+        
     }
 }

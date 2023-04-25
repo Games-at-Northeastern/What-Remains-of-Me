@@ -15,6 +15,7 @@ public class InkDialogueTrigger : MonoBehaviour
     [SerializeField] private bool stopMovement = true;
     [SerializeField] private bool autoTurnPage = false;
     [SerializeField] private float waitForPageTurn = 2f;
+    [SerializeField] private bool dialogueActive = true; 
 
     private bool playerInRange;
 
@@ -59,7 +60,7 @@ public class InkDialogueTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && dialogueActive)
         {
             playerInRange = true;
         }
@@ -71,5 +72,9 @@ public class InkDialogueTrigger : MonoBehaviour
         {
             playerInRange = false;
         }
+    }
+
+    public void setDialogueActive(bool status) {
+        dialogueActive = status;
     }
 }
