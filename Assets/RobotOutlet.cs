@@ -29,11 +29,12 @@ public class RobotOutlet : AControllable
          
        if(energy > 1) {
         spriteRenderer.sprite = chargedRobot;
-
+        
         switch (virus) 
         {
-            case float v when (v < 50):
+            case float virus when (virus < 50):
             dialogueTrigger.inkJSON = cleanScript;
+            dialogueTrigger.setDialogueActive(true);
             break;
 
             //case float v when (v >= 25):
@@ -42,7 +43,7 @@ public class RobotOutlet : AControllable
 
             //case float v when (v >= 75):
 
-            case float v when (v >= 50):
+            case float virus when (virus >= 50):
             dialogueTrigger.inkJSON = infectedScript;
             dialogueTrigger.setDialogueActive(true);
             break;
