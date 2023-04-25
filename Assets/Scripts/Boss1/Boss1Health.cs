@@ -32,7 +32,7 @@ public class Boss1Health : MonoBehaviour
         if(currentHealth <= 0) {
 
             print("DEFEATED BOSS");
-            this.enabled = false;
+            enabled = false;
         }
 
         // Debug.Log("Current Health: " + currentHealth);
