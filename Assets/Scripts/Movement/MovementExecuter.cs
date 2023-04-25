@@ -36,24 +36,31 @@ public class MovementExecuter : MonoBehaviour
     /// </summary>
     private void Update()
     {
+
         if (InkDialogueManager.GetInstance() != null)
         {
             if (InkDialogueManager.GetInstance().dialogueIsPlaying && InkDialogueManager.GetInstance().stopMovement)
             {
                 currentMove.AdvanceTime();
-                rb.velocity = new Vector2(0, rb.velocity.y);
+                rb.velocity = new Vector2(0, Mathf.Abs(rb.velocity.y) * -1);
                 currentMove = new Idle();
             }
-            else if (isOnAPlatform)
-            {
-                currentMove.AdvanceTime();
-                rb.velocity = new Vector2(currentMove.XSpeed() + platformRb.velocity.x, currentMove.YSpeed());
-                currentMove = currentMove.GetNextMove();
-            }
+                    else if (isOnAPlatform)
+                    {
+                       currentMove.AdvanceTime();
+                        rb.velocity = new Vector2(currentMove.XSpeed() + platformRb.velocity.x, currentMove.YSpeed() + platformRb.velocity.y);
+                       currentMove = currentMove.GetNextMove();
+                    }
             else
             {
                 DoMove();
             }
+        }
+        else if (isOnAPlatform)
+        {
+            currentMove.AdvanceTime();
+            rb.velocity = new Vector2(currentMove.XSpeed() + platformRb.velocity.x, currentMove.YSpeed() + platformRb.velocity.y);
+            currentMove = currentMove.GetNextMove();
         }
         else
         {

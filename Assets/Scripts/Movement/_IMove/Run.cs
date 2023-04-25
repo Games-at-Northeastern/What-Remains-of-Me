@@ -18,6 +18,8 @@ public class Run : AMove
     private bool damageInput;
 
     private float currDistFromOutlet; // Current position from the player to the outlet, if wire connected
+    public bool isOnPlatform;
+    public Rigidbody2D platformRB;
 
     /// <summary>
     /// Constructs a Run move, starting it off with the given horizontal speed.
@@ -67,6 +69,7 @@ public class Run : AMove
             {
                 jumpPending = false;
             }
+
     }
 
     public override float XSpeed() => xVel;

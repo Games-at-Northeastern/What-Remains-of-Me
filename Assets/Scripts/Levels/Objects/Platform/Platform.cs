@@ -12,11 +12,12 @@ namespace Levels.Objects.Platform
     {
         [SerializeField] private float _speed;
         [SerializeField] private Transform[] _points;
-
+        
         private int _currPointIndex;
         private bool _shouldMove;
+        private IMove currentMove;
 
-        
+
         Rigidbody2D rb;
         Vector3 moveDirection;
 
@@ -41,6 +42,12 @@ namespace Levels.Objects.Platform
                 return;
             }
 
+            if (_shouldMove)
+            {
+               rb.velocity = moveDirection * _speed;
+            }   
+
+
             if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.02f)
             {
                 _currPointIndex++;
@@ -55,15 +62,6 @@ namespace Levels.Objects.Platform
             //transform.position = Vector2.MoveTowards(transform.position,
             //    _points[_currPointIndex].position,
             //    _speed * Time.deltaTime);
-        }
-
-        private void FixedUpdate()
-        {
-            if (_shouldMove)
-            {
-                rb.velocity = moveDirection * _speed;
-            }
-            
         }
 
         private void DirectionCalculate()
@@ -81,17 +79,25 @@ namespace Levels.Objects.Platform
             _shouldMove = false;
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private void OnTriggerStay2D(Collider2D collision)
         {
-            movementExecuter.isOnAPlatform = true;
-            movementExecuter.platformRb = rb;
+            //if (collision.gameObject.tag == "groundDetector")
+            //{
+                movementExecuter.isOnAPlatform = true;
+                movementExecuter.platformRb = rb;
+            //}
+ 
+            
             //movementExecuter.isOnAPlatform = true;
             //movementExecuter.platformRb = rb;
         }
 
-        private void OnCollisionExit2D(Collision2D collision)
+        private void OnTriggerExit2D(Collider2D collision)
         {
             movementExecuter.isOnAPlatform = false;
         }
+
+
+        public IMoveImmutable GetCurrentMove() => currentMove;
     }
 }

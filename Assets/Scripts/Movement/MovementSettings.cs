@@ -81,6 +81,9 @@ public class MovementSettings : ScriptableObject
     [SerializeField] private float knockbackGravity;
     [SerializeField] private float knockbackGravityHorizOnRecovery;
 
+    [SerializeField] private bool isOnPlatform = false;
+    [SerializeField] private Rigidbody2D platromRb;
+
     // ACCESSIBLE FIELDS
 
     // General
@@ -148,4 +151,9 @@ public class MovementSettings : ScriptableObject
     public float AbsKnockbackHorizVel => absKnockbackHorizVel;
     public float KnockbackGravity => knockbackGravity;
     public float KnockbackGravityHorizOnRecovery => knockbackGravityHorizOnRecovery;
+
+    // platform stuff
+
+    public bool IsOnPlatform => isOnPlatform;
+    public Rigidbody2D PlatromRb => platromRb;
 }
