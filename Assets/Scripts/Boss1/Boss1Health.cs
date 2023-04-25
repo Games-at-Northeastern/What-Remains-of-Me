@@ -10,14 +10,14 @@ public class Boss1Health : MonoBehaviour
     [SerializeField] int currentHealth;
     [SerializeField] int damageAmount;
     [SerializeField] Slider healthSlider;
-    
+
 
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = startingHealth;
         healthSlider.value = currentHealth;
-        
+
     }
 
 
@@ -32,6 +32,7 @@ public class Boss1Health : MonoBehaviour
         if(currentHealth <= 0) {
 
             print("DEFEATED BOSS");
+            this.enabled = false;
         }
 
         // Debug.Log("Current Health: " + currentHealth);

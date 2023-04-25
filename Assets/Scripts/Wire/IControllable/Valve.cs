@@ -10,8 +10,8 @@ public class Valve : AControllable
     public float activeTimer {get; set;}
     private int _activeTime = 2;
     bool _activated;
-    
-   
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -30,7 +30,7 @@ public class Valve : AControllable
             _activated = true;
             activeTimer = _activeTime;
             machine._hitWithValve = true;
-
+            machine.enabled = false;
         }
 
        if(activeTimer > 0.0f)
@@ -46,7 +46,7 @@ public class Valve : AControllable
         }
     }
 
-        
+
     }
 
 }
