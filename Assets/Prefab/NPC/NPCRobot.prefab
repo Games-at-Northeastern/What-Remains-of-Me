@@ -88,6 +88,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3881124541818454009}
   - component: {fileID: 3881124541818454006}
+  - component: {fileID: 4509952647783139813}
+  - component: {fileID: 1822273873109161148}
   m_Layer: 0
   m_Name: RobotSpriteRenderer
   m_TagString: Untagged
@@ -103,8 +105,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3881124541818454007}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.91, y: -0.91, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_LocalPosition: {x: -1.77, y: 0.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 748456310625551169}
@@ -151,17 +153,54 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -1602914516, guid: a184e112c8324e543bec26cbffd39dec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.5625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &4509952647783139813
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3881124541818454007}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 1
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
+  m_Constraints: 0
+--- !u!70 &1822273873109161148
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3881124541818454007}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.04260063, y: 0.034080386}
+  m_Size: {x: 0.91479874, y: 1.715862}
+  m_Direction: 0
 --- !u!1 &3881124541988607236
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +226,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3881124541988607236}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.81, y: 1.0567955, z: 2.5586243}
+  m_LocalPosition: {x: -0.85, y: 0.89, z: 2.5586243}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -303,8 +342,9 @@ MonoBehaviour:
   cleanScript: {fileID: 4900000, guid: a112674e5ce502740b916e17aefd31b9, type: 3}
   infectedScript: {fileID: 4900000, guid: e3386ca8bea3fc14bb829e780aeb52a1, type: 3}
   spriteRenderer: {fileID: 3881124541818454006}
-  deadRobot: {fileID: 21300000, guid: 15873c8bbceaf47669e85bcc93a80c91, type: 3}
-  chargedRobot: {fileID: 21300000, guid: 7940670b3e5c847f9823d4cc782b15ae, type: 3}
+  deadRobot: {fileID: 1323403498, guid: f2ea45fcba7c21a4e9241f3396fcedaa, type: 3}
+  chargedRobot: {fileID: 131067774, guid: a184e112c8324e543bec26cbffd39dec, type: 3}
+  virusRobot: {fileID: 867549700, guid: 5613382d062719e44817cb62765301f8, type: 3}
   virusLevelUpdate: 10
 --- !u!1001 &3881124542764398864
 PrefabInstance:
@@ -331,7 +371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6801492477888477871, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.46
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 6801492477888477871, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
       propertyPath: m_LocalPosition.z

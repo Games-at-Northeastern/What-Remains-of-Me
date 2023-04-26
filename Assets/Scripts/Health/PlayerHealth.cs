@@ -103,7 +103,7 @@ public class PlayerHealth : MonoBehaviour
      */
     public bool CanTakeEnergy(float amount)
     {
-        return playerInfo.battery <= playerInfo.maxBattery - amount;
+        return (playerInfo.battery + playerInfo.virus) <= playerInfo.maxBattery - amount;
     }
 
     /*
