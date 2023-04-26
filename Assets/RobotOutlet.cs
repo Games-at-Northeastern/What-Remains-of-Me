@@ -11,6 +11,7 @@ public class RobotOutlet : AControllable
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite deadRobot;
     [SerializeField] private Sprite chargedRobot;
+    [SerializeField] private Sprite virusRobot;
     [SerializeField] private int virusLevelUpdate;
     // Start is called before the first frame update
     void Start()
@@ -46,6 +47,8 @@ public class RobotOutlet : AControllable
             case float virus when (virus >= 50):
             dialogueTrigger.inkJSON = infectedScript;
             dialogueTrigger.setDialogueActive(true);
+            spriteRenderer.sprite = virusRobot;
+
             break;
 
         }
