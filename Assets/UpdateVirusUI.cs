@@ -9,7 +9,7 @@ public class UpdateVirusUI : MonoBehaviour
     
     [SerializeField] private PercentageFloatReactivePropertySO virusPercent;
     [SerializeField] private RectTransform virusTransform;
-    [SerializeField] private float _maxMaskWidth;
+    //[SerializeField] private float _maxMaskWidth;
 
 
     // Start is called before the first frame update
@@ -26,7 +26,7 @@ public class UpdateVirusUI : MonoBehaviour
 
     //
     public void setCurrentVirusPercentage(float percentage) {
-        virusTransform.sizeDelta = new Vector2((int) Mathf.CeilToInt(percentage * _maxMaskWidth),
+        virusTransform.sizeDelta = new Vector2((int) Mathf.CeilToInt(percentage * 29),
                 virusTransform.sizeDelta.y);
     }
 }
