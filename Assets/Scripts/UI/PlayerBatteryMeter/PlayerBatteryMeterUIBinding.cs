@@ -40,7 +40,7 @@ namespace UI.PlayerBatteryMeter
         private void OnEnable()
         {
             _batteryReactiveProperty.TakeUntilDisable(this).Subscribe(_playerBatteryMeterUI.SetCurrBatteryPercentage);
-            _virusReactiveProperty.TakeUntilDisable(this).Subscribe(_playerBatteryMeterUI.SetCurrVirusPercentage);
+            //_virusReactiveProperty.TakeUntilDisable(this).Subscribe(_playerBatteryMeterUI.SetCurrVirusPercentage);
         }
     }
 }
