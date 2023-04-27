@@ -12,12 +12,9 @@ namespace Levels.Objects.Platform
     {
         [SerializeField] private float _speed;
         [SerializeField] private Transform[] _points;
-        
+
         private int _currPointIndex;
         private bool _shouldMove;
-        private IMove currentMove;
-
-        private bool isOnThisPlatform;
 
 
         Rigidbody2D rb;
@@ -25,9 +22,16 @@ namespace Levels.Objects.Platform
 
         private MovementExecuter movementExecuter;
 
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody2D>();
+            movementExecuter = GameObject.FindGameObjectsWithTag("Player")[0].GetComponentInChildren<MovementExecuter>();
+        }
+
         private void Start()
         {
-            _shouldMove = false;
+            transform.position = _points[0].position;
+            moveDirection = new Vector3().normalized;
         }
 
         private void Update()
@@ -36,51 +40,35 @@ namespace Levels.Objects.Platform
             {
                 return;
             }
+
+            if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.02f)
+            {
+                _currPointIndex++;
+
+                if (_currPointIndex == _points.Length)
+                {
+                    _currPointIndex = 0;
+                }
+                DirectionCalculate();
+            }
+
+            //transform.position = Vector2.MoveTowards(transform.position,
+            //    _points[_currPointIndex].position,
+            //    _speed * Time.deltaTime);
+        }
+
+        private void FixedUpdate()
+        {
             if (_shouldMove)
             {
-
-                if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.02f)
-                {
-                    _currPointIndex++;
-
-                    if (_currPointIndex == _points.Length)
-                    {
-                        _currPointIndex = 0;
-                    }
-                }
-                transform.position = Vector2.MoveTowards(transform.position,
-                        _points[_currPointIndex].position,
-                        _speed * Time.deltaTime);
+                rb.velocity = moveDirection * _speed;
             }
+
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private void DirectionCalculate()
         {
-
-                collision.transform.SetParent(transform);
-               //movementExecuter.isOnAPlatform = true;
-                //isOnThisPlatform = true;
-            //if (collision.gameObject.tag == "groundDetector")
-            //{
-            //    movementExecuter.isOnAPlatform = true;
-            //   movementExecuter.platformRb = rb;
-            //}
-
-
-
-            //movementExecuter.isOnAPlatform = true;
-            //movementExecuter.platformRb = rb;
-        }
-
-        private void OnCollisionExit2D(Collision2D collision)
-        {
-
-                //isOnThisPlatform = false;
-                //movementExecuter.isOnAPlatform = false;
-                collision.transform.SetParent(null);
-   
-
-            //movementExecuter.isOnAPlatform = false;
+            moveDirection = (_points[_currPointIndex].position - transform.position).normalized;
         }
 
         public void Activate()
@@ -93,7 +81,17 @@ namespace Levels.Objects.Platform
             _shouldMove = false;
         }
 
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            movementExecuter.isOnAPlatform = true;
+            movementExecuter.platformRb = rb;
+            //movementExecuter.isOnAPlatform = true;
+            //movementExecuter.platformRb = rb;
+        }
 
-       // public IMoveImmutable GetCurrentMove() => currentMove;
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            movementExecuter.isOnAPlatform = false;
+        }
     }
 }
