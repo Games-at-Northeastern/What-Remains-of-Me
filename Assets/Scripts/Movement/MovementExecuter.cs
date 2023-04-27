@@ -45,22 +45,10 @@ public class MovementExecuter : MonoBehaviour
                 rb.velocity = new Vector2(0, Mathf.Abs(rb.velocity.y) * -1);
                 currentMove = new Idle();
             }
-                    else if (isOnAPlatform)
-                    {
-                       currentMove.AdvanceTime();
-                        rb.velocity = new Vector2(currentMove.XSpeed() + platformRb.velocity.x, currentMove.YSpeed() + platformRb.velocity.y);
-                       currentMove = currentMove.GetNextMove();
-                    }
             else
             {
                 DoMove();
             }
-        }
-        else if (isOnAPlatform)
-        {
-            currentMove.AdvanceTime();
-            rb.velocity = new Vector2(currentMove.XSpeed() + platformRb.velocity.x, currentMove.YSpeed() + platformRb.velocity.y);
-            currentMove = currentMove.GetNextMove();
         }
         else
         {

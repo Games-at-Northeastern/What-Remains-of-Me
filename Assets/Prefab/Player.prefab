@@ -719,82 +719,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 375
   collidesWithTriggers: 0
---- !u!1 &6860228395674026328
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6860228395674026335}
-  - component: {fileID: 6860228395674026333}
-  - component: {fileID: 6860228395674026334}
-  m_Layer: 11
-  m_Name: Dialogue Detector
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6860228395674026335
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6860228395674026328}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7803416329056728453}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &6860228395674026333
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6860228395674026328}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.034600258, y: 0.36421072}
-  m_SpriteTilingProperty:
-    border: {x: 0.1875, y: 0.03125, z: 0.125, w: 0.03125}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1.59375}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 4, y: 2.323938}
-  m_EdgeRadius: 0
---- !u!114 &6860228395674026334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6860228395674026328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13f8ebcffc6004919a5a1a20f4c0eeb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  col: {fileID: 6860228395674026333}
-  collidesWith:
-    serializedVersion: 2
-    m_Bits: 1024
-  collidesWithTriggers: 1
 --- !u!1 &7803416329029818621
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,7 +904,6 @@ Transform:
   - {fileID: 6860228393882630921}
   - {fileID: 6860228394072767244}
   - {fileID: 6860228394645248742}
-  - {fileID: 6860228395674026335}
   m_Father: {fileID: 6860228394538578389}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1289,7 +1212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f88a55c7cb844a9e8cbd1449e0b172c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueCollisionDetector: {fileID: 6860228395674026334}
+  dialogueCollisionDetector: {fileID: 0}
   promptSprite: {fileID: 2903628454705326773}
 --- !u!1 &7803416329777425275
 GameObject:
@@ -1458,6 +1381,8 @@ MonoBehaviour:
   ms: {fileID: 11400000, guid: 434e1d5d44d6f4678984622b2f051cbc, type: 2}
   wt: {fileID: 7803416330169813700}
   ph: {fileID: 7803416330563633417}
+  isOnAPlatform: 0
+  platformRb: {fileID: 0}
 --- !u!1 &7803416330169813702
 GameObject:
   m_ObjectHideFlags: 0
