@@ -398,6 +398,17 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""557f485e-901e-4037-a19b-6ac924de90ab"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""2D Vector"",
                     ""id"": ""b37b502a-0506-4b51-acc7-095da763c856"",
                     ""path"": ""2DVector"",
