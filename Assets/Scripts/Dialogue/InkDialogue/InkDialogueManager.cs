@@ -170,7 +170,8 @@ public class InkDialogueManager : MonoBehaviour
     private IEnumerator DisplayLine(string line)
     {
         // empty dialogue text
-        dialogueText.text = "";
+        dialogueText.text = line;
+        dialogueText.maxVisibleCharacters = 0;
 
         canContinueToNextLine = false;
 
@@ -180,7 +181,7 @@ public class InkDialogueManager : MonoBehaviour
         // display 1 letter at a time
         foreach (char letter in line.ToCharArray())
         {
-            dialogueText.text += letter;
+            dialogueText.maxVisibleCharacters++;
             yield return new WaitForSeconds(typingSpeed);
         }
 
