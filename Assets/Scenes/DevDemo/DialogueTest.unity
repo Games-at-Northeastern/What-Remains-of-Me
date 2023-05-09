@@ -341,7 +341,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e45ef337c0f84e078d2fce624c56659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 11400000, guid: f0794daf5166d486abaa4ea9caa8a2c0, type: 2}
+  _dialogue: {fileID: 0}
+  _dialogueManager: {fileID: 0}
 --- !u!1 &1106296388
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +380,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
