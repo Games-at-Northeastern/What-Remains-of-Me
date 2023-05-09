@@ -7,16 +7,16 @@ using UnityEngine;
 /// </summary>
 public class WallJump : AMove
 {
-    float xVel;
-    float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
-    float yVel;
-    float gravity;
-    float timePassed;
-    bool jumpCanceled = false;
+    private float xVel;
+    private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
+    private float yVel;
+    private float gravity;
+    private float timePassed;
+    private bool jumpCanceled = false;
 
-    bool dashInput;
-    bool connectInput;
-    bool damageInput;
+    private bool dashInput;
+    private bool connectInput;
+    private bool damageInput;
 
     /// <summary>
     /// Constructs a wall jump, initializing whether the jump should happen
@@ -69,15 +69,9 @@ public class WallJump : AMove
         }
     }
 
-    public override float XSpeed()
-    {
-        return xVel;
-    }
+    public override float XSpeed() => xVel;
 
-    public override float YSpeed()
-    {
-        return yVel;
-    }
+    public override float YSpeed() => yVel;
 
     public override IMove GetNextMove()
     {
@@ -89,7 +83,7 @@ public class WallJump : AMove
         {
             return new WireSwing(xVel, yVel);
         }
-        if (dashInput && AMove.dashIsReset && UpgradeHandler.DashAllowed)
+        if (dashInput && dashIsReset && UpgradeHandler.DashAllowed)
         {
             return new Dash();
         }
@@ -97,7 +91,7 @@ public class WallJump : AMove
         {
             return new Idle();
         }
-        else if (MI.GroundDetector.isColliding())
+        if (MI.GroundDetector.isColliding())
         {
             return new Run(xVel);
         }
@@ -105,11 +99,9 @@ public class WallJump : AMove
         {
             return new WallSlide();
         }
+
         return this;
     }
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.WALL_JUMP;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.WALL_JUMP;
 }

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelLoader : MonoBehaviour
 {
+    [SerializeField] private Animator animator;
     public string sceneToLoad;
     public int zoneToLoadAt;
     public float transitionTime = 1f;
@@ -18,7 +19,7 @@ public class LevelLoader : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        anim = transform.GetChild(0).GetComponent<Animator>();
+        anim = animator;
     }
 
 

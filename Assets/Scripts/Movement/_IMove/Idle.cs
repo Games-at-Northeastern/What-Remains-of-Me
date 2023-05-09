@@ -9,10 +9,11 @@ using UnityEngine;
 /// </summary>
 public class Idle : AMove
 {
-    bool dashInput;
-    bool damageInput;
+    private bool dashInput;
+    private bool damageInput;
 
-    float currDistFromOutlet; // Current position from the player to the outlet, if wire connected
+    private bool jumpPending; // is true if space still being held after last jump
+    private float currDistFromOutlet; // Current position from the player to the outlet, if wire connected
 
     /// <summary>
     /// Initializes the idle move, and does any actions that need to be completed
@@ -22,15 +23,16 @@ public class Idle : AMove
     {
         AMove.dashIsReset = true;
         CS.Player.Dash.performed += _ => dashInput = true;
+        jumpPending = (CS.Player.Jump.ReadValue<float>() > 0);
         PH.OnDamageTaken.AddListener(() => damageInput = true);
     }
 
     public override void AdvanceTime()
     {
-        if (WT.connectedOutlet != null)
+        if (WT.ConnectedOutlet != null)
         {
             Vector2 origPos = MI.transform.position;
-            Vector2 connectedOutletPos = WT.connectedOutlet.transform.position;
+            Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
             float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
             if (newDistFromOutlet < currDistFromOutlet)
             {
@@ -38,17 +40,17 @@ public class Idle : AMove
             }
             currDistFromOutlet = newDistFromOutlet;
         }
+
+        // ready the player for another jump once space has been released
+        if (jumpPending && CS.Player.Jump.ReadValue<float>() == 0)
+        {
+            jumpPending = false;
+        }
     }
 
-    public override float XSpeed()
-    {
-        return 0;
-    }
+    public override float XSpeed() => 0;
 
-    public override float YSpeed()
-    {
-        return 0;
-    }
+    public override float YSpeed() => 0;
 
     public override IMove GetNextMove()
     {
@@ -64,7 +66,7 @@ public class Idle : AMove
         {
             return new Dash();
         }
-        if (CS.Player.Jump.ReadValue<float>() > 0)
+        if (!jumpPending && CS.Player.Jump.ReadValue<float>() > 0)
         {
             return new Jump();
         }
@@ -75,8 +77,5 @@ public class Idle : AMove
         return this;
     }
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.IDLE;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.IDLE;
 }

@@ -9,17 +9,12 @@ using UnityEngine;
 public class PlayerSFX : MonoBehaviour
 {
 
-    private SoundController soundController;
-
-    private void Awake()
-    {
-        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
-    }
+    [SerializeField] private SoundController soundController;
 
     /// <summary>
     /// Plays the left foot's walking audio clip at the player's location
     /// <summary>
-    void WalkLeftFoot()
+    public void WalkLeftFoot()
     {
         soundController.PlaySound("Player_WalkLeftFoot");
     }
@@ -27,7 +22,7 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     /// Plays the right foot's walking audio clip at the player's location
     /// <summary>
-    void WalkRightFoot()
+    public void WalkRightFoot()
     {
         soundController.PlaySound("Player_WalkRightFoot");
     }
@@ -35,7 +30,7 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     /// Plays the jumping audio clip at the player's location
     /// <summary>
-    void JumpUp()
+    public void JumpUp()
     {
         soundController.PlaySound("Player_JumpUp");
     }
@@ -50,7 +45,7 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     /// Plays the swinging audio clip at the player's location
     /// <summary>
-    void Swing()
+    public void Swing()
     {
         soundController.PlaySound("Player_Swing");
     }
@@ -58,9 +53,17 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     /// Plays the damaged audio clip at the player's location
     /// <summary>
-    void Damaged()
+    public void Damaged()
     {
         soundController.PlaySound("Player_Damaged");
+    }
+	
+	/// <summary>
+    /// Plays the death audio clip at the player's location
+    /// <summary>
+    public void Died()
+    {
+        soundController.PlaySound("Player_Die");
     }
 
 }

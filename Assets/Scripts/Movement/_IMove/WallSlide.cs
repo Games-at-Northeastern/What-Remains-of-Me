@@ -8,8 +8,8 @@ using UnityEngine;
 /// </summary>
 public class WallSlide : AMove
 {
-    bool wallJumpPending = false;
-    bool damageInput;
+    private bool wallJumpPending = false;
+    private bool damageInput;
 
     /// <summary>
     /// Initializes the WallSlide move and completes any actions that are
@@ -27,15 +27,9 @@ public class WallSlide : AMove
         // Nothing
     }
 
-    public override float XSpeed()
-    {
-        return 0;
-    }
+    public override float XSpeed() => 0;
 
-    public override float YSpeed()
-    {
-        return MS.WallSlideSpeed;
-    }
+    public override float YSpeed() => MS.WallSlideSpeed;
 
     public override IMove GetNextMove()
     {
@@ -47,10 +41,7 @@ public class WallSlide : AMove
         {
             return new Fall(0, MS.WallSlideSpeed);
         }
-        if (wallJumpPending)
-        {
-            return new WallJump(MI.LeftWallDetector.isColliding());
-        }
+
         if (MI.GroundDetector.isColliding())
         {
             return new Idle();
@@ -58,8 +49,5 @@ public class WallSlide : AMove
         return this;
     }
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.WALL_SLIDE;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.WALL_SLIDE;
 }

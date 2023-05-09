@@ -6,34 +6,27 @@ using UnityEngine;
 /// The "main" movement script. Moves the player based on the information provided
 /// in the appropriate IMove script, switching when appropriate.
 /// </summary>
-[RequireComponent(typeof(MovementSettings))]
-[RequireComponent(typeof(MovementInfo))]
-[RequireComponent(typeof(WireThrower))]
-[RequireComponent(typeof(PlayerHealth))]
-[RequireComponent(typeof(Rigidbody2D))]
 public class MovementExecuter : MonoBehaviour
 {
-    Rigidbody2D rb; // To move the player
-    MovementInfo mi; // Gives other info to move scripts
-    MovementSettings ms; // Gives constants to move scripts
-    WireThrower wt; // Gives information about the wire
-    PlayerHealth ph; // Gives info about player health / damage
-    IMove currentMove; // The move taking place this frame
-    Vector3 respawnPosition;
+    [SerializeField] private Rigidbody2D rb; // To move the player
+    [SerializeField] private MovementInfo mi; // Gives other info to move scripts
+    [SerializeField] private MovementSettings ms; // Gives constants to move scripts
+    [SerializeField] private WireThrower wt; // Gives information about the wire
+    [SerializeField] private PlayerHealth ph; // Gives info about player health / damage
+    private IMove currentMove; // The move taking place this frame
+    private Vector3 respawnPosition;
+    public bool isOnAPlatform;
+    public Rigidbody2D platformRb;
 
     // Initialization
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        mi = GetComponent<MovementInfo>();
-        ms = GetComponent<MovementSettings>();
-        wt = GetComponent<WireThrower>();
-        ph = GetComponent<PlayerHealth>();
-        ControlSchemes cs = new ControlSchemes();
+        var cs = new ControlSchemes();
         cs.Enable();
         cs.Debug.Restart.performed += _ => Restart();
         currentMove = new StarterMove(mi, ms, cs, wt, ph);
         respawnPosition = transform.position;
+
     }
 
     /// <summary>
@@ -43,6 +36,31 @@ public class MovementExecuter : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (InkDialogueManager.GetInstance() != null)
+        {
+            if (InkDialogueManager.GetInstance().dialogueIsPlaying && InkDialogueManager.GetInstance().stopMovement)
+            {
+                currentMove.AdvanceTime();
+                rb.velocity = new Vector2(0, rb.velocity.y);
+                currentMove = new Idle();
+            }
+        }
+        if (isOnAPlatform)
+        {
+            currentMove.AdvanceTime();
+            rb.velocity = new Vector2(currentMove.XSpeed() + platformRb.velocity.x, currentMove.YSpeed() + platformRb.velocity.y);
+            currentMove = currentMove.GetNextMove();
+        }
+        else
+        {
+            DoMove();
+        }
+    }
+
+
+    // executes the movement this frame
+    private void DoMove()
+    {
         currentMove.AdvanceTime();
         rb.velocity = new Vector2(currentMove.XSpeed(), currentMove.YSpeed());
         currentMove = currentMove.GetNextMove();
@@ -51,7 +69,7 @@ public class MovementExecuter : MonoBehaviour
     /// <summary>
     /// Resets the player to their original position. For debugging only.
     /// </summary>
-    void Restart()
+    private void Restart()
     {
         transform.position = respawnPosition;
         currentMove = new Fall();
@@ -61,8 +79,5 @@ public class MovementExecuter : MonoBehaviour
     /// Gives an immutable version of the current move. This allows certain information
     /// about the move to be accessed.
     /// </summary>
-    public IMoveImmutable GetCurrentMove()
-    {
-        return currentMove;
-    }
+    public IMoveImmutable GetCurrentMove() => currentMove;
 }

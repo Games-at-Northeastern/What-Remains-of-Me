@@ -16,9 +16,10 @@ public class BasicEnemyAI : MonoBehaviour, IBehaviorTree
     public float attackTime;
 
     [SerializeField] private LayerMask platformLayerMask;
-    private Rigidbody2D rb;
-    private BoxCollider2D boxCollider2D;
-    private Animator anim;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private BoxCollider2D boxCollider2D;
+    [SerializeField] private Animator anim;
+    [SerializeField] private SpriteRenderer sr;
     private Node topNode;
     private bool isTurning;
     private bool isAlerted = false;
@@ -200,7 +201,7 @@ public class BasicEnemyAI : MonoBehaviour, IBehaviorTree
     /// </summary>
     private void UpdateAnimationState()
     {
-        SpriteRenderer sr = this.GetComponent<SpriteRenderer>();
+        //SpriteRenderer sr = this.GetComponent<SpriteRenderer>();
         if (rb.velocity.x < 0) { sr.flipX = true; }
         if (rb.velocity.x > 0) { sr.flipX = false; }
         if (isDead) { }

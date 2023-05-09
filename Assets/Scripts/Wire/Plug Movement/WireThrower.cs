@@ -1,16 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// The main script for handling wire controls. Spawns/Fires, despawns, and
 /// connects the wire. Also controls bullet time while the wire is being aimed.
 /// </summary>
-[RequireComponent(typeof(PlugMovementSettings))]
-[RequireComponent(typeof(LineRenderer))]
-[RequireComponent(typeof(MovementExecuter))]
-[RequireComponent(typeof(DistanceJoint2D))]
 public class WireThrower : MonoBehaviour
 {
     [Header("SFX")]
@@ -22,41 +21,48 @@ public class WireThrower : MonoBehaviour
     [SerializeField] Camera mainCamera;
     [SerializeField] GameObject plugPrefab;
     [SerializeField] float timeScaleForAim;
-    GameObject activePlug;
-    ControlSchemes cs;
-    PlugMovementSettings pms;
-    MovementExecuter me;
-    LineRenderer lineRenderer;
-    DistanceJoint2D distanceJoint;
-    float framesHeld;
-    bool isLockOn = false; // Whether or not Atlas is locking on to an outlet
-    GameObject lockOnOutlet;
-    Vector2 lastRecordedPosition;
+    private GameObject _activePlug;
+    private ControlSchemes _controlSchemes;
+    [SerializeField] private PlugMovementSettings _plugMovementSettings;
+    [SerializeField] private MovementExecuter _movementExecuter;
+    [SerializeField] private LineRenderer _lineRenderer;
+    [SerializeField] private DistanceJoint2D _distanceJoint;
+    [SerializeField] private GameObject reticle;
+    private float _framesHeld;
+    private bool _isLockOn = false; // Whether or not Atlas is locking on to an outlet
+    private GameObject _lockOnOutlet;
+    private Vector2 _lastRecordedPosition;
 
     // Accessible Fields
-    public Outlet connectedOutlet { get; private set; } // If null, disconnected. Otherwise, connected.
+    public Outlet ConnectedOutlet { get; private set; } // If null, disconnected. Otherwise, connected.
     public UnityEvent onConnect = new UnityEvent();
     public UnityEvent onDisconnect = new UnityEvent();
 
 
     private void Awake()
     {
+
+
+
+
         // Add left click handling functionality
-        cs = new ControlSchemes();
-        cs.Enable();
-        cs.Player.Throw.started += _ => HandleThrowInputHeld();
-        cs.Player.ThrowController.canceled += _ => HandleThrowInputReleasedController();
-        cs.Player.ThrowMouse.canceled += _ => HandleThrowInputReleasedKeyboard();
-        cs.Player.Jump.performed += _ => HandlePotentialDisconnectByJump();
-        // Initialize basic variables
-        pms = GetComponent<PlugMovementSettings>();
-        distanceJoint = GetComponent<DistanceJoint2D>();
-        me = GetComponent<MovementExecuter>();
+        _controlSchemes = new ControlSchemes();
+        _controlSchemes.Enable();
+        _controlSchemes.Player.Throw.started += HandleThrowInputReleasedKeyboard;
+        //_controlSchemes.Player.ThrowController.canceled += _ => HandleThrowInputReleasedController();
+        //_controlSchemes.Player.ThrowMouse.canceled += _ => HandleThrowInputReleasedKeyboard();
+        _controlSchemes.Player.Jump.performed += HandlePotentialDisconnectByJump;
         // Handle line renderer
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.enabled = false;
-        connectedOutlet = null;
-        framesHeld = 0;
+        _lineRenderer.enabled = false;
+        ConnectedOutlet = null;
+        _framesHeld = 0;
+        reticle.GetComponent<Renderer>().enabled = false;
+    }
+
+    private void OnDestroy()
+    {
+        _controlSchemes.Player.Throw.started -= HandleThrowInputReleasedKeyboard;
+        _controlSchemes.Player.Jump.performed -= HandlePotentialDisconnectByJump;
     }
 
     /// <summary>
@@ -64,43 +70,53 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void HandleThrowInputHeld()
     {
-        if (activePlug == null && connectedOutlet == null)
+        if (_activePlug == null && ConnectedOutlet == null)
         {
             // Prepare to fire wire
-            Time.timeScale = timeScaleForAim;
-            framesHeld = 0;
+            Time.timeScale = 1;
+            _framesHeld = 0;
         }
     }
 
     /// <summary>
-    /// Function that is passed to the control scheme to handle cancelling a throw when the 
+    /// Function that is passed to the control scheme to handle cancelling a throw when the
     /// keyboard/mouse button for this action is released.
     /// </summary>
-    void HandleThrowInputReleasedKeyboard()
+    void HandleThrowInputReleasedKeyboard(InputAction.CallbackContext ctx)
     {
-        if (activePlug == null && connectedOutlet == null)
+        Debug.Log("LOCKED ON: " + _isLockOn);
+        if (_activePlug == null && ConnectedOutlet == null)
         {
             Time.timeScale = 1;
-            if (framesHeld < 0.1)
-                if (isLockOn) { FirePlugLockOn(); }
-                else { FirePlugAutoAim(); }
+            // if (_framesHeld < 0.1)
+            //     if (_isLockOn) { FirePlugLockOn(); }
+            //     else { FirePlugAutoAim(); }
+            // else
+            //     FirePlugMouse();
+            if (_isLockOn)
+            {
+                FirePlugLockOn();
+            }
             else
+            {
                 FirePlugMouse();
+            }
+
         }
         HandlePotentialDisconnect();
     }
 
     /// <summary>
-    /// Function that is passed to the control scheme to handle cancelling a throw when the 
+    /// Function that is passed to the control scheme to handle cancelling a throw when the
     /// controller button for this action is released.
     /// </summary>
     void HandleThrowInputReleasedController()
     {
-        if (activePlug == null && connectedOutlet == null)
+        if (_activePlug == null && ConnectedOutlet == null)
         {
             Time.timeScale = 1;
-            if (framesHeld < 0.1)
-                if (isLockOn) { FirePlugLockOn(); }
+            if (_framesHeld < 0.1)
+                if (_isLockOn) { FirePlugLockOn(); }
                 else { FirePlugAutoAim(); }
             else
                 FirePlugController();
@@ -111,9 +127,9 @@ public class WireThrower : MonoBehaviour
     /// <summary>
     /// Function passed to the control scheme to handle disconnecting the wire when jumping.
     /// </summary>
-    void HandlePotentialDisconnectByJump()
+    void HandlePotentialDisconnectByJump(InputAction.CallbackContext ctx)
     {
-        if (me.GetCurrentMove().DisconnectByJumpOkay())
+        if (_movementExecuter.GetCurrentMove().DisconnectByJumpOkay())
         {
             HandlePotentialDisconnect();
         }
@@ -124,7 +140,7 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void HandlePotentialDisconnect()
     {
-        if (connectedOutlet != null)
+        if (ConnectedOutlet != null)
         {
             Disconnect();
         }
@@ -136,7 +152,7 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void FirePlugLockOn()
     {
-        if (lockOnOutlet == null)
+        if (_lockOnOutlet == null)
         {
             ChangeOutletTarget();
         }
@@ -144,15 +160,16 @@ public class WireThrower : MonoBehaviour
         Vector2 playerScreenPos = mainCamera.WorldToScreenPoint(transform.position);
         Vector2 fireDir = playerScreenPos;
 
-        if (lockOnOutlet != null)
+        if (_lockOnOutlet != null)
         {
-            Vector2 closestPos = mainCamera.WorldToScreenPoint(lockOnOutlet.transform.position);
+            Vector2 closestPos = mainCamera.WorldToScreenPoint(_lockOnOutlet.transform.position);
             fireDir = closestPos - playerScreenPos;
+
         }
 
-        activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
-        PlugMovementExecuter pme = activePlug.GetComponent<PlugMovementExecuter>();
-        pme.Fire(new Straight(fireDir, activePlug.transform, transform, pms));
+        _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
+        PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
+        pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
         pme.onTerminateRequest.AddListener(() => DestroyPlug());
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
@@ -185,12 +202,15 @@ public class WireThrower : MonoBehaviour
 
         if (closest != null)
         {
+            Debug.Log("FOUND");
+            reticle.transform.position = closest.transform.position;
+            reticle.GetComponent<Renderer>().enabled = true;
             Vector2 closestPos = mainCamera.WorldToScreenPoint(closest.transform.position);
             fireDir = closestPos - playerScreenPos;
         }
-        activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
-        PlugMovementExecuter pme = activePlug.GetComponent<PlugMovementExecuter>();
-        pme.Fire(new Straight(fireDir, activePlug.transform, transform, pms));
+        _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
+        PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
+        pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
         pme.onTerminateRequest.AddListener(() => DestroyPlug());
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
@@ -200,22 +220,24 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void ChangeOutletTarget()
     {
-        if (lockOnOutlet == null)
+        if (_lockOnOutlet == null)
         {
             GameObject[] gos;
             gos = GameObject.FindGameObjectsWithTag("Outlet");
             GameObject closest = null;
-            float distance = Mathf.Infinity;
             Vector3 position = transform.position;
             foreach (GameObject go in gos)
             {
                 Vector3 diff = go.transform.position - position;
                 float curDistance = diff.sqrMagnitude;
-                if (curDistance < distance)
+                if (go.GetComponent<SpriteRenderer>().isVisible)
                 {
                     closest = go;
-                    distance = curDistance;
-                    lockOnOutlet = closest;
+                    // reticle.transform.position = closest.transform.position;
+                    // reticle.GetComponent<Renderer>().enabled = true;
+                    //distance = curDistance;
+                    _lockOnOutlet = closest;
+                    _isLockOn = true;
                 }
             }
         }
@@ -224,37 +246,36 @@ public class WireThrower : MonoBehaviour
             GameObject[] gos;
             gos = GameObject.FindGameObjectsWithTag("Outlet");
             GameObject closest = null;
-            float originalDistance = Vector2.Distance(this.transform.position, lockOnOutlet.transform.position);
-            float distance = Mathf.Infinity;
+            float originalDistance = Vector2.Distance(this.transform.position, _lockOnOutlet.transform.position);
+            bool hasOutletsOnScreen = false;
             Vector3 position = transform.position;
             foreach (GameObject go in gos)
             {
                 Vector3 diff = go.transform.position - position;
-                float curDistance = diff.sqrMagnitude;
-                if (go.GetComponent<SpriteRenderer>().isVisible && curDistance < distance)
+                float curDistance = Vector2.Distance(this.transform.position, go.transform.position);
+                if (go.GetComponent<SpriteRenderer>().isVisible)
                 {
-                    if (lastRecordedPosition == new Vector2(this.transform.position.x, this.transform.position.y))
+                    hasOutletsOnScreen = true;
+                    if (curDistance < originalDistance)
                     {
-                        if (curDistance > originalDistance)
-                        {
-                            closest = go;
-                            distance = curDistance;
-                            lockOnOutlet = closest;
-                        }
-                    }
-                    else
-                    {
-                        if (go != lockOnOutlet)
-                        {
-                            closest = go;
-                            distance = curDistance;
-                            lockOnOutlet = closest;
-                        }
+                        closest = go;
+                        // reticle.transform.position = closest.transform.position;
+                        // reticle.GetComponent<Renderer>().enabled = true;
+                        //distance = curDistance;
+                        _lockOnOutlet = closest;
+                        originalDistance = curDistance;
                     }
                 }
             }
+
+            if (!hasOutletsOnScreen)
+            {
+                //distance = curDistance;
+                _lockOnOutlet = null;
+                _isLockOn = false;
+            }
         }
-        lastRecordedPosition = transform.position;
+        _lastRecordedPosition = transform.position;
     }
 
     /// <summary>
@@ -265,12 +286,12 @@ public class WireThrower : MonoBehaviour
     void FirePlugMouse()
     {
         Vector2 playerScreenPos = mainCamera.WorldToScreenPoint(transform.position);
-        Vector2 aimScreenPos = cs.Player.AimMouse.ReadValue<Vector2>();
+        Vector2 aimScreenPos = _controlSchemes.Player.AimMouse.ReadValue<Vector2>();
         Vector2 fireDir = aimScreenPos - playerScreenPos;
-        activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
-        PlugMovementExecuter pme = activePlug.GetComponent<PlugMovementExecuter>();
-        pme.Fire(new Straight(fireDir, activePlug.transform, transform, pms));
-        
+        _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
+        PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
+        pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
+
         // Play SFX for shooting plug
         src.clip = shootWire;
         src.Play();
@@ -286,10 +307,10 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void FirePlugController()
     {
-        Vector2 fireDir = cs.Player.AimController.ReadValue<Vector2>();
-        activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
-        PlugMovementExecuter pme = activePlug.GetComponent<PlugMovementExecuter>();
-        pme.Fire(new Straight(fireDir, activePlug.transform, transform, pms));
+        Vector2 fireDir = _controlSchemes.Player.AimController.ReadValue<Vector2>();
+        _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
+        PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
+        pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
 
         // Play SFX for shooting plug
         src.clip = shootWire;
@@ -301,11 +322,25 @@ public class WireThrower : MonoBehaviour
 
     private void Update()
     {
+        ChangeOutletTarget();
+        // sets reticle to targe the locked on outlet at all times
+        if (_lockOnOutlet != null) {
+            reticle.transform.position = _lockOnOutlet.transform.position;
+            reticle.GetComponent<Renderer>().enabled = true;
+        }
         HandleLineRendering();
+        HandleThrowInputHeld();
         HandleConnectionPhysics();
-        framesHeld += Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Q)) { isLockOn = !isLockOn; }
-        if (isLockOn && Input.GetKeyDown(KeyCode.E)) { ChangeOutletTarget(); }
+        _framesHeld += Time.deltaTime;
+        // REMOVED THIS AND REPLACED THIS WITH AUTO TARGETING RETICLE
+        //if (Input.GetKeyDown(KeyCode.Q)) { _isLockOn = !_isLockOn; }
+        // if (_isLockOn && Input.GetKeyDown(KeyCode.E)) { ChangeOutletTarget(); }
+        // // lock-on reticle is not visible when the plug has locked on
+        // if (ConnectedOutlet != null) {
+        //     reticle.GetComponent<Renderer>().enabled = false;
+        // }
+
+
     }
 
     /// <summary>
@@ -314,16 +349,16 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void HandleLineRendering()
     {
-        lineRenderer.enabled = activePlug != null || connectedOutlet != null;
-        if (activePlug != null)
+        _lineRenderer.enabled = _activePlug != null || ConnectedOutlet != null;
+        if (_activePlug != null)
         {
-            lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.SetPosition(1, activePlug.transform.position);
+            _lineRenderer.SetPosition(0, transform.position);
+            _lineRenderer.SetPosition(1, _activePlug.transform.position);
         }
-        else if (connectedOutlet != null)
+        else if (ConnectedOutlet != null)
         {
-            lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.SetPosition(1, connectedOutlet.transform.position);
+            _lineRenderer.SetPosition(0, transform.position);
+            _lineRenderer.SetPosition(1, ConnectedOutlet.transform.position);
         }
     }
 
@@ -335,9 +370,9 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void HandleConnectionPhysics()
     {
-        if (connectedOutlet != null)
+        if (ConnectedOutlet != null)
         {
-            distanceJoint.connectedAnchor = connectedOutlet.transform.position;
+            _distanceJoint.connectedAnchor = ConnectedOutlet.transform.position;
         }
     }
 
@@ -347,11 +382,11 @@ public class WireThrower : MonoBehaviour
     void ConnectPlug(GameObject g)
     {
         onConnect.Invoke();
-        connectedOutlet = g.GetComponent<Outlet>();
-        connectedOutlet.Connect();
-        distanceJoint.enabled = true;
-        distanceJoint.connectedAnchor = connectedOutlet.transform.position;
-        Destroy(activePlug);
+        ConnectedOutlet = g.GetComponent<Outlet>();
+        ConnectedOutlet.Connect();
+        _distanceJoint.enabled = true;
+        _distanceJoint.connectedAnchor = ConnectedOutlet.transform.position;
+        Destroy(_activePlug);
     }
 
     /// <summary>
@@ -360,9 +395,9 @@ public class WireThrower : MonoBehaviour
     void Disconnect()
     {
         onDisconnect.Invoke();
-        distanceJoint.enabled = false;
-        connectedOutlet.Disconnect();
-        connectedOutlet = null;
+        _distanceJoint.enabled = false;
+        ConnectedOutlet.Disconnect();
+        ConnectedOutlet = null;
     }
 
     /// <summary>
@@ -370,8 +405,8 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void DestroyPlug()
     {
-        if (activePlug != null)
-            Destroy(activePlug);
+        if (_activePlug != null)
+            Destroy(_activePlug);
     }
 
     /// <summary>
@@ -380,7 +415,7 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     public void SetMaxWireLength(float amount)
     {
-        distanceJoint.distance = amount;
+        _distanceJoint.distance = amount;
     }
 
     /// <summary>
@@ -389,6 +424,6 @@ public class WireThrower : MonoBehaviour
     /// <returns>the state of the line renderer attached to this game object</returns>
     public bool WireExists()
     {
-        return lineRenderer.enabled;
+        return _lineRenderer.enabled;
     }
 }

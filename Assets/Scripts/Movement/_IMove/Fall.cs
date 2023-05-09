@@ -9,14 +9,16 @@ using UnityEngine;
 /// </summary>
 public class Fall : AMove
 {
-    float yVel;
-    float xVel;
-    float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
+    private float yVel;
+    private float xVel;
+    private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
+    private static float coyoteTimeCounter = MS.CoyoteTime;
+    private static float jumpBufferCounter = MS.JumpBuffer;
 
-    bool dashInput;
-    bool connectedInput;
-    bool swingInput;
-    bool damageInput;
+    private bool dashInput;
+    private bool connectedInput;
+    private bool swingInput;
+    private bool damageInput;
 
     /// <summary>
     /// Initializes a fall, appropriately setting its vertical velocity to start
@@ -28,8 +30,13 @@ public class Fall : AMove
         yVel = initYVel;
         CS.Player.Dash.performed += _ => dashInput = true;
         WT.onConnect.AddListener(() => connectedInput = true);
-        CS.Player.Jump.performed += _ => { if (WT.connectedOutlet != null) { swingInput = true; } };
+        CS.Player.Jump.performed += _ => { if (WT.ConnectedOutlet != null) { swingInput = true; } };
         PH.OnDamageTaken.AddListener(() => damageInput = true);
+    }
+
+    public Fall(bool disableCoyote)
+    {
+        coyoteTimeCounter = 0.0f;
     }
 
     public Fall() : this(0, 0)
@@ -39,23 +46,31 @@ public class Fall : AMove
 
     public override void AdvanceTime()
     {
+        var timeChange = Time.deltaTime;
         xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(), ref xAccel, MS.FallSmoothTimeX);
-        yVel -= MS.FallGravity * Time.deltaTime;
+        yVel -= MS.FallGravity * timeChange;
         if (yVel < MS.FallMinSpeedY)
         {
             yVel = MS.FallMinSpeedY;
         }
+
+        // Tracking Coyote Time
+        coyoteTimeCounter -= timeChange;
+
+        // Jump Buffer
+        if (CS.Player.Jump.ReadValue<float>() > 0)
+        {
+            jumpBufferCounter -= timeChange;
+        }
+        else
+        {
+            jumpBufferCounter = MS.JumpBuffer;
+        }
     }
 
-    public override float XSpeed()
-    {
-        return xVel;
-    }
+    public override float XSpeed() => xVel;
 
-    public override float YSpeed()
-    {
-        return yVel;
-    }
+    public override float YSpeed() => yVel;
 
     public override IMove GetNextMove()
     {
@@ -63,12 +78,13 @@ public class Fall : AMove
         {
             return new Knockback();
         }
-        if (connectedInput || swingInput || WT.connectedOutlet != null)
+        if (connectedInput || swingInput || WT.ConnectedOutlet != null)
         {
             return new WireSwing(xVel, yVel);
         }
         if (dashInput && AMove.dashIsReset && UpgradeHandler.DashAllowed)
         {
+            coyoteTimeCounter = MS.CoyoteTime;
             return new Dash();
         }
         /*
@@ -79,23 +95,35 @@ public class Fall : AMove
             return new Climb();
         }
         */
-        if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding() && yVel < 0)
+
+
+        // Deprecated code for wall jumping.
+        /*if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding() && yVel < 0)
         {
+            coyoteTimeCounter = MS.CoyoteTime;
             return new WallSlide();
+        }*/
+        if (MI.GroundDetector.isColliding() && jumpBufferCounter > 0 && jumpBufferCounter < MS.JumpBuffer)
+        {
+            return new Jump(xVel);
+        }
+        if (CS.Player.Jump.ReadValue<float>() > 0 && coyoteTimeCounter > 0.0f)
+        {
+            coyoteTimeCounter = MS.CoyoteTime;
+            return new Jump(xVel);
         }
         if (MI.GroundDetector.isColliding() && Mathf.Abs(xVel) < MS.RunToIdleSpeed)
         {
+            coyoteTimeCounter = MS.CoyoteTime;
             return new Idle();
         }
-        else if (MI.GroundDetector.isColliding())
+        if (MI.GroundDetector.isColliding())
         {
+            coyoteTimeCounter = MS.CoyoteTime;
             return new Run(xVel);
         }
         return this;
     }
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.JUMP_FALLING;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.JUMP_FALLING;
 }

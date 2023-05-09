@@ -8,8 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Knockback : AMove
 {
-    float vertVel;
-    float horizVel;
+    private float vertVel;
+    private float horizVel;
 
     /// <summary>
     /// Initializes a knockback move, starting the player at a specific vertical
@@ -35,15 +35,9 @@ public class Knockback : AMove
         }
     }
 
-    public override float XSpeed()
-    {
-        return horizVel;
-    }
+    public override float XSpeed() => horizVel;
 
-    public override float YSpeed()
-    {
-        return vertVel;
-    }
+    public override float YSpeed() => vertVel;
 
     public override IMove GetNextMove()
     {
@@ -54,8 +48,5 @@ public class Knockback : AMove
         return this;
     }
 
-    public override AnimationType GetAnimationState()
-    {
-        return AnimationType.KNOCKBACK;
-    }
+    public override AnimationType GetAnimationState() => AnimationType.KNOCKBACK;
 }

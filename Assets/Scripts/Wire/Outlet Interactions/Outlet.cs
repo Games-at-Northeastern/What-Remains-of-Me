@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Outlet : MonoBehaviour
 {
+    private SoundController soundController;
+
     [Header("SFX")]
     public AudioSource src;
     public AudioClip giving;
@@ -24,6 +26,13 @@ public class Outlet : MonoBehaviour
         CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); } };
         CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); } };
         CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); } };
+
+        CS.Player.GiveVirus.performed += _ => { if (controlled != null) { StartCoroutine("GiveVirus"); } };
+        CS.Player.TakeVirus.performed += _ => { if (controlled != null) { StartCoroutine("TakeVirus"); } };
+        CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); } };
+        CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); } };
+
+        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
     }
 
     /// <summary>
@@ -32,6 +41,7 @@ public class Outlet : MonoBehaviour
     public void Connect()
     {
         CS.Enable();
+        soundController.PlaySound("Plug_In");
     }
 
     /// <summary>
@@ -60,6 +70,22 @@ public class Outlet : MonoBehaviour
     }
 
     /// <summary>
+    /// Gives virus to the controlled object until this coroutine is called to end.
+    /// </summary>
+    IEnumerator GiveVirus()
+    {
+        while (true)
+        {
+            controlled.GainVirus(energyTransferSpeed * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+
+            // SFX
+            src.clip = giving;
+            src.Play();
+        }
+    }
+
+    /// <summary>
     /// Takes energy from the controlled object until this coroutine is called to end.
     /// </summary>
     IEnumerator TakeEnergy()
@@ -67,6 +93,22 @@ public class Outlet : MonoBehaviour
         while (true)
         {
             controlled.LoseEnergy(energyTransferSpeed * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+
+            // SFX
+            src.clip = taking;
+            src.Play();
+        }
+    }
+
+    /// <summary>
+    /// Takes virus from the controlled object until this coroutine is called to end.
+    /// </summary>
+    IEnumerator TakeVirus()
+    {
+        while (true)
+        {
+            controlled.LoseVirus(energyTransferSpeed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
 
             // SFX

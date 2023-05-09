@@ -1,27 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 /// <summary>
-/// Represents a move in which the player is jumping into the air.
+///     Represents a move in which the player is jumping into the air.
 /// </summary>
 public class Jump : AMove
 {
-    float xVel;
-    float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
-    float yVel;
-    float gravity;
-    float timePassed;
-    bool jumpCanceled;
+    private bool connectedInput;
+    private bool damageInput;
 
-    bool dashInput;
-    bool connectedInput;
-    bool swingInput; // Jump input while connecting to an outlet
-    bool damageInput;
+    private bool dashInput;
+    private float gravity;
+    private bool jumpCanceled;
+    private bool swingInput; // Jump input while connecting to an outlet
+    private float timePassed;
+    private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
+    private float xVel;
+    private float yVel;
+    private static float jumpBufferCounter = MS.JumpBuffer;
 
     /// <summary>
-    /// Initializes a jump, appropriately setting its horizontal velocity to start
-    /// with.
+    ///     Initializes a jump, appropriately setting its horizontal velocity to start
+    ///     with.
     /// </summary>
     public Jump(float initXVel)
     {
@@ -31,7 +31,10 @@ public class Jump : AMove
         timePassed = 0;
         CS.Player.Dash.performed += _ => dashInput = true;
         WT.onConnect.AddListener(() => connectedInput = true);
-        CS.Player.Jump.performed += _ => { if (WT.connectedOutlet != null) { swingInput = true; } };
+        CS.Player.Jump.performed += _ =>
+        {
+            if (WT.ConnectedOutlet != null) { swingInput = true; }
+        };
         PH.OnDamageTaken.AddListener(() => damageInput = true);
     }
 
@@ -42,32 +45,55 @@ public class Jump : AMove
 
     public override void AdvanceTime()
     {
+        var timeChange = Time.deltaTime;
         // General
-        timePassed += Time.deltaTime;
+        timePassed += timeChange;
         // Horizontal
-        xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(), ref xAccel, MS.FallSmoothTimeX);
+        if (xVel > MS.FallMaxSpeedX * 0.85 && !connectedInput)
+        {
+            xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(),
+                ref xAccel, MS.FallSmoothTimeX * 5);
+        }
+        else
+        {
+            xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(),
+            ref xAccel, MS.FallSmoothTimeX);
+        }
         // Vertical
-        gravity = Mathf.Clamp(gravity + (MS.JumpGravityIncRate * Time.deltaTime), MS.JumpInitGravity, MS.JumpMaxGravity);
-        yVel -= gravity * Time.deltaTime;
+        gravity = Mathf.Clamp(gravity + (MS.JumpGravityIncRate * timeChange),
+            MS.JumpInitGravity, MS.JumpMaxGravity);
+        yVel -= gravity * timeChange;
         if (yVel < MS.JumpMinSpeedY)
         {
             yVel = MS.JumpMinSpeedY;
         }
+
         // Cancellation
         if (!jumpCanceled && CS.Player.Jump.ReadValue<float>() == 0)
         {
             CancelJump(false);
         }
+
         if (!jumpCanceled && MI.CeilingDetector.isColliding())
         {
             CancelJump(true);
         }
+
+        // Jump Buffer
+        if (CS.Player.Jump.ReadValue<float>() > 0)
+        {
+            jumpBufferCounter -= timeChange;
+        }
+        else
+        {
+            jumpBufferCounter = MS.JumpBuffer;
+        }
     }
 
     /// <summary>
-    /// Causes any consequences that should come from the jump being cancelled at
-    /// this point in time. Takes in whether a cancellation would mean the jump going
-    /// straight to zero in Y Velocity or not.
+    ///     Causes any consequences that should come from the jump being cancelled at
+    ///     this point in time. Takes in whether a cancellation would mean the jump going
+    ///     straight to zero in Y Velocity or not.
     /// </summary>
     private void CancelJump(bool straightToZeroVel)
     {
@@ -80,15 +106,9 @@ public class Jump : AMove
         }
     }
 
-    public override float XSpeed()
-    {
-        return xVel;
-    }
+    public override float XSpeed() => xVel;
 
-    public override float YSpeed()
-    {
-        return yVel;
-    }
+    public override float YSpeed() => yVel;
 
     public override IMove GetNextMove()
     {
@@ -96,31 +116,42 @@ public class Jump : AMove
         {
             return new Knockback();
         }
+
         if (connectedInput || swingInput)
         {
             return new WireSwing(xVel, yVel);
         }
-        if (dashInput && AMove.dashIsReset && UpgradeHandler.DashAllowed)
+
+        if (dashInput && dashIsReset && UpgradeHandler.DashAllowed)
         {
             return new Dash();
         }
-        if ((MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding()) && yVel < 0)
+
+         // Deprecated code for wall jumping.
+        /*if ((MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding()) && yVel < 0)
         {
             return new WallSlide();
+        }*/
+
+        if (MI.GroundDetector.isColliding() && jumpBufferCounter > 0 && jumpBufferCounter < MS.JumpBuffer)
+        {
+            return new Jump(xVel);
         }
-        if (timePassed > MS.JumpLandableTimer && MI.GroundDetector.isColliding() && Mathf.Abs(xVel) < MS.RunToIdleSpeed)
+
+        if (timePassed > MS.JumpLandableTimer && MI.GroundDetector.isColliding() &&
+            Mathf.Abs(xVel) < MS.RunToIdleSpeed)
         {
             return new Idle();
         }
-        else if (timePassed > MS.JumpLandableTimer && MI.GroundDetector.isColliding())
+
+        if (MI.GroundDetector.isColliding() && timePassed > MS.JumpLandableTimer )
         {
             return new Run(xVel);
         }
+
         return this;
     }
 
-    public override AnimationType GetAnimationState()
-    {
-        return yVel >= 0 ? AnimationType.JUMP_RISING : AnimationType.JUMP_FALLING;
-    }
+    public override AnimationType GetAnimationState() =>
+        yVel >= 0 ? AnimationType.JUMP_RISING : AnimationType.JUMP_FALLING;
 }

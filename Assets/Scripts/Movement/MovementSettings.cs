@@ -10,137 +10,150 @@ using UnityEngine;
 /// the information here can be customized from the editor, but not changed
 /// from any other script.
 /// </summary>
-public class MovementSettings : MonoBehaviour
+[CreateAssetMenu]
+public class MovementSettings : ScriptableObject
 {
     // SERIALIZED FIELDS
 
     [Header("General")]
-    [SerializeField] float runToIdleSpeed; // Speed which the player must be below to go from run to idle
+    [SerializeField] private float runToIdleSpeed; // Speed which the player must be below to go from run to idle
 
     [Header("Jump")]
-    [SerializeField] float jumpLandableTimer;
-    [SerializeField] float jumpInitVelY;
-    [SerializeField] float jumpInitGravity;
-    [SerializeField] float jumpMaxGravity;
-    [SerializeField] float jumpGravityIncRate;
-    [SerializeField] float jumpMinSpeedY;
-    [SerializeField] float jumpCancelYVelMultiplier;
+    [SerializeField] private float jumpLandableTimer;
+    [SerializeField] private float jumpInitVelY;
+    [SerializeField] private float jumpInitGravity;
+    [SerializeField] private float jumpMaxGravity;
+    [SerializeField] private float jumpGravityIncRate;
+    [SerializeField] private float jumpMinSpeedY;
+    [SerializeField] private float jumpCancelYVelMultiplier;
+    [SerializeField] private float coyoteTime;
+    [SerializeField] private float jumpBuffer;
 
     [Header("Fall")]
-    [SerializeField] float fallGravity;
-    [SerializeField] float fallMaxSpeedX;
-    [SerializeField] float fallSmoothTimeX;
-    [SerializeField] float fallMinSpeedY;
+    [SerializeField] private float fallGravity;
+    [SerializeField] private float fallMaxSpeedX;
+    [SerializeField] private float fallSmoothTimeX;
+    [SerializeField] private float fallMinSpeedY;
 
     [Header("Run")]
-    [SerializeField] float runMaxSpeed;
-    [SerializeField] float runSmoothTime;
+    [SerializeField] private float runMaxSpeed;
+    [SerializeField] private float runSmoothTime;
 
     [Header("Wall Slide")]
-    [SerializeField] float wallSlideSpeed;
+    [SerializeField] private float wallSlideSpeed;
 
     [Header("Wall Jump")]
-    [SerializeField] float wallJumpLandableTimer;
-    [SerializeField] float wallJumpInitVelX;
-    [SerializeField] float wallJumpMaxSpeedX;
-    [SerializeField] float wallJumpSmoothTimeX;
-    [SerializeField] float wallJumpInitVelY;
-    [SerializeField] float wallJumpMinSpeedY;
-    [SerializeField] float wallJumpInitGravity;
-    [SerializeField] float wallJumpMaxGravity;
-    [SerializeField] float wallJumpGravityIncRate;
-    [SerializeField] float wallJumpCancelYVelMultiplier;
+    [SerializeField] private float wallJumpLandableTimer;
+    [SerializeField] private float wallJumpInitVelX;
+    [SerializeField] private float wallJumpMaxSpeedX;
+    [SerializeField] private float wallJumpSmoothTimeX;
+    [SerializeField] private float wallJumpInitVelY;
+    [SerializeField] private float wallJumpMinSpeedY;
+    [SerializeField] private float wallJumpInitGravity;
+    [SerializeField] private float wallJumpMaxGravity;
+    [SerializeField] private float wallJumpGravityIncRate;
+    [SerializeField] private float wallJumpCancelYVelMultiplier;
 
     [Header("Dash")]
-    [SerializeField] float dashSpeedX;
-    [SerializeField] float dashTime;
+    [SerializeField] private float dashSpeedX;
+    [SerializeField] private float dashTime;
 
     [Header("Wire Swing")]
-    [SerializeField] float wireSwingBounceDecayMultiplier;
-    [SerializeField] float wireSwingDecayMultiplier;
-    [SerializeField] float wireSwingNaturalAccelMultiplier;
-    [SerializeField] float wireSwingManualAccelMultiplier;
-    [SerializeField] float wireSwingAngularVelOfDash;
-    [SerializeField] float wireSwingReferenceWireLength;
+    [SerializeField] private float wireSwingBounceDecayMultiplier;
+    [SerializeField] private float wireSwingDecayMultiplier;
+    [SerializeField] private float wireSwingNaturalAccelMultiplier;
+    [SerializeField] private float wireSwingManualAccelMultiplier;
+    [SerializeField] private float wireSwingAngularVelOfDash;
+    [SerializeField] private float wireSwingReferenceWireLength;
 
     [Header("Wire Swing Release")]
-    [SerializeField] float wsrGravity;
-    [SerializeField] float wsrMaxSpeedX;
-    [SerializeField] float wsrSmoothTimeX;
-    [SerializeField] float wsrMinSpeedY;
+    [SerializeField] private float wsrGravity;
+    [SerializeField] private float wsrMaxSpeedX;
+    [SerializeField] private float wsrSmoothTimeX;
+    [SerializeField] private float wsrMinSpeedY;
 
     [Header("Wire General")]
-    [SerializeField] float wireGeneralMaxDistance;
+    [SerializeField] private float wireGeneralMaxDistance;
 
     [Header("Knockback")]
-    [SerializeField] float knockbackVertVel;
-    [SerializeField] float absKnockbackHorizVel;
-    [SerializeField] float knockbackGravity;
-    [SerializeField] float knockbackGravityHorizOnRecovery;
+    [SerializeField] private float knockbackVertVel;
+    [SerializeField] private float absKnockbackHorizVel;
+    [SerializeField] private float knockbackGravity;
+    [SerializeField] private float knockbackGravityHorizOnRecovery;
+
+    [SerializeField] private bool isOnPlatform = false;
+    [SerializeField] private Rigidbody2D platromRb;
 
     // ACCESSIBLE FIELDS
 
     // General
-    public float RunToIdleSpeed { get { return runToIdleSpeed; } } // Speed which the player must be below to go from run to idle
+    public float RunToIdleSpeed => runToIdleSpeed; // Speed which the player must be below to go from run to idle
 
     // Jump
-    public float JumpLandableTimer { get { return jumpLandableTimer; } }
-    public float JumpInitVelY { get { return jumpInitVelY; } }
-    public float JumpInitGravity { get { return jumpInitGravity; } }
-    public float JumpMaxGravity { get { return jumpMaxGravity; } }
-    public float JumpGravityIncRate { get { return jumpGravityIncRate; } }
-    public float JumpMinSpeedY { get { return jumpMinSpeedY; } }
-    public float JumpCancelYVelMultiplier { get { return jumpCancelYVelMultiplier; } }
+    public float JumpLandableTimer => jumpLandableTimer;
+    public float JumpInitVelY => jumpInitVelY;
+    public float JumpInitGravity => jumpInitGravity;
+    public float JumpMaxGravity => jumpMaxGravity;
+    public float JumpGravityIncRate => jumpGravityIncRate;
+    public float JumpMinSpeedY => jumpMinSpeedY;
+    public float JumpCancelYVelMultiplier => jumpCancelYVelMultiplier;
+    public float CoyoteTime => coyoteTime;
+    public float JumpBuffer => jumpBuffer;
 
     // Fall
-    public float FallGravity { get { return fallGravity; } }
-    public float FallMaxSpeedX { get { return fallMaxSpeedX; } }
-    public float FallSmoothTimeX { get { return fallSmoothTimeX; } }
-    public float FallMinSpeedY { get { return fallMinSpeedY; } }
+    public float FallGravity => fallGravity;
+    public float FallMaxSpeedX => fallMaxSpeedX;
+    public float FallSmoothTimeX => fallSmoothTimeX;
+    public float FallMinSpeedY => fallMinSpeedY;
 
     // Run
-    public float RunMaxSpeed { get { return runMaxSpeed; } }
-    public float RunSmoothTime { get { return runSmoothTime; } }
+    public float RunMaxSpeed => runMaxSpeed;
+    public float RunSmoothTime => runSmoothTime;
 
     // Wall Slide
-    public float WallSlideSpeed { get { return wallSlideSpeed; } }
+    public float WallSlideSpeed => wallSlideSpeed;
 
     // Wall Jump
-    public float WallJumpLandableTimer { get { return wallJumpLandableTimer; } }
-    public float WallJumpInitVelX { get { return wallJumpInitVelX; } }
-    public float WallJumpMaxSpeedX { get { return wallJumpMaxSpeedX; } }
-    public float WallJumpSmoothTimeX { get { return wallJumpSmoothTimeX; } }
-    public float WallJumpInitVelY { get { return wallJumpInitVelY; } }
-    public float WallJumpMinSpeedY { get { return wallJumpMinSpeedY; } }
-    public float WallJumpInitGravity { get { return wallJumpInitGravity; } }
-    public float WallJumpMaxGravity { get { return wallJumpMaxGravity; } }
-    public float WallJumpGravityIncRate { get { return wallJumpGravityIncRate; } }
-    public float WallJumpCancelYVelMultiplier { get { return wallJumpCancelYVelMultiplier; } }
+    public float WallJumpLandableTimer => wallJumpLandableTimer;
+    public float WallJumpInitVelX => wallJumpInitVelX;
+    public float WallJumpMaxSpeedX => wallJumpMaxSpeedX;
+    public float WallJumpSmoothTimeX => wallJumpSmoothTimeX;
+    public float WallJumpInitVelY => wallJumpInitVelY;
+    public float WallJumpMinSpeedY => wallJumpMinSpeedY;
+    public float WallJumpInitGravity => wallJumpInitGravity;
+    public float WallJumpMaxGravity => wallJumpMaxGravity;
+    public float WallJumpGravityIncRate => wallJumpGravityIncRate;
+    public float WallJumpCancelYVelMultiplier => wallJumpCancelYVelMultiplier;
 
     // Dash
-    public float DashSpeedX { get { return dashSpeedX; } }
-    public float DashTime { get { return dashTime; } }
+    public float DashSpeedX => dashSpeedX;
+    public float DashTime => dashTime;
 
     // Wire Swing
-    public float WireSwingBounceDecayMultiplier { get { return wireSwingBounceDecayMultiplier; } }
-    public float WireSwingDecayMultiplier { get { return wireSwingDecayMultiplier; } }
-    public float WireSwingNaturalAccelMultiplier { get { return wireSwingNaturalAccelMultiplier; } }
-    public float WireSwingManualAccelMultiplier { get { return wireSwingManualAccelMultiplier; } }
-    public float WireSwingAngularVelOfDash { get { return wireSwingAngularVelOfDash; } }
-    public float WireSwingReferenceWireLength { get { return wireSwingReferenceWireLength; } }
+    public float WireSwingBounceDecayMultiplier => wireSwingBounceDecayMultiplier;
+    public float WireSwingDecayMultiplier => wireSwingDecayMultiplier;
+    public float WireSwingNaturalAccelMultiplier => wireSwingNaturalAccelMultiplier;
+    public float WireSwingManualAccelMultiplier => wireSwingManualAccelMultiplier;
+    public float WireSwingAngularVelOfDash => wireSwingAngularVelOfDash;
+    public float WireSwingReferenceWireLength => wireSwingReferenceWireLength;
 
     // Wire Swing Release
-    public float WsrGravity { get { return wsrGravity; } }
-    public float WsrMaxSpeedX { get { return wsrMaxSpeedX; } }
-    public float WsrSmoothTimeX { get { return wsrSmoothTimeX; } }
-    public float WsrMinSpeedY { get { return wsrMinSpeedY; } }
+    public float WsrGravity => wsrGravity;
+    public float WsrMaxSpeedX => wsrMaxSpeedX;
+    public float WsrSmoothTimeX => wsrSmoothTimeX;
+    public float WsrMinSpeedY => wsrMinSpeedY;
 
     // Wire General
-    public float WireGeneralMaxDistance { get { return wireGeneralMaxDistance; } }
+    public float WireGeneralMaxDistance => wireGeneralMaxDistance;
 
     // Knockback
-    public float KnockbackVertVel { get { return knockbackVertVel; } }
-    public float AbsKnockbackHorizVel { get { return absKnockbackHorizVel; } }
-    public float KnockbackGravity { get { return knockbackGravity; } }
-    public float KnockbackGravityHorizOnRecovery { get { return knockbackGravityHorizOnRecovery; } }
+    public float KnockbackVertVel => knockbackVertVel;
+    public float AbsKnockbackHorizVel => absKnockbackHorizVel;
+    public float KnockbackGravity => knockbackGravity;
+    public float KnockbackGravityHorizOnRecovery => knockbackGravityHorizOnRecovery;
+
+    // platform stuff
+
+    public bool IsOnPlatform => isOnPlatform;
+    public Rigidbody2D PlatromRb => platromRb;
 }
