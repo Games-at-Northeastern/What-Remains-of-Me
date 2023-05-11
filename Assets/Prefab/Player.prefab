@@ -200,7 +200,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 565412307
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 184f56740c188f74194e907aebb17c55, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -510,6 +510,7 @@ GameObject:
   - component: {fileID: 6860228394538578389}
   - component: {fileID: 1911170117102511828}
   - component: {fileID: 6860228394538578388}
+  - component: {fileID: 2484244879771645305}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -577,6 +578,25 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!232 &2484244879771645305
+DistanceJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860228394538578391}
+  m_Enabled: 0
+  serializedVersion: 4
+  m_EnableCollision: 1
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 0
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_AutoConfigureDistance: 0
+  m_Distance: 10
+  m_MaxDistanceOnly: 1
 --- !u!1 &6860228394645248743
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,7 +845,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 565412307
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: f31f90459b152b94a9cac44fbb2f977b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1027,7 +1047,7 @@ LineRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 565412307
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: -1
   m_Positions:
   - {x: 0, y: 0, z: 0}
@@ -1440,7 +1460,7 @@ MonoBehaviour:
   _plugMovementSettings: {fileID: 7803416329712722703}
   _movementExecuter: {fileID: 7803416330162132462}
   _lineRenderer: {fileID: 7803416329464112781}
-  _distanceJoint: {fileID: 7803416329777425273}
+  _distanceJoint: {fileID: 2484244879771645305}
   reticle: {fileID: 2476191629135710749}
   onConnect:
     m_PersistentCalls:
