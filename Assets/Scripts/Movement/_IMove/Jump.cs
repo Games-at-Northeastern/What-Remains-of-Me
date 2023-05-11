@@ -37,16 +37,16 @@ public class Jump : AMove
         };
         PH.OnDamageTaken.AddListener(() => damageInput = true);
 
-        /*if (WT.ConnectedOutlet != null)
+        if (WT.ConnectedOutlet != null)
         {
-
-            // Temporarily set the max wire distance as the current distance from the connected outlet
+            // Temporarily set the max wire length as the current distance from the connected outlet
+            // This prevents the wire from 'stretching' during a jump
             Vector2 origPos = MI.transform.position;
             Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
             float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
 
-            WT.SetMaxWireLength(Mathf.Min(newDistFromOutlet));
-        }*/
+            WT.SetMaxWireLength(Mathf.Min(newDistFromOutlet, MS.WireGeneralMaxDistance));
+        }
     }
 
     public Jump() : this(0)
@@ -153,17 +153,20 @@ public class Jump : AMove
 
         if (MI.GroundDetector.isColliding() && jumpBufferCounter > 0 && jumpBufferCounter < MS.JumpBuffer)
         {
+            WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
             return new Jump(xVel);
         }
 
         if (timePassed > MS.JumpLandableTimer && MI.GroundDetector.isColliding() &&
             Mathf.Abs(xVel) < MS.RunToIdleSpeed)
         {
+            WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
             return new Idle();
         }
 
         if (MI.GroundDetector.isColliding() && timePassed > MS.JumpLandableTimer )
         {
+            WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
             return new Run(xVel);
         }
 
