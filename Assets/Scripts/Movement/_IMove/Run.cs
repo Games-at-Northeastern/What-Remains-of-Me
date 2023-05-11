@@ -57,11 +57,17 @@ public class Run : AMove
                 Vector2 origPos = MI.transform.position;
                 Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
                 float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
-                if (newDistFromOutlet < currDistFromOutlet)
-                {
-                    WT.SetMaxWireLength(newDistFromOutlet);
-                }
-                currDistFromOutlet = newDistFromOutlet;
+
+
+                Debug.Log(WT.WireAtMaxLength());
+
+            // The code doesn't let the wire 'stretch' to the default max length, should check with
+            // design team on the ideal wire movement while grounded
+            /*if (newDistFromOutlet < currDistFromOutlet)
+            {
+                WT.SetMaxWireLength(newDistFromOutlet);
+            }*/
+            currDistFromOutlet = newDistFromOutlet;
             }
 
             // ready the player for another jump once space has been released

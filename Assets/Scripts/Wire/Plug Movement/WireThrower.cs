@@ -418,6 +418,13 @@ public class WireThrower : MonoBehaviour
         _distanceJoint.distance = amount;
     }
 
+
+    public bool WireAtMaxLength()
+    {
+        float currentLength = Vector2.Distance(_distanceJoint.connectedAnchor, _distanceJoint.transform.position);
+        return currentLength >= (_distanceJoint.distance - 0.02);
+    }
+
     /// <summary>
     /// Determines whether or not the Wire for this WireThrower exits.
     /// </summary>

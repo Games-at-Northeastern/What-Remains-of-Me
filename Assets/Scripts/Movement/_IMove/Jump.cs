@@ -36,6 +36,17 @@ public class Jump : AMove
             if (WT.ConnectedOutlet != null) { swingInput = true; }
         };
         PH.OnDamageTaken.AddListener(() => damageInput = true);
+
+        /*if (WT.ConnectedOutlet != null)
+        {
+
+            // Temporarily set the max wire distance as the current distance from the connected outlet
+            Vector2 origPos = MI.transform.position;
+            Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
+            float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
+
+            WT.SetMaxWireLength(Mathf.Min(newDistFromOutlet));
+        }*/
     }
 
     public Jump() : this(0)
@@ -66,6 +77,12 @@ public class Jump : AMove
         if (yVel < MS.JumpMinSpeedY)
         {
             yVel = MS.JumpMinSpeedY;
+        }
+
+        // Once the player starts moving downwards, go into a swing instead if applicable
+        if (yVel < 0 && WT.ConnectedOutlet != null)
+        {
+            swingInput = true;
         }
 
         // Cancellation
@@ -117,7 +134,8 @@ public class Jump : AMove
             return new Knockback();
         }
 
-        if (connectedInput || swingInput)
+        // TODO : If we have the connected outlet != null check here, do we need the other bools in the check?
+        if (connectedInput || swingInput)// || WT.WireAtMaxLength())//|| WT.ConnectedOutlet != null)
         {
             return new WireSwing(xVel, yVel);
         }

@@ -34,10 +34,13 @@ public class Idle : AMove
             Vector2 origPos = MI.transform.position;
             Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
             float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
-            if (newDistFromOutlet < currDistFromOutlet)
+
+            // The code doesn't let the wire 'stretch' to the default max length, should check with
+            // design team on the ideal wire movement while grounded
+            /*if (newDistFromOutlet < currDistFromOutlet)
             {
                 WT.SetMaxWireLength(newDistFromOutlet);
-            }
+            }*/
             currDistFromOutlet = newDistFromOutlet;
         }
 
