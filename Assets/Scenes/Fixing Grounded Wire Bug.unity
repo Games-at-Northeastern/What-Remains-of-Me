@@ -1918,10 +1918,18 @@ PrefabInstance:
       propertyPath: collidesWithTriggers
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7803416330154974931, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7803416330169813700, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 149494354}
+    - target: {fileID: 7803416330169813700, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: _distanceJoint
+      value: 
+      objectReference: {fileID: 1815631382}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
 --- !u!1001 &139513548
@@ -6295,6 +6303,25 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6860228394538578391, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
   m_PrefabInstance: {fileID: 120631419}
   m_PrefabAsset: {fileID: 0}
+--- !u!232 &1815631382
+DistanceJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815631379}
+  m_Enabled: 0
+  serializedVersion: 4
+  m_EnableCollision: 1
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 0
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_AutoConfigureDistance: 0
+  m_Distance: 10
+  m_MaxDistanceOnly: 1
 --- !u!1001 &1855886848
 PrefabInstance:
   m_ObjectHideFlags: 0

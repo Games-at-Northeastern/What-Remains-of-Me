@@ -59,8 +59,6 @@ public class Run : AMove
                 float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
 
 
-                Debug.Log(WT.WireAtMaxLength());
-
             // The code doesn't let the wire 'stretch' to the default max length, should check with
             // design team on the ideal wire movement while grounded
             /*if (newDistFromOutlet < currDistFromOutlet)

@@ -113,7 +113,7 @@ public class WireSwing : AMove
         }
         if (MI.GroundDetector.isColliding())
         {
-            // WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
+            WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
             return new Run(vel.x);
         }
         if (disconnected)

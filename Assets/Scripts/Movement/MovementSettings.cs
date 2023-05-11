@@ -28,6 +28,7 @@ public class MovementSettings : ScriptableObject
     [SerializeField] private float jumpCancelYVelMultiplier;
     [SerializeField] private float coyoteTime;
     [SerializeField] private float jumpBuffer;
+    [SerializeField] private float jumpToSwingMinYVel;
 
     [Header("Fall")]
     [SerializeField] private float fallGravity;
@@ -99,6 +100,11 @@ public class MovementSettings : ScriptableObject
     public float JumpCancelYVelMultiplier => jumpCancelYVelMultiplier;
     public float CoyoteTime => coyoteTime;
     public float JumpBuffer => jumpBuffer;
+    /// <summary>
+    /// When a player begins a jump already connected to an outlet,
+    /// set the minimum vertical falling velocity for when a wire swing should begin
+    /// </summary>
+    public float JumpToSwingMinYVel => jumpToSwingMinYVel;
 
     // Fall
     public float FallGravity => fallGravity;

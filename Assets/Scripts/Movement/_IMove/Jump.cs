@@ -79,8 +79,8 @@ public class Jump : AMove
             yVel = MS.JumpMinSpeedY;
         }
 
-        // Once the player starts moving downwards, go into a swing instead if applicable
-        if (yVel < 0 && WT.ConnectedOutlet != null)
+        // Once the player starts moving downwards, go into a swing instead if already connected to an outlet
+        if (yVel < MS.JumpToSwingMinVel && WT.ConnectedOutlet != null)
         {
             swingInput = true;
         }
