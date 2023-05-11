@@ -80,7 +80,7 @@ public class Jump : AMove
         }
 
         // Once the player starts moving downwards, go into a swing instead if already connected to an outlet
-        if (yVel < MS.JumpToSwingMinVel && WT.ConnectedOutlet != null)
+        if (yVel < MS.JumpToSwingMinYVel && WT.ConnectedOutlet != null)
         {
             swingInput = true;
         }
