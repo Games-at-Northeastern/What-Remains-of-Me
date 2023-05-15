@@ -41,10 +41,6 @@ public class WireThrower : MonoBehaviour
 
     private void Awake()
     {
-
-
-
-
         // Add left click handling functionality
         _controlSchemes = new ControlSchemes();
         _controlSchemes.Enable();
@@ -57,6 +53,19 @@ public class WireThrower : MonoBehaviour
         ConnectedOutlet = null;
         _framesHeld = 0;
         reticle.GetComponent<Renderer>().enabled = false;
+    }
+
+    private void Start()
+    {
+        RegisterEvents();
+    }
+
+    /// <summary>
+    /// Register this as a listener to any necessary events
+    /// </summary>
+    private void RegisterEvents()
+    {
+        LevelManager.Instance.OnPlayerReset.AddListener(DespawnWire);
     }
 
     private void OnDestroy()
@@ -425,5 +434,14 @@ public class WireThrower : MonoBehaviour
     public bool WireExists()
     {
         return _lineRenderer.enabled;
+    }
+
+    /// <summary>
+    /// Disconnects and immediately destroys the plug
+    /// </summary>
+    private void DespawnWire()
+    {
+        HandlePotentialDisconnect();
+        DestroyPlug();
     }
 }

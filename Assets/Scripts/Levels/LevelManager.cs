@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
+
 
 
 /// <summary>
@@ -15,6 +17,13 @@ public class LevelManager : MonoBehaviour
     private int toWarpID;
     private bool loadedNewScene = false;
     private GameObject playerRef;
+
+    // Level events
+    [Header("Event to trigger player respawn after obstacle collision. Requires a respawn position.")]
+    public UnityEvent OnPlayerReset;
+
+    // Event start functions that are accessible for other objects to trigger events
+    public void PlayerReset() => OnPlayerReset?.Invoke();
 
     // Singleton
     public static LevelManager Instance { get; private set; }

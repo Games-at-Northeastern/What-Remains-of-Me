@@ -15,6 +15,7 @@ public class MovementExecuter : MonoBehaviour
     [SerializeField] private PlayerHealth ph; // Gives info about player health / damage
     private IMove currentMove; // The move taking place this frame
     private Vector3 respawnPosition;
+
     public bool isOnAPlatform;
     public Rigidbody2D platformRb;
 
@@ -27,6 +28,19 @@ public class MovementExecuter : MonoBehaviour
         currentMove = new StarterMove(mi, ms, cs, wt, ph);
         respawnPosition = transform.position;
 
+    }
+
+    private void Start()
+    {
+        RegisterEvents();
+    }
+
+    /// <summary>
+    /// Register this executor as a listener to any necessary events.
+    /// </summary>
+    private void RegisterEvents()
+    {
+        LevelManager.Instance.OnPlayerReset.AddListener(Respawn);
     }
 
     /// <summary>
@@ -72,6 +86,17 @@ public class MovementExecuter : MonoBehaviour
     private void Restart()
     {
         transform.position = respawnPosition;
+        currentMove = new Fall();
+    }
+
+    /// <summary>
+    /// Respawns the player at a given location.
+    /// </summary>
+    private void Respawn()
+    {
+        // TODO : handle respawn location here
+        // rb.position = respawnPoint
+        rb.velocity = Vector2.zero;
         currentMove = new Fall();
     }
 
