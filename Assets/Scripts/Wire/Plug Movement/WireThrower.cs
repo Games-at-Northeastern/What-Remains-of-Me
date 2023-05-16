@@ -18,7 +18,7 @@ public class WireThrower : MonoBehaviour
     public float aimDistance;
 
     // Non-accessible fields
-    [SerializeField] Camera mainCamera;
+    private Camera mainCamera;
     [SerializeField] GameObject plugPrefab;
     [SerializeField] float timeScaleForAim;
     private GameObject _activePlug;
@@ -53,6 +53,7 @@ public class WireThrower : MonoBehaviour
         ConnectedOutlet = null;
         _framesHeld = 0;
         reticle.GetComponent<Renderer>().enabled = false;
+        mainCamera = Camera.main;
     }
 
     private void Start()

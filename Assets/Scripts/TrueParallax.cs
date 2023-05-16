@@ -9,7 +9,7 @@ public class TrueParallax : MonoBehaviour
 {
 
     private float lengthX, lengthY, startpos, startpos2;
-    [SerializeField] private GameObject cam;
+    private GameObject cam;
     [SerializeField] private float parallaxEffectX;
     [SerializeField] private bool enableVerticleParallax = false;
     [SerializeField] private float parallaxEffectY = .05f;
@@ -31,6 +31,7 @@ public class TrueParallax : MonoBehaviour
         {
             spriteRenderer.size = new Vector2(spriteRenderer.size.x * 3, spriteRenderer.size.y);
         }
+        cam = Camera.main.gameObject;
 
     }
 
