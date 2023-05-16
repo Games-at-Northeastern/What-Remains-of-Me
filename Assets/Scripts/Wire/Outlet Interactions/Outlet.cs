@@ -8,7 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Outlet : MonoBehaviour
 {
-    private SoundController soundController;
+    //private SoundController soundController;
+    [SerializeField] private SoundArray OutletSounds;
 
     [Header("SFX")]
     public AudioSource src;
@@ -32,7 +33,7 @@ public class Outlet : MonoBehaviour
         CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); } };
         CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); } };
 
-        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+        //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
     }
 
     /// <summary>
@@ -41,7 +42,8 @@ public class Outlet : MonoBehaviour
     public void Connect()
     {
         CS.Enable();
-        soundController.PlaySound("Plug_In");
+        src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
+        //soundController.PlaySound("Plug_In");
     }
 
     /// <summary>

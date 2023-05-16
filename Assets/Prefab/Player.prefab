@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2282522661473750811}
   - component: {fileID: 1065947360339903343}
   m_Layer: 7
-  m_Name: Sound
+  m_Name: PlayerAudioSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -752,7 +752,7 @@ GameObject:
   - component: {fileID: 7803416329029818617}
   - component: {fileID: 7803416329029818616}
   - component: {fileID: 7803416329029818619}
-  - component: {fileID: 2102413086}
+  - component: {fileID: 5413613009249639619}
   m_Layer: 7
   m_Name: PlayerGraphics
   m_TagString: Untagged
@@ -878,7 +878,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &2102413086
+--- !u!114 &5413613009249639619
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -890,7 +890,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326b23119f03c4f4f89803f2ad16c3f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundController: {fileID: 0}
+  _playerSounds: {fileID: 11400000, guid: 1a58408fb5a4dc94685578494c771d77, type: 2}
+  _playerAudioSource: {fileID: 1065947360339903343}
 --- !u!1 &7803416329056728452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,7 +1381,6 @@ MonoBehaviour:
   src: {fileID: 1065947360339903343}
   shootWire: {fileID: 8300000, guid: 032270fced469634b93f4e8e709a2421, type: 3}
   aimDistance: 0
-  mainCamera: {fileID: 0}
   plugPrefab: {fileID: 4615177501490907055, guid: a647468d1f59f4cadb7ddfc0f20951b3, type: 3}
   timeScaleForAim: 0.3
   _plugMovementSettings: {fileID: 7803416329712722703}
