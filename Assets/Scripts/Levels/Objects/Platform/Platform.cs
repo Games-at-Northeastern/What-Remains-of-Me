@@ -79,6 +79,7 @@ namespace Levels.Objects.Platform
         public void Deactivate()
         {
             _shouldMove = false;
+            rb.velocity = Vector2.zero;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
