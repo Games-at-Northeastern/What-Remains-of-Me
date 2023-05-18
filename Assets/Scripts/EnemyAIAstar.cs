@@ -4,30 +4,47 @@ using UnityEngine;
 public class EnemyAIAstar : MonoBehaviour
 {
 
+    // ADAPTED FROM THIS YT VID: https://www.youtube.com/watch?v=sWqRfygpl4I
+    [Header("Pathfinding")]
     public Transform target;
+    public float activateDistance = 50f;
+    public float updatePathPerSecondSpeed = 0.5f;
+
+    [Header("Physics")]
     public float walkSpeed = 2f;
     public float nextWaypointDistance = 3f;
+    public float minimimumHeightForJump = 0.8f;
+    public float jumpForce = 0.3f;
+    public float jumpColliderOffset = 0.1f;
 
-    Path path;
-    int currentWaypoint = 0;
+    // add behavior modifiers as necessary for enemy ai navigation
+    [Header("Custom Enemy Behavior Modifiers")]
+    public bool followEnabled = true;
+    public bool jumpEnabled = true;
+    public bool lookAtEnabled = true;
+
+    // private variables
+    private Path path;
+    private int currentWaypoint = 0;
+    bool isGrounded = false;
     bool reachedEndOfPath = false;
-
     Seeker seeker;
     Rigidbody2D rb;
 
     private void Start()
     {
+        // get seeker script and rigidbody from enemy object
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
 
-        InvokeRepeating("UpdatePath", 0, .5f);
+        InvokeRepeating("UpdatePath", 0, updatePathPerSecondSpeed);
     }
 
     private void UpdatePath()
     {
-        if (seeker.IsDone())
+        if (followEnabled && TargetInDistance() && seeker.IsDone())
         {
-            seeker.StartPath(transform.position, target.position, OnPathComplete);
+            seeker.StartPath(rb.position, target.position, OnPathComplete);
         }
     }
 
@@ -42,7 +59,10 @@ public class EnemyAIAstar : MonoBehaviour
 
     private void FixedUpdate()
     {
-        MoveTowardsPlayer();
+        if (TargetInDistance() && followEnabled)
+        {
+            MoveTowardsPlayer();
+        }
     }
 
 
@@ -71,26 +91,52 @@ public class EnemyAIAstar : MonoBehaviour
             return;
         }
 
-        //pathfinding output direction.
-        Vector2 direction = ((Vector2)(path.vectorPath[currentWaypoint] - transform.position)).normalized;
 
-        //Determining VELOCITY:
-        bool isGrounded = Physics2D.OverlapCircle(transform.position - (Vector3.up * .3f), .1f);
-        bool shouldJump = Vector2.Dot(direction, Vector2.up) > .5f && isGrounded;
-        float yVel = shouldJump ? 5f : rb.velocity.y;
+        // checking if enemy is grounded 
+        isGrounded = Physics2D.Raycast(transform.position, Vector3.up, GetComponent<Collider2D>().bounds.extents.y + jumpColliderOffset);
 
-        Vector2 velocity = direction * walkSpeed;
-        //velocity.y = yVel;
-        //print("velocity.y: " + velocity.y);
+        Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
+        Vector2 moveForce = direction * walkSpeed * Time.deltaTime;
 
-        rb.velocity = velocity;
+        // Jump
+        if (jumpEnabled && isGrounded)
+        {
+            if (direction.y > minimimumHeightForJump)
+            {
+                rb.AddForce(Vector2.up * walkSpeed * jumpForce);
+            }
+        }
 
-        //incrementing next waypoint.
-        float distance = Vector2.Distance(transform.position, path.vectorPath[currentWaypoint]);
+        // Movement
+        rb.AddForce(moveForce);
+
+        // move to next waypoint
+        float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
         if (distance < nextWaypointDistance)
         {
             currentWaypoint++;
         }
+
+        // flip sprite
+        if (lookAtEnabled)
+        {
+            if (rb.velocity.x > 0.05f)
+            {
+                transform.localScale = new Vector3(-1f * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            }
+            else if (rb.velocity.x < -0.05f)
+            {
+                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            }
+        }
+
+             
+       
+    }
+
+    private bool TargetInDistance()
+    {
+        return Vector2.Distance(transform.position, target.transform.position) < activateDistance;
     }
 
 }
