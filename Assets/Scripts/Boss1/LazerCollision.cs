@@ -6,7 +6,11 @@ public class LazerCollision : MonoBehaviour
 {
 
     public PlayerInfo player;
+
+    // Energy transfer per second
     public int energyAmount;
+
+    // Virus transfer per second
     public int virusAmount;
 
 

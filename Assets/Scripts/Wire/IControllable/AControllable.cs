@@ -64,6 +64,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void LoseEnergy(float amount)
     {
+        // TODO : this would conceivably become only the last line of this - the rest would be handled in the gain?
         if (amount <= 0 || energy <= 0 || playerInfo.batteryPercentage.Value >= 1f)
         {
             return;
@@ -71,7 +72,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
 
         // Can only provide what the player can take
         float remainingEmptyBatteryAmount = playerInfo.maxBattery - playerInfo.battery;
-        amount = Mathf.Min(remainingEmptyBatteryAmount, amount);
+        amount = Mathf.Min(remainingEmptyBatteryAmount, amount); // TODO : this would be returned as the 'actual' amount
 
         playerInfo.battery += amount;
 
