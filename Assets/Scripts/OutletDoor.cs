@@ -39,6 +39,7 @@ public class OutletDoor : AControllable
         {
             _doorCollider.enabled = true;
             _doorSpriteRenderer.sprite = _closedDoorSprite;
+            
         }
     }
 }
