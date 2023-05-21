@@ -7,14 +7,14 @@ public class EnemyAIAstar : MonoBehaviour
     // ADAPTED FROM THIS YT VID: https://www.youtube.com/watch?v=sWqRfygpl4I
     [Header("Pathfinding")]
     public Transform target;
-    public float activateDistance = 50f;
+    public float activateDistance = 10f;
     public float updatePathPerSecondSpeed = 0.5f;
 
     [Header("Physics")]
-    public float walkSpeed = 2f;
+    public float walkSpeed = 50f;
     public float nextWaypointDistance = 3f;
-    public float minimimumHeightForJump = 0.8f;
-    public float jumpForce = 0.3f;
+    public float minimimumHeightForJump = 5f;
+    public float jumpForce = 40f;
     public float jumpColliderOffset = 0.1f;
 
     // add behavior modifiers as necessary for enemy ai navigation
