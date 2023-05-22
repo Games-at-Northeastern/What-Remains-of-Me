@@ -1,17 +1,23 @@
 using Pathfinding;
 using UnityEngine;
 
+
 public class EnemyAIAstar : MonoBehaviour
 {
+    // ADAPTED FROM THIS YT VID: https://www.youtube.com/watch?v=sWqRfygpl4I&ab_channel=Etredal
 
-    // ADAPTED FROM THIS YT VID: https://www.youtube.com/watch?v=sWqRfygpl4I
     [Header("Pathfinding")]
+    // object enemey is following (should be player)
     public Transform target;
+    // enemy will detect target within this distance
     public float activateDistance = 10f;
+    // how often A* pathfinding algorithm is updated (in seconds)
     public float updatePathPerSecondSpeed = 0.5f;
 
     [Header("Physics")]
+    // how fast enemy moves
     public float walkSpeed = 50f;
+
     public float nextWaypointDistance = 3f;
     public float minimimumHeightForJump = 5f;
     public float jumpForce = 40f;
