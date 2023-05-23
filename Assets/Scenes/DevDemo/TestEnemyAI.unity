@@ -2248,16 +2248,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1335629201}
-  activateDistance: 10
+  activateDistance: 100
   updatePathPerSecondSpeed: 0.5
-  walkSpeed: 100
+  walkSpeed: 300
   nextWaypointDistance: 10
-  minimimumHeightForJump: 1
-  jumpForce: 10
+  minimimumHeightForJump: 0.5
+  jumpForce: 1.2
   jumpColliderOffset: 0.5
   followEnabled: 1
   jumpEnabled: 1
   lookAtEnabled: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!50 &225613037
 Rigidbody2D:
   serializedVersion: 4
@@ -5850,7 +5853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 0
+      value: 3.455
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
