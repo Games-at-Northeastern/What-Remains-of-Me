@@ -30,6 +30,55 @@ public class PlayerHealth : MonoBehaviour
         playerInfo.ResetMaxBattery();
     }
 
+    private void Update()
+    {
+        // TODO : This should really be done with listeners/events - ideally, this would actually be
+        // replaced with an AControllable component, but that would require some rework of the AControllable class
+        // to not directly reference the PlayerInfo
+
+        // check if player has reached maximum virus amount (with a bit of float forgiveness)
+        if (playerInfo.virus >= playerInfo.maxVirus - 0.01)
+        {
+            VirusFullDeath();
+        }
+        else if (playerInfo.battery <= 0.01)
+        {
+            EnergyDepletedDeath();
+        }
+    }
+
+    // TODO : Should there be some kind of scene resetting that is triggered by this? I.e. platforms, enemies, etc.?
+
+    /// <summary>
+    /// Represents any necessary steps to handle the player death when they hold their max Virus amount.
+    /// </summary>
+    private void VirusFullDeath()
+    {
+        Debug.Log("Death from virus full");
+        // LevelManager.Instance.PlayerDeath(); // TODO : Uncomment this once energy start levels are fixed in scenes
+    }
+
+    /// <summary>
+    /// Represents any necessary steps to handle the player death when their battery level reaches 0 from depletion.
+    /// </summary>
+    private void EnergyDepletedDeath()
+    {
+        Debug.Log("Death from energy depleted");
+        LevelManager.Instance.PlayerDeath();
+    }
+
+    /// <summary>
+    /// Represents any necessary steps to handle the player death when their battery level reaches 0 from taking damage.
+    /// </summary>
+    private void EnergyDamageDeath()
+    {
+        Debug.Log("Death from energy empty upon damage");
+
+    }
+
+
+    // -------------- Are these being used? Don't think so --------------
+
     /*
      * deducts the amount of energy given up until 0 for energy transmission use
      * and kills the player if the battery is 0.

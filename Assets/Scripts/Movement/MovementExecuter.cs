@@ -19,6 +19,8 @@ public class MovementExecuter : MonoBehaviour
     public bool isOnAPlatform;
     public Rigidbody2D platformRb;
 
+    private CheckpointManager checkpointManager;
+
     // Initialization
     private void Awake()
     {
@@ -33,6 +35,7 @@ public class MovementExecuter : MonoBehaviour
     private void Start()
     {
         RegisterEvents();
+        checkpointManager = FindObjectOfType<CheckpointManager>();
     }
 
     /// <summary>
@@ -41,6 +44,7 @@ public class MovementExecuter : MonoBehaviour
     private void RegisterEvents()
     {
         LevelManager.Instance.OnPlayerReset.AddListener(Respawn);
+        LevelManager.Instance.OnPlayerDeath.AddListener(Restart);
     }
 
     /// <summary>
@@ -85,7 +89,13 @@ public class MovementExecuter : MonoBehaviour
     /// </summary>
     private void Restart()
     {
-        transform.position = respawnPosition;
+        if (checkpointManager != null)
+        {
+            checkpointManager.RespawnAtBeginning(rb.transform);
+        } else
+        {
+            transform.position = respawnPosition;
+        }
         currentMove = new Fall();
     }
 
@@ -94,8 +104,11 @@ public class MovementExecuter : MonoBehaviour
     /// </summary>
     private void Respawn()
     {
-        // TODO : handle respawn location here
-        // rb.position = respawnPoint
+        if (checkpointManager != null)
+        {
+            checkpointManager.RespawnAtRecent(rb.transform);
+        }
+
         rb.velocity = Vector2.zero;
         currentMove = new Fall();
     }
