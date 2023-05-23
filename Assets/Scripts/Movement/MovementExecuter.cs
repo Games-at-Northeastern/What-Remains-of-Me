@@ -94,7 +94,7 @@ public class MovementExecuter : MonoBehaviour
             checkpointManager.RespawnAtBeginning(rb.transform);
         } else
         {
-            transform.position = respawnPosition;
+            rb.position = respawnPosition;
         }
         currentMove = new Fall();
     }
