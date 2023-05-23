@@ -22,8 +22,13 @@ public class SpikeTeleport : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            // TODO : this should eventually be handled by a checkpoint system and within MovementExecuter
-            other.gameObject.transform.position = teleportLocation.position;
+            // TODO: Remove this once CheckpointManagers have been placed in every scene. Until then,
+            // keep this check to make sure no current scenes break
+            if (FindObjectOfType<CheckpointManager>() == null)
+            {
+                other.gameObject.transform.position = teleportLocation.position;
+            }
+
             LevelManager.Instance.PlayerReset();
             InkDialogueVariables.deathCount++;
 

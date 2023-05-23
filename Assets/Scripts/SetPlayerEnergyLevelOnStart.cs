@@ -17,11 +17,18 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
 
     void Start()
     {
-        playerBatterySO.Value = PlayerEnergyStartingValue;
-        playerVirusSO.Value = PlayerVirusStartingValue;
+        ResetHealth();
 
+        // Register the reset health event to occur when the player dies
+        LevelManager.Instance.OnPlayerDeath.AddListener(ResetHealth);
     }
 
-
-
+    /// <summary>
+    /// Resets the player health to the original starting value
+    /// </summary>
+    void ResetHealth()
+    {
+        playerBatterySO.Value = PlayerEnergyStartingValue;
+        playerVirusSO.Value = PlayerVirusStartingValue;
+    }
 }

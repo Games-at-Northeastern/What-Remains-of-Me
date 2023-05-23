@@ -67,6 +67,7 @@ public class WireThrower : MonoBehaviour
     private void RegisterEvents()
     {
         LevelManager.Instance.OnPlayerReset.AddListener(DespawnWire);
+        LevelManager.Instance.OnPlayerDeath.AddListener(DespawnWire);
     }
 
     private void OnDestroy()

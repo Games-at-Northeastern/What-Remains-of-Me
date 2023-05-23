@@ -19,11 +19,14 @@ public class LevelManager : MonoBehaviour
     private GameObject playerRef;
 
     // Level events
-    [Header("Event to trigger player respawn after obstacle collision. Requires a respawn position.")]
+    [Header("Event to trigger player respawn after obstacle collision.")]
     public UnityEvent OnPlayerReset;
+    [Header("Event to trigger player death events.")]
+    public UnityEvent OnPlayerDeath;
 
     // Event start functions that are accessible for other objects to trigger events
     public void PlayerReset() => OnPlayerReset?.Invoke();
+    public void PlayerDeath() => OnPlayerDeath?.Invoke(); // TODO: We may want to take in a type of death for this function
 
     // Singleton
     public static LevelManager Instance { get; private set; }
