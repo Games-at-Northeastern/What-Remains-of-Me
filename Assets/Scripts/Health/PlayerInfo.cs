@@ -22,7 +22,7 @@ public class PlayerInfo : ScriptableObject
     public float battery
     {
         get => batteryPercentage.Value * maxBattery;
-        set => batteryPercentage.Value = value / maxBattery;
+        set => batteryPercentage.Value = value / maxBattery; // TODO : add a 'battery changed' event that is invoked here
     }
 
     private float _maxBattery;
@@ -35,11 +35,12 @@ public class PlayerInfo : ScriptableObject
             _maxBattery = value;
         }
     }
+
     [HideInInspector] public IReactiveProperty<float> virusPercentage;
     public float virus
     {
         get => virusPercentage.Value * maxVirus;
-        set => virusPercentage.Value = (value / maxVirus);
+        set => virusPercentage.Value = (value / maxVirus); // TODO : add a 'virus changed' event that is invoked here
     }
     public float maxVirus;
     [SerializeField] private float initialMaxBattery;

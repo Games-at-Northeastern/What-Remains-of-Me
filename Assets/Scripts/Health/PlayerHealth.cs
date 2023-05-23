@@ -42,25 +42,34 @@ public class PlayerHealth : MonoBehaviour
         {
             VirusFullDeath();
         }
-        else if (playerInfo.battery <= playerInfo.maxBattery - 0.01)
+        else if (playerInfo.battery <= 0.01)
         {
             EnergyDepletedDeath();
         }
     }
 
-    // TODO : Docs for these
+    /// <summary>
+    /// Represents any necessary steps to handle the player death when they hold their max Virus amount.
+    /// </summary>
     private void VirusFullDeath()
     {
         Debug.Log("Death from virus full");
     }
 
+    /// <summary>
+    /// Represents any necessary steps to handle the player death when their battery level reaches 0 from depletion.
+    /// </summary>
     private void EnergyDepletedDeath()
     {
-        Debug.Log("Death from energy empty");
+        Debug.Log("Death from energy depleted");
     }
 
+    /// <summary>
+    /// Represents any necessary steps to handle the player death when their battery level reaches 0 from taking damage.
+    /// </summary>
     private void EnergyDamageDeath()
     {
+        Debug.Log("Death from energy empty upon damage");
 
     }
 
