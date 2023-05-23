@@ -140,7 +140,7 @@ public class EnemyAIAstar : MonoBehaviour
 
         // direction calculation
         Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
-        //Vector2 moveForce = direction * walkSpeed * Time.deltaTime;
+        Vector2 moveForce = direction * walkSpeed * Time.deltaTime;
 
         // Jump
         if (jumpEnabled && isGrounded)
@@ -152,7 +152,11 @@ public class EnemyAIAstar : MonoBehaviour
         }
 
         // Movement
-        rb.AddForce(Vector2.right * direction, ForceMode2D.Impulse);
+        if (!isGrounded)
+        {
+            moveForce.y = 0;
+        }
+        rb.AddForce(moveForce, ForceMode2D.Force);
 
         if (rb.velocity.x > walkSpeed)
         {
