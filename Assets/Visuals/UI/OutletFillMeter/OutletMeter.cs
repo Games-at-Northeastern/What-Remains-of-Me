@@ -15,7 +15,7 @@ public class OutletMeter : MonoBehaviour
     public int Virus;
 
     [Range(0, 16)]
-    public int Charge;
+    public int Clean;
 
     /*public Animation healthBarAnimation;
     public string animationClipName = "HealthBarAnimation";
@@ -52,11 +52,11 @@ public class OutletMeter : MonoBehaviour
 
     [SerializeField] private Sprite[] limiterSprites;
     [SerializeField] private Sprite[] virusSprites;
-    [SerializeField] private Sprite[] chargeSprites;
+    [SerializeField] private Sprite[] cleanSprites;
 
     [SerializeField] private SpriteRenderer limiterMeter;
     [SerializeField] private SpriteRenderer virusMeter;
-    [SerializeField] private SpriteRenderer chargeMeter;
+    [SerializeField] private SpriteRenderer cleanMeter;
 
     private void Awake()
     {
@@ -82,6 +82,6 @@ public class OutletMeter : MonoBehaviour
     {
         limiterMeter.sprite = limiterSprites[Limiter];
         virusMeter.sprite = virusSprites[Virus];
-        chargeMeter.sprite = chargeSprites[Charge];
+        cleanMeter.sprite = cleanSprites[Mathf.Min(Clean + Virus, 16)];
     }
 }
