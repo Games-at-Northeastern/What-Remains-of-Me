@@ -4,51 +4,23 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// This script handles the visuals of the energy level contained within an outlet.
+///
+/// To assign new a new sprite sheet to this visual, go to the inspector and select each sprite in the sliced spritesheet,
+/// then drag the selection into the serialized array in the inspector.
+/// </summary>
 public class OutletMeter : MonoBehaviour
 {
     
-    [Range(0, 9)]
-    public int Limiter;
-
-    
-    [Range(0, 16)]
-    public int Virus;
+    /*[Range(0, 9)]
+    public int Limiter = 0;
 
     [Range(0, 16)]
-    public int Clean;
+    public int Virus = 0;
 
-    /*public Animation healthBarAnimation;
-    public string animationClipName = "HealthBarAnimation";
-    public int targetFrame = 5;*/
-
-    /*private void Start()
-    {
-        ChangeAnimationFrame();
-    }
-
-    // Call this method to change the frame of the animation
-    public void ChangeAnimationFrame()
-    {
-        healthBarAnimation.Stop();  // Stop the animation to avoid conflicts
-        AnimationClip clip = healthBarAnimation.GetClip(animationClipName);
-        float frameRate = clip.frameRate;
-        float targetTime = targetFrame / frameRate;
-
-        healthBarAnimation.Play(animationClipName);
-        healthBarAnimation[animationClipName].time = targetTime;
-        healthBarAnimation.Sample();  // Force the animation to the desired frame
-        healthBarAnimation.Stop();  // Stop the animation to freeze it at the desired frame
-    }*/
-
-    /*[SerializeField] private SpriteSheetData scriptable;
-
-    [SerializeField] private string limiterPath;
-    [SerializeField] private string virusPath;
-    [SerializeField] private string chargePath;
-
-    [SerializeField] private Sprite limiterPath;
-    [SerializeField] private Sprite virusPath;
-    [SerializeField] private Sprite chargePath;*/
+    [Range(0, 16)]
+    public int Clean = 0;*/
 
     [SerializeField] private Sprite[] limiterSprites;
     [SerializeField] private Sprite[] virusSprites;
@@ -58,30 +30,51 @@ public class OutletMeter : MonoBehaviour
     [SerializeField] private SpriteRenderer virusMeter;
     [SerializeField] private SpriteRenderer cleanMeter;
 
-    private void Awake()
+    private int _limiterState = 0;
+    private int LimiterState
     {
-        //limiterSprites = Resources.LoadAll<Sprite>(AssetDatabase.GetAssetPath(limiterMeter.GetComponent<SpriteRenderer>().sprite.GetInstanceID()).Replace(".png", "").Replace(limiterPath, ""));
-        //virusSprites = Resources.LoadAll<Sprite>(AssetDatabase.GetAssetPath(virusMeter.GetComponent<SpriteRenderer>().sprite.GetInstanceID()).Replace(".png", "").Replace(virusPath, ""));
-        //chargeSprites = Resources.LoadAll<Sprite>(AssetDatabase.GetAssetPath(chargeMeter.GetComponent<SpriteRenderer>().sprite.GetInstanceID()).Replace(".png", "").Replace(chargePath, ""));
-        /*Sprite[] sprites = new Sprite[scriptable.sprites.Length];
-        for (int i = 0; i < scriptable.sprites.Length; i++)
+        get { return _limiterState; }
+        set { _limiterState = Mathf.Clamp(value, 0, limiterSprites.Length - 1); }
+    }
+
+    private int _virusState = 0;
+    private int VirusState
+    {
+        get { return _virusState; }
+        set { _virusState = Mathf.Clamp(value, 0, virusSprites.Length - 1); }
+    }
+
+    private int _cleanState = 0;
+    private int CleanState
+    {
+        get { return _cleanState; }
+        set { _cleanState = Mathf.Clamp(value, 0, cleanSprites.Length - 1); }
+    }
+
+    public void UpdateValues(float virus, float clean, float max)
+    {
+        //TODO : Implement limiter
+        
+        float cleanAmount = (clean / max) * cleanSprites.Length - 1;
+        if (cleanAmount is < 1 and > 0)
         {
-            sprites[i] = (Sprite)scriptable.sprites[i];
+            CleanState = 1;
+        } else
+        {
+            CleanState = Mathf.FloorToInt(cleanAmount);
         }
-        limiterMeter.GetComponent<SpriteRenderer>().sprite = sprites[0];*/
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        limiterMeter.sprite = limiterSprites[Limiter];
-        virusMeter.sprite = virusSprites[Virus];
-        cleanMeter.sprite = cleanSprites[Mathf.Min(Clean + Virus, 16)];
+        
+        float virusAmount = (virus / max) * virusSprites.Length - 1;
+        if (virusAmount is < 1 and > 0)
+        {
+            VirusState = 1;
+        }
+        else
+        {
+            VirusState = Mathf.FloorToInt(cleanAmount);
+        }
+        limiterMeter.sprite = limiterSprites[_limiterState];
+        virusMeter.sprite = virusSprites[_virusState];
+        cleanMeter.sprite = cleanSprites[Mathf.Min(_cleanState + _virusState, cleanSprites.Length - 1)];
     }
 }

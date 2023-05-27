@@ -218,6 +218,9 @@ public class WireThrower : MonoBehaviour
             reticle.GetComponent<Renderer>().enabled = true;
             Vector2 closestPos = mainCamera.WorldToScreenPoint(closest.transform.position);
             fireDir = closestPos - playerScreenPos;
+            /*Outlet outlet;
+            closest.TryGetComponent<Outlet>(out outlet);
+            outlet?.Invoke();*/
         }
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
         PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();

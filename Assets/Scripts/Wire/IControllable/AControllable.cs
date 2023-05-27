@@ -17,6 +17,26 @@ public abstract class AControllable : MonoBehaviour, IControllable
 
     public PlayerInfo playerInfo;
 
+    public float GetEnergy()
+    {
+        return energy;
+    }
+
+    public float GetMaxCharge()
+    {
+        return maxCharge;
+    }
+
+    public float GetVirus()
+    {
+        return virus;
+    }
+
+    public float GetMaxVirus()
+    {
+        return maxVirus;
+    }
+
     /// <summary>
     /// This controllable gains the given amount of energy and takes it to the player health.
     /// <param name="amount"> float amount of energy for this controllable to gain </param>

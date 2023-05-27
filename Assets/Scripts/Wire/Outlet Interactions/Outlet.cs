@@ -19,6 +19,7 @@ public class Outlet : MonoBehaviour
     ControlSchemes CS;
     [SerializeField] AControllable controlled;
     [SerializeField] float energyTransferSpeed;
+    [SerializeField] OutletMeter visuals;
 
     private void Awake()
     {
@@ -117,6 +118,14 @@ public class Outlet : MonoBehaviour
             src.clip = taking;
             src.Play();
         }
+    }
+
+    private void Update()
+    {
+        if (visuals != null && controlled != null)
+        {
+            visuals.UpdateValues(controlled.GetVirus(), controlled.GetEnergy(), controlled.GetMaxCharge());
+        }  
     }
 }
 
