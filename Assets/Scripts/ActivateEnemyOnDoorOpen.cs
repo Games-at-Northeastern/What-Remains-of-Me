@@ -8,12 +8,25 @@ public class ActivateEnemyOnDoorOpen : MonoBehaviour
 
     [SerializeField] private Animator _animator;
 
+    [SerializeField] private GameObject _babyRobot;
+    [SerializeField] private GameObject _infectedRobotWithAI;
+
     private void Update()
     {
         Debug.Log("door is: " + _doorCollider.enabled);
         if (_doorCollider.enabled == false)
         {
             _animator.Play("EnemyWakeUpAnimation");
+
         }
+
+    }
+
+    public void ActivateRobot()
+    {
+
+        _infectedRobotWithAI.SetActive(true);
+
+        _babyRobot.SetActive(false);
     }
 }
