@@ -76,6 +76,9 @@ namespace Levels.Objects.Platform
             _shouldMove = true;
         }
 
+        /// <summary>
+        /// Deactivates the platform by stopping the movement immediately.
+        /// </summary>
         public void Deactivate()
         {
             _shouldMove = false;
