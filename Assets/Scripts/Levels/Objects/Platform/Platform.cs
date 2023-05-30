@@ -87,15 +87,19 @@ namespace Levels.Objects.Platform
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            movementExecuter.isOnAPlatform = true;
-            movementExecuter.platformRb = rb;
-            //movementExecuter.isOnAPlatform = true;
-            //movementExecuter.platformRb = rb;
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                movementExecuter.isOnAPlatform = true; // TODO : this should NOT have an explicit reference to the player's movement executor...
+                movementExecuter.platformRb = rb;
+            }
         }
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            movementExecuter.isOnAPlatform = false;
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                movementExecuter.isOnAPlatform = false;
+            }
         }
     }
 }
