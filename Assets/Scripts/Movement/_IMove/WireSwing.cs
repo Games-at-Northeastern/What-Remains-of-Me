@@ -66,6 +66,7 @@ public class WireSwing : AMove
         {
             inBounceMode = false;
         }
+
         // Check for dash input
         if (dashInput)
         {
@@ -76,7 +77,16 @@ public class WireSwing : AMove
         }
         // Get Angular Acceleration
         float inputPower = CS.Player.Move.ReadValue<float>() * Mathf.Clamp(Mathf.Abs(Mathf.Sin(angle)), 0, 1);
-        angularAccel = (-Mathf.Cos(angle) * MS.WireSwingNaturalAccelMultiplier) + (inputPower * MS.WireSwingManualAccelMultiplier);
+
+        // if the player is actively colliding against something, only consider the manual input to prevent infinite force buildup
+        if (inBounceMode)
+        {
+            angularAccel = inputPower * MS.WireSwingManualAccelMultiplier;
+        }
+        else
+        {
+            angularAccel = (-Mathf.Cos(angle) * MS.WireSwingNaturalAccelMultiplier) + (inputPower * MS.WireSwingManualAccelMultiplier);
+        }
         // Add decay if accel and vel are in different directions
         if (Mathf.Sign(angularAccel) != Mathf.Sign(angularVelocity))
         {
@@ -84,6 +94,10 @@ public class WireSwing : AMove
         }
         // Use the angular acceleration to change the angular vel, enact angular vel
         angularVelocity += angularAccel * Time.deltaTime * (MS.WireSwingReferenceWireLength / GetCurrentWireLength());
+
+        // Clamp the angular velocity - again, to prevent infinite buildup or crazy speeds.
+        angularVelocity = Mathf.Clamp(angularVelocity, -MS.WireSwingMaxAngularVelocity, MS.WireSwingMaxAngularVelocity);
+
         float newAngle = angle + (angularVelocity * Time.deltaTime);
         Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
         vel = (newPos - origPos) / Time.deltaTime;

@@ -66,6 +66,7 @@ public class MovementSettings : ScriptableObject
     [SerializeField] private float wireSwingManualAccelMultiplier;
     [SerializeField] private float wireSwingAngularVelOfDash;
     [SerializeField] private float wireSwingReferenceWireLength;
+    [SerializeField] private float wireSwingMaxAngularVelocity;
 
     [Header("Wire Swing Release")]
     [SerializeField] private float wsrGravity;
@@ -142,6 +143,7 @@ public class MovementSettings : ScriptableObject
     public float WireSwingManualAccelMultiplier => wireSwingManualAccelMultiplier;
     public float WireSwingAngularVelOfDash => wireSwingAngularVelOfDash;
     public float WireSwingReferenceWireLength => wireSwingReferenceWireLength;
+    public float WireSwingMaxAngularVelocity => wireSwingMaxAngularVelocity;
 
     // Wire Swing Release
     public float WsrGravity => wsrGravity;
