@@ -28,7 +28,7 @@ public class RespawnChamberAnimation : MonoBehaviour
         LevelManager.Instance.PlayerPause();
 
         // Set the layer to show above the player
-        spriteRenderer.sortingLayerName = "ForegroundLit";
+        spriteRenderer.sortingLayerName = "Foreground";
 
         // Begin the door open animation
         anim.enabled = true;
