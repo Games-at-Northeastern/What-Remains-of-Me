@@ -15,16 +15,30 @@ public class Fall : AMove
     private static float coyoteTimeCounter = MS.CoyoteTime;
     private static float jumpBufferCounter = MS.JumpBuffer;
 
+    // This represents how long the player should stay in a 'fall' state
+    // while connected to a wire before they begin to swing and the wire locks length.
+    private float waitToSwingTime;
+
     private bool dashInput;
     private bool connectedInput;
     private bool swingInput;
     private bool damageInput;
 
+    // TODO : May want to create a builder for this Move if there are too many more variables....
     /// <summary>
     /// Initializes a fall, appropriately setting its vertical velocity to start
     /// with.
     /// </summary>
-    public Fall(float initXVel, float initYVel)
+    public Fall(float initXVel, float initYVel) : this(initXVel, initYVel, 0)
+    {
+    
+    }
+
+    /// <summary>
+    /// Initializes a fall, appropriately setting its vertical velocity to start and setting any wait times between states
+    /// with.
+    /// </summary>
+    public Fall(float initXVel, float initYVel, float initWaitToSwingTime)
     {
         xVel = initXVel;
         yVel = initYVel;
@@ -32,6 +46,7 @@ public class Fall : AMove
         WT.onConnect.AddListener(() => connectedInput = true);
         CS.Player.Jump.performed += _ => { if (WT.ConnectedOutlet != null) { swingInput = true; } };
         PH.OnDamageTaken.AddListener(() => damageInput = true);
+        waitToSwingTime = initWaitToSwingTime;
     }
 
     public Fall(bool disableCoyote)
@@ -57,6 +72,9 @@ public class Fall : AMove
         // Tracking Coyote Time
         coyoteTimeCounter -= timeChange;
 
+        // tracking wait time till wire swing is possible
+        waitToSwingTime -= timeChange;
+
         // Jump Buffer
         if (CS.Player.Jump.ReadValue<float>() > 0)
         {
@@ -78,7 +96,7 @@ public class Fall : AMove
         {
             return new Knockback();
         }
-        if (connectedInput || swingInput || WT.ConnectedOutlet != null)
+        if (waitToSwingTime <= 0 && (connectedInput || swingInput || WT.ConnectedOutlet != null))
         {
             return new WireSwing(xVel, yVel);
         }
