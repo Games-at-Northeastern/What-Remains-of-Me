@@ -55,7 +55,7 @@ public class PlayerHealth : MonoBehaviour
     private void VirusFullDeath()
     {
         Debug.Log("Death from virus full");
-        // LevelManager.Instance.PlayerDeath(); // TODO : Uncomment this once energy start levels are fixed in scenes
+        LevelManager.Instance.PlayerDeath();
     }
 
     /// <summary>
