@@ -142,6 +142,8 @@ public class InkDialogueManager : MonoBehaviour
         layoutAnimator.Play("right");
 
         ContinueStory();
+
+        LevelManager.Instance.PlayerPause();
     }
 
 
@@ -154,6 +156,8 @@ public class InkDialogueManager : MonoBehaviour
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
+
+        LevelManager.Instance.PlayerUnpause();
     }
 
     private void ContinueStory()

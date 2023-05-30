@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 631115788}
   - component: {fileID: 631115789}
   - component: {fileID: 631115790}
+  - component: {fileID: 631115791}
   m_Layer: 16
   m_Name: Door
   m_TagString: Untagged
@@ -71,9 +72,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1280782871
-  m_SortingLayer: 4
-  m_SortingOrder: 0
+  m_SortingLayerID: 1099278911
+  m_SortingLayer: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2032103962, guid: 8821c93308c6d8d4b80c786cc42e551d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -105,6 +106,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &631115791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631115787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1135bb45af80cff45b5a76636e9ec78f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 631115790}
+  spriteRenderer: {fileID: 0}
 --- !u!1 &4025577614894314015
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,6 +264,7 @@ Transform:
   m_Children:
   - {fileID: 631115788}
   - {fileID: 1495380462386357212}
+  - {fileID: 5497282921202652737}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -290,6 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c61958d9814224ab1e167f13a82c2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  respawnPoint: {fileID: 0}
 --- !u!212 &2346748861624839591
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -328,8 +345,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1099278911
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4d44dd92d1d479f4698fdb7bf4095a66, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -342,3 +359,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &8026636041028206422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5497282921202652737}
+  m_Layer: 16
+  m_Name: RespawnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5497282921202652737
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026636041028206422}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.244, y: -0.142, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4448909059521288683}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

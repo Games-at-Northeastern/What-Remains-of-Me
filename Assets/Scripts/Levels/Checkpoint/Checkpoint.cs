@@ -10,6 +10,8 @@ public class Checkpoint : MonoBehaviour
 {
     private CheckpointManager checkpointManager;
 
+    [SerializeField] private Transform respawnPoint;
+
     private void Start()
     {
         checkpointManager = FindObjectOfType<CheckpointManager>();
@@ -31,5 +33,26 @@ public class Checkpoint : MonoBehaviour
         {
             checkpointManager.SetRecentPoint(this);
         }
+
+        OnActivation();
+    }
+
+    private void OnActivation()
+    {
+        // TODO : fade activation light on here (or in a separate script)
+    }
+
+    /// <summary>
+    /// Get the position that the player should respawn at for this checkpoint.
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 getRespawnPosition()
+    {
+        if (respawnPoint != null)
+        {
+            return respawnPoint.position;
+        }
+
+        return transform.position;
     }
 }

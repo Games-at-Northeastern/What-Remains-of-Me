@@ -33,6 +33,8 @@ public class WireThrower : MonoBehaviour
     private GameObject _lockOnOutlet;
     private Vector2 _lastRecordedPosition;
 
+    private LevelManager levelManager;
+
     // Accessible Fields
     public Outlet ConnectedOutlet { get; private set; } // If null, disconnected. Otherwise, connected.
     public UnityEvent onConnect = new UnityEvent();
@@ -58,6 +60,7 @@ public class WireThrower : MonoBehaviour
 
     private void Start()
     {
+        levelManager = LevelManager.Instance;
         RegisterEvents();
     }
 
@@ -66,8 +69,10 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     private void RegisterEvents()
     {
-        LevelManager.Instance.OnPlayerReset.AddListener(DespawnWire);
-        LevelManager.Instance.OnPlayerDeath.AddListener(DespawnWire);
+        levelManager.OnPlayerReset.AddListener(DespawnWire);
+        levelManager.OnPlayerDeath.AddListener(DespawnWire);
+        levelManager.OnPlayerPause.AddListener(_controlSchemes.Disable);
+        levelManager.OnPlayerUnpause.AddListener(_controlSchemes.Enable);
     }
 
     private void OnDestroy()

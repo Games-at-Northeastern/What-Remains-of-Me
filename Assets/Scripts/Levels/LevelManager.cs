@@ -23,11 +23,22 @@ public class LevelManager : MonoBehaviour
     public UnityEvent OnPlayerReset;
     [Header("Event to trigger player death events.")]
     public UnityEvent OnPlayerDeath;
+    [Header("Event to trigger player pausing (i.e. movement, wire throwing, etc.)")]
+    public UnityEvent OnPlayerPause;
+    [Header("Event to trigger player unpausing (i.e. movement, wire throwing, etc.)")]
+    public UnityEvent OnPlayerUnpause;
+
 
     // Event start functions that are accessible for other objects to trigger events
     public void PlayerReset() => OnPlayerReset?.Invoke();
     public void PlayerDeath() => OnPlayerDeath?.Invoke(); // TODO: We may want to take in a type of death for this function
+    public void PlayerPause()
+    {
+        Debug.Log("Player Pause Event");
+        OnPlayerPause?.Invoke();
+    }
 
+    public void PlayerUnpause() => OnPlayerUnpause?.Invoke();
     // Singleton
     public static LevelManager Instance { get; private set; }
 

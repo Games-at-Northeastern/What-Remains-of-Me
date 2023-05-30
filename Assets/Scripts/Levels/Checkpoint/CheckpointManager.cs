@@ -50,13 +50,16 @@ public class CheckpointManager : MonoBehaviour
     /// Respawns the given transform at the appropriate recent checkpoint.
     /// </summary>
     /// <param name="respawnable"></param>
-    public void RespawnAtRecent(Transform respawnable) => respawnable.transform.position = mostRecentPoint.transform.position;
+    public void RespawnAtRecent(Transform respawnable) => respawnable.transform.position = mostRecentPoint.getRespawnPosition();
 
     /// <summary>
     /// Respawns the given transform at the appropriate level beginning checkpoint.
     /// </summary>
     /// <param name="respawnable"></param>
-    public void RespawnAtBeginning(Transform respawnable) => respawnable.transform.position = levelStartPoint.transform.position;
+    public void RespawnAtBeginning(Transform respawnable) => respawnable.transform.position = levelStartPoint.getRespawnPosition();
 
-    public void SetRecentPoint(Checkpoint checkpoint) => mostRecentPoint = checkpoint;
+    public void SetRecentPoint(Checkpoint checkpoint)
+    {
+        mostRecentPoint = checkpoint;
+    }
 }

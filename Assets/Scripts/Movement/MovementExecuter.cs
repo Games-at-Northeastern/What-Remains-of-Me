@@ -13,8 +13,13 @@ public class MovementExecuter : MonoBehaviour
     [SerializeField] private MovementSettings ms; // Gives constants to move scripts
     [SerializeField] private WireThrower wt; // Gives information about the wire
     [SerializeField] private PlayerHealth ph; // Gives info about player health / damage
+
+    private LevelManager levelManager;
     private IMove currentMove; // The move taking place this frame
     private Vector3 respawnPosition;
+    private ControlSchemes cs;
+
+    private bool isPaused;
 
     public bool isOnAPlatform;
     public Rigidbody2D platformRb;
@@ -24,16 +29,21 @@ public class MovementExecuter : MonoBehaviour
     // Initialization
     private void Awake()
     {
-        var cs = new ControlSchemes();
+        cs = new ControlSchemes();
         cs.Enable();
         cs.Debug.Restart.performed += _ => Restart();
+
         currentMove = new StarterMove(mi, ms, cs, wt, ph);
         respawnPosition = transform.position;
 
+        isPaused = false;
     }
 
     private void Start()
     {
+        // Set up the level manager, and the control scheme enable/disable for when the player movement should be paused
+        levelManager = LevelManager.Instance;
+
         RegisterEvents();
         checkpointManager = FindObjectOfType<CheckpointManager>();
     }
@@ -43,8 +53,13 @@ public class MovementExecuter : MonoBehaviour
     /// </summary>
     private void RegisterEvents()
     {
-        LevelManager.Instance.OnPlayerReset.AddListener(Respawn);
-        LevelManager.Instance.OnPlayerDeath.AddListener(Restart);
+        levelManager.OnPlayerReset.AddListener(Respawn);
+        levelManager.OnPlayerDeath.AddListener(Restart);
+        levelManager.OnPlayerPause.AddListener(Pause);
+        levelManager.OnPlayerUnpause.AddListener(Unpause);
+
+        levelManager.OnPlayerPause.AddListener(cs.Disable);
+        levelManager.OnPlayerUnpause.AddListener(cs.Enable);
     }
 
     /// <summary>
@@ -54,14 +69,11 @@ public class MovementExecuter : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (InkDialogueManager.GetInstance() != null)
+        if (isPaused)
         {
-            if (InkDialogueManager.GetInstance().dialogueIsPlaying && InkDialogueManager.GetInstance().stopMovement)
-            {
-                currentMove.AdvanceTime();
-                rb.velocity = new Vector2(0, rb.velocity.y);
-                currentMove = new Idle();
-            }
+            rb.velocity = new Vector2(0, 0);
+            currentMove = new Idle();
+            return;
         }
         if (isOnAPlatform)
         {
@@ -98,7 +110,7 @@ public class MovementExecuter : MonoBehaviour
         }
         currentMove = new Fall();
     }
-
+    
     /// <summary>
     /// Respawns the player at a given location.
     /// </summary>
@@ -110,8 +122,11 @@ public class MovementExecuter : MonoBehaviour
         }
 
         rb.velocity = Vector2.zero;
-        currentMove = new Fall();
+        currentMove = new Idle();
     }
+
+    private void Pause() => isPaused = true;
+    private void Unpause() => isPaused = false;
 
     /// <summary>
     /// Gives an immutable version of the current move. This allows certain information
