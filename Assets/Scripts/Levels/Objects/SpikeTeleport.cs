@@ -57,10 +57,9 @@ public class SpikeTeleport : MonoBehaviour
         {
 
             objectToTeleport.transform.position = teleportLocation.position;
-            objectToTeleport.SetActive(true);
-
         }
 
+        objectToTeleport.SetActive(true);
         LevelManager.Instance.PlayerReset();
         InkDialogueVariables.deathCount++;
 
