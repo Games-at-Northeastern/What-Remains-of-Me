@@ -54,8 +54,10 @@ public class OutletMeter : MonoBehaviour
     public void UpdateValues(float virus, float clean, float max)
     {
         //TODO : Implement limiter
-        
-        float cleanAmount = (clean / max) * cleanSprites.Length - 1;
+        float limiterAmount = ((100 - max) / 100) * limiterSprites.Length - 1;
+        LimiterState = Mathf.FloorToInt(limiterAmount);
+
+        float cleanAmount = (clean / 100) * cleanSprites.Length - 1;
         if (cleanAmount is < 1 and > 0)
         {
             CleanState = 1;
@@ -64,7 +66,7 @@ public class OutletMeter : MonoBehaviour
             CleanState = Mathf.FloorToInt(cleanAmount);
         }
         
-        float virusAmount = (virus / max) * virusSprites.Length - 1;
+        float virusAmount = (virus / 100) * virusSprites.Length - 1;
         if (virusAmount is < 1 and > 0)
         {
             VirusState = 1;
