@@ -8,8 +8,11 @@ using Unity.VisualScripting;
 
 public class InkDialogueManager : MonoBehaviour
 {
-    [Header("Parms")]
+    [Header("Params")]
     [SerializeField] private float typingSpeed = 0.04f;
+    [SerializeField] private float dialogueDelayTime = 100f;
+    [SerializeField] private float exitDialogueTime = 1.0f;
+    
 
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
@@ -54,6 +57,9 @@ public class InkDialogueManager : MonoBehaviour
     public bool autoTurnPage;
 
     public float waitBeforePageTurn;
+
+    private bool canSkip = false;
+    private bool submitSkip = false;
 
     private void Awake()
     {
@@ -100,6 +106,11 @@ public class InkDialogueManager : MonoBehaviour
             return;
         }
 
+        if (_cs.Player.Dialogue.triggered)
+        {
+            submitSkip = true;
+        }
+
         // handle continuing to the next line in the dialogue when submit is pressed
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
         if (canContinueToNextLine
@@ -112,7 +123,7 @@ public class InkDialogueManager : MonoBehaviour
 
     private IEnumerator ContinueWithDelay()
     {
-        yield return new WaitForSeconds(100f);
+        yield return new WaitForSeconds(dialogueDelayTime);
         ContinueStory();
     }
 
@@ -136,7 +147,7 @@ public class InkDialogueManager : MonoBehaviour
 
     private IEnumerator ExitDialogueMode()
     {
-        yield return new WaitForSeconds(0.2f); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+        yield return new WaitForSeconds(exitDialogueTime); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
 
         dialogueVariables.StopListening(currentStory);
 
@@ -174,6 +185,9 @@ public class InkDialogueManager : MonoBehaviour
         dialogueText.maxVisibleCharacters = 0;
 
         canContinueToNextLine = false;
+        submitSkip = false;
+
+        StartCoroutine(CanSkip());
 
         //hide previous choices
         HideChoices();
@@ -181,19 +195,38 @@ public class InkDialogueManager : MonoBehaviour
         // display 1 letter at a time
         foreach (char letter in line.ToCharArray())
         {
+            // if player presses 'submit', entire dialogue line is displayed
+            if (canSkip && submitSkip)
+            {
+                submitSkip = false;
+                dialogueText.maxVisibleCharacters = line.Length;
+                break;
+            }
             dialogueText.maxVisibleCharacters++;
             yield return new WaitForSeconds(typingSpeed);
         }
 
+
         // display choices, if any, for this dialogue line
         DisplayChoices();
 
-        if (autoTurnPage)
+        if (canSkip)
+        {
+            StartCoroutine(ContinueWithDelay());
+        } else if (autoTurnPage)
         {
             yield return new WaitForSeconds(waitBeforePageTurn);
         }
 
         canContinueToNextLine = true;
+        canSkip = false;
+    }
+
+    private IEnumerator CanSkip()
+    {
+        canSkip = false; 
+        yield return new WaitForSeconds(0.05f);
+        canSkip = true;
     }
 
     private void HideChoices()
