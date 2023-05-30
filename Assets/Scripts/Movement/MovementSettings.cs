@@ -35,6 +35,7 @@ public class MovementSettings : ScriptableObject
     [SerializeField] private float fallMaxSpeedX;
     [SerializeField] private float fallSmoothTimeX;
     [SerializeField] private float fallMinSpeedY;
+    [SerializeField] private float fallToSwingWaitTime;
 
     [Header("Run")]
     [SerializeField] private float runMaxSpeed;
@@ -112,6 +113,7 @@ public class MovementSettings : ScriptableObject
     public float FallMaxSpeedX => fallMaxSpeedX;
     public float FallSmoothTimeX => fallSmoothTimeX;
     public float FallMinSpeedY => fallMinSpeedY;
+    public float FallToSwingWaitTime => fallToSwingWaitTime;
 
     // Run
     public float RunMaxSpeed => runMaxSpeed;

@@ -18,6 +18,8 @@ public class Run : AMove
     private bool damageInput;
 
     private float currDistFromOutlet; // Current position from the player to the outlet, if wire connected
+    private bool isConnectedToOutlet;
+
     public bool isOnPlatform;
     public Rigidbody2D platformRB;
 
@@ -41,36 +43,34 @@ public class Run : AMove
     public override void AdvanceTime()
     {
 
-            if (xVel > MS.RunMaxSpeed)
-            {
-                xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
-                    ref xAccel, (float)0.3);
-            }
-            else
-            {
-                xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
-                    ref xAccel, MS.RunSmoothTime);
-            }
+        if (xVel > MS.RunMaxSpeed)
+        {
+            xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
+                ref xAccel, (float)0.3);
+        }
+        else
+        {
+            xVel = Mathf.SmoothDamp(xVel, MS.RunMaxSpeed * CS.Player.Move.ReadValue<float>(),
+                ref xAccel, MS.RunSmoothTime);
+        }
 
-            if (WT.ConnectedOutlet != null)
-            {
-                Vector2 origPos = MI.transform.position;
-                Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
-                float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
-                // The code doesn't let the wire 'stretch' to the default max length, should check with
-                // design team on the ideal wire movement while grounded
-                /*if (newDistFromOutlet < currDistFromOutlet)
-                {
-                    WT.SetMaxWireLength(newDistFromOutlet);
-                }*/
+        if (WT.ConnectedOutlet != null)
+        {
+            isConnectedToOutlet = true;
+            Vector2 origPos = MI.transform.position;
+            Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
+            float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
             currDistFromOutlet = newDistFromOutlet;
-            }
+        } else
+        {
+            isConnectedToOutlet = false;
+        }
 
-            // ready the player for another jump once space has been released
-            if (jumpPending && CS.Player.Jump.ReadValue<float>() == 0)
-            {
-                jumpPending = false;
-            }
+        // ready the player for another jump once space has been released
+        if (jumpPending && CS.Player.Jump.ReadValue<float>() == 0)
+        {
+            jumpPending = false;
+        }
 
     }
 
@@ -94,7 +94,8 @@ public class Run : AMove
         }
         if (!MI.GroundDetector.isColliding())
         {
-            return new Fall(xVel, 0);
+
+            return new Fall(xVel, 0, MS.FallToSwingWaitTime);
         }
         if (CS.Player.Move.ReadValue<float>() == 0 && Mathf.Abs(xVel) < MS.RunToIdleSpeed)
         {

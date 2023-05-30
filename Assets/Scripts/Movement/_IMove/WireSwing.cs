@@ -27,8 +27,11 @@ public class WireSwing : AMove
         // Get starting angular vel
         Vector2 origPos = MI.transform.position;
         Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
+
+        // Set the wire length to be the current distance between the player and the outlet
         initRadius = Vector2.Distance(origPos, connectedOutletPos);
         WT.SetMaxWireLength(initRadius);
+
         float firstAngle = Mathf.Atan2(origPos.y - connectedOutletPos.y, origPos.x - connectedOutletPos.x);
         Vector2 newPos = origPos + (new Vector2(horizVel, vertVel) * Time.deltaTime);
         float secondAngle = Mathf.Atan2(newPos.y - connectedOutletPos.y, newPos.x - connectedOutletPos.x);
