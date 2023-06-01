@@ -20,17 +20,22 @@ public class TrueParallax : MonoBehaviour
     {
         startpos = transform.position.x;
         startpos2 = transform.position.y;
-        lengthX = GetComponent<SpriteRenderer>().bounds.size.x;
-        lengthY = GetComponent<SpriteRenderer>().bounds.size.y;
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.drawMode = SpriteDrawMode.Tiled;
-        if (tileY)
+        if(GetComponent<SpriteRenderer>() != null)
         {
-            spriteRenderer.size = new Vector2(spriteRenderer.size.x * 3, spriteRenderer.size.y * 3);
-        } else
-        {
-            spriteRenderer.size = new Vector2(spriteRenderer.size.x * 3, spriteRenderer.size.y);
+            lengthX = GetComponent<SpriteRenderer>().bounds.size.x;
+            lengthY = GetComponent<SpriteRenderer>().bounds.size.y;
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer.drawMode = SpriteDrawMode.Tiled;
+            if (tileY)
+            {
+                spriteRenderer.size = new Vector2(spriteRenderer.size.x * 3, spriteRenderer.size.y * 3);
+            }
+            else
+            {
+                spriteRenderer.size = new Vector2(spriteRenderer.size.x * 3, spriteRenderer.size.y);
+            }
         }
+
         cam = Camera.main.gameObject;
 
     }
