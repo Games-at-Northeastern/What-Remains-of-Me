@@ -73,7 +73,7 @@ public class OutletMeter : MonoBehaviour
         }
         else
         {
-            VirusState = Mathf.FloorToInt(cleanAmount);
+            VirusState = Mathf.FloorToInt(virusAmount);
         }
         limiterMeter.sprite = limiterSprites[_limiterState];
         virusMeter.sprite = virusSprites[_virusState];
