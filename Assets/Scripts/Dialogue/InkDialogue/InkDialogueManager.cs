@@ -106,7 +106,7 @@ public class InkDialogueManager : MonoBehaviour
             return;
         }
 
-        if (_cs.Player.Dialogue.triggered)
+        if (_cs.Player.Dialogue.WasPressedThisFrame())
         {
             submitSkip = true;
         }
@@ -115,7 +115,7 @@ public class InkDialogueManager : MonoBehaviour
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
         if (canContinueToNextLine
             && currentStory.currentChoices.Count == 0
-            && (_cs.Player.Dialogue.WasReleasedThisFrame() || autoTurnPage))
+            && (_cs.Player.Dialogue.WasPressedThisFrame() || autoTurnPage))
         {
             ContinueStory();
         }
