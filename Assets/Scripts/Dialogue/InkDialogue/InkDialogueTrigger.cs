@@ -22,6 +22,7 @@ public class InkDialogueTrigger : MonoBehaviour
     private ControlSchemes _cs;
 
     private bool _playerInRange;
+    private bool _firstInteraction;
 
     private void Start()
     {
@@ -32,16 +33,18 @@ public class InkDialogueTrigger : MonoBehaviour
     private void Awake()
     {
         playerInRange = false;
-        visualCue.SetActive(false);
+        _firstInteraction = true;
+        visualCue.SetActive(true);
     }
 
     private void Update()
     {
         if (playerInRange && !InkDialogueManager.GetInstance().dialogueIsPlaying)
         {
-            visualCue.SetActive(true);
+            
             if (_cs.Player.Dialogue.WasReleasedThisFrame() || forceDialogue)
             {
+                _firstInteraction = false;
                 forceDialogue = false;
                 var i = InkDialogueManager.GetInstance();
                 i.EnterDialogueMode(inkJSON);
@@ -49,10 +52,9 @@ public class InkDialogueTrigger : MonoBehaviour
                 i.autoTurnPage = this.autoTurnPage;
                 i.waitBeforePageTurn = this.waitForPageTurn;
             }
-
-
         }
-        else
+
+        if (!_firstInteraction)
         {
             visualCue.SetActive(false);
         }
