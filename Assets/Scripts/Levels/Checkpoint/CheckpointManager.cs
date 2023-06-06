@@ -30,6 +30,9 @@ public class CheckpointManager : MonoBehaviour
         if (levelStartPoint == null)
         {
             Debug.LogWarning("No level start respawn point set - player will not be able to respawn at the beginning of the level");
+        } else
+        {
+            levelStartPoint.OnActivation();
         }
 
         if (mostRecentPoint == null)
@@ -69,5 +72,9 @@ public class CheckpointManager : MonoBehaviour
     public void SetRecentPoint(Checkpoint checkpoint)
     {
         mostRecentPoint = checkpoint;
+        if (levelStartPoint == null)
+        {
+            levelStartPoint = mostRecentPoint;
+        }
     }
 }
