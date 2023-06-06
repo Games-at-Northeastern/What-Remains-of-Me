@@ -143,7 +143,15 @@ public class InkDialogueManager : MonoBehaviour
 
         ContinueStory();
 
-        LevelManager.Instance.PlayerPause();
+        // this works, but it also depends on a single player existing in the scene
+        // and is using FindGameObjectsWithTag which is
+        // VERY BAD PRACTICE, DON'T DO THIS!!!
+        // also using GetComponent usually isn't good practice compared to [SerializeField]
+        // I am using GetComponent here so that you don't have to assign the player to every InkDialogueManager in every scene
+        // if there is a better way to implement this please do
+        // this just prevents the player's rigidbody from moving along the X Axis while dialogue is playing
+        Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
+        playerRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
     }
 
 
@@ -157,196 +165,202 @@ public class InkDialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
 
-        LevelManager.Instance.PlayerUnpause();
-    }
+        //turns off the X constraint on the player's rigidbody when dialogue has stopped
+        Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
+        playerRB.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        //btw if you ever want to adjust this, know that RigidbodyContraints2D are something called a "Bitmap" so they can't be set normally
+        // https://answers.unity.com/questions/1104653/im-trying-to-freeze-both-positionx-and-rotation-in.html 
+        // The constraints property is a Bitmask. Simply setting it to a single option only sets that option. You need to use the | (bitwise OR) operator to merge them together before setting it i.e.
+        // constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezepositionX;
+}
 
-    private void ContinueStory()
+private void ContinueStory()
+{
+StopCoroutine(ContinueWithDelay());
+if (currentStory.canContinue)
+{
+    if (displayLineCoroutine != null)
     {
-        StopCoroutine(ContinueWithDelay());
-        if (currentStory.canContinue)
-        {
-            if (displayLineCoroutine != null)
-            {
-                StopCoroutine(displayLineCoroutine);
-            }
-            // set text for the current dialogue line
-            displayLineCoroutine = StartCoroutine(DisplayLine(currentStory.Continue()));
-
-            // handles current tags
-            HandleTags(currentStory.currentTags);
-        }
-        else
-        {
-            StartCoroutine(ExitDialogueMode());
-        }
+        StopCoroutine(displayLineCoroutine);
     }
+    // set text for the current dialogue line
+    displayLineCoroutine = StartCoroutine(DisplayLine(currentStory.Continue()));
+
+    // handles current tags
+    HandleTags(currentStory.currentTags);
+}
+else
+{
+    StartCoroutine(ExitDialogueMode());
+}
+}
 
 
-    private IEnumerator DisplayLine(string line)
+private IEnumerator DisplayLine(string line)
+{
+// empty dialogue text
+dialogueText.text = line;
+dialogueText.maxVisibleCharacters = 0;
+
+canContinueToNextLine = false;
+submitSkip = false;
+
+StartCoroutine(CanSkip());
+
+//hide previous choices
+HideChoices();
+
+// display 1 letter at a time
+foreach (char letter in line.ToCharArray())
+{
+    // if player presses 'submit', entire dialogue line is displayed
+    if (canSkip && submitSkip)
     {
-        // empty dialogue text
-        dialogueText.text = line;
-        dialogueText.maxVisibleCharacters = 0;
-
-        canContinueToNextLine = false;
         submitSkip = false;
-
-        StartCoroutine(CanSkip());
-
-        //hide previous choices
-        HideChoices();
-
-        // display 1 letter at a time
-        foreach (char letter in line.ToCharArray())
-        {
-            // if player presses 'submit', entire dialogue line is displayed
-            if (canSkip && submitSkip)
-            {
-                submitSkip = false;
-                dialogueText.maxVisibleCharacters = line.Length;
-                break;
-            }
-            dialogueText.maxVisibleCharacters++;
-            yield return new WaitForSeconds(typingSpeed);
-        }
-
-
-        // display choices, if any, for this dialogue line
-        DisplayChoices();
-
-        if (canSkip)
-        {
-            StartCoroutine(ContinueWithDelay());
-        } else if (autoTurnPage)
-        {
-            yield return new WaitForSeconds(waitBeforePageTurn);
-        }
-
-        canContinueToNextLine = true;
-        canSkip = false;
+        dialogueText.maxVisibleCharacters = line.Length;
+        break;
     }
+    dialogueText.maxVisibleCharacters++;
+    yield return new WaitForSeconds(typingSpeed);
+}
 
-    private IEnumerator CanSkip()
+
+// display choices, if any, for this dialogue line
+DisplayChoices();
+
+if (canSkip)
+{
+    StartCoroutine(ContinueWithDelay());
+} else if (autoTurnPage)
+{
+    yield return new WaitForSeconds(waitBeforePageTurn);
+}
+
+canContinueToNextLine = true;
+canSkip = false;
+}
+
+private IEnumerator CanSkip()
+{
+canSkip = false; 
+yield return new WaitForSeconds(0.05f);
+canSkip = true;
+}
+
+private void HideChoices()
+{
+foreach (GameObject choicebutton in choices)
+{
+    choicebutton.SetActive(false);
+}
+}
+
+private void HandleTags(List<string> currentTags)
+{
+// loop through current tags
+foreach(string tag in currentTags)
+{
+    string[] splitTag = tag.Split(':');
+    if (splitTag.Length != 2)
     {
-        canSkip = false; 
-        yield return new WaitForSeconds(0.05f);
-        canSkip = true;
+        Debug.LogError("Tag could not be parsed:" + tag);
     }
+    string tagKey = splitTag[0].Trim();
+    string tagValue = splitTag[1].Trim();
 
-    private void HideChoices()
+    // handle the tag
+    switch (tagKey)
     {
-        foreach (GameObject choicebutton in choices)
-        {
-            choicebutton.SetActive(false);
-        }
+        case SPEAKER_TAG:
+            displayNameText.text = tagValue;
+            Debug.Log("Speaker = " + tagValue);
+            break;
+        case PORTRAIT_TAG:
+            portraitAnimator.Play(tagValue);
+            Debug.Log("Potrait = " + tagValue);
+            break;
+        case LAYOUT_TAG:
+            layoutAnimator.Play(tagValue);
+            Debug.Log("Layout = " + tagValue);
+            break;
+        default:
+            Debug.LogWarning("Tag came in but isn't being handled" + tag);
+            break;
     }
+}
+}
 
-    private void HandleTags(List<string> currentTags)
-    {
-        // loop through current tags
-        foreach(string tag in currentTags)
-        {
-            string[] splitTag = tag.Split(':');
-            if (splitTag.Length != 2)
-            {
-                Debug.LogError("Tag could not be parsed:" + tag);
-            }
-            string tagKey = splitTag[0].Trim();
-            string tagValue = splitTag[1].Trim();
+private void DisplayChoices()
+{
+List<Choice> currentChoices = currentStory.currentChoices;
 
-            // handle the tag
-            switch (tagKey)
-            {
-                case SPEAKER_TAG:
-                    displayNameText.text = tagValue;
-                    Debug.Log("Speaker = " + tagValue);
-                    break;
-                case PORTRAIT_TAG:
-                    portraitAnimator.Play(tagValue);
-                    Debug.Log("Potrait = " + tagValue);
-                    break;
-                case LAYOUT_TAG:
-                    layoutAnimator.Play(tagValue);
-                    Debug.Log("Layout = " + tagValue);
-                    break;
-                default:
-                    Debug.LogWarning("Tag came in but isn't being handled" + tag);
-                    break;
-            }
-        }
-    }
+// defensive check to make sure our UI can support the number of choices coming in
+if (currentChoices.Count > choices.Length)
+{
+    Debug.LogError("More choices were given than the UI can support. Number of choices given: "
+        + currentChoices.Count);
+}
 
-    private void DisplayChoices()
-    {
-        List<Choice> currentChoices = currentStory.currentChoices;
+int index = 0;
+// enable and initialize the choices up to the amount of choices for this line of dialogue
+foreach (Choice choice in currentChoices)
+{
+    choices[index].gameObject.SetActive(true);
+    choicesText[index].text = choice.text;
+    index++;
+}
+// go through the remaining choices the UI supports and make sure they're hidden
+for (int i = index; i < choices.Length; i++)
+{
+    choices[i].gameObject.SetActive(false);
+}
 
-        // defensive check to make sure our UI can support the number of choices coming in
-        if (currentChoices.Count > choices.Length)
-        {
-            Debug.LogError("More choices were given than the UI can support. Number of choices given: "
-                + currentChoices.Count);
-        }
+StartCoroutine(SelectFirstChoice());
+}
 
-        int index = 0;
-        // enable and initialize the choices up to the amount of choices for this line of dialogue
-        foreach (Choice choice in currentChoices)
-        {
-            choices[index].gameObject.SetActive(true);
-            choicesText[index].text = choice.text;
-            index++;
-        }
-        // go through the remaining choices the UI supports and make sure they're hidden
-        for (int i = index; i < choices.Length; i++)
-        {
-            choices[i].gameObject.SetActive(false);
-        }
+private IEnumerator SelectFirstChoice()
+{
+// Event System requires we clear it first, then wait
+// for at least one frame before we set the current selected object.
+EventSystem.current.SetSelectedGameObject(null);
+yield return new WaitForEndOfFrame();
+EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
+}
 
-        StartCoroutine(SelectFirstChoice());
-    }
+public void MakeChoice(int choiceIndex)
+{
+if (canContinueToNextLine)
+{
+    currentStory.ChooseChoiceIndex(choiceIndex);
 
-    private IEnumerator SelectFirstChoice()
-    {
-        // Event System requires we clear it first, then wait
-        // for at least one frame before we set the current selected object.
-        EventSystem.current.SetSelectedGameObject(null);
-        yield return new WaitForEndOfFrame();
-        EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
-    }
+    ContinueStory();
+}
+}
 
-    public void MakeChoice(int choiceIndex)
-    {
-        if (canContinueToNextLine)
-        {
-            currentStory.ChooseChoiceIndex(choiceIndex);
+public Ink.Runtime.Object GetVariableState(string variableName)
+{
+Ink.Runtime.Object result = null;
+dialogueVariables.variables.TryGetValue(variableName, out result);
+if (result == null)
+{
+    Debug.LogWarning("Ink Variable was found to be null" + variableName);
+}
+return result;
+}
 
-            ContinueStory();
-        }
-    }
-
-    public Ink.Runtime.Object GetVariableState(string variableName)
-    {
-        Ink.Runtime.Object result = null;
-        dialogueVariables.variables.TryGetValue(variableName, out result);
-        if (result == null)
-        {
-            Debug.LogWarning("Ink Variable was found to be null" + variableName);
-        }
-        return result;
-    }
-
-    public void ChangeVariableState(string variableName, Ink.Runtime.Object newValue)
-    {
-        Ink.Runtime.Object result = null;
-        dialogueVariables.variables.TryGetValue(variableName, out result);
-        if (result == null)
-        {
-            Debug.LogWarning("Ink Variable was found to be null. You may have to add the variable to globas.ink" + variableName);
-        }
-        else
-        {
-            dialogueVariables.variables.Remove(variableName);
-            dialogueVariables.variables.Add(variableName, newValue);
-        }
-    }
+public void ChangeVariableState(string variableName, Ink.Runtime.Object newValue)
+{
+Ink.Runtime.Object result = null;
+dialogueVariables.variables.TryGetValue(variableName, out result);
+if (result == null)
+{
+    Debug.LogWarning("Ink Variable was found to be null. You may have to add the variable to globas.ink" + variableName);
+}
+else
+{
+    dialogueVariables.variables.Remove(variableName);
+    dialogueVariables.variables.Add(variableName, newValue);
+}
+}
 
 }
