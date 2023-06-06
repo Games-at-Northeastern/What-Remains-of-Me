@@ -64,7 +64,7 @@ public class FadeOnActivation : MonoBehaviour
 
     private IEnumerator FadeInLight()
     {
-        float targetIntensity = 3.0f;
+        float targetIntensity = targetLight.intensity;
 
         float elapsedTime = 0.0f;
         float startIntensity = 0.0f;
