@@ -23,6 +23,7 @@ public class Outlet : MonoBehaviour
 
     private void Awake()
     {
+        // TODO : This should be moved into one of the player scripts
         CS = new ControlSchemes();
         CS.Player.GiveEnergy.performed += _ => { if (controlled != null) { StartCoroutine("GiveEnergy"); } };
         CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); } };
