@@ -13,7 +13,7 @@ public class ActivateVirusBeam : MonoBehaviour
     private void Start()
     {
         // Invoke the function every 2 seconds, starting after 1 second
-        InvokeRepeating("SetVirusBeamActive", 1f, 2f);
+        InvokeRepeating("SetVirusBeamActive", startDelay, repeatRate);
     }
 
     private void SetVirusBeamActive()
