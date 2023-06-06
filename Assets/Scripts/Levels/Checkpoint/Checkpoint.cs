@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Represents a saveable location that the player can pass and be respawned at.
@@ -11,6 +12,15 @@ public class Checkpoint : MonoBehaviour
     private CheckpointManager checkpointManager;
 
     [SerializeField] private Transform respawnPoint;
+
+    // EVENTS
+    public UnityEvent OnRespawn;
+    public void RespawnStart() => OnRespawn?.Invoke();
+
+    public UnityEvent OnActivate;
+    public void Activate() => OnActivate?.Invoke();
+
+
 
     private void Start()
     {

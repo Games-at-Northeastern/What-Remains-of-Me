@@ -120,6 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 631115790}
   spriteRenderer: {fileID: 0}
+  checkpoint: {fileID: 4448909059521288680}
 --- !u!1 &2361411347612492466
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,6 +505,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 5497282921202652737}
+  OnRespawn:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!212 &2346748861624839591
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -580,7 +587,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8026636041028206422}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.294, y: -0.174, z: 0}
+  m_LocalPosition: {x: -0.294, y: -0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

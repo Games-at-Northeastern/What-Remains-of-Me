@@ -7,6 +7,7 @@ public class RespawnChamberAnimation : MonoBehaviour
 {
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Checkpoint checkpoint;
 
     private void Start()
     {
@@ -20,9 +21,23 @@ public class RespawnChamberAnimation : MonoBehaviour
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        LevelManager.Instance.OnPlayerReset.AddListener(RespawnStarted);
+        if (checkpoint == null)
+        {
+            checkpoint = GetComponentInParent<Checkpoint>();
+            if (checkpoint == null)
+            {
+                Debug.LogWarning("No checkpoint script found in parent - please manually add reference.");
+            }
+        }
+
+        // This sets up the event listening to begin the respawn animation once the checkpoint parent object
+        // has been triggered to start the respawn.
+        checkpoint.OnRespawn.AddListener(RespawnStarted);
     }
 
+    /// <summary>
+    /// Begins the door animation for the respawn chamber, pausing the player controls while it plays.
+    /// </summary>
     private void RespawnStarted()
     {
         LevelManager.Instance.PlayerPause();
