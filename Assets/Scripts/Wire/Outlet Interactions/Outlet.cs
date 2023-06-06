@@ -35,6 +35,10 @@ public class Outlet : MonoBehaviour
         CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); } };
         CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); } };
 
+        if (visuals != null && controlled == null)
+        {
+            visuals.UpdateValues(0, 0, 0);
+        }
         //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
     }
 
@@ -121,12 +125,14 @@ public class Outlet : MonoBehaviour
         }
     }
 
+
     private void Update()
     {
         if (visuals != null && controlled != null)
         {
             visuals.UpdateValues(controlled.GetVirus(), controlled.GetEnergy(), controlled.GetMaxCharge());
-        }  
+        }
+        
     }
 }
 

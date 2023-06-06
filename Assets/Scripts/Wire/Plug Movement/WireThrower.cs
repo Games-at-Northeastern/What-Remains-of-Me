@@ -190,6 +190,7 @@ public class WireThrower : MonoBehaviour
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
 
+    
     /// <summary>
     /// Spawns a plug and launches it in the air towards the nearest object with the tag "Outlet",
     /// setting it as the active plug.
@@ -218,14 +219,12 @@ public class WireThrower : MonoBehaviour
 
         if (closest != null)
         {
+            
             Debug.Log("FOUND");
             reticle.transform.position = closest.transform.position;
             reticle.GetComponent<Renderer>().enabled = true;
             Vector2 closestPos = mainCamera.WorldToScreenPoint(closest.transform.position);
             fireDir = closestPos - playerScreenPos;
-            /*Outlet outlet;
-            closest.TryGetComponent<Outlet>(out outlet);
-            outlet?.Invoke();*/
         }
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
         PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
@@ -234,6 +233,7 @@ public class WireThrower : MonoBehaviour
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
 
+    private GameObject lastReticleLock;
     /// <summary>
     /// Sets the lockOnOutlet to the nearest object tagged "Outlet".
     /// </summary>
@@ -257,6 +257,11 @@ public class WireThrower : MonoBehaviour
                     //distance = curDistance;
                     _lockOnOutlet = closest;
                     _isLockOn = true;
+                    OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+                    outletMeter?.EndVisuals();
+                    lastReticleLock = closest;
+                    outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+                    outletMeter?.StartVisuals();
                 }
             }
         }
@@ -277,12 +282,19 @@ public class WireThrower : MonoBehaviour
                     hasOutletsOnScreen = true;
                     if (curDistance < originalDistance)
                     {
+                        Debug.Log("test");
+                        
                         closest = go;
                         // reticle.transform.position = closest.transform.position;
                         // reticle.GetComponent<Renderer>().enabled = true;
                         //distance = curDistance;
                         _lockOnOutlet = closest;
                         originalDistance = curDistance;
+                        OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+                        outletMeter?.EndVisuals();
+                        lastReticleLock = closest;
+                        outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+                        outletMeter?.StartVisuals();
                     }
                 }
             }
