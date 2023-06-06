@@ -113,6 +113,9 @@ public class MovementSettings : ScriptableObject
     public float FallMaxSpeedX => fallMaxSpeedX;
     public float FallSmoothTimeX => fallSmoothTimeX;
     public float FallMinSpeedY => fallMinSpeedY;
+    /// <summary>
+    /// Represents the amount of time to wait before switching between the fall and wire swing state if necessary
+    /// </summary>
     public float FallToSwingWaitTime => fallToSwingWaitTime;
 
     // Run
