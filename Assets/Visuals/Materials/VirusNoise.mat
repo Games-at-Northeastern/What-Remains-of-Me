@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2639745912406770427
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 0
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,19 +33,7 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MaskTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -51,13 +52,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _Color_Threshold_1: 0.6
-    - _Color_Threshold_2: 0.5
+    - _Color_Threshold_2: 0.55
     - _Color_Threshold_3: 0.45
-    - _EnableExternalAlpha: 0
-    - _Fade_Amount: 0.9
-    - _Speed: 10
+    - _Fade_Amount: 1
+    - _Speed: 0.5
     m_Colors:
-    - _Color: {r: 0.59059906, g: 0.28920433, b: 0.6320754, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.6355138, g: 0, b: 1, a: 0}
   m_BuildTextureStacks: []
