@@ -13,12 +13,12 @@ public class SetVirusShaderLevel : MonoBehaviour
 
     private void Start()
     {
-        _batteryUIBarMaterial = _batteryUIBar.GetComponent<Material>();
+        _batteryUIBarMaterial = _batteryUIBar.material;
+        _batteryUIBar.material = _batteryUIBarMaterial;
     }
 
     private void Update()
     {
-        _batteryUIBar.material = _batteryUIBarMaterial;
         _batteryUIBarMaterial.SetFloat("_Fade_Amount", _virusLevel);
     }
 }
