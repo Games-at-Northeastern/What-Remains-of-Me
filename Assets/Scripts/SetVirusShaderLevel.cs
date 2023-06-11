@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SetVirusShaderLevel : MonoBehaviour
 {
-    [SerializeField] private float _virusLevel;
+    [SerializeField] private PlayerInfo playerEnergy;
 
     [SerializeField] private Image _batteryUIBar;
 
@@ -19,6 +19,6 @@ public class SetVirusShaderLevel : MonoBehaviour
 
     private void Update()
     {
-        _batteryUIBarMaterial.SetFloat("_Fade_Amount", _virusLevel);
+        _batteryUIBarMaterial.SetFloat("_Fade_Amount", playerEnergy.virus / 100);
     }
 }
