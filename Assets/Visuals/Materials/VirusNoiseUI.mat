@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VirusNoise
-  m_Shader: {fileID: -6465566751694194690, guid: 18e846aff8efac847bec708d121149d5, type: 3}
+  m_Name: VirusNoiseUI
+  m_Shader: {fileID: -6465566751694194690, guid: 218125d6c4e14c24bae300efdbf79710, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -51,11 +51,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BUILTIN_QueueControl: -1
+    - _BUILTIN_QueueOffset: 0
+    - _Battery_Amount: 1
     - _Color_Threshold_1: 0.6
     - _Color_Threshold_2: 0.55
     - _Color_Threshold_3: 0.35
     - _Fade_Amount: 1
+    - _Pixels_Per_Unit: 128
     - _Speed: 0.5
+    - _Virus_Amount: 1
     m_Colors:
     - _Color: {r: 0.7161486, g: 0.2216981, b: 1, a: 0}
   m_BuildTextureStacks: []
