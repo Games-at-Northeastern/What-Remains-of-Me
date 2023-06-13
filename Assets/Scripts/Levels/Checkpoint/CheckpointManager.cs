@@ -67,14 +67,30 @@ public class CheckpointManager : MonoBehaviour
     {
         respawnable.transform.position = levelStartPoint.getRespawnPosition();
         levelStartPoint.RespawnStart();
+        SetRecentPoint(levelStartPoint);
     }
 
+    /// <summary>
+    /// Store the given checkpoint as the most recently passed checkpoint (i.e. the one that the player will now respawn at)
+    /// </summary>
     public void SetRecentPoint(Checkpoint checkpoint)
     {
-        mostRecentPoint = checkpoint;
-        if (levelStartPoint == null)
+        // if the player is activating a different checkpoint
+        if (mostRecentPoint != checkpoint)
         {
-            levelStartPoint = mostRecentPoint;
+            // deactivate the old checkpoint as long as it's not the level start (i.e. the level start should always remain activated)
+            if (mostRecentPoint != levelStartPoint)
+            {
+                mostRecentPoint.OnDeactivation();
+            }
+
+            // set the new checkpoint
+            mostRecentPoint = checkpoint;
+
+            if (levelStartPoint == null)
+            {
+                levelStartPoint = mostRecentPoint;
+            }
         }
     }
 }

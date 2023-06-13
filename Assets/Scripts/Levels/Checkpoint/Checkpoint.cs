@@ -69,6 +69,16 @@ public class Checkpoint : MonoBehaviour
         }
     }
 
+    public void OnDeactivation()
+    {
+        if (isActive)
+        {
+            // TODO : fade activation light on here (or in a separate script)
+            Array.ForEach(objectsToActivate, gameObject => gameObject.SetActive(false));
+            isActive = false;
+        }
+    }
+
     /// <summary>
     /// Get the position that the player should respawn at for this checkpoint.
     /// </summary>
