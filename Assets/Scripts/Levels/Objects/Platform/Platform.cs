@@ -1,6 +1,5 @@
 namespace Levels.Objects.Platform
 {
-    using System;
     using UnityEngine;
 
     /// <summary>
@@ -13,7 +12,10 @@ namespace Levels.Objects.Platform
         [SerializeField] private float _speed;
         [SerializeField] private Transform[] _points;
 
+        [SerializeField] private float randomSpeedModifier = 0;
+
         private int _currPointIndex;
+        private int _prevPointIndex;
         private bool _shouldMove;
 
 
@@ -36,22 +38,6 @@ namespace Levels.Objects.Platform
 
         private void Update()
         {
-            if (!_shouldMove)
-            {
-                return;
-            }
-
-            if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.02f)
-            {
-                _currPointIndex++;
-
-                if (_currPointIndex == _points.Length)
-                {
-                    _currPointIndex = 0;
-                }
-                DirectionCalculate();
-            }
-
             //transform.position = Vector2.MoveTowards(transform.position,
             //    _points[_currPointIndex].position,
             //    _speed * Time.deltaTime);
@@ -61,7 +47,19 @@ namespace Levels.Objects.Platform
         {
             if (_shouldMove)
             {
-                rb.velocity = moveDirection * _speed;
+                if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.05f)
+                {
+                    _currPointIndex++;
+
+                    if (_currPointIndex == _points.Length)
+                    {
+                        _currPointIndex = 0;
+                    }
+                    DirectionCalculate();
+                }
+
+                // rb.velocity = moveDirection * _speed;
+                rb.velocity = moveDirection * Random.Range(_speed - randomSpeedModifier, _speed + randomSpeedModifier);
             }
 
         }
