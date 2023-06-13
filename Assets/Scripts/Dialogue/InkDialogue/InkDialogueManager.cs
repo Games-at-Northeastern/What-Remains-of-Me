@@ -13,14 +13,11 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private float dialogueDelayTime = 100f;
     [SerializeField] private float exitDialogueTime = 1.0f;
     
-
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI displayNameText;
     [SerializeField] private Animator portraitAnimator;
-
-    private Animator layoutAnimator;
 
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
@@ -29,37 +26,31 @@ public class InkDialogueManager : MonoBehaviour
     [Header("Load Globals JSON")]
     [SerializeField] private TextAsset globalsJSON;
 
-    private Story currentStory;
+    [Header("Configs")]
+    public bool stopMovement;
+    public bool autoTurnPage;
+    public float waitBeforePageTurn;
 
-    private Coroutine displayLineCoroutine;
-
-    private bool canContinueToNextLine = false;
     public bool dialogueIsPlaying { get; private set; }
 
-    private static InkDialogueManager instance;
-
-    private ControlSchemes _cs;
-
     // constants for ink tags (ink tags allow you to change the state of the game from ink json files)
-
     private const string SPEAKER_TAG = "speaker";
-
     private const string PORTRAIT_TAG = "portrait";
-
     private const string LAYOUT_TAG = "layout";
 
     // dialogue variables
-
     private InkDialogueVariables dialogueVariables;
 
-    public bool stopMovement;
-
-    public bool autoTurnPage;
-
-    public float waitBeforePageTurn;
-
+    // private variables
+    private Story currentStory;
+    private Coroutine displayLineCoroutine;
+    private bool canContinueToNextLine = false;
+    private Animator layoutAnimator;
+    private static InkDialogueManager instance;
+    private ControlSchemes _cs;
     private bool canSkip = false;
     private bool submitSkip = false;
+
 
     private void Awake()
     {

@@ -54,6 +54,7 @@ public class InkDialogueTrigger : MonoBehaviour
             }
         }
 
+        // disables visual cue so handler doesn't have animated text bubble upon next interaction
         if (!_firstInteraction)
         {
             visualCue.SetActive(false);
