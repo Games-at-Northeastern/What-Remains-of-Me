@@ -16,29 +16,30 @@ public class CheckpointManager : MonoBehaviour
     /// </summary>
     [SerializeField] private Checkpoint mostRecentPoint;
 
-    /// <summary>
-    /// Since the CheckpointManager is a singleton, makes sure to keep the same instance
-    /// of this game object
-    /// </summary>
-    private void Awake()
-    {
-
-    }
-
     private void Start()
     {
-        if (levelStartPoint == null)
-        {
-            Debug.LogWarning("No level start respawn point set - player will not be able to respawn at the beginning of the level");
-        } else
-        {
-            levelStartPoint.OnActivation();
-        }
-
         if (mostRecentPoint == null)
         {
             mostRecentPoint = levelStartPoint;
         }
+
+        if (levelStartPoint == null)
+        {
+            Debug.LogWarning("No level start respawn point set - player will not be able to respawn at the beginning of the level");
+        }
+        else
+        {
+            StartCoroutine(RespawnOnStart());
+        }
+    }
+
+    private IEnumerator RespawnOnStart()
+    {
+        yield return new WaitForEndOfFrame();
+        // If there is a 'starting' chamber at the beginning of the scene, have the player
+        // come out of that respawn chamber.
+        LevelManager.Instance.PlayerReset();
+        yield return null;
     }
 
     /// <summary>

@@ -30,7 +30,13 @@ public class LevelManager : MonoBehaviour
 
 
     // Event start functions that are accessible for other objects to trigger events
+    /// <summary>
+    /// Event to trigger player respawn after obstacle collision. This should respawn the player at the nearest checkpoint.
+    /// </summary>
     public void PlayerReset() => OnPlayerReset?.Invoke();
+    /// <summary>
+    /// Event to trigger full player death event. This should respawn the player at the beginning of the level.
+    /// </summary>
     public void PlayerDeath() => OnPlayerDeath?.Invoke(); // TODO: We may want to take in a type of death for this function
     public void PlayerPause()
     {
