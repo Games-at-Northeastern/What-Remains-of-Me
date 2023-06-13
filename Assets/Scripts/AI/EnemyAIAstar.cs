@@ -1,5 +1,7 @@
 using Pathfinding;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Class that deals with enemy AI path finding towards a target (player).
@@ -36,6 +38,10 @@ public class EnemyAIAstar : MonoBehaviour
     public bool jumpEnabled = true;
     // toggle enable enemy to look at target
     public bool lookAtEnabled = true;
+    // attack radius of enemy
+    public float attackRadius = 2f;
+    // how long between enemy attacks (in seconds)
+    public float attackCooldown = 2f;
 
     // private variables
     // use variable provided by A* Pathfinding library package
@@ -43,13 +49,17 @@ public class EnemyAIAstar : MonoBehaviour
     // variable to mark current waypoint
     private int currentWaypoint = 0;
 
+    // state
+    private bool isAttacking = false;
+
     // what layer all ground objects enemy detects should be on
     [SerializeField] private LayerMask groundLayer;
+
     bool reachedEndOfPath = false;
-    //private Animator anim;
     Seeker seeker;
     Rigidbody2D rb;
     Collider2D col;
+    private Animator anim;
 
     /// <summary>
     /// Initializes seeker script among other private variables.
@@ -58,10 +68,11 @@ public class EnemyAIAstar : MonoBehaviour
     /// <returns></returns>
     private void Start()
     {
-        // get seeker script, rigidbody, and collider from enemy object
+        // get components from enemy object
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
+        anim = GetComponent<Animator>();
 
         // repeatedly calls UpdatePath func based on update variable
         InvokeRepeating("UpdatePath", 0, updatePathPerSecondSpeed);
@@ -76,6 +87,29 @@ public class EnemyAIAstar : MonoBehaviour
         if (TargetInDistance() && followEnabled)
         {
             MoveTowardsPlayer();
+        }
+        else if (TargetInAttackDistance())
+        {
+            rb.velocity = new Vector2(0f, rb.velocity.y);
+            StartCoroutine(Attack());
+        }
+    }
+
+    /// <summary>
+    /// Handles the Attacking state of the Ai. 
+    /// </summary>
+    /// <returns>The wait period after the AI performs the attack</returns>
+    private IEnumerator Attack()
+    {
+        if (!isAttacking)
+        {
+            isAttacking = true;
+            anim.SetInteger("animState", 2);
+            this.gameObject.layer = 7;
+            yield return new WaitForSeconds(attackCooldown);
+            anim.SetInteger("animState", 0);
+            this.gameObject.layer = 13;
+            isAttacking = false;
         }
     }
 
@@ -131,10 +165,11 @@ public class EnemyAIAstar : MonoBehaviour
 
         if (IsPathDone())
         {
+            anim.SetInteger("animState", 0);
             return;
         }
 
-
+        anim.SetInteger("animState", 1);
         // checking if enemy is grounded
         RaycastHit2D isGrounded = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
 
@@ -147,7 +182,7 @@ public class EnemyAIAstar : MonoBehaviour
         {
             if (direction.y > minimimumHeightForJump)
             {
-                rb.AddForce(Vector2.up * walkSpeed * jumpForce);
+                rb.AddForce(Vector2.up * jumpForce);
             }
         }
 
@@ -194,6 +229,15 @@ public class EnemyAIAstar : MonoBehaviour
     private bool TargetInDistance()
     {
         return Vector2.Distance(transform.position, target.transform.position) < activateDistance;
+    }
+
+    /// <summary>
+    /// Checks whether target (player) is within attackDistance of enemy. Will start to follow if true.
+    /// </summary>
+    /// <returns>boolean</returns>
+    private bool TargetInAttackDistance()
+    {
+        return Vector2.Distance(transform.position, target.transform.position) < attackRadius;
     }
 
 }

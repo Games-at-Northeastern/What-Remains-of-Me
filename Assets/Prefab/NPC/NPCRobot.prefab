@@ -177,9 +177,10 @@ GameObject:
   - component: {fileID: 225613041}
   - component: {fileID: 225613034}
   - component: {fileID: 225613038}
+  - component: {fileID: 1519961438}
   m_Layer: 7
   m_Name: NPCRobot
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -240,16 +241,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  activateDistance: 100
+  activateDistance: 10
   updatePathPerSecondSpeed: 0.5
-  walkSpeed: 300
-  nextWaypointDistance: 10
-  minimimumHeightForJump: 0.5
+  walkSpeed: 500
+  nextWaypointDistance: 3
+  minimimumHeightForJump: 0.8
   jumpForce: 1.2
   jumpColliderOffset: 0.5
   followEnabled: 1
   jumpEnabled: 1
   lookAtEnabled: 1
+  attackRadius: 2
+  attackCooldown: 2
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
@@ -380,6 +383,26 @@ MonoBehaviour:
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: -1
+--- !u!95 &1519961438
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4055826069956893095}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7e205c232b3446949be888b37420c63c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1001 &3881124542764398864
 PrefabInstance:
   m_ObjectHideFlags: 0
