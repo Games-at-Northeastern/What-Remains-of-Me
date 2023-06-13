@@ -24,21 +24,30 @@ public class RotateTowardsPlayer : MonoBehaviour
 
     private bool activateVisual = true;
 
+    private float startRotationX;
+    private float startRotationY;
+
     private void Start()
     {
         lineRenderer.textureMode = LineTextureMode.Tile;
 
         // Invoke the function every 2 seconds, starting after 1 second
         InvokeRepeating("SetVirusBeamActive", startDelay, repeatRate);
+
+        startRotationX = turretTransform.rotation.x;
+        startRotationY = turretTransform.rotation.y;
     }
 
 
     private void Update()
     {
 
-        float angle = Mathf.Atan2(playerTransform.position.y - turretTransform.position.y, playerTransform.position.x - turretTransform.position.x) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        turretTransform.rotation = Quaternion.RotateTowards(turretTransform.rotation, targetRotation, speed * Time.deltaTime);
+
+        Vector2 direction = playerTransform.position - turretTransform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        turretTransform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+
 
         lineRenderer.material.mainTextureScale = new Vector2 (Vector2.Distance(lineRenderer.GetPosition(0), lineRenderer.GetPosition(1)), 1f);
 
@@ -46,11 +55,6 @@ public class RotateTowardsPlayer : MonoBehaviour
 
         if (activateVisual)
         {
-
-
- 
-
-
 
             RaycastHit2D hit = Physics2D.Raycast(shootingPoint.position, shootingPoint.right);
             lineRenderer.SetPosition(0, shootingPoint.position);
