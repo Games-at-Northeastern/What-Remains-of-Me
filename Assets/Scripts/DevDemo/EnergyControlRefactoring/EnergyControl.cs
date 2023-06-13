@@ -28,6 +28,10 @@ public class EnergyControl : MonoBehaviour
         return virus;
     }
 
+    // TODO : we may also want to have a method that simply takes in an energy amount and a prefered ratio
+    // This could be more abstracted and prevent repeated code - it also allows for a simpler way to do 
+    // i.e. TransferEnergy(float amount, float virusPercentage) { actualVirusAmount = Mathf.Min(amount * virusPercentage, virus)... }
+
     /// <summary>
     /// This controllable gains the given amount of energy, within it's current thresholds.
     /// <param name="amount"> float amount of energy for this object to gain </param>

@@ -38,7 +38,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     }
 
     /// <summary>
-    /// This controllable gains the given amount of energy and takes it to the player health.
+    /// This controllable gains the given amount of energy and takes it from the player health.
     /// <param name="amount"> float amount of energy for this controllable to gain </param>
     /// </summary>
     public void GainEnergy(float amount)
@@ -57,7 +57,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     }
 
     /// <summary>
-    /// This controllable gains the given amount of virus and takes it to the player health.
+    /// This controllable gains the given amount of virus and takes it from the player health.
     /// <param name="amount"> float amount of virus for this controllable to gain </param>
     /// </summary>
     public void GainVirus(float amount)
