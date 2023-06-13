@@ -73,51 +73,15 @@ public class OutletMeter : MonoBehaviour
         float limiterAmount = ((100 - max) / 100) * limiterSprites.Length - 1;
         LimiterState = Mathf.FloorToInt(limiterAmount);
 
-        /*float cleanAmount = (clean / 100) * cleanSprites.Length - 1;
-        if (cleanAmount is < 1 and > 0)
-        {
-            CleanState = 1;
-        }
-        else
-        {
-            CleanState = Mathf.FloorToInt(cleanAmount);
-        }
-
-        float virusAmount = (virus / 100) * virusSprites.Length - 1;
-        if (virusAmount is < 1 and > 0)
-        {
-            VirusState = 1;
-        }
-        else
-        {
-            VirusState = Mathf.FloorToInt(virusAmount);
-        }*/
-
-
-        /*CleanState = Mathf.FloorToInt((clean / 12.5f) * 2);
-        VirusState = Mathf.FloorToInt((virus / 12.5f) * 2);
-        if (virus > 0 && VirusState == 0)
-        {
-            VirusState = 1;
-        }
-        if (clean > 0 && CleanState == 0)
-        {
-            CleanState = 1;
-        }*/
-
         actualVirus = virus;
         actualClean = clean;
 
         limiterMeter.sprite = limiterSprites[_limiterState];
-        /*virusMeter.sprite = virusSprites[_virusState];
-        cleanMeter.sprite = cleanSprites[Mathf.Min(_cleanState + _virusState, cleanSprites.Length - 1)];*/
     }
 
     public void StartVisuals()
     {
         Debug.Log("startVisuals");
-        targetVirus = actualVirus;
-        targetClean = actualClean;
         if (coroutineRunning) { return; }
         StartCoroutine(UpdateVisuals());
     }
@@ -126,8 +90,6 @@ public class OutletMeter : MonoBehaviour
     {
         Debug.Log("endVisuals");
         powered = false;
-        targetVirus = 0;
-        targetClean = 0;
     }
 
     private IEnumerator UpdateVisuals()
@@ -138,18 +100,27 @@ public class OutletMeter : MonoBehaviour
         while (true)
         {
 
+            if(!powered)
+            {
+                targetVirus = 0;
+                targetClean = 0;
+            } else
+            {
+                targetVirus = actualVirus;
+                targetClean = actualClean;
+            }
+
             currentVirus = Mathf.Lerp(currentVirus, targetVirus, visualFillSpeed * Time.deltaTime);
             currentClean = Mathf.Lerp(currentClean, targetClean, visualFillSpeed * Time.deltaTime);
 
             VirusState = Mathf.FloorToInt((currentVirus / 12.5f) * 2);
             CleanState = Mathf.FloorToInt((currentClean / 12.5f) * 2);
-            if (currentVirus > 0 && VirusState == 0)
+            if (currentVirus > 0.05f && VirusState == 0)
             {
                 VirusState = 1;
             }
-            if (currentClean > 0 && CleanState == 0)
+            if (currentClean > 0.05f && CleanState == 0)
             {
-                Debug.Log("TEST");
                 CleanState = 1;
             }
 
@@ -160,6 +131,8 @@ public class OutletMeter : MonoBehaviour
             {
                 virusMeter.sprite = virusSprites[0];
                 cleanMeter.sprite = cleanSprites[0];
+                currentVirus = 0;
+                currentClean = 0;
                 coroutineRunning = false;
                 Debug.Log("Stopping outletmeter coroutine");
                 StopAllCoroutines();
