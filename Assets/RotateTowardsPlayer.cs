@@ -40,6 +40,8 @@ public class RotateTowardsPlayer : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
         turretTransform.rotation = Quaternion.RotateTowards(turretTransform.rotation, targetRotation, speed * Time.deltaTime);
 
+        lineRenderer.material.mainTextureScale = new Vector2 (Vector2.Distance(lineRenderer.GetPosition(0), lineRenderer.GetPosition(1)), 1f);
+
         Debug.Log(activateVisual);
 
         if (activateVisual)

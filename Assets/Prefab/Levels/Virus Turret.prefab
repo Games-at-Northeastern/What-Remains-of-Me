@@ -154,9 +154,9 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 55973931
+  m_SortingLayer: 4
+  m_SortingOrder: 1
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
@@ -657,11 +657,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf872434800686b42810865691a9c1d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energy: 50
+  cleanEnergy: 0
   maxCharge: 50
   virus: 50
   maxVirus: 50
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
+  OnVirusChange:
+    m_PersistentCalls:
+      m_Calls: []
   virusTurret: {fileID: 0}
 --- !u!1001 &7427411291464094484
 PrefabInstance:
