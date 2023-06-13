@@ -28,7 +28,7 @@ public class RobotOutlet : AControllable
        // different states of energy, changing how the robot reacts. Then on top of the energy, there is a virus switch case checking how
        // behavior should change depending on virus
          
-       if(energy > 1 || virus > 1) {
+       if(cleanEnergy > 1 || virus > 1) {
         spriteRenderer.sprite = chargedRobot;
         
         switch (virus) 

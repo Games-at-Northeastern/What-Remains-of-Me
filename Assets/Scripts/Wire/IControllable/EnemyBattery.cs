@@ -15,15 +15,15 @@ public class EnemyBattery : AControllable
     /// </summary>
     private void Update()
     {
-        if ((energy + virus) / maxCharge != 0 && (energy + virus) / maxCharge != 1)
+        if ((cleanEnergy + virus) / maxCharge != 0 && (cleanEnergy + virus) / maxCharge != 1)
         {
             // Debug.Log("Energy: " + energy / maxEnergy);
         }
-        else if ((energy + virus) / maxCharge == 0)
+        else if ((cleanEnergy + virus) / maxCharge == 0)
         {
             // Debug.Log("Dead: Drained");
         }
-        else if ((energy + virus) / maxCharge == 1)
+        else if ((cleanEnergy + virus) / maxCharge == 1)
         {
             // Debug.Log("Dead: Overloaded");
         }

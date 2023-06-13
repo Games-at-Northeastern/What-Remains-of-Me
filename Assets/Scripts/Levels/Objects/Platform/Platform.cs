@@ -1,5 +1,6 @@
 namespace Levels.Objects.Platform
 {
+    using System;
     using UnityEngine;
 
     /// <summary>
@@ -13,6 +14,7 @@ namespace Levels.Objects.Platform
         [SerializeField] private Transform[] _points;
 
         [SerializeField] private float randomSpeedModifier = 0;
+        [SerializeField] private float maxSpeedModifier = 3;
 
         private int _currPointIndex;
         private int _prevPointIndex;
@@ -59,20 +61,14 @@ namespace Levels.Objects.Platform
                 }
 
                 // rb.velocity = moveDirection * _speed;
-                rb.velocity = moveDirection * Random.Range(_speed - randomSpeedModifier, _speed + randomSpeedModifier);
+                rb.velocity = moveDirection * UnityEngine.Random.Range(_speed - randomSpeedModifier, _speed + randomSpeedModifier);
             }
 
         }
 
-        private void DirectionCalculate()
-        {
-            moveDirection = (_points[_currPointIndex].position - transform.position).normalized;
-        }
+        private void DirectionCalculate() => moveDirection = (_points[_currPointIndex].position - transform.position).normalized;
 
-        public void Activate()
-        {
-            _shouldMove = true;
-        }
+        public void Activate() => _shouldMove = true;
 
         /// <summary>
         /// Deactivates the platform by stopping the movement immediately.
@@ -82,6 +78,8 @@ namespace Levels.Objects.Platform
             _shouldMove = false;
             rb.velocity = Vector2.zero;
         }
+
+        public void SetRandomSpeedModifier(float newModifier) => randomSpeedModifier = Math.Min(newModifier, maxSpeedModifier);
 
         private void OnCollisionEnter2D(Collision2D collision)
         {

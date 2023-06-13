@@ -29,4 +29,6 @@ public class ControllablePlatform : AControllable
             hasMoved = false;
         }
     }
+
+    public void ApplyToPlatforms(Action<Platform> platformFunc) => Array.ForEach(_platforms, platform => platformFunc(platform));
 }
