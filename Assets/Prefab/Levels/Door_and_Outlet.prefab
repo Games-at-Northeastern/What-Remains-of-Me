@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 2054581767290198427}
   - component: {fileID: 3960082523616786355}
   - component: {fileID: 5020861585325251194}
-  - component: {fileID: 1208235110150334368}
+  - component: {fileID: 7247845491249076285}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -60,7 +60,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7737673195162281203}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.79, y: 0.06, z: 0}
+  m_LocalPosition: {x: 0, y: -0.32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -108,12 +108,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1257981360987708015, guid: 6e040797c10a6874e8fd66e32db4a211, type: 3}
+  m_Sprite: {fileID: 1799147530, guid: 80cacc6dc0c5891468fcc5b910096254, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 3.5, y: 3.4375}
+  m_DrawMode: 2
+  m_Size: {x: 0.5157776, y: 3.021789}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -132,20 +132,20 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0074310303, y: -0.00000023841858}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.5, y: 3.4375}
-    newSize: {x: 3.5, y: 3.4375}
+    oldSize: {x: 0.5, y: 1.1875}
+    newSize: {x: 0.5157776, y: 3.021789}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.25, y: 2.21}
+  m_Size: {x: 0.54260254, y: 2.9820352}
   m_EdgeRadius: 0
---- !u!114 &1208235110150334368
+--- !u!114 &7247845491249076285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,18 +154,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7737673195162281203}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eab1112f49eee6046b13eaec77680445, type: 3}
+  m_Script: {fileID: 11500000, guid: fb6439f5312bc4408898997a011b210e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   energy: 0
-  maxCharge: 20
+  maxCharge: 50
   virus: 0
   maxVirus: 0
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
-  _doorSpriteRenderer: {fileID: 3960082523616786355}
-  _doorCollider: {fileID: 5020861585325251194}
-  _openDoorSprite: {fileID: 1722359868, guid: 6e040797c10a6874e8fd66e32db4a211, type: 3}
-  _closedDoorSprite: {fileID: 1257981360987708015, guid: 6e040797c10a6874e8fd66e32db4a211, type: 3}
+  posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!1001 &5445610359586298925
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -176,7 +173,7 @@ PrefabInstance:
     - target: {fileID: 174682162069955913, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
       propertyPath: controlled
       value: 
-      objectReference: {fileID: 1208235110150334368}
+      objectReference: {fileID: 7247845491249076285}
     - target: {fileID: 9156519854386073056, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
       propertyPath: m_RootOrder
       value: 1

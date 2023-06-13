@@ -7,13 +7,34 @@ public class DetachCameraFromPlayer : MonoBehaviour
 {
     [SerializeField] private GameObject GameCamera;
     [SerializeField] private CinemachineVirtualCamera VirtualCam;
+    [SerializeField] private Transform bossRoomCameraCenter;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.tag == "Player")
+        {
+            VirtualCam.Follow = collision.gameObject.transform;
+        }
+
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            VirtualCam.Follow = collision.gameObject.transform;
+        }
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
         if(collision.gameObject.tag == "Player")
         {
-            VirtualCam.Follow = null;
-            GameCamera.transform.position = new Vector3(46.5f, 6.5f, 0f); //hardcoded :P
+            VirtualCam.Follow = bossRoomCameraCenter;
+            GameCamera.transform.position = bossRoomCameraCenter.position; //hardcoded :P
         }
     }
+
+
 }
