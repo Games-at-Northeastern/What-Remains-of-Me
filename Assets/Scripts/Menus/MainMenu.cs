@@ -8,13 +8,15 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MainMenu : MonoBehaviour
 {
-   
+
+    [SerializeField] private int sceneID;
+
    /// <summary>
    /// Loads Chapter 1 Room 1 (the tutorial scene).
    /// </summary>
     public void StartGame()
     {
-        SceneManager.LoadScene("Chapt1Room1StartingTutorial");
+        SceneManager.LoadScene(sceneID);
     }
 
     /// <summary>
