@@ -12,15 +12,8 @@ using UnityEngine;
 /// </summary>
 public class OutletMeter : MonoBehaviour
 {
-    
-    /*[Range(0, 9)]
-    public int Limiter = 0;
 
-    [Range(0, 16)]
-    public int Virus = 0;
-
-    [Range(0, 16)]
-    public int Clean = 0;*/
+    Outlet outlet;
 
     [SerializeField] private Sprite[] limiterSprites;
     [SerializeField] private Sprite[] virusSprites;
@@ -67,22 +60,29 @@ public class OutletMeter : MonoBehaviour
         set { _cleanState = Mathf.Clamp(value, 0, cleanSprites.Length - 1); }
     }
 
-    public void UpdateValues(float virus, float clean, float max)
+    private void Awake()
     {
+        outlet = transform.GetComponentInParent<Outlet>();
+        GetValues();
+    }
 
-        float limiterAmount = ((100 - max) / 100) * limiterSprites.Length - 1;
+    public void GetValues()
+    {
+        if (outlet == null) { return; }
+
+        float limiterAmount = ((100 - outlet.GetMaxCharge()) / 100) * limiterSprites.Length - 1;
         LimiterState = Mathf.FloorToInt(limiterAmount);
 
-        actualVirus = virus;
-        actualClean = clean;
+        actualVirus = outlet.GetVirus();
+        actualClean = outlet.GetEnergy();
 
         limiterMeter.sprite = limiterSprites[_limiterState];
     }
 
     public void StartVisuals()
     {
-        Debug.Log("startVisuals");
         if (coroutineRunning) { return; }
+        Debug.Log("startVisuals");
         StartCoroutine(UpdateVisuals());
     }
 
@@ -99,7 +99,7 @@ public class OutletMeter : MonoBehaviour
         powered = true;
         while (true)
         {
-
+            GetValues();
             if(!powered)
             {
                 targetVirus = 0;

@@ -19,7 +19,6 @@ public class Outlet : MonoBehaviour
     ControlSchemes CS;
     [SerializeField] AControllable controlled;
     [SerializeField] float energyTransferSpeed;
-    [SerializeField] OutletMeter visuals;
 
     private void Awake()
     {
@@ -35,10 +34,6 @@ public class Outlet : MonoBehaviour
         CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); } };
         CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); } };
 
-        if (visuals != null && controlled == null)
-        {
-            visuals.UpdateValues(0, 0, 0);
-        }
         //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
     }
 
@@ -125,14 +120,31 @@ public class Outlet : MonoBehaviour
         }
     }
 
-
-    private void Update()
+    public float GetMaxCharge()
     {
-        if (visuals != null && controlled != null)
+        if (controlled != null)
         {
-            visuals.UpdateValues(controlled.GetVirus(), controlled.GetEnergy(), controlled.GetMaxCharge());
+            return controlled.GetMaxCharge();
         }
-        
+        return 0f;
+    }
+
+    public float GetEnergy()
+    {
+        if (controlled != null)
+        {
+            return controlled.GetEnergy();
+        }
+        return 0f;
+    }
+
+    public float GetVirus()
+    {
+        if (controlled != null)
+        {
+            return controlled.GetVirus();
+        }
+        return 0f;
     }
 }
 
