@@ -11,6 +11,7 @@ using UnityEngine;
 public class VirusEffectPlatform : MonoBehaviour
 {
     [SerializeField] private ControllablePlatform platformController;
+    [SerializeField] private ParticleSystem virusParticles;
 
     private float currentVirusPercentage;
 
@@ -21,12 +22,22 @@ public class VirusEffectPlatform : MonoBehaviour
             platformController = GetComponent<ControllablePlatform>();
         }
         platformController.OnVirusChange.AddListener(updatePlatformSpeeds);
+        platformController.OnVirusChange.AddListener(updateVirusParticles);
+
     }
 
     private void updatePlatformSpeeds(float virusPercentage)
     {
         currentVirusPercentage = virusPercentage;
         platformController.ApplyToPlatforms(modifySpeed);
+    }
+
+    private void updateVirusParticles(float virusPercentage)
+    {
+        if (virusParticles)
+        {
+            virusParticles.maxParticles = Mathf.FloorToInt(virusPercentage * 8);
+        } 
     }
 
     private void modifySpeed(Platform platform)
