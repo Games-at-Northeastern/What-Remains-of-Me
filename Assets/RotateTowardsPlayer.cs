@@ -10,13 +10,16 @@ public class RotateTowardsPlayer : MonoBehaviour
 {
     [SerializeField] private Transform turretTransform;
 
+    private Quaternion originalTurretRotation;
+
     [SerializeField] private Transform playerTransform;
 
-    [SerializeField] private float speed = 10f;
+    [SerializeField] private float speed = 1f;
 
     [SerializeField] private LineRenderer lineRenderer;
 
     [SerializeField] private Transform shootingPoint;
+    [SerializeField] private LayerMask laserCollidesWith;
 
 
     public PlayerInfo playerInfo;
@@ -28,6 +31,8 @@ public class RotateTowardsPlayer : MonoBehaviour
     [SerializeField] private float shootDuration = 2f;
     [Tooltip("Duration in seconds that this object will pause for between shooting")]
     [SerializeField] private float delayBetweenShots = 2f;
+    [SerializeField] private float maxLaserDistance = 20;
+
 
     private bool activateVisual = true;
 
@@ -43,15 +48,17 @@ public class RotateTowardsPlayer : MonoBehaviour
         // Calculate the direction towards the player, and rotate that way
         Vector2 direction = playerTransform.position - turretTransform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        turretTransform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
+        Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        turretTransform.rotation = Quaternion.Lerp(turretTransform.rotation, targetRotation, speed * Time.deltaTime);
+        //turretTransform.rotation = targetRotation;
 
         if (activateVisual)
         {
 
             // Determine the nearest collision from the turret's shooting line towards the player,
             // and set the line renderer to display until that collision point
-            RaycastHit2D hit = Physics2D.Raycast(shootingPoint.position, shootingPoint.right);
+            RaycastHit2D hit = Physics2D.Raycast(shootingPoint.position, shootingPoint.right, maxLaserDistance, laserCollidesWith);
+            Debug.Log(hit.collider.gameObject);
             lineRenderer.SetPosition(0, shootingPoint.position);
             lineRenderer.SetPosition(1, hit.point);
 
