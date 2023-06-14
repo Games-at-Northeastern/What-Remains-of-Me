@@ -24,7 +24,10 @@ public class RotateTowardsPlayer : MonoBehaviour
     public int virusTransferPerSecond = 5;
 
     [SerializeField] private float startDelay = 1f;
-    [SerializeField] private float repeatRate = 2f;
+    [Tooltip("Duration in seconds that this object will shoot continuously for, i.e. length of shots")]
+    [SerializeField] private float shootDuration = 2f;
+    [Tooltip("Duration in seconds that this object will pause for between shooting")]
+    [SerializeField] private float delayBetweenShots = 2f;
 
     private bool activateVisual = true;
 
@@ -32,23 +35,16 @@ public class RotateTowardsPlayer : MonoBehaviour
     {
         lineRenderer.textureMode = LineTextureMode.Tile;
 
-        // Invoke the function every <repeatRate> seconds, starting after <startDelay> seconds
-        InvokeRepeating("ToggleVirusBeamActive", startDelay, repeatRate);
-
+        StartCoroutine(ShootLaserCycle());
     }
-
 
     private void Update()
     {
-
         // Calculate the direction towards the player, and rotate that way
         Vector2 direction = playerTransform.position - turretTransform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         turretTransform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        // Set the scale of the texture to the magnitude of the line being rendered, so that there's no
-        // texture squishing or stretching
-        lineRenderer.material.mainTextureScale = new Vector2 (Vector2.Distance(lineRenderer.GetPosition(0), lineRenderer.GetPosition(1)), 1f);
 
         if (activateVisual)
         {
@@ -59,6 +55,9 @@ public class RotateTowardsPlayer : MonoBehaviour
             lineRenderer.SetPosition(0, shootingPoint.position);
             lineRenderer.SetPosition(1, hit.point);
 
+            // Set the scale of the texture to the magnitude of the line being rendered, so that there's no
+            // texture squishing or stretching
+            lineRenderer.material.mainTextureScale = new Vector2(Vector2.Distance(lineRenderer.GetPosition(0), lineRenderer.GetPosition(1)), 1f);
 
             // If the shooting line/laser hits the player, manually adjust the player's energy and virus appropriately
             if (LayerMask.LayerToName(hit.transform.gameObject.layer) == "Player")
@@ -66,18 +65,31 @@ public class RotateTowardsPlayer : MonoBehaviour
                 playerInfo.battery += energyTransferPerSecond * Time.fixedDeltaTime;
                 playerInfo.virus += virusTransferPerSecond * Time.fixedDeltaTime;
             }
+        }
+    }
 
+    private IEnumerator ShootLaserCycle()
+    {
+        // Delay before beginning the laser cycle
+        yield return new WaitForSeconds(startDelay);
+
+        while (true)
+        {
+            // begin shooting for <shootDuration> seconds
+            SetVirusBeamActive(true);
+            yield return new WaitForSeconds(shootDuration);
+
+            // pause shooting for <delayBetweenShots> seconds
+            SetVirusBeamActive(false);
+            yield return new WaitForSeconds(delayBetweenShots);
         }
 
-
     }
 
 
-    private void ToggleVirusBeamActive()
+    private void SetVirusBeamActive(bool isActive)
     {
-        activateVisual = !activateVisual;
-        lineRenderer.gameObject.SetActive(activateVisual);
+        activateVisual = isActive;
+        lineRenderer.gameObject.SetActive(isActive);
     }
-
-
 }
