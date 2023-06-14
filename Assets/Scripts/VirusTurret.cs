@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VirusTurret : AControllable
 {
-    [SerializeField] private ActivateVirusBeam virusTurret;
+    /**[SerializeField] private ActivateVirusBeam virusTurret;
     private void Update()
     {
         if(GetEnergy() <= 0f)
@@ -12,5 +12,5 @@ public class VirusTurret : AControllable
             virusTurret.StopVirusBeam();
             virusTurret.virusBeam.SetActive(false);
         }
-    }
+    }**/
 }
