@@ -310,6 +310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5601625249604626433}
   - component: {fileID: 2896789920481395068}
+  - component: {fileID: 1217607481}
   m_Layer: 0
   m_Name: Virus Turret
   m_TagString: Untagged
@@ -355,11 +356,33 @@ MonoBehaviour:
   speed: 20
   lineRenderer: {fileID: 7094890259500355583}
   shootingPoint: {fileID: 6231597123975154448}
+  laserCollisionMask:
+    serializedVersion: 2
+    m_Bits: 111065
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
-  energyAmount: 0
-  virusAmount: 2
-  startDelay: 1
-  repeatRate: 2
+  energyTransferPerSecond: 0
+  virusTransferPerSecond: 5
+  startDelay: 5
+  shootDuration: 2
+  delayBetweenShots: 2
+  maxLaserDistance: 20
+--- !u!1818360609 &1217607481
+RotationConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5601625249604626434}
+  m_Enabled: 1
+  m_Weight: 1
+  m_RotationAtRest: {x: -180, y: 180, z: 0}
+  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 0
+  m_IsContraintActive: 1
+  m_IsLocked: 0
+  m_Sources: []
 --- !u!1 &8917165853002356310
 GameObject:
   m_ObjectHideFlags: 0
