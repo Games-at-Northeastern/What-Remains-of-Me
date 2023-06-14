@@ -22,6 +22,7 @@ public class RotateTowardsPlayer : MonoBehaviour
     [SerializeField] private LayerMask laserCollidesWith;
 
 
+    public bool turnedOn;
     public PlayerInfo playerInfo;
     public int energyTransferPerSecond = 0;
     public int virusTransferPerSecond = 5;
@@ -38,6 +39,7 @@ public class RotateTowardsPlayer : MonoBehaviour
 
     private void Start()
     {
+        turnedOn = true;
         lineRenderer.textureMode = LineTextureMode.Tile;
 
         StartCoroutine(ShootLaserCycle());
@@ -45,32 +47,35 @@ public class RotateTowardsPlayer : MonoBehaviour
 
     private void Update()
     {
-        // Calculate the direction towards the player, and rotate that way
-        Vector2 direction = playerTransform.position - turretTransform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        turretTransform.rotation = Quaternion.Lerp(turretTransform.rotation, targetRotation, speed * Time.deltaTime);
-        //turretTransform.rotation = targetRotation;
-
-        if (activateVisual)
+        if (turnedOn)
         {
+            // Calculate the direction towards the player, and rotate that way
+            Vector2 direction = playerTransform.position - turretTransform.position;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            turretTransform.rotation = Quaternion.Lerp(turretTransform.rotation, targetRotation, speed * Time.deltaTime);
+            //turretTransform.rotation = targetRotation;
 
-            // Determine the nearest collision from the turret's shooting line towards the player,
-            // and set the line renderer to display until that collision point
-            RaycastHit2D hit = Physics2D.Raycast(shootingPoint.position, shootingPoint.right, maxLaserDistance, laserCollidesWith);
-            Debug.Log(hit.collider.gameObject);
-            lineRenderer.SetPosition(0, shootingPoint.position);
-            lineRenderer.SetPosition(1, hit.point);
-
-            // Set the scale of the texture to the magnitude of the line being rendered, so that there's no
-            // texture squishing or stretching
-            lineRenderer.material.mainTextureScale = new Vector2(Vector2.Distance(lineRenderer.GetPosition(0), lineRenderer.GetPosition(1)), 1f);
-
-            // If the shooting line/laser hits the player, manually adjust the player's energy and virus appropriately
-            if (LayerMask.LayerToName(hit.transform.gameObject.layer) == "Player")
+            if (activateVisual)
             {
-                playerInfo.battery += energyTransferPerSecond * Time.fixedDeltaTime;
-                playerInfo.virus += virusTransferPerSecond * Time.fixedDeltaTime;
+
+                // Determine the nearest collision from the turret's shooting line towards the player,
+                // and set the line renderer to display until that collision point
+                RaycastHit2D hit = Physics2D.Raycast(shootingPoint.position, shootingPoint.right, maxLaserDistance, laserCollidesWith);
+                Debug.Log(hit.collider.gameObject);
+                lineRenderer.SetPosition(0, shootingPoint.position);
+                lineRenderer.SetPosition(1, hit.point);
+
+                // Set the scale of the texture to the magnitude of the line being rendered, so that there's no
+                // texture squishing or stretching
+                lineRenderer.material.mainTextureScale = new Vector2(Vector2.Distance(lineRenderer.GetPosition(0), lineRenderer.GetPosition(1)), 1f);
+
+                // If the shooting line/laser hits the player, manually adjust the player's energy and virus appropriately
+                if (LayerMask.LayerToName(hit.transform.gameObject.layer) == "Player")
+                {
+                    playerInfo.battery += energyTransferPerSecond * Time.fixedDeltaTime;
+                    playerInfo.virus += virusTransferPerSecond * Time.fixedDeltaTime;
+                }
             }
         }
     }
@@ -82,15 +87,20 @@ public class RotateTowardsPlayer : MonoBehaviour
 
         while (true)
         {
-            // begin shooting for <shootDuration> seconds
-            SetVirusBeamActive(true);
-            yield return new WaitForSeconds(shootDuration);
+            if (turnedOn)
+            {
+                // begin shooting for <shootDuration> seconds
+                SetVirusBeamActive(true);
+                yield return new WaitForSeconds(shootDuration);
 
-            // pause shooting for <delayBetweenShots> seconds
-            SetVirusBeamActive(false);
-            yield return new WaitForSeconds(delayBetweenShots);
+                // pause shooting for <delayBetweenShots> seconds
+                SetVirusBeamActive(false);
+                yield return new WaitForSeconds(delayBetweenShots);
+            } else
+            {
+                yield return new WaitForSeconds(delayBetweenShots);
+            }
         }
-
     }
 
 

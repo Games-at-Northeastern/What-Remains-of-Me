@@ -45,6 +45,9 @@ public abstract class AControllable : MonoBehaviour, IControllable
     public UnityEvent<float> OnVirusChange;
     public void VirusChange(float virusPercentage) => OnVirusChange?.Invoke(virusPercentage);
 
+    public UnityEvent<float> OnEnergyChange;
+    public void EnergyChange(float totalEnergyAmount) => OnEnergyChange?.Invoke(totalEnergyAmount);
+
     /// <summary>
     /// This controllable gains the given amount of energy and takes it from the player health.
     /// <param name="amount"> float amount of energy for this controllable to gain </param>
@@ -62,6 +65,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         playerInfo.battery -= amount;
 
         cleanEnergy = Mathf.Clamp(cleanEnergy + amount, 0, maxCharge);
+        EnergyChange(totalEnergy);
     }
 
     /// <summary>
@@ -85,6 +89,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
 
         virus = Mathf.Clamp(virus + amount, 0, maxCharge);
         VirusChange(virus / totalEnergy);
+        EnergyChange(totalEnergy);
     }
 
     /// <summary>
@@ -105,6 +110,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         playerInfo.battery += amount;
 
         cleanEnergy = Mathf.Clamp(cleanEnergy - amount, 0, maxCharge);
+        EnergyChange(totalEnergy);
     }
 
     /// <summary>
@@ -128,6 +134,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
 
         virus = Mathf.Clamp(virus - amount, 0, maxCharge);
         VirusChange(virus / totalEnergy);
+        EnergyChange(totalEnergy);
     }
 
     /// <summary>

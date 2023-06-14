@@ -1977,6 +1977,9 @@ MonoBehaviour:
   OnVirusChange:
     m_PersistentCalls:
       m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
   _platforms:
   - {fileID: 433211876}
 --- !u!4 &609575654
@@ -2357,6 +2360,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1960977109}
     m_Modifications:
+    - target: {fileID: 701339818, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+      propertyPath: turretLights.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 701339818, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+      propertyPath: turretLights.Array.data[0]
+      value: 
+      objectReference: {fileID: 774529727}
+    - target: {fileID: 701339818, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+      propertyPath: turretLights.Array.data[1]
+      value: 
+      objectReference: {fileID: 774529726}
     - target: {fileID: 2896789920481395068, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
       propertyPath: speed
       value: 2
@@ -2436,6 +2451,28 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5601625249604626432, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+--- !u!114 &774529726 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6539084202685943259, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+  m_PrefabInstance: {fileID: 774529725}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &774529727 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1387844710145077091, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+  m_PrefabInstance: {fileID: 774529725}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &779268760
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31015,6 +31052,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1960977109}
     m_Modifications:
+    - target: {fileID: 701339818, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+      propertyPath: turretLights.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 701339818, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+      propertyPath: turretLights.Array.data[0]
+      value: 
+      objectReference: {fileID: 5601625249021070837}
+    - target: {fileID: 701339818, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+      propertyPath: turretLights.Array.data[1]
+      value: 
+      objectReference: {fileID: 5601625249021070836}
     - target: {fileID: 2896789920481395068, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
       propertyPath: speed
       value: 2
@@ -31086,6 +31135,28 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5601625249604626432, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+--- !u!114 &5601625249021070836 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6539084202685943259, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+  m_PrefabInstance: {fileID: 5601625249021070835}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5601625249021070837 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1387844710145077091, guid: 4308c8b2eef5b344aae467357f8990e1, type: 3}
+  m_PrefabInstance: {fileID: 5601625249021070835}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5948060647386587020
 GameObject:
   m_ObjectHideFlags: 0
@@ -31570,6 +31641,9 @@ MonoBehaviour:
   maxVirus: 0
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
   OnVirusChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
   _platforms:
