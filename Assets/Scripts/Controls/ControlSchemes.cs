@@ -389,7 +389,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""34abc2c5-7a61-4244-8452-ea818f36081c"",
-                    ""path"": ""<Keyboard>/enter"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
