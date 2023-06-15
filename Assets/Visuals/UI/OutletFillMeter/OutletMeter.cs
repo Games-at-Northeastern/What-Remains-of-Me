@@ -13,7 +13,7 @@ using UnityEngine;
 public class OutletMeter : MonoBehaviour
 {
 
-    Outlet outlet;
+    private Outlet outlet;
 
     [SerializeField] private Sprite[] limiterSprites;
     [SerializeField] private Sprite[] virusSprites;
@@ -34,6 +34,7 @@ public class OutletMeter : MonoBehaviour
     private float actualVirus;
     private float actualClean;
 
+    private bool plugConnected;
     private bool coroutineRunning = false;
     private bool powered = false;
 
@@ -81,15 +82,28 @@ public class OutletMeter : MonoBehaviour
 
     public void StartVisuals()
     {
-        if (coroutineRunning) { return; }
+        if (coroutineRunning || plugConnected)
+        { return; }
         Debug.Log("startVisuals");
         StartCoroutine(UpdateVisuals());
     }
 
     public void EndVisuals()
     {
+        if (plugConnected)
+        { return; }
         Debug.Log("endVisuals");
         powered = false;
+    }
+
+    public void ConnectPlug()
+    {
+        plugConnected = true;
+    }
+
+    public void DisconnectPlug()
+    {
+        plugConnected = false;
     }
 
     private IEnumerator UpdateVisuals()
