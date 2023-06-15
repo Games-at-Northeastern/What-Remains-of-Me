@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Levels.Objects.Platform;
 using UnityEngine;
+using UnityEngine.VFX;
 
 /// <summary>
 /// Applies a movement speed 'glitch' effect to the platforms controlled by this object,
@@ -11,7 +12,7 @@ using UnityEngine;
 public class VirusEffectSpeedPlatform : MonoBehaviour
 {
     [SerializeField] private ControllablePlatform platformController;
-    [SerializeField] private ParticleSystem virusParticles;
+    [SerializeField] private VisualEffect virusEffect;
 
     private float currentVirusPercentage;
 
@@ -34,9 +35,9 @@ public class VirusEffectSpeedPlatform : MonoBehaviour
 
     private void updateVirusParticles(float virusPercentage)
     {
-        if (virusParticles)
+        if (virusEffect)
         {
-            virusParticles.maxParticles = Mathf.FloorToInt(virusPercentage * 20);
+            virusEffect.SetFloat("Density", virusPercentage);
         }
     }
 
