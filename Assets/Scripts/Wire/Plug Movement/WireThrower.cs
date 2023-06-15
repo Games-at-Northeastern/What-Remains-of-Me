@@ -258,6 +258,7 @@ public class WireThrower : MonoBehaviour
                     _lockOnOutlet = closest;
                     _isLockOn = true;
                     OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+                    outletMeter?.EndVisuals();
                     lastReticleLock = closest;
                     outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
                     outletMeter?.StartVisuals();
@@ -417,9 +418,6 @@ public class WireThrower : MonoBehaviour
         _distanceJoint.enabled = true;
         _distanceJoint.connectedAnchor = ConnectedOutlet.transform.position;
         Destroy(_activePlug);
-        Debug.Log("CONNECTED TO PLUG");
-        OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
-        outletMeter?.ConnectPlug();
     }
 
     /// <summary>
@@ -427,17 +425,10 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void Disconnect()
     {
-        OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
-        if (outletMeter != null)
-        {
-            outletMeter.DisconnectPlug();
-            outletMeter.EndVisuals();
-        } 
         onDisconnect.Invoke();
         _distanceJoint.enabled = false;
         ConnectedOutlet.Disconnect();
         ConnectedOutlet = null;
-        Debug.Log("DISCONNECTED FROM PLUG");
     }
 
     /// <summary>
