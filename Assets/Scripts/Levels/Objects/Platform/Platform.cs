@@ -16,6 +16,9 @@ namespace Levels.Objects.Platform
         [SerializeField] private float randomSpeedModifier = 0;
         [SerializeField] private float maxSpeedModifier = 3;
 
+
+        [SerializeField] private float speedModifier = 1f;
+
         private int _currPointIndex;
         private int _prevPointIndex;
         private bool _shouldMove;
@@ -61,7 +64,8 @@ namespace Levels.Objects.Platform
                 }
 
                 // rb.velocity = moveDirection * _speed;
-                rb.velocity = moveDirection * UnityEngine.Random.Range(_speed - randomSpeedModifier, _speed + randomSpeedModifier);
+                //rb.velocity = moveDirection * UnityEngine.Random.Range(_speed - randomSpeedModifier, _speed + randomSpeedModifier);
+                rb.velocity = moveDirection * speedModifier * _speed;
             }
 
         }
@@ -80,6 +84,11 @@ namespace Levels.Objects.Platform
         }
 
         public void SetRandomSpeedModifier(float newModifier) => randomSpeedModifier = Math.Min(newModifier, maxSpeedModifier);
+
+        public void SetSpeedModifier(float newModifier)
+        {
+            speedModifier = newModifier;
+        }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {

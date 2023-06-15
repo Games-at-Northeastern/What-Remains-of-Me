@@ -1,5 +1,75 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4234526189968909145
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2748678289466159337}
+    m_Modifications:
+    - target: {fileID: 6467185822469393828, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_Name
+      value: SparkingParticles (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.672
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393829, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393831, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467185822469393831, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 200
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+--- !u!198 &7134827846254751486 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6467185822469393831, guid: 7aab513651187b44885b2219bd6616a4, type: 3}
+  m_PrefabInstance: {fileID: 4234526189968909145}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7126096027260762279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -123,6 +193,14 @@ PrefabInstance:
       propertyPath: maxCharge
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 4954450812213478046, guid: c83f3005c705c43abab3a63fc143b7e0, type: 3}
+      propertyPath: cleanEnergy
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4954450812249458764, guid: c83f3005c705c43abab3a63fc143b7e0, type: 3}
+      propertyPath: speedModifier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4954450812249458766, guid: c83f3005c705c43abab3a63fc143b7e0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.5
@@ -222,7 +300,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4954450812213478033, guid: c83f3005c705c43abab3a63fc143b7e0, type: 3}
   m_PrefabInstance: {fileID: 7126096027260762279}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2125209110
+--- !u!114 &7461121457707927452
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -231,10 +309,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2748678289291901494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05f8451043761cf4db2d604a6ff1406a, type: 3}
+  m_Script: {fileID: 11500000, guid: 12f63784003ac9e459f036b84ad6403f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   platformController: {fileID: 2748678289291901497}
+  virusParticles: {fileID: 7134827846254751486}
 --- !u!114 &2748678289291901497 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4954450812213478046, guid: c83f3005c705c43abab3a63fc143b7e0, type: 3}
@@ -246,3 +325,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b221df3b18d866b4388068f553967b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &2748678289466159337 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4954450812249458766, guid: c83f3005c705c43abab3a63fc143b7e0, type: 3}
+  m_PrefabInstance: {fileID: 7126096027260762279}
+  m_PrefabAsset: {fileID: 0}
