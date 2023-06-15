@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class VirusTurret : AControllable
+public class VirusTurretOutlet : AControllable
 {
-    [SerializeField] private RotateTowardsPlayer virusTurret;
+    [SerializeField] private VirusTurret virusTurret;
     [SerializeField] private Light2D[] turretLights;
 
     private void Start()
     {
         if (virusTurret == null)
         {
-            virusTurret = GetComponentInParent<RotateTowardsPlayer>();
+            virusTurret = GetComponentInParent<VirusTurret>();
         }
 
         OnEnergyChange.AddListener(CheckForTurretPower);

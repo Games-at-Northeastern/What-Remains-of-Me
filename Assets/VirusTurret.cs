@@ -6,11 +6,10 @@ using UnityEngine;
 /// Script that tracks the current player and rotates towards it. It also handles
 /// shooting out a line towards the player, i.e. the laser beam from the turret.
 /// </summary>
-public class RotateTowardsPlayer : MonoBehaviour
+public class VirusTurret : MonoBehaviour
 {
-    [SerializeField] private Transform turretTransform;
+    [SerializeField] private Transform rotatingPointTransform;
 
-    private Quaternion originalTurretRotation;
 
     [SerializeField] private Transform playerTransform;
 
@@ -50,10 +49,10 @@ public class RotateTowardsPlayer : MonoBehaviour
         if (turnedOn)
         {
             // Calculate the direction towards the player, and rotate that way
-            Vector2 direction = playerTransform.position - turretTransform.position;
+            Vector2 direction = playerTransform.position - rotatingPointTransform.position;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            turretTransform.rotation = Quaternion.Lerp(turretTransform.rotation, targetRotation, speed * Time.deltaTime);
+            rotatingPointTransform.rotation = Quaternion.Lerp(rotatingPointTransform.rotation, targetRotation, speed * Time.deltaTime);
             //turretTransform.rotation = targetRotation;
 
             if (activateVisual)
