@@ -9,18 +9,19 @@ using UnityEngine;
 public class MovementExecuter : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb; // To move the player
-    [SerializeField] private MovementInfo mi; // Gives other info to move scripts
-    [SerializeField] private MovementSettings ms; // Gives constants to move scripts
-    [SerializeField] private WireThrower wt; // Gives information about the wire
-    [SerializeField] private PlayerHealth ph; // Gives info about player health / damage
+    [SerializeField] private MovementInfo movementInfo; // Gives other info to move scripts
+    [SerializeField] private MovementSettings movementSettings; // Gives constants to move scripts
+    [SerializeField] private WireThrower wireThrower; // Gives information about the wire
+    [SerializeField] private PlayerHealth playerHealth; // Gives info about player health / damage
 
     private LevelManager levelManager;
     private IMove currentMove; // The move taking place this frame
     private Vector3 respawnPosition;
-    private ControlSchemes cs;
+    private ControlSchemes controlSchemes;
 
     private bool isPaused;
-
+    [Space]
+    [Header("Platform stuff, don't assign or modify")]
     public bool isOnAPlatform;
     public Rigidbody2D platformRb;
 
@@ -29,11 +30,11 @@ public class MovementExecuter : MonoBehaviour
     // Initialization
     private void Awake()
     {
-        cs = new ControlSchemes();
-        cs.Enable();
-        cs.Debug.Restart.performed += _ => Restart();
+        controlSchemes = new ControlSchemes();
+        controlSchemes.Enable();
+        controlSchemes.Debug.Restart.performed += _ => Restart();
 
-        currentMove = new StarterMove(mi, ms, cs, wt, ph);
+        currentMove = new StarterMove(movementInfo, movementSettings, controlSchemes, wireThrower, playerHealth);
         respawnPosition = transform.position;
 
         isPaused = false;
@@ -58,8 +59,8 @@ public class MovementExecuter : MonoBehaviour
         levelManager.OnPlayerPause.AddListener(Pause);
         levelManager.OnPlayerUnpause.AddListener(Unpause);
 
-        levelManager.OnPlayerPause.AddListener(cs.Disable);
-        levelManager.OnPlayerUnpause.AddListener(cs.Enable);
+        levelManager.OnPlayerPause.AddListener(controlSchemes.Disable);
+        levelManager.OnPlayerUnpause.AddListener(controlSchemes.Enable);
     }
 
     /// <summary>
