@@ -30,6 +30,7 @@ public class InkDialogueManager : MonoBehaviour
     public bool stopMovement;
     public bool autoTurnPage;
     public float waitBeforePageTurn;
+    public bool dialogueEnded;
 
     public bool dialogueIsPlaying { get; private set; }
 
@@ -76,6 +77,7 @@ public class InkDialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
         stopMovement = true;
         stopMovement = false;
+        dialogueEnded = false;
 
         layoutAnimator = dialoguePanel.GetComponent<Animator>();
 
@@ -153,6 +155,7 @@ public class InkDialogueManager : MonoBehaviour
         dialogueVariables.StopListening(currentStory);
 
         dialogueIsPlaying = false;
+        dialogueEnded = true;
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
 
