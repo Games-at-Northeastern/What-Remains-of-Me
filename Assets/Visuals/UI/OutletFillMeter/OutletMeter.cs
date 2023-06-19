@@ -82,6 +82,7 @@ public class OutletMeter : MonoBehaviour
 
     public void StartVisuals()
     {
+        powered = true;
         if (coroutineRunning || plugConnected)
         { return; }
         Debug.Log("startVisuals");
@@ -99,18 +100,19 @@ public class OutletMeter : MonoBehaviour
     public void ConnectPlug()
     {
         plugConnected = true;
+        powered = true;
     }
 
     public void DisconnectPlug()
     {
         plugConnected = false;
+        powered= false;
     }
 
     private IEnumerator UpdateVisuals()
     {
         Debug.Log("Starting outletmeter coroutine");
         coroutineRunning = true;
-        powered = true;
         while (true)
         {
             GetValues();

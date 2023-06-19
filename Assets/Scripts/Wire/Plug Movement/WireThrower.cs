@@ -239,6 +239,7 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void ChangeOutletTarget()
     {
+        
         if (_lockOnOutlet == null)
         {
             GameObject[] gos;
@@ -257,16 +258,13 @@ public class WireThrower : MonoBehaviour
                     //distance = curDistance;
                     _lockOnOutlet = closest;
                     _isLockOn = true;
-                    OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
-                    outletMeter?.EndVisuals();
-                    lastReticleLock = closest;
-                    outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
-                    outletMeter?.StartVisuals();
+                    UpdateMeter(closest);
                 }
             }
         }
         else
         {
+            
             GameObject[] gos;
             gos = GameObject.FindGameObjectsWithTag("Outlet");
             GameObject closest = null;
@@ -275,6 +273,7 @@ public class WireThrower : MonoBehaviour
             Vector3 position = transform.position;
             foreach (GameObject go in gos)
             {
+                //Debug.Log("among");
                 Vector3 diff = go.transform.position - position;
                 float curDistance = Vector2.Distance(this.transform.position, go.transform.position);
                 if (go.GetComponent<SpriteRenderer>().isVisible)
@@ -290,11 +289,7 @@ public class WireThrower : MonoBehaviour
                         //distance = curDistance;
                         _lockOnOutlet = closest;
                         originalDistance = curDistance;
-                        OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
-                        outletMeter?.EndVisuals();
-                        lastReticleLock = closest;
-                        outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
-                        outletMeter?.StartVisuals();
+                        UpdateMeter(closest);
                     }
                 }
             }
@@ -307,6 +302,15 @@ public class WireThrower : MonoBehaviour
             }
         }
         _lastRecordedPosition = transform.position;
+    }
+
+    private void UpdateMeter(GameObject closest)
+    {
+        OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+        outletMeter?.EndVisuals();
+        lastReticleLock = closest;
+        outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+        outletMeter?.StartVisuals();
     }
 
     /// <summary>
@@ -407,6 +411,7 @@ public class WireThrower : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// Register the plug as connected to the given GameObject.
     /// </summary>
@@ -419,6 +424,7 @@ public class WireThrower : MonoBehaviour
         _distanceJoint.connectedAnchor = ConnectedOutlet.transform.position;
         Destroy(_activePlug);
         OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
+        outletMeter?.StartVisuals();
         outletMeter?.ConnectPlug();
     }
 
@@ -428,11 +434,14 @@ public class WireThrower : MonoBehaviour
     void Disconnect()
     {
         OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
-        if (outletMeter != null)
+        outletMeter?.DisconnectPlug();
+        UpdateMeter(lastReticleLock);
+        /*if (connectedOutletMeter != lastReticleLock)
         {
-            outletMeter.DisconnectPlug();
-            outletMeter.EndVisuals();
-        }
+            //outletMeter.EndVisuals();
+            ChangeOutletTarget();
+            Debug.Log("balls");
+        }*/
         onDisconnect.Invoke();
         _distanceJoint.enabled = false;
         ConnectedOutlet.Disconnect();
