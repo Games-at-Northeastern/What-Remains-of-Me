@@ -56,9 +56,9 @@ GameObject:
   - component: {fileID: 7380969444694538569}
   - component: {fileID: 3792660793040403015}
   - component: {fileID: 1118699354105796202}
-  - component: {fileID: 1049078021005584946}
-  - component: {fileID: 7209552433578368777}
-  - component: {fileID: 9202990118892247258}
+  - component: {fileID: 4389084551019496658}
+  - component: {fileID: 6250353658643298731}
+  - component: {fileID: 6285988075059031840}
   m_Layer: 0
   m_Name: Ground Tilemap
   m_TagString: Untagged
@@ -168,7 +168,7 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
---- !u!19719996 &1049078021005584946
+--- !u!19719996 &4389084551019496658
 TilemapCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,7 +184,7 @@ TilemapCollider2D:
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
---- !u!50 &7209552433578368777
+--- !u!50 &6250353658643298731
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -205,7 +205,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!66 &9202990118892247258
+--- !u!66 &6285988075059031840
 CompositeCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -223,7 +223,7 @@ CompositeCollider2D:
   m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
-  - m_Collider: {fileID: 1049078021005584946}
+  - m_Collider: {fileID: 4389084551019496658}
     m_ColliderPaths: []
   m_CompositePaths:
     m_Paths: []
