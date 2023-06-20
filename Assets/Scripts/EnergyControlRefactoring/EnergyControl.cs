@@ -32,6 +32,23 @@ public class EnergyControl : MonoBehaviour
     // This could be more abstracted and prevent repeated code - it also allows for a simpler way to do 
     // i.e. TransferEnergy(float amount, float virusPercentage) { actualVirusAmount = Mathf.Min(amount * virusPercentage, virus)... }
 
+    /**public float TransferEnergy(float amount, float virusPercentage)
+    {
+        float cleanEnergyTransfer = amount * (1 - virusPercentage);
+        float virusEnergyTransfer = amount * virusPercentage);
+        if (amount < 0)
+        {
+            float cleanEnergyLost = LoseEnergy(cleanEnergyTransfer);
+
+            // if there was any energy leftover that couldn't be transferred (i.e. 
+            float energyLeftover = cleanEnergyTransfer - cleanEnergyLost;
+            float virusLost = LoseVirus(virusEnergyTransfer);
+            float virusLeftover = virusEnergyTransfer - virusLost;
+
+            .... 
+        }
+    }**/
+
     /// <summary>
     /// This controllable gains the given amount of energy, within it's current thresholds.
     /// <param name="amount"> float amount of energy for this object to gain </param>
