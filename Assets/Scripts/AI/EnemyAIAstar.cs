@@ -86,12 +86,14 @@ public class EnemyAIAstar : MonoBehaviour
     {
         if (TargetInDistance() && followEnabled)
         {
-            MoveTowardsPlayer();
-        }
-        else if (TargetInAttackDistance())
-        {
-            rb.velocity = new Vector2(0f, rb.velocity.y);
-            StartCoroutine(Attack());
+            if (TargetInAttackDistance())
+            {
+                rb.velocity = new Vector2(0f, rb.velocity.y);
+                StartCoroutine(Attack());
+            } else
+            {
+                MoveTowardsPlayer();
+            }
         }
     }
 
