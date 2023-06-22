@@ -1,6 +1,7 @@
 namespace Levels.Objects.Platform
 {
     using System;
+    using System.Linq;
     using UnityEngine;
 
     /// <summary>
@@ -20,11 +21,11 @@ namespace Levels.Objects.Platform
         [SerializeField] private float speedModifier = 1f;
 
         private int _currPointIndex;
-        private int _prevPointIndex;
         private bool _shouldMove;
 
 
         Rigidbody2D rb;
+        Collider2D collider;
         Vector3 moveDirection;
 
         private MovementExecuter movementExecuter;
@@ -32,11 +33,13 @@ namespace Levels.Objects.Platform
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            collider = GetComponent<Collider2D>();
             movementExecuter = GameObject.FindGameObjectsWithTag("Player")[0].GetComponentInChildren<MovementExecuter>();
         }
 
         private void Start()
         {
+            //_currPointIndex = 1;
             transform.position = _points[0].position;
             moveDirection = new Vector3().normalized;
         }
@@ -52,32 +55,28 @@ namespace Levels.Objects.Platform
         {
             if (_shouldMove)
             {
-                if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.05f)
-                {
-                    _currPointIndex++;
-
-                    if (_currPointIndex == _points.Length)
-                    {
-                        _currPointIndex = 0;
-                    }
-                    DirectionCalculate();
-                }
-
-                // rb.velocity = moveDirection * _speed;
-                //rb.velocity = moveDirection * UnityEngine.Random.Range(_speed - randomSpeedModifier, _speed + randomSpeedModifier);
-                rb.velocity = moveDirection * speedModifier * _speed;
+                rb.velocity = moveDirection * speedModifier * UnityEngine.Random.Range(_speed - randomSpeedModifier, _speed + randomSpeedModifier);
             }
 
         }
 
         private void DirectionCalculate() => moveDirection = (_points[_currPointIndex].position - transform.position).normalized;
 
-        public void Activate() => _shouldMove = true;
+        public void Activate()
+        {
+            _shouldMove = true;
+            // Upon activation, check that the direction it should be moving in is correct. Adjust if not.
+            if (isPlatformBeyondTarget())
+            {
+                SetNextTargetPoint();
+            }
+            DirectionCalculate();
+        }
 
-        /// <summary>
-        /// Deactivates the platform by stopping the movement immediately.
-        /// </summary>
-        public void Deactivate()
+            /// <summary>
+            /// Deactivates the platform by stopping the movement immediately.
+            /// </summary>
+            public void Deactivate()
         {
             _shouldMove = false;
             rb.velocity = Vector2.zero;
@@ -92,10 +91,25 @@ namespace Levels.Objects.Platform
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            Debug.Log("collision  " + collision);
+
             if (collision.gameObject.CompareTag("Player"))
             {
                 movementExecuter.isOnAPlatform = true; // TODO : this should NOT have an explicit reference to the player's movement executor...
                 movementExecuter.platformRb = rb;
+            } else if (collision.gameObject.CompareTag("platformPoint"))
+            {
+                SetNextTargetPoint();
+                DirectionCalculate();
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.CompareTag("platformPoint"))
+            {
+                SetNextTargetPoint();
+                DirectionCalculate();
             }
         }
 
@@ -106,5 +120,28 @@ namespace Levels.Objects.Platform
                 movementExecuter.isOnAPlatform = false;
             }
         }
+
+        private void SetNextTargetPoint()
+        {
+            _currPointIndex++;
+
+            if (_currPointIndex == _points.Length)
+            {
+                _currPointIndex = 0;
+            }
+        }
+
+        private Transform GetPreviousPoint()
+        {
+            if (_currPointIndex == 0)
+            {
+                return _points.Last();
+            } else
+            {
+                return _points[_currPointIndex - 1];
+            }
+        }
+
+        private bool isPlatformBeyondTarget() => Vector2.Distance(GetPreviousPoint().position, _points[_currPointIndex].position) < Vector2.Distance(GetPreviousPoint().position, transform.position);
     }
 }
