@@ -71,13 +71,15 @@ public class WireSwing : AMove
         }
 
         // Check for dash input
+        /*
+        // COMMENTING OUT THE ABILITY TO DASH WHILE WIRE IS ATTACHED FOR RIGHT NOW (SUMMER 2023) BECAUSE CHAPTER 1 DOESN'T NEED IT
         if (dashInput)
         {
             float change = MS.WireSwingAngularVelOfDash * (MS.WireSwingReferenceWireLength / GetCurrentWireLength());
             change = change * -Mathf.Sin(angle);
             angularVelocity = Flipped() ? -change : change;
             dashInput = false;
-        }
+        }*/
         // Get Angular Acceleration
         float inputPower = CS.Player.Move.ReadValue<float>() * Mathf.Clamp(Mathf.Abs(Mathf.Sin(angle)), 0, 1);
 
