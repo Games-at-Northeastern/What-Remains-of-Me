@@ -557,17 +557,6 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""4537cf94-5a0a-49cd-987a-5681943eddbc"",
-                    ""path"": ""<Keyboard>/rightBracket"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Restart"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""68354e88-65c8-4b05-b276-ad5400351f40"",
                     ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
