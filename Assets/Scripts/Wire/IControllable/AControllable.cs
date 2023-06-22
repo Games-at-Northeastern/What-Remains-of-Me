@@ -14,7 +14,6 @@ public abstract class AControllable : MonoBehaviour, IControllable
     [SerializeField] protected float cleanEnergy;
     [SerializeField] protected float maxCharge;
     [SerializeField] protected float virus;
-    [SerializeField] protected float maxVirus;
 
     protected float totalEnergy => cleanEnergy + virus;
 
@@ -33,11 +32,6 @@ public abstract class AControllable : MonoBehaviour, IControllable
     public float GetVirus()
     {
         return virus;
-    }
-
-    public float GetMaxVirus()
-    {
-        return maxVirus;
     }
 
     // Event to be triggered whenever the virus amount changes,
