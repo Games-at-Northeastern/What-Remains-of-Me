@@ -76,7 +76,6 @@ public class InkDialogueManager : MonoBehaviour
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
         stopMovement = true;
-        stopMovement = false;
         dialogueEnded = false;
 
         layoutAnimator = dialoguePanel.GetComponent<Animator>();
@@ -143,8 +142,11 @@ public class InkDialogueManager : MonoBehaviour
         // I am using GetComponent here so that you don't have to assign the player to every InkDialogueManager in every scene
         // if there is a better way to implement this please do
         // this just prevents the player's rigidbody from moving along the X Axis while dialogue is playing
-        Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
-        playerRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        if (stopMovement)
+        {
+            Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
+            playerRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        }
     }
 
 
@@ -160,8 +162,11 @@ public class InkDialogueManager : MonoBehaviour
         dialogueText.text = "";
 
         //turns off the X constraint on the player's rigidbody when dialogue has stopped
-        Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
-        playerRB.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        if (stopMovement)
+        {
+            Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
+            playerRB.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        }
         //btw if you ever want to adjust this, know that RigidbodyContraints2D are something called a "Bitmap" so they can't be set normally
         // https://answers.unity.com/questions/1104653/im-trying-to-freeze-both-positionx-and-rotation-in.html 
         // The constraints property is a Bitmask. Simply setting it to a single option only sets that option. You need to use the | (bitwise OR) operator to merge them together before setting it i.e.
