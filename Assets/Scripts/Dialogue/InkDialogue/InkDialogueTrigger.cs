@@ -53,10 +53,10 @@ public class InkDialogueTrigger : MonoBehaviour
                 _firstInteraction = false;
                 forceDialogue = false;
                 var i = InkDialogueManager.GetInstance();
-                i.EnterDialogueMode(inkJSON);
                 i.stopMovement = this.stopMovement;
                 i.autoTurnPage = this.autoTurnPage;
                 i.waitBeforePageTurn = this.waitForPageTurn;
+                i.EnterDialogueMode(inkJSON);
             }
         }
 
