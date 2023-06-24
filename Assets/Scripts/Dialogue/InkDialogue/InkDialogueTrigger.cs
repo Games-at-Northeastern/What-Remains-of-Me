@@ -18,6 +18,8 @@ public class InkDialogueTrigger : MonoBehaviour
     [SerializeField] private bool dialogueActive = true;
     [SerializeField] private float waitForInteractAvailable = 3f;
 
+    [SerializeField] private bool isTutorialDialogue = false;
+
     private bool playerInRange;
 
     private ControlSchemes _cs;
@@ -81,6 +83,8 @@ public class InkDialogueTrigger : MonoBehaviour
         {
             playerInRange = true;
         }
+        InkDialogueManager.GetInstance().isTutorialDialogue = isTutorialDialogue;
+        
     }
 
     private void OnTriggerExit2D(Collider2D collision)

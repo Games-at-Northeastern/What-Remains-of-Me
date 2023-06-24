@@ -52,6 +52,8 @@ public class InkDialogueManager : MonoBehaviour
     private bool canSkip = false;
     private bool submitSkip = false;
 
+    [HideInInspector]
+    public bool isTutorialDialogue = false;
 
     private void Awake()
     {
@@ -152,7 +154,14 @@ public class InkDialogueManager : MonoBehaviour
 
     private IEnumerator ExitDialogueMode()
     {
-        yield return new WaitForSeconds(exitDialogueTime); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+        if (isTutorialDialogue)
+        {
+            yield return new WaitForSeconds(exitDialogueTime); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+        }
+        else
+        {
+            yield return new WaitForSeconds(0f); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+        }
 
         dialogueVariables.StopListening(currentStory);
 
