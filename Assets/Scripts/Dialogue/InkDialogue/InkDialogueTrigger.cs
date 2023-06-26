@@ -84,7 +84,6 @@ public class InkDialogueTrigger : MonoBehaviour
             playerInRange = true;
         }
         InkDialogueManager.GetInstance().isTutorialDialogue = isTutorialDialogue;
-        
     }
 
     private void OnTriggerExit2D(Collider2D collision)

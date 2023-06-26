@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class RobotOutlet : AControllable
 {
-    [Header("Player")]
+    [Header("Needed Targets")]
     [SerializeField] private GameObject player;
+    [SerializeField] private EnemyAIAstar astarScript;
+    [SerializeField] private GameObject inkDialogueTrigger;
 
     [Header("inkJSON")]
     [SerializeField] private TextAsset atlasLowEnemyLowVirusScript;
@@ -30,10 +32,27 @@ public class RobotOutlet : AControllable
     [SerializeField] private int virusLevelUpdate;
 
     private TextAsset currentInkJSONScript;
+    private bool _isPacified;
+    private bool _isDead;
+    private bool _setTriggerActive;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        inkDialogueTrigger.SetActive(false);
+        _isDead = false;
+        _setTriggerActive = false;
+
+        // if enemy robot has a virus level of below 50%, the enemy movement (A* pathfinding) will be set to not follow player (makes it passive)
+        if (GetVirus() < 50)
+        {
+            astarScript.followEnabled = false;
+            _isPacified = true;
+        }
+        else
+        {
+            _isPacified = false;
+        } 
     }
 
     // Update is called once per frame
@@ -88,18 +107,43 @@ public class RobotOutlet : AControllable
             }
         }
 
-        // play script if player is within activate distance
-        if (PlayerInTriggerDistance() && !InkDialogueManager.GetInstance().dialogueIsPlaying)
+        // play script if player is within activate distance and enemy virus level 
+        if (!_isPacified)
         {
-            var i = InkDialogueManager.GetInstance();
-            i.EnterDialogueMode(currentInkJSONScript);
-            i.stopMovement = this.stopMovement;
-            i.autoTurnPage = this.autoTurnPage;
+            if (PlayerInTriggerDistance() && !InkDialogueManager.GetInstance().dialogueIsPlaying) {
+                var i = InkDialogueManager.GetInstance();
+                i.stopMovement = this.stopMovement;
+                i.autoTurnPage = this.autoTurnPage;
+                i.waitBeforePageTurn = this.waitForPageTurn;
+                i.EnterDialogueMode(currentInkJSONScript);
+            }
         }
 
+        // will enable the dialogue trigger when the robot is pacified, so that the robot defaults to a regular NPC and can be interacted with using 'F'
+        if (_isPacified && !_setTriggerActive)
+        {
+            inkDialogueTrigger.SetActive(true);
+            _setTriggerActive = true;
+        } 
 
+        // if enemy virus is updated so that it is less than 50%, set the astar to stop following the player
+        if (GetVirus() < 50)
+        {
+            astarScript.followEnabled = false;
+            _isPacified = true;
+        }
+        else // virus was increased beyong 50% so robot will attack and enable dialogue through distance (not ink dialogue trigger)
+        {
+            astarScript.followEnabled = true;
+            _isPacified = false;
+            inkDialogueTrigger.SetActive(false);
+        } 
     }
 
+    /// <summary>
+    /// Returns true if the player comes within dialogueActivateDistance distance of the enemy
+    /// </summary>
+    /// <returns>bool</returns>
     private bool PlayerInTriggerDistance()
     {
         return Vector2.Distance(transform.position, player.transform.position) < dialogueActivateDistance;

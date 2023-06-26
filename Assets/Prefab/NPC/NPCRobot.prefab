@@ -163,6 +163,7 @@ MonoBehaviour:
   waitForPageTurn: 2
   dialogueActive: 1
   waitForInteractAvailable: 3
+  isTutorialDialogue: 0
 --- !u!1 &4055826069956893095
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,6 +177,9 @@ GameObject:
   - component: {fileID: 225613034}
   - component: {fileID: 225613038}
   - component: {fileID: 1519961438}
+  - component: {fileID: 337450424}
+  - component: {fileID: 337450425}
+  - component: {fileID: 337450418}
   m_Layer: 7
   m_Name: NPCRobot
   m_TagString: Enemy
@@ -224,13 +228,24 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
-  dialogueTrigger: {fileID: 3881124541287223570}
-  cleanScript: {fileID: 4900000, guid: a112674e5ce502740b916e17aefd31b9, type: 3}
-  infectedScript: {fileID: 4900000, guid: e3386ca8bea3fc14bb829e780aeb52a1, type: 3}
+  player: {fileID: 0}
+  astarScript: {fileID: 337450418}
+  inkDialogueTrigger: {fileID: 0}
+  atlasLowEnemyLowVirusScript: {fileID: 4900000, guid: e3033642490c16e49ac8aa22c06e5a92, type: 3}
+  atlasLowEnemyMediumVirusScript: {fileID: 4900000, guid: cebc5ff5a0e595f419e3246900f04f1a, type: 3}
+  atlasLowEnemyHighVirusScript: {fileID: 4900000, guid: 0aac347a6251b5245857bac315154ad0, type: 3}
+  atlasHighEnemyLowVirusScript: {fileID: 4900000, guid: 597ab935043ba464eb9f0be51ee648ad, type: 3}
+  atlasHighEnemyMediumVirusScript: {fileID: 4900000, guid: 7b24778bf74218f4bb9104d13c880cec, type: 3}
+  atlasHighEnemyHighVirusScript: {fileID: 4900000, guid: 024ba562dd7c3dd468858533948c6853, type: 3}
   spriteRenderer: {fileID: 225613034}
   deadRobot: {fileID: 1862953172, guid: f2ea45fcba7c21a4e9241f3396fcedaa, type: 3}
   chargedRobot: {fileID: 1578847933, guid: a184e112c8324e543bec26cbffd39dec, type: 3}
   virusRobot: {fileID: 455411889, guid: 5613382d062719e44817cb62765301f8, type: 3}
+  dialogueActivateDistance: 5
+  stopMovement: 1
+  autoTurnPage: 0
+  waitForPageTurn: 2
+  waitForInteractAvailable: 3
   virusLevelUpdate: 10
 --- !u!212 &225613034
 SpriteRenderer:
@@ -298,7 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   drawGizmos: 1
-  detailedGizmos: 0
+  detailedGizmos: 1
   startEndModifier:
     addPoints: 0
     exactStartPoint: 3
@@ -332,6 +347,81 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!50 &337450424
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4055826069956893095}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
+--- !u!61 &337450425
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4055826069956893095}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.875, y: 1.5}
+    newSize: {x: 1, y: 1.5625}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.875, y: 1.5}
+  m_EdgeRadius: 0
+--- !u!114 &337450418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4055826069956893095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15bccaf4f8f6c4746bb3950128835fb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  activateDistance: 10
+  updatePathPerSecondSpeed: 0.5
+  walkSpeed: 500
+  nextWaypointDistance: 8
+  minimimumHeightForJump: 0.8
+  jumpForce: 40
+  jumpColliderOffset: 0.1
+  followEnabled: 1
+  jumpEnabled: 1
+  lookAtEnabled: 1
+  attackRadius: 2
+  attackCooldown: 2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!1001 &3881124542764398864
 PrefabInstance:
   m_ObjectHideFlags: 0
