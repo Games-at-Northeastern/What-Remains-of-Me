@@ -12,13 +12,14 @@ using UnityEngine;
 /// </summary>
 public class OutletMeter : MonoBehaviour
 {
-
     private Outlet outlet;
 
+    // Sprite arrays for different meter states
     [SerializeField] private Sprite[] limiterSprites;
     [SerializeField] private Sprite[] virusSprites;
     [SerializeField] private Sprite[] cleanSprites;
 
+    // Sprite renderers for the meter visuals
     [SerializeField] private SpriteRenderer limiterMeter;
     [SerializeField] private SpriteRenderer virusMeter;
     [SerializeField] private SpriteRenderer cleanMeter;
@@ -39,7 +40,6 @@ public class OutletMeter : MonoBehaviour
     private bool powered = false;
 
     private int _limiterState = 0;
-
     private int LimiterState
     {
         get { return _limiterState; }
@@ -54,7 +54,6 @@ public class OutletMeter : MonoBehaviour
     }
 
     private int _cleanState = 0;
-
     private int CleanState
     {
         get { return _cleanState; }
@@ -67,9 +66,11 @@ public class OutletMeter : MonoBehaviour
         GetValues();
     }
 
+    // Get the initial values from the associated Outlet object
     public void GetValues()
     {
-        if (outlet == null) { return; }
+        if (outlet == null)
+        { return; }
 
         float limiterAmount = ((100 - outlet.GetMaxCharge()) / 100) * limiterSprites.Length - 1;
         LimiterState = Mathf.FloorToInt(limiterAmount);
@@ -80,6 +81,7 @@ public class OutletMeter : MonoBehaviour
         limiterMeter.sprite = limiterSprites[_limiterState];
     }
 
+    // Start the visuals update coroutine
     public void StartVisuals()
     {
         powered = true;
@@ -89,6 +91,7 @@ public class OutletMeter : MonoBehaviour
         StartCoroutine(UpdateVisuals());
     }
 
+    // End the visuals update coroutine
     public void EndVisuals()
     {
         if (plugConnected)
@@ -97,18 +100,21 @@ public class OutletMeter : MonoBehaviour
         powered = false;
     }
 
+    // Connect the plug to the outlet
     public void ConnectPlug()
     {
         plugConnected = true;
         powered = true;
     }
 
+    // Disconnect the plug from the outlet
     public void DisconnectPlug()
     {
         plugConnected = false;
-        powered= false;
+        powered = false;
     }
 
+    // Coroutine for updating the meter visuals
     private IEnumerator UpdateVisuals()
     {
         Debug.Log("Starting outletmeter coroutine");
@@ -116,11 +122,12 @@ public class OutletMeter : MonoBehaviour
         while (true)
         {
             GetValues();
-            if(!powered)
+            if (!powered)
             {
                 targetVirus = 0;
                 targetClean = 0;
-            } else
+            }
+            else
             {
                 targetVirus = actualVirus;
                 targetClean = actualClean;
@@ -131,6 +138,8 @@ public class OutletMeter : MonoBehaviour
 
             VirusState = Mathf.FloorToInt((currentVirus / 12.5f) * 2);
             CleanState = Mathf.FloorToInt((currentClean / 12.5f) * 2);
+
+            // Adjust meter states if the current values are close to zero
             if (currentVirus > 0.05f && VirusState == 0)
             {
                 VirusState = 1;
@@ -143,6 +152,7 @@ public class OutletMeter : MonoBehaviour
             virusMeter.sprite = virusSprites[_virusState];
             cleanMeter.sprite = cleanSprites[Mathf.Min(_cleanState + _virusState, cleanSprites.Length - 1)];
 
+            // Check if both energy and virus levels are low and not powered, then stop the coroutine
             if (currentClean < 6f && currentVirus < 6f && !powered)
             {
                 virusMeter.sprite = virusSprites[0];
@@ -155,6 +165,7 @@ public class OutletMeter : MonoBehaviour
             }
 
             yield return null;
-        } 
+        }
     }
 }
+

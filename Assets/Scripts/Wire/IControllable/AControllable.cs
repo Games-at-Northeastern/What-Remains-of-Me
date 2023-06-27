@@ -19,16 +19,19 @@ public abstract class AControllable : MonoBehaviour, IControllable
 
     public PlayerInfo playerInfo;
 
+    // Gets the clean energy contained within this controllable
     public float GetEnergy()
     {
         return cleanEnergy;
     }
 
+    // Gets the energy cap of this controllable
     public float GetMaxCharge()
     {
         return maxCharge;
     }
 
+    // Gets the virus energy contained within this controllable
     public float GetVirus()
     {
         return virus;

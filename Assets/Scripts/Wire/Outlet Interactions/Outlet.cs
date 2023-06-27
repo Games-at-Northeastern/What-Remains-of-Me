@@ -120,6 +120,7 @@ public class Outlet : MonoBehaviour
         }
     }
 
+    // Get the maximum charge of the controlled object
     public float GetMaxCharge()
     {
         if (controlled != null)
@@ -129,6 +130,7 @@ public class Outlet : MonoBehaviour
         return 0f;
     }
 
+    // Get the energy level of the controlled object
     public float GetEnergy()
     {
         if (controlled != null)
@@ -138,6 +140,7 @@ public class Outlet : MonoBehaviour
         return 0f;
     }
 
+    // Get the virus level of the controlled object
     public float GetVirus()
     {
         if (controlled != null)

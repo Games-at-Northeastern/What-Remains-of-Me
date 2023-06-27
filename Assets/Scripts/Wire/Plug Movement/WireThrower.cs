@@ -273,7 +273,6 @@ public class WireThrower : MonoBehaviour
             Vector3 position = transform.position;
             foreach (GameObject go in gos)
             {
-                //Debug.Log("among");
                 Vector3 diff = go.transform.position - position;
                 float curDistance = Vector2.Distance(this.transform.position, go.transform.position);
                 if (go.GetComponent<SpriteRenderer>().isVisible)
@@ -284,9 +283,6 @@ public class WireThrower : MonoBehaviour
                         Debug.Log("test");
                         
                         closest = go;
-                        // reticle.transform.position = closest.transform.position;
-                        // reticle.GetComponent<Renderer>().enabled = true;
-                        //distance = curDistance;
                         _lockOnOutlet = closest;
                         originalDistance = curDistance;
                         UpdateMeter(closest);
@@ -296,7 +292,6 @@ public class WireThrower : MonoBehaviour
 
             if (!hasOutletsOnScreen)
             {
-                //distance = curDistance;
                 _lockOnOutlet = null;
                 _isLockOn = false;
             }
@@ -304,14 +299,28 @@ public class WireThrower : MonoBehaviour
         _lastRecordedPosition = transform.position;
     }
 
+    /// <summary>
+    /// Updates the outlet meter based on the closest GameObject.
+    /// </summary>
+    /// <param name="closest">The closest GameObject to update the meter for.</param>
     private void UpdateMeter(GameObject closest)
     {
+        // Get the OutletMeter component from the previous locked reticle (if any)
         OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+
+        // End the visuals of the previous locked reticle's outlet meter (if any)
         outletMeter?.EndVisuals();
+
+        // Update the lastReticleLock to the closest GameObject
         lastReticleLock = closest;
+
+        // Get the OutletMeter component from the new locked reticle (if any)
         outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+
+        // Start the visuals of the new locked reticle's outlet meter (if any)
         outletMeter?.StartVisuals();
     }
+
 
     /// <summary>
     /// Using a mouse for input, Spawns a plug and launches it in the air,
@@ -436,12 +445,6 @@ public class WireThrower : MonoBehaviour
         OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
         outletMeter?.DisconnectPlug();
         UpdateMeter(lastReticleLock);
-        /*if (connectedOutletMeter != lastReticleLock)
-        {
-            //outletMeter.EndVisuals();
-            ChangeOutletTarget();
-            Debug.Log("balls");
-        }*/
         onDisconnect.Invoke();
         _distanceJoint.enabled = false;
         ConnectedOutlet.Disconnect();
