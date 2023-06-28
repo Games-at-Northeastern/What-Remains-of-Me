@@ -39,16 +39,8 @@ namespace Levels.Objects.Platform
 
         private void Start()
         {
-            //_currPointIndex = 1;
             transform.position = _points[0].position;
-            moveDirection = new Vector3().normalized;
-        }
-
-        private void Update()
-        {
-            //transform.position = Vector2.MoveTowards(transform.position,
-            //    _points[_currPointIndex].position,
-            //    _speed * Time.deltaTime);
+            DirectionCalculate();
         }
 
         private void FixedUpdate()
@@ -73,10 +65,10 @@ namespace Levels.Objects.Platform
             DirectionCalculate();
         }
 
-            /// <summary>
-            /// Deactivates the platform by stopping the movement immediately.
-            /// </summary>
-            public void Deactivate()
+        /// <summary>
+        /// Deactivates the platform by stopping the movement immediately.
+        /// </summary>
+        public void Deactivate()
         {
             _shouldMove = false;
             rb.velocity = Vector2.zero;
@@ -131,17 +123,6 @@ namespace Levels.Objects.Platform
             }
         }
 
-        private Transform GetPreviousPoint()
-        {
-            if (_currPointIndex == 0)
-            {
-                return _points.Last();
-            } else
-            {
-                return _points[_currPointIndex - 1];
-            }
-        }
-
-        private bool isPlatformBeyondTarget() => Vector2.Distance(GetPreviousPoint().position, _points[_currPointIndex].position) < Vector2.Distance(GetPreviousPoint().position, transform.position);
+        private bool isPlatformBeyondTarget() => Vector2.Dot(moveDirection, _points[_currPointIndex].position - transform.position) <= 0;
     }
 }
