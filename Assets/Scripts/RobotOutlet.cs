@@ -7,7 +7,7 @@ public class RobotOutlet : AControllable
     [Header("Needed Targets")]
     [SerializeField] private GameObject player;
     [SerializeField] private EnemyAIAstar astarScript;
-    [SerializeField] private GameObject inkDialogueTrigger;
+    [SerializeField] private GameObject inkDialogueTriggerOnRobot;
 
     [Header("inkJSON")]
     [SerializeField] private TextAsset atlasLowEnemyLowVirusScript;
@@ -39,7 +39,7 @@ public class RobotOutlet : AControllable
     // Start is called before the first frame update
     void Awake()
     {
-        inkDialogueTrigger.SetActive(false);
+        inkDialogueTriggerOnRobot.SetActive(false);
         _isDead = false;
         _setTriggerActive = false;
 
@@ -52,7 +52,7 @@ public class RobotOutlet : AControllable
         else
         {
             _isPacified = false;
-        } 
+        }
     }
 
     // Update is called once per frame
@@ -122,7 +122,7 @@ public class RobotOutlet : AControllable
         // will enable the dialogue trigger when the robot is pacified, so that the robot defaults to a regular NPC and can be interacted with using 'F'
         if (_isPacified && !_setTriggerActive)
         {
-            inkDialogueTrigger.SetActive(true);
+            inkDialogueTriggerOnRobot.SetActive(true);
             _setTriggerActive = true;
         } 
 
@@ -136,7 +136,7 @@ public class RobotOutlet : AControllable
         {
             astarScript.followEnabled = true;
             _isPacified = false;
-            inkDialogueTrigger.SetActive(false);
+            inkDialogueTriggerOnRobot.SetActive(false);
         } 
     }
 
