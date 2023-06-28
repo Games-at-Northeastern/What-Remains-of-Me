@@ -2541,6 +2541,14 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1335629201}
+    - target: {fileID: 337450418, guid: 8f0f872fb64c19a4f86afb036c419475, type: 3}
+      propertyPath: walkSpeed
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 337450418, guid: 8f0f872fb64c19a4f86afb036c419475, type: 3}
+      propertyPath: attackRadius
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 337450424, guid: 8f0f872fb64c19a4f86afb036c419475, type: 3}
       propertyPath: m_Constraints
       value: 4
@@ -2594,9 +2602,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3881124543056782433, guid: 8f0f872fb64c19a4f86afb036c419475, type: 3}
+      propertyPath: virus
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881124543056782433, guid: 8f0f872fb64c19a4f86afb036c419475, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1815631379}
+    - target: {fileID: 3881124543056782433, guid: 8f0f872fb64c19a4f86afb036c419475, type: 3}
+      propertyPath: cleanEnergy
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881124543056782433, guid: 8f0f872fb64c19a4f86afb036c419475, type: 3}
+      propertyPath: inkDialogueTrigger
+      value: 
+      objectReference: {fileID: 1960410234}
     - target: {fileID: 4055826069956893095, guid: 8f0f872fb64c19a4f86afb036c419475, type: 3}
       propertyPath: m_Name
       value: NPCRobot
@@ -25211,6 +25231,11 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1 &1960410234 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3881124541287223571, guid: 8f0f872fb64c19a4f86afb036c419475, type: 3}
+  m_PrefabInstance: {fileID: 337450416}
+  m_PrefabAsset: {fileID: 0}
 --- !u!213 &1977069467
 Sprite:
   m_ObjectHideFlags: 0
