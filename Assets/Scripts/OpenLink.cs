@@ -9,7 +9,17 @@ public class OpenLink : MonoBehaviour
 
     [SerializeField] private socialMedia app;
 
-    private string url; 
+    private string url;
+
+    [SerializeField] private GameObject hover;
+    private void OnMouseOver()
+    {
+        hover.SetActive(true);
+    }
+    private void OnMouseExit()
+    {
+        hover.SetActive(false);
+    }
 
     private void OnMouseDown()
     {
