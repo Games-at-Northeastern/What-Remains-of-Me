@@ -1,4 +1,4 @@
-INCLUDE globas.ink
+INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 ->main
 
 === main ===
@@ -7,8 +7,7 @@ INCLUDE globas.ink
 
 
 ===firstInteraction===
-Press space to jump #portrait:Handler #speaker:The Handler
-
+WARNING:: Elevated Terrain --- PROCEDURE:: Use <Space> actuator to initiate <Jump> action. #portrait:security_protocol #speaker:I.S.P.
 ~hasMoved = true
 ->DONE
 
