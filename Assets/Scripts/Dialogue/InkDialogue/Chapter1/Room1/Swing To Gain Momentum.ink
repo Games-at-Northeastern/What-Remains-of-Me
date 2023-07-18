@@ -7,8 +7,10 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===firstInteraction===
-WARNING:: Momentum Required --- PROCEDURE:: Use <A> and <D> actuators to swing and gain momentum. #portrait:isp #speaker:I.S.P.
-~hasMoved = true
+WARNING:: Momentum Required #portrait:isp #speaker:I.S.P.
+
+PROCEDURE:: Use <A> and <D> actuators to swing and gain momentum.
+
 ->DONE
 
 

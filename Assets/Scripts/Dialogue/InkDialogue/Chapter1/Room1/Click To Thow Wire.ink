@@ -7,9 +7,10 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===firstInteraction===
-WARNING:: Grapple Plug Protocol Required --- PROCEDURE:: Use <Left Mouse> actuator to initiate <GRAPPLE> action. To release use <Left Mouse> actuator again. #portrait:isp #speaker:I.S.P.
+WARNING:: Grapple Plug Protocol Required #portrait:isp #speaker:I.S.P.
 
-~hasMoved = true
+PROCEDURE:: Use <Left Mouse> actuator to initiate <GRAPPLE> action. To release use <Left Mouse> actuator again. 
+
 ->DONE
 
 

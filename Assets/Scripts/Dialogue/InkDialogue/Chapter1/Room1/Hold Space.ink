@@ -7,8 +7,9 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===firstInteraction===
-WARNING:: Wide Gap --- PROCEDURE:: Hold <space> to extend <JUMP> action #portrait:isp #speaker:I.S.P.
-~hasMoved = true
+WARNING:: \n Wide Gap #portrait:isp #speaker:I.S.P.
+
+PROCEDURE:: Hold <space> to extend <JUMP> action 
 ->DONE
 
 

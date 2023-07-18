@@ -12,7 +12,6 @@ SENDER:: Internal Security Protocol A.I.
 RECIEVER:: Atlas class Robot \#1297
 PROCEDURE:: Use <A> and <D> actuators to move left and right. 
 
-~hasMoved = true
 ->DONE
 
 

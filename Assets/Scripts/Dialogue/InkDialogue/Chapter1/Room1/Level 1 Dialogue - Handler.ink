@@ -2,18 +2,20 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 ->main
 
 === main ===
-{hasMoved: 
-    ->doneMoving
-  - else:
-    ->firstInteraction
-}
 
+{levelStart == true:
+    ->firstInteraction
+  - else:
+    ->doneMoving
+}
 
 ===firstInteraction===
 %:;&::%:;%:& ...H-ello?...%:;&::%:;%:& Atlas! You’re operational! #layout:left #portrait:Handler #speaker:The Handler
 
 You seem to be intact. That’s good. Try moving around while I run a few tests on my %:;&::%:;%:&
-~hasMoved = true
+
+~levelStart = false
+
 ->DONE
 
 
