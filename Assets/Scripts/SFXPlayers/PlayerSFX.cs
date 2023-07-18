@@ -8,23 +8,32 @@ using UnityEngine;
 /// <summary>
 public class PlayerSFX : MonoBehaviour
 {
+    [SerializeField] private SoundArray _playerSounds;
+    [SerializeField] private AudioSource _playerAudioSource;
 
-    [SerializeField] private SoundController soundController;
+
+
 
     /// <summary>
     /// Plays the left foot's walking audio clip at the player's location
     /// <summary>
     public void WalkLeftFoot()
     {
-        soundController.PlaySound("Player_WalkLeftFoot");
+        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_WalkLeftFoot"));
+        //PlaySound("Player_WalkLeftFoot");
+        //        soundController.PlaySound("Player_WalkLeftFoot");
     }
+    
 
     /// <summary>
     /// Plays the right foot's walking audio clip at the player's location
     /// <summary>
     public void WalkRightFoot()
     {
-        soundController.PlaySound("Player_WalkRightFoot");
+        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_WalkRightFoot"));
+
+        //PlaySound("Player_WalkRightFoot");
+        //        soundController.PlaySound("Player_WalkRightFoot");
     }
 
     /// <summary>
@@ -32,7 +41,9 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void JumpUp()
     {
-        soundController.PlaySound("Player_JumpUp");
+        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_JumpUp"));
+        //PlaySound("Player_JumpUp");
+        //soundController.PlaySound("Player_JumpUp");
     }
 
     /*
@@ -42,12 +53,16 @@ public class PlayerSFX : MonoBehaviour
     }
     */
 
+    
+
     /// <summary>
     /// Plays the swinging audio clip at the player's location
     /// <summary>
     public void Swing()
     {
-        soundController.PlaySound("Player_Swing");
+        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_Swing"));
+        //PlaySound("Player_Swing");
+        //soundController.PlaySound("Player_Swing");
     }
 
     /// <summary>
@@ -55,7 +70,9 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void Damaged()
     {
-        soundController.PlaySound("Player_Damaged");
+        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_Damaged"));
+        //PlaySound("Player_Damaged");
+        //soundController.PlaySound("Player_Damaged");
     }
 	
 	/// <summary>
@@ -63,7 +80,9 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void Died()
     {
-        soundController.PlaySound("Player_Die");
+        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_Die"));
+        //PlaySound("Player_Died");
+        //soundController.PlaySound("Player_Die");
     }
 
 }

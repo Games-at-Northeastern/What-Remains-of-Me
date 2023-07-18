@@ -28,12 +28,14 @@ public class MovementSettings : ScriptableObject
     [SerializeField] private float jumpCancelYVelMultiplier;
     [SerializeField] private float coyoteTime;
     [SerializeField] private float jumpBuffer;
+    [SerializeField] private float jumpToSwingMinYVel;
 
     [Header("Fall")]
     [SerializeField] private float fallGravity;
     [SerializeField] private float fallMaxSpeedX;
     [SerializeField] private float fallSmoothTimeX;
     [SerializeField] private float fallMinSpeedY;
+    [SerializeField] private float fallToSwingWaitTime;
 
     [Header("Run")]
     [SerializeField] private float runMaxSpeed;
@@ -65,6 +67,7 @@ public class MovementSettings : ScriptableObject
     [SerializeField] private float wireSwingManualAccelMultiplier;
     [SerializeField] private float wireSwingAngularVelOfDash;
     [SerializeField] private float wireSwingReferenceWireLength;
+    [SerializeField] private float wireSwingMaxAngularVelocity;
 
     [Header("Wire Swing Release")]
     [SerializeField] private float wsrGravity;
@@ -99,12 +102,21 @@ public class MovementSettings : ScriptableObject
     public float JumpCancelYVelMultiplier => jumpCancelYVelMultiplier;
     public float CoyoteTime => coyoteTime;
     public float JumpBuffer => jumpBuffer;
+    /// <summary>
+    /// When a player begins a jump already connected to an outlet,
+    /// set the minimum vertical falling velocity for when a wire swing should begin
+    /// </summary>
+    public float JumpToSwingMinYVel => jumpToSwingMinYVel;
 
     // Fall
     public float FallGravity => fallGravity;
     public float FallMaxSpeedX => fallMaxSpeedX;
     public float FallSmoothTimeX => fallSmoothTimeX;
     public float FallMinSpeedY => fallMinSpeedY;
+    /// <summary>
+    /// Represents the amount of time to wait before switching between the fall and wire swing state if necessary
+    /// </summary>
+    public float FallToSwingWaitTime => fallToSwingWaitTime;
 
     // Run
     public float RunMaxSpeed => runMaxSpeed;
@@ -136,6 +148,7 @@ public class MovementSettings : ScriptableObject
     public float WireSwingManualAccelMultiplier => wireSwingManualAccelMultiplier;
     public float WireSwingAngularVelOfDash => wireSwingAngularVelOfDash;
     public float WireSwingReferenceWireLength => wireSwingReferenceWireLength;
+    public float WireSwingMaxAngularVelocity => wireSwingMaxAngularVelocity;
 
     // Wire Swing Release
     public float WsrGravity => wsrGravity;

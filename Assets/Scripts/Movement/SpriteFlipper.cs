@@ -10,8 +10,9 @@ using UnityEngine;
 public class SpriteFlipper : MonoBehaviour
 {
     [SerializeField] private MovementExecuter me;
-    [SerializeField] SpriteRenderer[] spriteRenderers;
+    //[SerializeField] SpriteRenderer[] spriteRenderers;
 
+    [SerializeField] private Transform playerTransform;
 
     private void Update()
     {
@@ -36,9 +37,17 @@ public class SpriteFlipper : MonoBehaviour
     void HandleFlipping()
     {
         bool flipped = me.GetCurrentMove().Flipped();
-        foreach(SpriteRenderer sr in spriteRenderers)
+        if (flipped)
         {
-            sr.flipX = flipped;
+            playerTransform.rotation = new Quaternion(0f, 180f, 0f, 0f);
         }
+        else
+        {
+            playerTransform.rotation = new Quaternion(0f, 0f, 0f, 0f);
+        }
+        /*        foreach(SpriteRenderer sr in spriteRenderers)
+                {
+                    sr.flipX = flipped;
+                }*/
     }
 }

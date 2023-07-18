@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runToIdleSpeed: 0.01
   jumpLandableTimer: 0.1
-  jumpInitVelY: 6.5
+  jumpInitVelY: 7.5
   jumpInitGravity: 0
   jumpMaxGravity: 25
   jumpGravityIncRate: 80
@@ -22,11 +22,13 @@ MonoBehaviour:
   jumpCancelYVelMultiplier: 0.35
   coyoteTime: 0.1
   jumpBuffer: 0.1
+  jumpToSwingMinYVel: -4
   fallGravity: 20
   fallMaxSpeedX: 4
   fallSmoothTimeX: 0.2
   fallMinSpeedY: -10
-  runMaxSpeed: 4
+  fallToSwingWaitTime: 0.1
+  runMaxSpeed: 5
   runSmoothTime: 0.1
   wallSlideSpeed: -1
   wallJumpLandableTimer: 0.1
@@ -47,6 +49,7 @@ MonoBehaviour:
   wireSwingManualAccelMultiplier: 1.7
   wireSwingAngularVelOfDash: 3
   wireSwingReferenceWireLength: 5
+  wireSwingMaxAngularVelocity: 6
   wsrGravity: 20
   wsrMaxSpeedX: 4
   wsrSmoothTimeX: 0.5
@@ -56,3 +59,5 @@ MonoBehaviour:
   absKnockbackHorizVel: 4
   knockbackGravity: 25
   knockbackGravityHorizOnRecovery: 7
+  isOnPlatform: 0
+  platromRb: {fileID: 0}

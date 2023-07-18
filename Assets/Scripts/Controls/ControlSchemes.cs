@@ -389,7 +389,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""34abc2c5-7a61-4244-8452-ea818f36081c"",
-                    ""path"": ""<Keyboard>/enter"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -555,17 +555,6 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""4537cf94-5a0a-49cd-987a-5681943eddbc"",
-                    ""path"": ""<Keyboard>/rightBracket"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Restart"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""68354e88-65c8-4b05-b276-ad5400351f40"",

@@ -15,13 +15,17 @@ public class InkDialogueTrigger : MonoBehaviour
     [SerializeField] private bool stopMovement = true;
     [SerializeField] private bool autoTurnPage = false;
     [SerializeField] private float waitForPageTurn = 2f;
-    [SerializeField] private bool dialogueActive = true; 
+    [SerializeField] private bool dialogueActive = true;
+    [SerializeField] private float waitForInteractAvailable = 3f;
+
+    [SerializeField] private bool isTutorialDialogue = false;
 
     private bool playerInRange;
 
     private ControlSchemes _cs;
 
     private bool _playerInRange;
+    private bool _firstInteraction;
 
     private void Start()
     {
@@ -32,30 +36,45 @@ public class InkDialogueTrigger : MonoBehaviour
     private void Awake()
     {
         playerInRange = false;
-        visualCue.SetActive(false);
+        _firstInteraction = true;
+        visualCue.SetActive(true);
     }
 
     private void Update()
     {
-        if (playerInRange && !InkDialogueManager.GetInstance().dialogueIsPlaying)
+        if (playerInRange && !InkDialogueManager.GetInstance().dialogueIsPlaying && dialogueActive)
         {
-            visualCue.SetActive(true);
-            if (_cs.Player.Dialogue.WasReleasedThisFrame() || forceDialogue)
+
+            // disables dialogue so that the player can't enter the dialogue mode until waitForInteractAvailable seconds
+            if (InkDialogueManager.GetInstance().dialogueEnded)
             {
+                StartCoroutine(CanInteractAgain());
+            }
+            else if (_cs.Player.Dialogue.WasReleasedThisFrame() || forceDialogue)
+            {
+                _firstInteraction = false;
                 forceDialogue = false;
                 var i = InkDialogueManager.GetInstance();
-                i.EnterDialogueMode(inkJSON);
                 i.stopMovement = this.stopMovement;
                 i.autoTurnPage = this.autoTurnPage;
                 i.waitBeforePageTurn = this.waitForPageTurn;
+                i.EnterDialogueMode(inkJSON);
             }
-
-
         }
-        else
+
+        // disables visual cue so handler doesn't have animated text bubble upon next interaction
+        if (!_firstInteraction)
         {
             visualCue.SetActive(false);
         }
+    }
+
+    private IEnumerator CanInteractAgain()
+    {
+        setDialogueActive(false);
+        yield return new WaitForSeconds(waitForInteractAvailable);
+        setDialogueActive(true);
+        InkDialogueManager.GetInstance().dialogueEnded = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -64,6 +83,7 @@ public class InkDialogueTrigger : MonoBehaviour
         {
             playerInRange = true;
         }
+        InkDialogueManager.GetInstance().isTutorialDialogue = isTutorialDialogue;
     }
 
     private void OnTriggerExit2D(Collider2D collision)

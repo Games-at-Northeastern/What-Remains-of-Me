@@ -30,7 +30,7 @@ public class OutletDoor : AControllable
     /// </summary>
     private void Update()
     {
-        if ((energy + virus) >= maxCharge)
+        if ((cleanEnergy + virus) >= maxCharge)
         {
             _doorCollider.enabled = false;
             _doorSpriteRenderer.sprite = _openDoorSprite;
@@ -39,6 +39,7 @@ public class OutletDoor : AControllable
         {
             _doorCollider.enabled = true;
             _doorSpriteRenderer.sprite = _closedDoorSprite;
+            
         }
     }
 }

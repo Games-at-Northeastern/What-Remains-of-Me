@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
+
 
 
 /// <summary>
@@ -16,6 +18,33 @@ public class LevelManager : MonoBehaviour
     private bool loadedNewScene = false;
     private GameObject playerRef;
 
+    // Level events
+    [Header("Event to trigger player respawn after obstacle collision.")]
+    public UnityEvent OnPlayerReset;
+    [Header("Event to trigger player death events.")]
+    public UnityEvent OnPlayerDeath;
+    [Header("Event to trigger player pausing (i.e. movement, wire throwing, etc.)")]
+    public UnityEvent OnPlayerPause;
+    [Header("Event to trigger player unpausing (i.e. movement, wire throwing, etc.)")]
+    public UnityEvent OnPlayerUnpause;
+
+
+    // Event start functions that are accessible for other objects to trigger events
+    /// <summary>
+    /// Event to trigger player respawn after obstacle collision. This should respawn the player at the nearest checkpoint.
+    /// </summary>
+    public void PlayerReset() => OnPlayerReset?.Invoke();
+    /// <summary>
+    /// Event to trigger full player death event. This should respawn the player at the beginning of the level.
+    /// </summary>
+    public void PlayerDeath() => OnPlayerDeath?.Invoke(); // TODO: We may want to take in a type of death for this function
+    public void PlayerPause()
+    {
+        Debug.Log("Player Pause Event");
+        OnPlayerPause?.Invoke();
+    }
+
+    public void PlayerUnpause() => OnPlayerUnpause?.Invoke();
     // Singleton
     public static LevelManager Instance { get; private set; }
 
@@ -72,11 +101,11 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
-
+/*
         if (Input.GetKeyDown(KeyCode.RightBracket))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+        }*/
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

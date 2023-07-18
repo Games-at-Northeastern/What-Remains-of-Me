@@ -18,7 +18,7 @@ public class WireThrower : MonoBehaviour
     public float aimDistance;
 
     // Non-accessible fields
-    [SerializeField] Camera mainCamera;
+    private Camera mainCamera;
     [SerializeField] GameObject plugPrefab;
     [SerializeField] float timeScaleForAim;
     private GameObject _activePlug;
@@ -33,6 +33,8 @@ public class WireThrower : MonoBehaviour
     private GameObject _lockOnOutlet;
     private Vector2 _lastRecordedPosition;
 
+    private LevelManager levelManager;
+
     // Accessible Fields
     public Outlet ConnectedOutlet { get; private set; } // If null, disconnected. Otherwise, connected.
     public UnityEvent onConnect = new UnityEvent();
@@ -41,10 +43,6 @@ public class WireThrower : MonoBehaviour
 
     private void Awake()
     {
-
-
-
-
         // Add left click handling functionality
         _controlSchemes = new ControlSchemes();
         _controlSchemes.Enable();
@@ -57,6 +55,24 @@ public class WireThrower : MonoBehaviour
         ConnectedOutlet = null;
         _framesHeld = 0;
         reticle.GetComponent<Renderer>().enabled = false;
+        mainCamera = Camera.main;
+    }
+
+    private void Start()
+    {
+        levelManager = LevelManager.Instance;
+        RegisterEvents();
+    }
+
+    /// <summary>
+    /// Register this as a listener to any necessary events
+    /// </summary>
+    private void RegisterEvents()
+    {
+        levelManager.OnPlayerReset.AddListener(DespawnWire);
+        levelManager.OnPlayerDeath.AddListener(DespawnWire);
+        levelManager.OnPlayerPause.AddListener(_controlSchemes.Disable);
+        levelManager.OnPlayerUnpause.AddListener(_controlSchemes.Enable);
     }
 
     private void OnDestroy()
@@ -174,6 +190,7 @@ public class WireThrower : MonoBehaviour
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
 
+    
     /// <summary>
     /// Spawns a plug and launches it in the air towards the nearest object with the tag "Outlet",
     /// setting it as the active plug.
@@ -202,6 +219,7 @@ public class WireThrower : MonoBehaviour
 
         if (closest != null)
         {
+            
             Debug.Log("FOUND");
             reticle.transform.position = closest.transform.position;
             reticle.GetComponent<Renderer>().enabled = true;
@@ -215,11 +233,13 @@ public class WireThrower : MonoBehaviour
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
 
+    private GameObject lastReticleLock;
     /// <summary>
     /// Sets the lockOnOutlet to the nearest object tagged "Outlet".
     /// </summary>
     void ChangeOutletTarget()
     {
+        
         if (_lockOnOutlet == null)
         {
             GameObject[] gos;
@@ -238,11 +258,13 @@ public class WireThrower : MonoBehaviour
                     //distance = curDistance;
                     _lockOnOutlet = closest;
                     _isLockOn = true;
+                    UpdateMeter(closest);
                 }
             }
         }
         else
         {
+            
             GameObject[] gos;
             gos = GameObject.FindGameObjectsWithTag("Outlet");
             GameObject closest = null;
@@ -258,25 +280,47 @@ public class WireThrower : MonoBehaviour
                     hasOutletsOnScreen = true;
                     if (curDistance < originalDistance)
                     {
+                        Debug.Log("test");
+                        
                         closest = go;
-                        // reticle.transform.position = closest.transform.position;
-                        // reticle.GetComponent<Renderer>().enabled = true;
-                        //distance = curDistance;
                         _lockOnOutlet = closest;
                         originalDistance = curDistance;
+                        UpdateMeter(closest);
                     }
                 }
             }
 
             if (!hasOutletsOnScreen)
             {
-                //distance = curDistance;
                 _lockOnOutlet = null;
                 _isLockOn = false;
             }
         }
         _lastRecordedPosition = transform.position;
     }
+
+    /// <summary>
+    /// Updates the outlet meter based on the closest GameObject.
+    /// </summary>
+    /// <param name="closest">The closest GameObject to update the meter for.</param>
+    private void UpdateMeter(GameObject closest)
+    {
+        // Get the OutletMeter component from the previous locked reticle (if any)
+        OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+
+        // End the visuals of the previous locked reticle's outlet meter (if any)
+        outletMeter?.EndVisuals();
+
+        // Update the lastReticleLock to the closest GameObject
+        lastReticleLock = closest;
+
+        // Get the OutletMeter component from the new locked reticle (if any)
+        outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+
+        // Start the visuals of the new locked reticle's outlet meter (if any)
+        outletMeter?.StartVisuals();
+    }
+
 
     /// <summary>
     /// Using a mouse for input, Spawns a plug and launches it in the air,
@@ -376,6 +420,7 @@ public class WireThrower : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// Register the plug as connected to the given GameObject.
     /// </summary>
@@ -387,6 +432,9 @@ public class WireThrower : MonoBehaviour
         _distanceJoint.enabled = true;
         _distanceJoint.connectedAnchor = ConnectedOutlet.transform.position;
         Destroy(_activePlug);
+        OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
+        outletMeter?.StartVisuals();
+        outletMeter?.ConnectPlug();
     }
 
     /// <summary>
@@ -394,6 +442,9 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void Disconnect()
     {
+        OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
+        outletMeter?.DisconnectPlug();
+        UpdateMeter(lastReticleLock);
         onDisconnect.Invoke();
         _distanceJoint.enabled = false;
         ConnectedOutlet.Disconnect();
@@ -425,5 +476,14 @@ public class WireThrower : MonoBehaviour
     public bool WireExists()
     {
         return _lineRenderer.enabled;
+    }
+
+    /// <summary>
+    /// Disconnects and immediately destroys the plug
+    /// </summary>
+    private void DespawnWire()
+    {
+        HandlePotentialDisconnect();
+        DestroyPlug();
     }
 }

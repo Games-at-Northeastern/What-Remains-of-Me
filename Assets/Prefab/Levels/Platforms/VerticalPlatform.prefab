@@ -243,10 +243,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cb08d2b68c44c0495c17497d9c8e394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 2
+  _speed: 4
   _points:
   - {fileID: 3175746268635689118}
   - {fileID: 3175746269257402529}
+  randomSpeedModifier: 0
+  maxSpeedModifier: 3
+  speedModifier: 1
 --- !u!50 &1837545767
 Rigidbody2D:
   serializedVersion: 4
@@ -631,11 +634,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b221df3b18d866b4388068f553967b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energy: 10
+  cleanEnergy: 0
   maxCharge: 20
   virus: 0
   maxVirus: 100
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
+  OnVirusChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
   _platforms:
   - {fileID: 1356603267965378350}
 --- !u!1001 &8758219455394214234
@@ -654,12 +663,20 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9156519854386073056, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9156519854386073056, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9156519854386073056, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.56
       objectReference: {fileID: 0}
     - target: {fileID: 9156519854386073056, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.845
+      value: -1.68
       objectReference: {fileID: 0}
     - target: {fileID: 9156519854386073056, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
       propertyPath: m_LocalPosition.z

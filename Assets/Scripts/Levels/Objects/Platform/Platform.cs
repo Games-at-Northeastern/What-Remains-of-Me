@@ -13,7 +13,14 @@ namespace Levels.Objects.Platform
         [SerializeField] private float _speed;
         [SerializeField] private Transform[] _points;
 
+        [SerializeField] private float randomSpeedModifier = 0;
+        [SerializeField] private float maxSpeedModifier = 3;
+
+
+        [SerializeField] private float speedModifier = 1f;
+
         private int _currPointIndex;
+        private int _prevPointIndex;
         private bool _shouldMove;
 
 
@@ -36,22 +43,6 @@ namespace Levels.Objects.Platform
 
         private void Update()
         {
-            if (!_shouldMove)
-            {
-                return;
-            }
-
-            if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.02f)
-            {
-                _currPointIndex++;
-
-                if (_currPointIndex == _points.Length)
-                {
-                    _currPointIndex = 0;
-                }
-                DirectionCalculate();
-            }
-
             //transform.position = Vector2.MoveTowards(transform.position,
             //    _points[_currPointIndex].position,
             //    _speed * Time.deltaTime);
@@ -61,37 +52,59 @@ namespace Levels.Objects.Platform
         {
             if (_shouldMove)
             {
-                rb.velocity = moveDirection * _speed;
+                if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.05f)
+                {
+                    _currPointIndex++;
+
+                    if (_currPointIndex == _points.Length)
+                    {
+                        _currPointIndex = 0;
+                    }
+                    DirectionCalculate();
+                }
+
+                // rb.velocity = moveDirection * _speed;
+                //rb.velocity = moveDirection * UnityEngine.Random.Range(_speed - randomSpeedModifier, _speed + randomSpeedModifier);
+                rb.velocity = moveDirection * speedModifier * _speed;
             }
 
         }
 
-        private void DirectionCalculate()
-        {
-            moveDirection = (_points[_currPointIndex].position - transform.position).normalized;
-        }
+        private void DirectionCalculate() => moveDirection = (_points[_currPointIndex].position - transform.position).normalized;
 
-        public void Activate()
-        {
-            _shouldMove = true;
-        }
+        public void Activate() => _shouldMove = true;
 
+        /// <summary>
+        /// Deactivates the platform by stopping the movement immediately.
+        /// </summary>
         public void Deactivate()
         {
             _shouldMove = false;
+            rb.velocity = Vector2.zero;
+        }
+
+        public void SetRandomSpeedModifier(float newModifier) => randomSpeedModifier = Math.Min(newModifier, maxSpeedModifier);
+
+        public void SetSpeedModifier(float newModifier)
+        {
+            speedModifier = newModifier;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            movementExecuter.isOnAPlatform = true;
-            movementExecuter.platformRb = rb;
-            //movementExecuter.isOnAPlatform = true;
-            //movementExecuter.platformRb = rb;
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                movementExecuter.isOnAPlatform = true; // TODO : this should NOT have an explicit reference to the player's movement executor...
+                movementExecuter.platformRb = rb;
+            }
         }
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            movementExecuter.isOnAPlatform = false;
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                movementExecuter.isOnAPlatform = false;
+            }
         }
     }
 }

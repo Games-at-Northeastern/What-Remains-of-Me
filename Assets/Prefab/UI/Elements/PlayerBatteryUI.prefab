@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1201118723806577781}
-  - component: {fileID: 1201118723806577783}
-  - component: {fileID: 1201118723806577780}
   m_Layer: 5
   m_Name: PlayerBatteryUI
   m_TagString: Untagged
@@ -40,39 +38,6 @@ RectTransform:
   m_AnchoredPosition: {x: 608, y: 263}
   m_SizeDelta: {x: 61.6626, y: 33.5988}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1201118723806577783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1201118723806577770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f0d2e303e2c40f7889d847eafc8805d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maskRectTransform: {fileID: 1201118723977956245}
-  _maxMaskWidth: 44
-  _virusOverlayImage: {fileID: 1201118725171848824}
-  _maxVirusUntransparency: 0.4
-  _virusAnimation: {fileID: 1201118725171848826}
-  _minVirusAnimationSpeedMultiplier: 0.35
---- !u!114 &1201118723806577780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1201118723806577770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bab430fc820540768eac24bb8841767e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerBatteryMeterUIMB: {fileID: 1201118723806577783}
-  _batteryReactivePropertySO: {fileID: 11400000, guid: c50c5a3e0919a416fa3a9b4e9ecb0773, type: 2}
-  _virusReactivePropertySO: {fileID: 11400000, guid: 39a60d1deb5ec456085652b6c0d0b794, type: 2}
 --- !u!1 &1201118723977956234
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,7 +77,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 6.829, y: -0.509}
+  m_AnchoredPosition: {x: 6.8289948, y: -0.5089998}
   m_SizeDelta: {x: 44, y: 11.014}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1201118723977956246
@@ -372,7 +337,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0.000005722046, y: 0.006999496}
+  m_AnchoredPosition: {x: -0.000027656555, y: 0.0069993734}
   m_SizeDelta: {x: 45, y: 11}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1201118725260410763
@@ -395,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 4247adb4c42ca6f4a9f10986ab556df6, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -403,7 +368,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 4627991475143077296, guid: c825fa7a5677345c297903d8e1e74624, type: 3}
+  m_Sprite: {fileID: -8129495079471564520, guid: c825fa7a5677345c297903d8e1e74624, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -504,4 +469,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   virusPercent: {fileID: 11400000, guid: 39a60d1deb5ec456085652b6c0d0b794, type: 2}
   virusTransform: {fileID: 1308697470772936986}
-  _maxMaskWidth: 30

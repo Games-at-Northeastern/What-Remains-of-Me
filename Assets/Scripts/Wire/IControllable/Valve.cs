@@ -22,7 +22,7 @@ public class Valve : AControllable
     void Update()
     {
 
-        if ((energy + virus) == maxCharge && !_activated)
+        if ((cleanEnergy + virus) == maxCharge && !_activated)
         {
             body.color = Color.blue;
             print("Valve fully charged");
@@ -42,7 +42,7 @@ public class Valve : AControllable
             body.color = Color.white;
             water.SetActive(false);
             _activated = false;
-            energy = 0;
+            cleanEnergy = 0;
         }
     }
 

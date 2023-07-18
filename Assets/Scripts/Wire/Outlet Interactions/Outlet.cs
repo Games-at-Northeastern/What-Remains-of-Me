@@ -8,7 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Outlet : MonoBehaviour
 {
-    private SoundController soundController;
+    //private SoundController soundController;
+    [SerializeField] private SoundArray OutletSounds;
 
     [Header("SFX")]
     public AudioSource src;
@@ -21,18 +22,19 @@ public class Outlet : MonoBehaviour
 
     private void Awake()
     {
+        // TODO : This should be moved into one of the player scripts
         CS = new ControlSchemes();
         CS.Player.GiveEnergy.performed += _ => { if (controlled != null) { StartCoroutine("GiveEnergy"); } };
         CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); } };
-        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); } };
-        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); } };
+        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); src.Stop(); } };
+        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); src.Stop(); } };
 
         CS.Player.GiveVirus.performed += _ => { if (controlled != null) { StartCoroutine("GiveVirus"); } };
         CS.Player.TakeVirus.performed += _ => { if (controlled != null) { StartCoroutine("TakeVirus"); } };
-        CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); } };
-        CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); } };
+        CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); src.Stop(); } };
+        CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); src.Stop(); } };
 
-        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+        //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
     }
 
     /// <summary>
@@ -41,7 +43,8 @@ public class Outlet : MonoBehaviour
     public void Connect()
     {
         CS.Enable();
-        soundController.PlaySound("Plug_In");
+        src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
+        //soundController.PlaySound("Plug_In");
     }
 
     /// <summary>
@@ -115,6 +118,36 @@ public class Outlet : MonoBehaviour
             src.clip = taking;
             src.Play();
         }
+    }
+
+    // Get the maximum charge of the controlled object
+    public float GetMaxCharge()
+    {
+        if (controlled != null)
+        {
+            return controlled.GetMaxCharge();
+        }
+        return 0f;
+    }
+
+    // Get the energy level of the controlled object
+    public float GetEnergy()
+    {
+        if (controlled != null)
+        {
+            return controlled.GetEnergy();
+        }
+        return 0f;
+    }
+
+    // Get the virus level of the controlled object
+    public float GetVirus()
+    {
+        if (controlled != null)
+        {
+            return controlled.GetVirus();
+        }
+        return 0f;
     }
 }
 

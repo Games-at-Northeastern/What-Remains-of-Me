@@ -8,16 +8,16 @@ using Unity.VisualScripting;
 
 public class InkDialogueManager : MonoBehaviour
 {
-    [Header("Parms")]
+    [Header("Params")]
     [SerializeField] private float typingSpeed = 0.04f;
-
+    [SerializeField] private float dialogueDelayTime = 100f;
+    [SerializeField] private float exitDialogueTime = 1.0f;
+    
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI displayNameText;
     [SerializeField] private Animator portraitAnimator;
-
-    private Animator layoutAnimator;
 
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
@@ -26,34 +26,34 @@ public class InkDialogueManager : MonoBehaviour
     [Header("Load Globals JSON")]
     [SerializeField] private TextAsset globalsJSON;
 
-    private Story currentStory;
+    [Header("Configs")]
+    public bool stopMovement;
+    public bool autoTurnPage;
+    public float waitBeforePageTurn;
+    public bool dialogueEnded;
 
-    private Coroutine displayLineCoroutine;
-
-    private bool canContinueToNextLine = false;
     public bool dialogueIsPlaying { get; private set; }
 
-    private static InkDialogueManager instance;
-
-    private ControlSchemes _cs;
-
     // constants for ink tags (ink tags allow you to change the state of the game from ink json files)
-
     private const string SPEAKER_TAG = "speaker";
-
     private const string PORTRAIT_TAG = "portrait";
-
     private const string LAYOUT_TAG = "layout";
 
     // dialogue variables
-
     private InkDialogueVariables dialogueVariables;
 
-    public bool stopMovement;
+    // private variables
+    private Story currentStory;
+    private Coroutine displayLineCoroutine;
+    private bool canContinueToNextLine = false;
+    private Animator layoutAnimator;
+    private static InkDialogueManager instance;
+    private ControlSchemes _cs;
+    private bool canSkip = false;
+    private bool submitSkip = false;
 
-    public bool autoTurnPage;
-
-    public float waitBeforePageTurn;
+    [HideInInspector]
+    public bool isTutorialDialogue = false;
 
     private void Awake()
     {
@@ -78,7 +78,7 @@ public class InkDialogueManager : MonoBehaviour
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
         stopMovement = true;
-        stopMovement = false;
+        dialogueEnded = false;
 
         layoutAnimator = dialoguePanel.GetComponent<Animator>();
 
@@ -100,11 +100,16 @@ public class InkDialogueManager : MonoBehaviour
             return;
         }
 
+        if (_cs.Player.Dialogue.WasPressedThisFrame())
+        {
+            submitSkip = true;
+        }
+
         // handle continuing to the next line in the dialogue when submit is pressed
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
         if (canContinueToNextLine
             && currentStory.currentChoices.Count == 0
-            && (_cs.Player.Dialogue.WasReleasedThisFrame() || autoTurnPage))
+            && (_cs.Player.Dialogue.WasPressedThisFrame() || autoTurnPage))
         {
             ContinueStory();
         }
@@ -112,7 +117,7 @@ public class InkDialogueManager : MonoBehaviour
 
     private IEnumerator ContinueWithDelay()
     {
-        yield return new WaitForSeconds(100f);
+        yield return new WaitForSeconds(dialogueDelayTime);
         ContinueStory();
     }
 
@@ -131,185 +136,239 @@ public class InkDialogueManager : MonoBehaviour
         layoutAnimator.Play("right");
 
         ContinueStory();
+
+        // this works, but it also depends on a single player existing in the scene
+        // and is using FindGameObjectsWithTag which is
+        // VERY BAD PRACTICE, DON'T DO THIS!!!
+        // also using GetComponent usually isn't good practice compared to [SerializeField]
+        // I am using GetComponent here so that you don't have to assign the player to every InkDialogueManager in every scene
+        // if there is a better way to implement this please do
+        // this just prevents the player's rigidbody from moving along the X Axis while dialogue is playing
+        if (stopMovement)
+        {
+            Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
+            playerRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        }
     }
 
 
     private IEnumerator ExitDialogueMode()
     {
-        yield return new WaitForSeconds(0.2f); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+        if (isTutorialDialogue)
+        {
+            yield return new WaitForSeconds(exitDialogueTime); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+        }
+        else
+        {
+            yield return new WaitForSeconds(0f); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+        }
 
         dialogueVariables.StopListening(currentStory);
 
         dialogueIsPlaying = false;
+        dialogueEnded = true;
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
-    }
 
-    private void ContinueStory()
+        //turns off the X constraint on the player's rigidbody when dialogue has stopped
+        if (stopMovement)
+        {
+            Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
+            playerRB.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        }
+        //btw if you ever want to adjust this, know that RigidbodyContraints2D are something called a "Bitmap" so they can't be set normally
+        // https://answers.unity.com/questions/1104653/im-trying-to-freeze-both-positionx-and-rotation-in.html 
+        // The constraints property is a Bitmask. Simply setting it to a single option only sets that option. You need to use the | (bitwise OR) operator to merge them together before setting it i.e.
+        // constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezepositionX;
+}
+
+private void ContinueStory()
+{
+StopCoroutine(ContinueWithDelay());
+if (currentStory.canContinue)
+{
+    if (displayLineCoroutine != null)
     {
-        StopCoroutine(ContinueWithDelay());
-        if (currentStory.canContinue)
-        {
-            if (displayLineCoroutine != null)
-            {
-                StopCoroutine(displayLineCoroutine);
-            }
-            // set text for the current dialogue line
-            displayLineCoroutine = StartCoroutine(DisplayLine(currentStory.Continue()));
-
-            // handles current tags
-            HandleTags(currentStory.currentTags);
-        }
-        else
-        {
-            StartCoroutine(ExitDialogueMode());
-        }
+        StopCoroutine(displayLineCoroutine);
     }
+    // set text for the current dialogue line
+    displayLineCoroutine = StartCoroutine(DisplayLine(currentStory.Continue()));
+
+    // handles current tags
+    HandleTags(currentStory.currentTags);
+}
+else
+{
+    StartCoroutine(ExitDialogueMode());
+}
+}
 
 
-    private IEnumerator DisplayLine(string line)
+private IEnumerator DisplayLine(string line)
+{
+// empty dialogue text
+dialogueText.text = line;
+dialogueText.maxVisibleCharacters = 0;
+
+canContinueToNextLine = false;
+submitSkip = false;
+
+StartCoroutine(CanSkip());
+
+//hide previous choices
+HideChoices();
+
+// display 1 letter at a time
+foreach (char letter in line.ToCharArray())
+{
+    // if player presses 'submit', entire dialogue line is displayed
+    if (canSkip && submitSkip)
     {
-        // empty dialogue text
-        dialogueText.text = line;
-        dialogueText.maxVisibleCharacters = 0;
-
-        canContinueToNextLine = false;
-
-        //hide previous choices
-        HideChoices();
-
-        // display 1 letter at a time
-        foreach (char letter in line.ToCharArray())
-        {
-            dialogueText.maxVisibleCharacters++;
-            yield return new WaitForSeconds(typingSpeed);
-        }
-
-        // display choices, if any, for this dialogue line
-        DisplayChoices();
-
-        if (autoTurnPage)
-        {
-            yield return new WaitForSeconds(waitBeforePageTurn);
-        }
-
-        canContinueToNextLine = true;
+        submitSkip = false;
+        dialogueText.maxVisibleCharacters = line.Length;
+        break;
     }
+    dialogueText.maxVisibleCharacters++;
+    yield return new WaitForSeconds(typingSpeed);
+}
 
-    private void HideChoices()
+
+// display choices, if any, for this dialogue line
+DisplayChoices();
+
+if (canSkip)
+{
+    StartCoroutine(ContinueWithDelay());
+} else if (autoTurnPage)
+{
+    yield return new WaitForSeconds(waitBeforePageTurn);
+}
+
+canContinueToNextLine = true;
+canSkip = false;
+}
+
+private IEnumerator CanSkip()
+{
+canSkip = false; 
+yield return new WaitForSeconds(0.05f);
+canSkip = true;
+}
+
+private void HideChoices()
+{
+foreach (GameObject choicebutton in choices)
+{
+    choicebutton.SetActive(false);
+}
+}
+
+private void HandleTags(List<string> currentTags)
+{
+// loop through current tags
+foreach(string tag in currentTags)
+{
+    string[] splitTag = tag.Split(':');
+    if (splitTag.Length != 2)
     {
-        foreach (GameObject choicebutton in choices)
-        {
-            choicebutton.SetActive(false);
-        }
+        Debug.LogError("Tag could not be parsed:" + tag);
     }
+    string tagKey = splitTag[0].Trim();
+    string tagValue = splitTag[1].Trim();
 
-    private void HandleTags(List<string> currentTags)
+    // handle the tag
+    switch (tagKey)
     {
-        // loop through current tags
-        foreach(string tag in currentTags)
-        {
-            string[] splitTag = tag.Split(':');
-            if (splitTag.Length != 2)
-            {
-                Debug.LogError("Tag could not be parsed:" + tag);
-            }
-            string tagKey = splitTag[0].Trim();
-            string tagValue = splitTag[1].Trim();
-
-            // handle the tag
-            switch (tagKey)
-            {
-                case SPEAKER_TAG:
-                    displayNameText.text = tagValue;
-                    Debug.Log("Speaker = " + tagValue);
-                    break;
-                case PORTRAIT_TAG:
-                    portraitAnimator.Play(tagValue);
-                    Debug.Log("Potrait = " + tagValue);
-                    break;
-                case LAYOUT_TAG:
-                    layoutAnimator.Play(tagValue);
-                    Debug.Log("Layout = " + tagValue);
-                    break;
-                default:
-                    Debug.LogWarning("Tag came in but isn't being handled" + tag);
-                    break;
-            }
-        }
+        case SPEAKER_TAG:
+            displayNameText.text = tagValue;
+            Debug.Log("Speaker = " + tagValue);
+            break;
+        case PORTRAIT_TAG:
+            portraitAnimator.Play(tagValue);
+            Debug.Log("Potrait = " + tagValue);
+            break;
+        case LAYOUT_TAG:
+            layoutAnimator.Play(tagValue);
+            Debug.Log("Layout = " + tagValue);
+            break;
+        default:
+            Debug.LogWarning("Tag came in but isn't being handled" + tag);
+            break;
     }
+}
+}
 
-    private void DisplayChoices()
-    {
-        List<Choice> currentChoices = currentStory.currentChoices;
+private void DisplayChoices()
+{
+List<Choice> currentChoices = currentStory.currentChoices;
 
-        // defensive check to make sure our UI can support the number of choices coming in
-        if (currentChoices.Count > choices.Length)
-        {
-            Debug.LogError("More choices were given than the UI can support. Number of choices given: "
-                + currentChoices.Count);
-        }
+// defensive check to make sure our UI can support the number of choices coming in
+if (currentChoices.Count > choices.Length)
+{
+    Debug.LogError("More choices were given than the UI can support. Number of choices given: "
+        + currentChoices.Count);
+}
 
-        int index = 0;
-        // enable and initialize the choices up to the amount of choices for this line of dialogue
-        foreach (Choice choice in currentChoices)
-        {
-            choices[index].gameObject.SetActive(true);
-            choicesText[index].text = choice.text;
-            index++;
-        }
-        // go through the remaining choices the UI supports and make sure they're hidden
-        for (int i = index; i < choices.Length; i++)
-        {
-            choices[i].gameObject.SetActive(false);
-        }
+int index = 0;
+// enable and initialize the choices up to the amount of choices for this line of dialogue
+foreach (Choice choice in currentChoices)
+{
+    choices[index].gameObject.SetActive(true);
+    choicesText[index].text = choice.text;
+    index++;
+}
+// go through the remaining choices the UI supports and make sure they're hidden
+for (int i = index; i < choices.Length; i++)
+{
+    choices[i].gameObject.SetActive(false);
+}
 
-        StartCoroutine(SelectFirstChoice());
-    }
+StartCoroutine(SelectFirstChoice());
+}
 
-    private IEnumerator SelectFirstChoice()
-    {
-        // Event System requires we clear it first, then wait
-        // for at least one frame before we set the current selected object.
-        EventSystem.current.SetSelectedGameObject(null);
-        yield return new WaitForEndOfFrame();
-        EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
-    }
+private IEnumerator SelectFirstChoice()
+{
+// Event System requires we clear it first, then wait
+// for at least one frame before we set the current selected object.
+EventSystem.current.SetSelectedGameObject(null);
+yield return new WaitForEndOfFrame();
+EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
+}
 
-    public void MakeChoice(int choiceIndex)
-    {
-        if (canContinueToNextLine)
-        {
-            currentStory.ChooseChoiceIndex(choiceIndex);
+public void MakeChoice(int choiceIndex)
+{
+if (canContinueToNextLine)
+{
+    currentStory.ChooseChoiceIndex(choiceIndex);
 
-            ContinueStory();
-        }
-    }
+    ContinueStory();
+}
+}
 
-    public Ink.Runtime.Object GetVariableState(string variableName)
-    {
-        Ink.Runtime.Object result = null;
-        dialogueVariables.variables.TryGetValue(variableName, out result);
-        if (result == null)
-        {
-            Debug.LogWarning("Ink Variable was found to be null" + variableName);
-        }
-        return result;
-    }
+public Ink.Runtime.Object GetVariableState(string variableName)
+{
+Ink.Runtime.Object result = null;
+dialogueVariables.variables.TryGetValue(variableName, out result);
+if (result == null)
+{
+    Debug.LogWarning("Ink Variable was found to be null" + variableName);
+}
+return result;
+}
 
-    public void ChangeVariableState(string variableName, Ink.Runtime.Object newValue)
-    {
-        Ink.Runtime.Object result = null;
-        dialogueVariables.variables.TryGetValue(variableName, out result);
-        if (result == null)
-        {
-            Debug.LogWarning("Ink Variable was found to be null. You may have to add the variable to globas.ink" + variableName);
-        }
-        else
-        {
-            dialogueVariables.variables.Remove(variableName);
-            dialogueVariables.variables.Add(variableName, newValue);
-        }
-    }
+public void ChangeVariableState(string variableName, Ink.Runtime.Object newValue)
+{
+Ink.Runtime.Object result = null;
+dialogueVariables.variables.TryGetValue(variableName, out result);
+if (result == null)
+{
+    Debug.LogWarning("Ink Variable was found to be null. You may have to add the variable to globas.ink" + variableName);
+}
+else
+{
+    dialogueVariables.variables.Remove(variableName);
+    dialogueVariables.variables.Add(variableName, newValue);
+}
+}
 
 }

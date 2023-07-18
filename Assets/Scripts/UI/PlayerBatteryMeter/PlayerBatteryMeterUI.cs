@@ -37,7 +37,7 @@ namespace UI.PlayerBatteryMeter
         public void SetCurrVirusPercentage(float percentage)
         {
             _virusAnimation.SetSpeedMultiplier(1f - ((1 - _minVirusAnimationSpeedMultiplier) * percentage));
-            ChangeVirusOverlayImageTransparency(percentage);
+            //ChangeVirusOverlayImageTransparency(percentage);
         }
 
         private void ChangeVirusOverlayImageTransparency(float percentage)

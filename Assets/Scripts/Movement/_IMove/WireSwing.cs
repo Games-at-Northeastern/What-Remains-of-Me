@@ -27,8 +27,11 @@ public class WireSwing : AMove
         // Get starting angular vel
         Vector2 origPos = MI.transform.position;
         Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
+
+        // Set the wire length to be the current distance between the player and the outlet
         initRadius = Vector2.Distance(origPos, connectedOutletPos);
         WT.SetMaxWireLength(initRadius);
+
         float firstAngle = Mathf.Atan2(origPos.y - connectedOutletPos.y, origPos.x - connectedOutletPos.x);
         Vector2 newPos = origPos + (new Vector2(horizVel, vertVel) * Time.deltaTime);
         float secondAngle = Mathf.Atan2(newPos.y - connectedOutletPos.y, newPos.x - connectedOutletPos.x);
@@ -66,17 +69,29 @@ public class WireSwing : AMove
         {
             inBounceMode = false;
         }
+
         // Check for dash input
+        /*
+        // COMMENTING OUT THE ABILITY TO DASH WHILE WIRE IS ATTACHED FOR RIGHT NOW (SUMMER 2023) BECAUSE CHAPTER 1 DOESN'T NEED IT
         if (dashInput)
         {
             float change = MS.WireSwingAngularVelOfDash * (MS.WireSwingReferenceWireLength / GetCurrentWireLength());
             change = change * -Mathf.Sin(angle);
             angularVelocity = Flipped() ? -change : change;
             dashInput = false;
-        }
+        }*/
         // Get Angular Acceleration
         float inputPower = CS.Player.Move.ReadValue<float>() * Mathf.Clamp(Mathf.Abs(Mathf.Sin(angle)), 0, 1);
-        angularAccel = (-Mathf.Cos(angle) * MS.WireSwingNaturalAccelMultiplier) + (inputPower * MS.WireSwingManualAccelMultiplier);
+
+        // if the player is actively colliding against something, only consider the manual input to prevent infinite force buildup
+        if (inBounceMode)
+        {
+            angularAccel = inputPower * MS.WireSwingManualAccelMultiplier;
+        }
+        else
+        {
+            angularAccel = (-Mathf.Cos(angle) * MS.WireSwingNaturalAccelMultiplier) + (inputPower * MS.WireSwingManualAccelMultiplier);
+        }
         // Add decay if accel and vel are in different directions
         if (Mathf.Sign(angularAccel) != Mathf.Sign(angularVelocity))
         {
@@ -84,6 +99,10 @@ public class WireSwing : AMove
         }
         // Use the angular acceleration to change the angular vel, enact angular vel
         angularVelocity += angularAccel * Time.deltaTime * (MS.WireSwingReferenceWireLength / GetCurrentWireLength());
+
+        // Clamp the angular velocity - again, to prevent infinite buildup or crazy speeds.
+        angularVelocity = Mathf.Clamp(angularVelocity, -MS.WireSwingMaxAngularVelocity, MS.WireSwingMaxAngularVelocity);
+
         float newAngle = angle + (angularVelocity * Time.deltaTime);
         Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
         vel = (newPos - origPos) / Time.deltaTime;
@@ -113,7 +132,7 @@ public class WireSwing : AMove
         }
         if (MI.GroundDetector.isColliding())
         {
-            // WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
+            WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
             return new Run(vel.x);
         }
         if (disconnected)

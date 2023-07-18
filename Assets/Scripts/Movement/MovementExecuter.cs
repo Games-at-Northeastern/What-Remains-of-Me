@@ -9,24 +9,58 @@ using UnityEngine;
 public class MovementExecuter : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb; // To move the player
-    [SerializeField] private MovementInfo mi; // Gives other info to move scripts
-    [SerializeField] private MovementSettings ms; // Gives constants to move scripts
-    [SerializeField] private WireThrower wt; // Gives information about the wire
-    [SerializeField] private PlayerHealth ph; // Gives info about player health / damage
+    [SerializeField] private MovementInfo movementInfo; // Gives other info to move scripts
+    [SerializeField] private MovementSettings movementSettings; // Gives constants to move scripts
+    [SerializeField] private WireThrower wireThrower; // Gives information about the wire
+    [SerializeField] private PlayerHealth playerHealth; // Gives info about player health / damage
+
+    private LevelManager levelManager;
     private IMove currentMove; // The move taking place this frame
     private Vector3 respawnPosition;
+    private ControlSchemes controlSchemes;
+
+    private bool isPaused;
+    [Space]
+    [Header("Platform stuff, don't assign or modify")]
     public bool isOnAPlatform;
     public Rigidbody2D platformRb;
+
+    private CheckpointManager checkpointManager;
 
     // Initialization
     private void Awake()
     {
-        var cs = new ControlSchemes();
-        cs.Enable();
-        cs.Debug.Restart.performed += _ => Restart();
-        currentMove = new StarterMove(mi, ms, cs, wt, ph);
+        controlSchemes = new ControlSchemes();
+        controlSchemes.Enable();
+        controlSchemes.Debug.Restart.performed += _ => Restart();
+
+        currentMove = new StarterMove(movementInfo, movementSettings, controlSchemes, wireThrower, playerHealth);
         respawnPosition = transform.position;
 
+        isPaused = false;
+    }
+
+    private void Start()
+    {
+        // Set up the level manager, and the control scheme enable/disable for when the player movement should be paused
+        levelManager = LevelManager.Instance;
+
+        RegisterEvents();
+        checkpointManager = FindObjectOfType<CheckpointManager>();
+    }
+
+    /// <summary>
+    /// Register this executor as a listener to any necessary events.
+    /// </summary>
+    private void RegisterEvents()
+    {
+        levelManager.OnPlayerReset.AddListener(Respawn);
+        levelManager.OnPlayerDeath.AddListener(Restart);
+        levelManager.OnPlayerPause.AddListener(Pause);
+        levelManager.OnPlayerUnpause.AddListener(Unpause);
+
+        levelManager.OnPlayerPause.AddListener(controlSchemes.Disable);
+        levelManager.OnPlayerUnpause.AddListener(controlSchemes.Enable);
     }
 
     /// <summary>
@@ -36,14 +70,11 @@ public class MovementExecuter : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (InkDialogueManager.GetInstance() != null)
+        if (isPaused)
         {
-            if (InkDialogueManager.GetInstance().dialogueIsPlaying && InkDialogueManager.GetInstance().stopMovement)
-            {
-                currentMove.AdvanceTime();
-                rb.velocity = new Vector2(0, rb.velocity.y);
-                currentMove = new Idle();
-            }
+            rb.velocity = new Vector2(0, 0);
+            currentMove = new Idle();
+            return;
         }
         if (isOnAPlatform)
         {
@@ -71,9 +102,32 @@ public class MovementExecuter : MonoBehaviour
     /// </summary>
     private void Restart()
     {
-        transform.position = respawnPosition;
+        if (checkpointManager != null)
+        {
+            checkpointManager.RespawnAtBeginning(rb.transform);
+        } else
+        {
+            rb.position = respawnPosition;
+        }
         currentMove = new Fall();
     }
+    
+    /// <summary>
+    /// Respawns the player at a given location.
+    /// </summary>
+    private void Respawn()
+    {
+        if (checkpointManager != null)
+        {
+            checkpointManager.RespawnAtRecent(rb.transform);
+        }
+
+        rb.velocity = Vector2.zero;
+        currentMove = new Idle();
+    }
+
+    private void Pause() => isPaused = true;
+    private void Unpause() => isPaused = false;
 
     /// <summary>
     /// Gives an immutable version of the current move. This allows certain information
