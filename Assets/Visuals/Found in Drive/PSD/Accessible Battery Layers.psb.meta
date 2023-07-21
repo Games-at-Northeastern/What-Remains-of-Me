@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -68,7 +70,7 @@ ScriptedImporter:
     compressionQualitySet: 0
     textureFormatSet: 0
     applyGammaDecoding: 0
-  spriteImportData:
+  singleSpriteImportData:
   - name: 
     originalName: 
     pivot: {x: 0, y: 0}
@@ -88,11 +90,10 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
     spritePosition: {x: 0, y: 0}
-  mosaicSpriteImportData: []
-  rigSpriteImportData:
+  multiSpriteImportData: []
+  layeredSpriteImportData:
   - name: VirusGlitchOverlay3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -112,7 +113,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 66, y: 4}
     spritePosition: {x: 7, y: 10}
   - name: VirusGlitchOverlay2
@@ -134,7 +134,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 32}
     spritePosition: {x: 7, y: 10}
   - name: VirusGlitchOverlay1
@@ -156,7 +155,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 57, y: 32}
     spritePosition: {x: 7, y: 10}
   - name: HeavyVirusFill
@@ -178,7 +176,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 51}
     spritePosition: {x: 7, y: 10}
   - name: ModerateVirusFill
@@ -200,7 +197,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 57, y: 51}
     spritePosition: {x: 7, y: 10}
   - name: MildVirusFill
@@ -222,7 +218,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 70}
     spritePosition: {x: 7, y: 10}
   - name: NoVirusFill
@@ -244,7 +239,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 57, y: 70}
     spritePosition: {x: 7, y: 10}
   - name: Battery Background
@@ -266,21 +260,214 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 4}
     spritePosition: {x: 4, y: 6}
-  characterData:
-    bones: []
-    parts: []
-    dimension: {x: 0, y: 0}
-    characterGroups: []
-    boneReadOnly: 0
+  spriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
+  rigSpriteImportData:
+  - name: VirusGlitchOverlay3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 66
+      y: 4
+      width: 45
+      height: 11
+    spriteID: 64ac5670b87670143ae61be19965f588
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 66, y: 4}
+    spritePosition: {x: 7, y: 10}
+  - name: VirusGlitchOverlay2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 32
+      width: 45
+      height: 11
+    spriteID: 0a91df8bc92fe3943b2ff6203efd25c5
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 32}
+    spritePosition: {x: 7, y: 10}
+  - name: VirusGlitchOverlay1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 32
+      width: 45
+      height: 11
+    spriteID: 8071198b57d0f3943ad66026596b1469
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 32}
+    spritePosition: {x: 7, y: 10}
+  - name: HeavyVirusFill
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 51
+      width: 45
+      height: 11
+    spriteID: 6117d9c9f97df8347b8ab9873b2a5166
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 51}
+    spritePosition: {x: 7, y: 10}
+  - name: ModerateVirusFill
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 51
+      width: 45
+      height: 11
+    spriteID: cbe2803f8e06c894d983ffbb6363539d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 51}
+    spritePosition: {x: 7, y: 10}
+  - name: MildVirusFill
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 70
+      width: 45
+      height: 11
+    spriteID: 9eac156b442c1964a93f16a7aa1544c8
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 70}
+    spritePosition: {x: 7, y: 10}
+  - name: NoVirusFill
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 70
+      width: 45
+      height: 11
+    spriteID: 7b23da5923778b24e92fc3c8fe9ed38e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 70}
+    spritePosition: {x: 7, y: 10}
+  - name: Battery Background
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 54
+      height: 20
+    spriteID: 548974f92b05acf45a795eb3ac921fdf
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 4, y: 6}
   sharedRigSpriteImportData: []
+  mosaicSpriteImportData: []
   sharedRigCharacterData:
     bones: []
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
+    boneReadOnly: 0
+  characterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings:
   - name: DefaultTexturePlatform
@@ -336,11 +523,115 @@ ScriptedImporter:
   generatePhysicsShape: 0
   paperDollMode: 0
   keepDupilcateSpriteName: 1
+  padding: 4
+  spriteSizeExpand: 0
   skeletonAssetReferenceID: 
   spriteCategoryList:
     categories: []
   spritePackingTag: 
   resliceFromLayer: 0
+  pSDLayerImportSetting: []
+  psdLayers:
+  - name: Virus Overlay
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: 3845a46c2837d19458df9036d8d7b452
+    layerID: 27
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: VirusGlitchOverlay3
+    spriteName: VirusGlitchOverlay3
+    isGroup: 0
+    parentIndex: 0
+    spriteID: 64ac5670b87670143ae61be19965f588
+    layerID: 19
+    mosaicPosition: {x: 66, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: VirusGlitchOverlay2
+    spriteName: VirusGlitchOverlay2
+    isGroup: 0
+    parentIndex: 0
+    spriteID: 0a91df8bc92fe3943b2ff6203efd25c5
+    layerID: 17
+    mosaicPosition: {x: 4, y: 32}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: VirusGlitchOverlay1
+    spriteName: VirusGlitchOverlay1
+    isGroup: 0
+    parentIndex: 0
+    spriteID: 8071198b57d0f3943ad66026596b1469
+    layerID: 15
+    mosaicPosition: {x: 57, y: 32}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Fill
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: 98952e1def25e214f8e2036a09b1a5d3
+    layerID: 42
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: HeavyVirusFill
+    spriteName: HeavyVirusFill
+    isGroup: 0
+    parentIndex: 4
+    spriteID: 6117d9c9f97df8347b8ab9873b2a5166
+    layerID: 41
+    mosaicPosition: {x: 4, y: 51}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: ModerateVirusFill
+    spriteName: ModerateVirusFill
+    isGroup: 0
+    parentIndex: 4
+    spriteID: cbe2803f8e06c894d983ffbb6363539d
+    layerID: 40
+    mosaicPosition: {x: 57, y: 51}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: MildVirusFill
+    spriteName: MildVirusFill
+    isGroup: 0
+    parentIndex: 4
+    spriteID: 9eac156b442c1964a93f16a7aa1544c8
+    layerID: 39
+    mosaicPosition: {x: 4, y: 70}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: NoVirusFill
+    spriteName: NoVirusFill
+    isGroup: 0
+    parentIndex: 4
+    spriteID: 7b23da5923778b24e92fc3c8fe9ed38e
+    layerID: 38
+    mosaicPosition: {x: 57, y: 70}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Battery Background
+    spriteName: Battery Background
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 548974f92b05acf45a795eb3ac921fdf
+    layerID: 2
+    mosaicPosition: {x: 4, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
   mosaicPSDLayers: []
   rigPSDLayers:
   - name: Virus Overlay
@@ -444,7 +735,9 @@ ScriptedImporter:
     isImported: 1
     isVisible: 1
   sharedRigPSDLayers: []
-  pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
   prefabAssetName: 

@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -68,7 +70,7 @@ ScriptedImporter:
     compressionQualitySet: 0
     textureFormatSet: 0
     applyGammaDecoding: 0
-  spriteImportData:
+  singleSpriteImportData:
   - name: 
     originalName: 
     pivot: {x: 0, y: 0}
@@ -88,11 +90,10 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
     spritePosition: {x: 0, y: 0}
-  mosaicSpriteImportData: []
-  rigSpriteImportData:
+  multiSpriteImportData: []
+  layeredSpriteImportData:
   - name: 'Words for example '
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -100,7 +101,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 661
+      x: 524
       y: 4
       width: 338
       height: 31
@@ -112,8 +113,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 661, y: 4}
+    uvTransform: {x: 524, y: 4}
     spritePosition: {x: 144, y: 46}
   - name: With Mold
     originalName: 
@@ -134,9 +134,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 4}
-    spritePosition: {x: 0, y: -38}
+    spritePosition: {x: 0, y: 0}
   - name: WHole thing
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -145,7 +144,7 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 178
+      y: 140
       width: 512
       height: 128
     spriteID: b0be9c609137e5b4c9459eaa33cef882
@@ -156,9 +155,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4, y: 178}
-    spritePosition: {x: 0, y: -38}
+    uvTransform: {x: 4, y: 140}
+    spritePosition: {x: 0, y: 0}
   - name: W/o mold
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -167,7 +165,7 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 352
+      y: 276
       width: 512
       height: 128
     spriteID: 43e9255ebbaf43c4cb604e8e56f69d7f
@@ -178,9 +176,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4, y: 352}
-    spritePosition: {x: 0, y: -38}
+    uvTransform: {x: 4, y: 276}
+    spritePosition: {x: 0, y: 0}
   - name: Layer 8
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -189,7 +186,7 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 526
+      y: 412
       width: 512
       height: 128
     spriteID: 72632f9ffb536854aac14591dbb8253e
@@ -200,8 +197,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4, y: 526}
+    uvTransform: {x: 4, y: 412}
     spritePosition: {x: 0, y: 0}
   - name: Background
     originalName: 
@@ -211,7 +207,7 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 662
+      y: 548
       width: 512
       height: 128
     spriteID: 8718bbc8f7f015d42883d4118cddac60
@@ -222,21 +218,172 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4, y: 662}
+    uvTransform: {x: 4, y: 548}
     spritePosition: {x: 0, y: 0}
-  characterData:
-    bones: []
-    parts: []
-    dimension: {x: 0, y: 0}
-    characterGroups: []
-    boneReadOnly: 0
+  spriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
+  rigSpriteImportData:
+  - name: 'Words for example '
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 524
+      y: 4
+      width: 338
+      height: 31
+    spriteID: 5741486647ba0e440af7b413d8e8437e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 524, y: 4}
+    spritePosition: {x: 144, y: 46}
+  - name: With Mold
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 512
+      height: 128
+    spriteID: 903ef65d459974f4085763df632e01fc
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 0, y: 0}
+  - name: WHole thing
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 140
+      width: 512
+      height: 128
+    spriteID: b0be9c609137e5b4c9459eaa33cef882
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 140}
+    spritePosition: {x: 0, y: 0}
+  - name: W/o mold
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 276
+      width: 512
+      height: 128
+    spriteID: 43e9255ebbaf43c4cb604e8e56f69d7f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 276}
+    spritePosition: {x: 0, y: 0}
+  - name: Layer 8
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 412
+      width: 512
+      height: 128
+    spriteID: 72632f9ffb536854aac14591dbb8253e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 412}
+    spritePosition: {x: 0, y: 0}
+  - name: Background
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 548
+      width: 512
+      height: 128
+    spriteID: 8718bbc8f7f015d42883d4118cddac60
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 548}
+    spritePosition: {x: 0, y: 0}
   sharedRigSpriteImportData: []
+  mosaicSpriteImportData: []
   sharedRigCharacterData:
     bones: []
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
+    boneReadOnly: 0
+  characterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings:
   - name: DefaultTexturePlatform
@@ -292,11 +439,75 @@ ScriptedImporter:
   generatePhysicsShape: 0
   paperDollMode: 0
   keepDupilcateSpriteName: 1
+  padding: 4
+  spriteSizeExpand: 0
   skeletonAssetReferenceID: 
   spriteCategoryList:
     categories: []
   spritePackingTag: 
   resliceFromLayer: 0
+  pSDLayerImportSetting: []
+  psdLayers:
+  - name: 'Words for example '
+    spriteName: 'Words for example '
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 5741486647ba0e440af7b413d8e8437e
+    layerID: 16
+    mosaicPosition: {x: 524, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 0
+  - name: With Mold
+    spriteName: With Mold
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 903ef65d459974f4085763df632e01fc
+    layerID: 18
+    mosaicPosition: {x: 4, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 0
+  - name: WHole thing
+    spriteName: WHole thing
+    isGroup: 0
+    parentIndex: -1
+    spriteID: b0be9c609137e5b4c9459eaa33cef882
+    layerID: 25
+    mosaicPosition: {x: 4, y: 140}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: W/o mold
+    spriteName: W/o mold
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 43e9255ebbaf43c4cb604e8e56f69d7f
+    layerID: 24
+    mosaicPosition: {x: 4, y: 276}
+    flatten: 0
+    isImported: 1
+    isVisible: 0
+  - name: Layer 8
+    spriteName: Layer 8
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 72632f9ffb536854aac14591dbb8253e
+    layerID: 23
+    mosaicPosition: {x: 4, y: 412}
+    flatten: 0
+    isImported: 1
+    isVisible: 0
+  - name: Background
+    spriteName: Background
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 8718bbc8f7f015d42883d4118cddac60
+    layerID: 1
+    mosaicPosition: {x: 4, y: 548}
+    flatten: 0
+    isImported: 1
+    isVisible: 0
   mosaicPSDLayers: []
   rigPSDLayers:
   - name: 'Words for example '
@@ -360,7 +571,9 @@ ScriptedImporter:
     isImported: 1
     isVisible: 0
   sharedRigPSDLayers: []
-  pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
   prefabAssetName: 

@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -68,7 +70,7 @@ ScriptedImporter:
     compressionQualitySet: 0
     textureFormatSet: 0
     applyGammaDecoding: 0
-  spriteImportData:
+  singleSpriteImportData:
   - name: VirusBarUI_1
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -88,10 +90,10 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
     spritePosition: {x: 0, y: 0}
-  mosaicSpriteImportData:
+  multiSpriteImportData: []
+  layeredSpriteImportData:
   - name: BarHolderLights
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -111,7 +113,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 708, y: 212}
     spritePosition: {x: 360, y: 60}
   - name: BarHolder
@@ -133,7 +134,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 4}
     spritePosition: {x: 72, y: 48}
   - name: ArmTip
@@ -155,7 +155,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 380}
     spritePosition: {x: 456, y: 348}
   - name: ArmAnchor
@@ -177,7 +176,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 360, y: 380}
     spritePosition: {x: 96, y: 348}
   - name: Size1
@@ -199,7 +197,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 532, y: 472}
     spritePosition: {x: 312, y: 108}
   - name: Size2
@@ -221,7 +218,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 392, y: 472}
     spritePosition: {x: 312, y: 108}
   - name: Size3
@@ -243,7 +239,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 216, y: 472}
     spritePosition: {x: 312, y: 108}
   - name: Size4
@@ -265,7 +260,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 472}
     spritePosition: {x: 312, y: 108}
   - name: Size5
@@ -287,7 +281,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 752, y: 276}
     spritePosition: {x: 312, y: 108}
   - name: Size6
@@ -309,7 +302,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 708, y: 108}
     spritePosition: {x: 312, y: 108}
   - name: Size7
@@ -331,7 +323,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 708, y: 4}
     spritePosition: {x: 312, y: 108}
   - name: Size8
@@ -353,7 +344,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 396, y: 276}
     spritePosition: {x: 312, y: 108}
   - name: Size9
@@ -375,9 +365,30 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 276}
     spritePosition: {x: 312, y: 108}
+  spriteImportData:
+  - name: VirusBarUI_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 828
+      height: 448
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
   rigSpriteImportData:
   - name: BarHolderLights
     originalName: 
@@ -398,7 +409,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 348, y: 152}
     spritePosition: {x: 0, y: 0}
   - name: BarHolder
@@ -420,7 +430,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -68, y: -44}
     spritePosition: {x: 0, y: 0}
   - name: ArmTip
@@ -442,7 +451,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -452, y: 32}
     spritePosition: {x: 0, y: 0}
   - name: ArmAnchor
@@ -464,7 +472,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 264, y: 32}
     spritePosition: {x: 0, y: 0}
   - name: Size1
@@ -486,7 +493,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 220, y: 364}
     spritePosition: {x: 0, y: 0}
   - name: Size2
@@ -508,7 +514,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 80, y: 364}
     spritePosition: {x: 0, y: 0}
   - name: Size3
@@ -530,7 +535,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -96, y: 364}
     spritePosition: {x: 0, y: 0}
   - name: Size4
@@ -552,7 +556,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -308, y: 364}
     spritePosition: {x: 0, y: 0}
   - name: Size5
@@ -574,7 +577,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 440, y: 168}
     spritePosition: {x: 0, y: 0}
   - name: Size6
@@ -596,7 +598,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 396, y: 0}
     spritePosition: {x: 0, y: 0}
   - name: Size7
@@ -618,7 +619,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 396, y: -104}
     spritePosition: {x: 0, y: 0}
   - name: Size8
@@ -640,7 +640,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 84, y: 168}
     spritePosition: {x: 0, y: 0}
   - name: Size9
@@ -662,21 +661,296 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -308, y: 168}
     spritePosition: {x: 0, y: 0}
-  characterData:
-    bones: []
-    parts: []
-    dimension: {x: 0, y: 0}
-    characterGroups: []
-    boneReadOnly: 0
   sharedRigSpriteImportData: []
+  mosaicSpriteImportData:
+  - name: BarHolderLights
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 708
+      y: 212
+      width: 96
+      height: 24
+    spriteID: 6779c9c1536874f55a1ca20deed852a1
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 708, y: 212}
+    spritePosition: {x: 360, y: 60}
+  - name: BarHolder
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 696
+      height: 264
+    spriteID: 954184f32d04c4ec7ae912fafd761951
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 72, y: 48}
+  - name: ArmTip
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 380
+      width: 348
+      height: 84
+    spriteID: ab7090644bcc7426c97f11c157297f37
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 380}
+    spritePosition: {x: 456, y: 348}
+  - name: ArmAnchor
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 360
+      y: 380
+      width: 312
+      height: 84
+    spriteID: 40281eac774524991a19b499084540c3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 360, y: 380}
+    spritePosition: {x: 96, y: 348}
+  - name: Size1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 532
+      y: 472
+      width: 96
+      height: 96
+    spriteID: 9c307bd825518460e93ac84aa989d00c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 532, y: 472}
+    spritePosition: {x: 312, y: 108}
+  - name: Size2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 392
+      y: 472
+      width: 132
+      height: 96
+    spriteID: 67c2594ca15764820a386005a6378a43
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 392, y: 472}
+    spritePosition: {x: 312, y: 108}
+  - name: Size3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 216
+      y: 472
+      width: 168
+      height: 96
+    spriteID: 7dc88ac1bd0354f59894f807e9f2e9ad
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 216, y: 472}
+    spritePosition: {x: 312, y: 108}
+  - name: Size4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 472
+      width: 204
+      height: 96
+    spriteID: 07f89ad4821b6424a877593308f6ac99
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 472}
+    spritePosition: {x: 312, y: 108}
+  - name: Size5
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 752
+      y: 276
+      width: 240
+      height: 96
+    spriteID: 1cdc3320d322d438b962b54ede179278
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 752, y: 276}
+    spritePosition: {x: 312, y: 108}
+  - name: Size6
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 708
+      y: 108
+      width: 276
+      height: 96
+    spriteID: 8f4a1cb311efd4dcaa2976cf0bf5248c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 708, y: 108}
+    spritePosition: {x: 312, y: 108}
+  - name: Size7
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 708
+      y: 4
+      width: 312
+      height: 96
+    spriteID: ca3c754ba0cee4311a0bcc58fdee38e7
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 708, y: 4}
+    spritePosition: {x: 312, y: 108}
+  - name: Size8
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 396
+      y: 276
+      width: 348
+      height: 96
+    spriteID: ea2f66f0dc83f40b29ebd86195570d5f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 396, y: 276}
+    spritePosition: {x: 312, y: 108}
+  - name: Size9
+    originalName: 
+    pivot: {x: 0, y: 0.5}
+    alignment: 4
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 276
+      width: 384
+      height: 96
+    spriteID: 8d1957c1582324c84901cd8384f5bff3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 276}
+    spritePosition: {x: 312, y: 108}
   sharedRigCharacterData:
     bones: []
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
+    boneReadOnly: 0
+  characterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings:
   - name: DefaultTexturePlatform
@@ -732,11 +1006,175 @@ ScriptedImporter:
   generatePhysicsShape: 0
   paperDollMode: 0
   keepDupilcateSpriteName: 1
+  padding: 4
+  spriteSizeExpand: 0
   skeletonAssetReferenceID: 
   spriteCategoryList:
     categories: []
   spritePackingTag: 
   resliceFromLayer: 0
+  pSDLayerImportSetting: []
+  psdLayers:
+  - name: Bar Holder
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: c11271c086fa84060b9bd32e03977277
+    layerID: 73
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: BarHolderLights
+    spriteName: BarHolderLights
+    isGroup: 0
+    parentIndex: 0
+    spriteID: 6779c9c1536874f55a1ca20deed852a1
+    layerID: 72
+    mosaicPosition: {x: 708, y: 212}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: BarHolder
+    spriteName: BarHolder
+    isGroup: 0
+    parentIndex: 0
+    spriteID: 954184f32d04c4ec7ae912fafd761951
+    layerID: 41
+    mosaicPosition: {x: 4, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Arm
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: 3bc9376c7dc7940fb95a2372498855c9
+    layerID: 86
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: ArmTip
+    spriteName: ArmTip
+    isGroup: 0
+    parentIndex: 3
+    spriteID: ab7090644bcc7426c97f11c157297f37
+    layerID: 85
+    mosaicPosition: {x: 4, y: 380}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: ArmAnchor
+    spriteName: ArmAnchor
+    isGroup: 0
+    parentIndex: 3
+    spriteID: 40281eac774524991a19b499084540c3
+    layerID: 4
+    mosaicPosition: {x: 360, y: 380}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Bars
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: 96baf7ec98d2c4695b011b9a6c434fe9
+    layerID: 83
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Size1
+    spriteName: Size1
+    isGroup: 0
+    parentIndex: 6
+    spriteID: 9c307bd825518460e93ac84aa989d00c
+    layerID: 75
+    mosaicPosition: {x: 532, y: 472}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Size2
+    spriteName: Size2
+    isGroup: 0
+    parentIndex: 6
+    spriteID: 67c2594ca15764820a386005a6378a43
+    layerID: 76
+    mosaicPosition: {x: 392, y: 472}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Size3
+    spriteName: Size3
+    isGroup: 0
+    parentIndex: 6
+    spriteID: 7dc88ac1bd0354f59894f807e9f2e9ad
+    layerID: 77
+    mosaicPosition: {x: 216, y: 472}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Size4
+    spriteName: Size4
+    isGroup: 0
+    parentIndex: 6
+    spriteID: 07f89ad4821b6424a877593308f6ac99
+    layerID: 78
+    mosaicPosition: {x: 4, y: 472}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Size5
+    spriteName: Size5
+    isGroup: 0
+    parentIndex: 6
+    spriteID: 1cdc3320d322d438b962b54ede179278
+    layerID: 79
+    mosaicPosition: {x: 752, y: 276}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Size6
+    spriteName: Size6
+    isGroup: 0
+    parentIndex: 6
+    spriteID: 8f4a1cb311efd4dcaa2976cf0bf5248c
+    layerID: 80
+    mosaicPosition: {x: 708, y: 108}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Size7
+    spriteName: Size7
+    isGroup: 0
+    parentIndex: 6
+    spriteID: ca3c754ba0cee4311a0bcc58fdee38e7
+    layerID: 81
+    mosaicPosition: {x: 708, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Size8
+    spriteName: Size8
+    isGroup: 0
+    parentIndex: 6
+    spriteID: ea2f66f0dc83f40b29ebd86195570d5f
+    layerID: 82
+    mosaicPosition: {x: 396, y: 276}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Size9
+    spriteName: Size9
+    isGroup: 0
+    parentIndex: 6
+    spriteID: 8d1957c1582324c84901cd8384f5bff3
+    layerID: 33
+    mosaicPosition: {x: 4, y: 276}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
   mosaicPSDLayers:
   - name: Bar Holder
     spriteName: 
@@ -1060,7 +1498,9 @@ ScriptedImporter:
     isImported: 1
     isVisible: 1
   sharedRigPSDLayers: []
-  pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 1
   textureAssetName: 
   prefabAssetName: 
