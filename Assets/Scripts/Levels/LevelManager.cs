@@ -101,11 +101,11 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
-/*
+
         if (Input.GetKeyDown(KeyCode.RightBracket))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }*/
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
