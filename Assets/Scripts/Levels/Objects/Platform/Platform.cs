@@ -23,6 +23,8 @@ namespace Levels.Objects.Platform
         private int _prevPointIndex;
         private bool _shouldMove;
 
+        private float _previousDistance;
+
 
         Rigidbody2D rb;
         Vector3 moveDirection;
@@ -39,6 +41,7 @@ namespace Levels.Objects.Platform
         {
             transform.position = _points[0].position;
             moveDirection = new Vector3().normalized;
+            _previousDistance = Vector2.Distance(transform.position, _points[_currPointIndex].position);
         }
 
         private void Update()
@@ -52,7 +55,8 @@ namespace Levels.Objects.Platform
         {
             if (_shouldMove)
             {
-                if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.05f)
+                //if (Vector2.Distance(transform.position, _points[_currPointIndex].position) < 0.05f) 
+                if (_previousDistance - Vector2.Distance(transform.position, _points[_currPointIndex].position) <= 0)
                 {
                     _currPointIndex++;
 
@@ -62,6 +66,7 @@ namespace Levels.Objects.Platform
                     }
                     DirectionCalculate();
                 }
+                _previousDistance = Vector2.Distance(transform.position, _points[_currPointIndex].position);
 
                 // rb.velocity = moveDirection * _speed;
                 //rb.velocity = moveDirection * UnityEngine.Random.Range(_speed - randomSpeedModifier, _speed + randomSpeedModifier);

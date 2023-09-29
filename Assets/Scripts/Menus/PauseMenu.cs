@@ -2,36 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 /// <summary> 
 /// This class provides the functionalities needed for the pause menu.
 /// </summary>
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
-    public GameObject pauseCanvas;
+    public GameObject pausePanel;
+    public GameObject confirmQuitMenu;
 
     /// <summary>
     /// Pauses the game if the "P" key is pressed.
     /// </summary>
+    private void OnValidate()
+    {
+        if (FindObjectOfType<EventSystem>() == null)
+        {
+            Debug.LogWarning("pause menu won't work without an Event System and.or UI input module");
+        }
+    }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (!GameIsPaused)
             {
                 Pause();
             }
+            else
+            {
+                Resume();
+            }
         }
+    }
+    private void Start()
+    {
+        pausePanel.SetActive(false);
     }
 
     /// <summary>
     /// Pauses the game by opening the pause menu and stopping the game time. 
     /// </summary>
-    void Pause()
+    public void Pause()
     {
-        pauseCanvas.SetActive(true);
+        pausePanel.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
     }
@@ -41,7 +57,8 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void Resume()
     {
-        pauseCanvas.SetActive(false);
+        pausePanel.SetActive(false);
+        confirmQuitMenu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
     }
@@ -51,9 +68,30 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void MainMenu()
     {
-        pauseCanvas.SetActive(false);
-        Time.timeScale = 1f;
+        Resume();
         SceneManager.LoadScene("MainMenu");
+    }
+    /// <summary>
+    /// Opens the quit confirmation menu
+    /// </summary>
+    public void ConfirmQuit()
+    {
+        confirmQuitMenu.SetActive(true);
+    }
+    /// <summary>
+    /// restarts the level
+    /// </summary>
+    public void RestartLevel()
+    {
+        Resume();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    /// <summary>
+    /// Opens up the settings menu where a variety of setting could be adjusted.
+    /// </summary>
+    public void SettingsMenu()
+    {
+        throw new System.NotImplementedException("Settings menu not implemented yet");
     }
 
     /// <summary>
