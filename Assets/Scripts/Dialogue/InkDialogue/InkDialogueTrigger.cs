@@ -9,7 +9,7 @@ public class InkDialogueTrigger : MonoBehaviour
     [SerializeField] private GameObject visualCue;
 
     [Header("inkJSON")]
-    [SerializeField] public TextAsset inkJSON;
+    public TextAsset inkJSON;
     [Header("Force Dialogue")]
     [SerializeField] private bool forceDialogue;
     [SerializeField] private bool stopMovement = true;

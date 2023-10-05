@@ -40,6 +40,7 @@ public class WireThrower : MonoBehaviour
     public UnityEvent onConnect = new UnityEvent();
     public UnityEvent onDisconnect = new UnityEvent();
 
+    private PlugMovementSettings pms; // For calculating grappling range
 
     private void Awake()
     {
@@ -56,6 +57,8 @@ public class WireThrower : MonoBehaviour
         _framesHeld = 0;
         reticle.GetComponent<Renderer>().enabled = false;
         mainCamera = Camera.main;
+
+        pms = FindObjectOfType<PlugMovementSettings>();
     }
 
     private void Start()
@@ -132,8 +135,10 @@ public class WireThrower : MonoBehaviour
         {
             Time.timeScale = 1;
             if (_framesHeld < 0.1)
-                if (_isLockOn) { FirePlugLockOn(); }
-                else { FirePlugAutoAim(); }
+                if (_isLockOn)
+                { FirePlugLockOn(); }
+                else
+                { FirePlugAutoAim(); }
             else
                 FirePlugController();
         }
@@ -190,7 +195,7 @@ public class WireThrower : MonoBehaviour
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
 
-    
+
     /// <summary>
     /// Spawns a plug and launches it in the air towards the nearest object with the tag "Outlet",
     /// setting it as the active plug.
@@ -219,10 +224,10 @@ public class WireThrower : MonoBehaviour
 
         if (closest != null)
         {
-            
+
             Debug.Log("FOUND");
             reticle.transform.position = closest.transform.position;
-            reticle.GetComponent<Renderer>().enabled = true;
+            //reticle.GetComponent<Renderer>().enabled = true;
             Vector2 closestPos = mainCamera.WorldToScreenPoint(closest.transform.position);
             fireDir = closestPos - playerScreenPos;
         }
@@ -239,7 +244,7 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void ChangeOutletTarget()
     {
-        
+
         if (_lockOnOutlet == null)
         {
             GameObject[] gos;
@@ -264,7 +269,7 @@ public class WireThrower : MonoBehaviour
         }
         else
         {
-            
+
             GameObject[] gos;
             gos = GameObject.FindGameObjectsWithTag("Outlet");
             GameObject closest = null;
@@ -281,7 +286,7 @@ public class WireThrower : MonoBehaviour
                     if (curDistance < originalDistance)
                     {
                         Debug.Log("test");
-                        
+
                         closest = go;
                         _lockOnOutlet = closest;
                         originalDistance = curDistance;
@@ -368,9 +373,19 @@ public class WireThrower : MonoBehaviour
     {
         ChangeOutletTarget();
         // sets reticle to targe the locked on outlet at all times
-        if (_lockOnOutlet != null) {
+        if (_lockOnOutlet != null)
+        {
             reticle.transform.position = _lockOnOutlet.transform.position;
-            reticle.GetComponent<Renderer>().enabled = true;
+
+            // Only show the reticle if the plug is within range
+            if (Vector2.Distance(transform.position, reticle.transform.position) <= pms.StraightSpeed * pms.StraightTimeTillRetraction)
+            {
+                reticle.GetComponent<Renderer>().enabled = true;
+            }
+            else
+            {
+                reticle.GetComponent<Renderer>().enabled = false;
+            }
         }
         HandleLineRendering();
         HandleThrowInputHeld();
