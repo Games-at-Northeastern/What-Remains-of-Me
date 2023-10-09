@@ -23,7 +23,7 @@ public class ControllablePlatform : AControllable
             Array.ForEach(_platforms, platform => platform.Activate());
             hasMoved = true;
         }
-        else if (GetPercentFull()  < 0.999f && hasMoved)
+        else if (GetPercentFull() < 0.99f && hasMoved)
         {
             Array.ForEach(_platforms, platform => platform.Deactivate());
             hasMoved = false;
