@@ -104,10 +104,15 @@ public class WireSwing : AMove
         angularVelocity = Mathf.Clamp(angularVelocity, -MS.WireSwingMaxAngularVelocity, MS.WireSwingMaxAngularVelocity);
 
         float newAngle = angle + (angularVelocity * Time.deltaTime);
+
+        // To accommodate the downwards movement of moving grapple points
+        radius = Mathf.Lerp(radius, initRadius, Time.deltaTime * 10f);
+
         Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
         vel = (newPos - origPos) / Time.deltaTime;
         // Add some free-fall to the mix if above the lowest point possible right now
-        if (initRadius - radius > 0.01f || Mathf.Sin(angle) > 0)
+        //if (initRadius - radius > 0.01f || Mathf.Sin(angle) > 0)
+        if(Mathf.Sin(angle) > 0)
         {
             gravityVel -= MS.FallGravity * Time.deltaTime;
             vel += new Vector2(0, gravityVel);

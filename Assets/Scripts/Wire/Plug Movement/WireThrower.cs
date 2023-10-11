@@ -387,6 +387,10 @@ public class WireThrower : MonoBehaviour
                 reticle.GetComponent<Renderer>().enabled = false;
             }
         }
+        else
+        {
+            reticle.GetComponent<Renderer>().enabled = false;
+        }
         HandleLineRendering();
         HandleThrowInputHeld();
         HandleConnectionPhysics();
