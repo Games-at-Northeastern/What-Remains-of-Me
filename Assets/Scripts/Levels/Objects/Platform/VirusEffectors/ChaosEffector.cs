@@ -32,7 +32,7 @@ namespace Levels.Objects.Platform
             }
         }
 
-        protected override void AffectPlatform(Platform platform) => platform.SetTrack(_virusPath, _overrideLoopType, _currentVirusPercentage < _revertPathWhenBelow);
+        protected override void AffectPlatform(MovingElement platform) => platform.SetTrack(_virusPath, _overrideLoopType, _currentVirusPercentage < _revertPathWhenBelow);
 
     }
 }

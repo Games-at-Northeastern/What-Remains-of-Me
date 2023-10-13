@@ -10,10 +10,10 @@ using UnityEngine;
 /// Applies a movement speed 'glitch' effect to the platforms controlled by this object,
 /// dependent on the ratio of virus to clean energy in the controller (i.e. a higher virus percentage = more glitching).
 /// </summary>
-[RequireComponent(typeof(ControllablePlatform))]
+[RequireComponent(typeof(MovingElementController))]
 public class SpeedEffector : MonoBehaviour
 {
-    [SerializeField] private ControllablePlatform platformController;
+    [SerializeField] private MovingElementController platformController;
     [SerializeField] private ParticleSystem virusParticles;
 
     private float currentVirusPercentage;
@@ -22,7 +22,7 @@ public class SpeedEffector : MonoBehaviour
     {
         if (platformController == null)
         {
-            platformController = GetComponent<ControllablePlatform>();
+            platformController = GetComponent<MovingElementController>();
         }
         platformController.OnVirusChange.AddListener(updatePlatformSpeeds);
         platformController.OnVirusChange.AddListener(updateVirusParticles);
@@ -32,7 +32,7 @@ public class SpeedEffector : MonoBehaviour
     private void updatePlatformSpeeds(float virusPercentage)
     {
         currentVirusPercentage = virusPercentage;
-        platformController.ApplyToPlatforms(modifySpeed);
+        platformController.ApplyToAll(modifySpeed);
     }
 
     private void updateVirusParticles(float virusPercentage)
@@ -43,7 +43,7 @@ public class SpeedEffector : MonoBehaviour
         } 
     }
 
-    private void modifySpeed(Platform platform)
+    private void modifySpeed(MovingElement platform)
     {
         platform.SetRandomSpeedModifier(currentVirusPercentage * 5);
     }

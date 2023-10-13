@@ -6,7 +6,7 @@ namespace Levels.Objects.Platform
     /// </summary>
     public class RandomSpeedEffector : APlatformVirusEffector
     {
-        protected override void AffectPlatform(Platform platform) => platform.SetSpeedModifier((_currentVirusPercentage * 3) + 1);
+        protected override void AffectPlatform(MovingElement platform) => platform.SetSpeedModifier((_currentVirusPercentage * 3) + 1);
     }
 
 }

@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// DEPRECATED SCRIPT: MovingElement.cs encapsulates this behavior.
+
 public class MovingOutlet : MonoBehaviour
 {
     [SerializeField] private Transform outletTransform; //transform of the outlet that will be moving

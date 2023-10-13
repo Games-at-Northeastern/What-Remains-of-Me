@@ -3,10 +3,10 @@ namespace Levels.Objects.Platform
     using UnityEngine;
     using UnityEngine.VFX;
 
-    [RequireComponent(typeof(ControllablePlatform))]
+    [RequireComponent(typeof(MovingElementController))]
     public abstract class APlatformVirusEffector : MonoBehaviour
     {
-        [SerializeField] private ControllablePlatform _platformController;
+        [SerializeField] private MovingElementController _platformController;
 
         [Space(15), Header("Visuals")]
 
@@ -24,7 +24,7 @@ namespace Levels.Objects.Platform
         {
             if (_platformController == null)
             {
-                _platformController = GetComponent<ControllablePlatform>();
+                _platformController = GetComponent<MovingElementController>();
             }
 
             _platformController.OnVirusChange.AddListener(UpdateVirusPercentageAndApply);
@@ -42,8 +42,7 @@ namespace Levels.Objects.Platform
 
             if (_currentVirusPercentage > _doVirusEffectAt)
             {
-                Debug.Log(_currentVirusPercentage);
-                _platformController.ApplyToPlatforms(AffectPlatform);
+                _platformController.ApplyToAll(AffectPlatform);
             }
         }
 
@@ -63,6 +62,6 @@ namespace Levels.Objects.Platform
         /// Affects the given platform.
         /// </summary>
         /// <param name="platform"></param>
-        protected abstract void AffectPlatform(Platform platform);
+        protected abstract void AffectPlatform(MovingElement platform);
     }
 }
