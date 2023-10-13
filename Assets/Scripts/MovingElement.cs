@@ -1,6 +1,9 @@
 using Levels.Objects.Platform;
 using UnityEngine;
 
+/// <summary>
+/// A custom component that moves the gameobject it's on along a given path.
+/// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovingElement : MonoBehaviour
 {
