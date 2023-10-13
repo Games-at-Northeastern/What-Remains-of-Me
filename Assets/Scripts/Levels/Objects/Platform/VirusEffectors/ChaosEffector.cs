@@ -12,7 +12,7 @@ namespace Levels.Objects.Platform
         [SerializeField, Range(0f, 1f), Tooltip("Reverts back to original path when virus is below this amount.")]
         private float _revertPathWhenBelow = 0.45f;
 
-        [SerializeField] private PlatformLoopType _overrideLoopType;
+        [SerializeField] private LoopType _overrideLoopType;
 
         private void Awake()
         {

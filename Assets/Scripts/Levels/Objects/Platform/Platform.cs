@@ -13,8 +13,16 @@ namespace Levels.Objects.Platform
 
         [Space(10)]
 
+        [Header("Initial Position")]
+        [SerializeField, Tooltip("What point index do we start at (0-indexed)? Is Clamped upon initialization.")]
+        private int _initialStartIndex = 0;
+        [SerializeField, Range(0f, 1f), Tooltip("How far along are we to the next point in the path upon initialization?")]
+        private float _normalizedInitialStartPosition = 0f;
+
+        [Space(10)]
+
         [Header("Loop Info")]
-        [SerializeField] private PlatformLoopType _loopType = PlatformLoopType.Wrap;
+        [SerializeField] private LoopType _loopType = LoopType.Wrap;
         [SerializeField] private bool _isMovingRight = true;
 
         [Space(10)]
@@ -35,7 +43,7 @@ namespace Levels.Objects.Platform
 
         private Vector3 _moveDirection;
         private Transform[] _runtimePoints;
-        private PlatformLoopType _runtimeLoopType;
+        private LoopType _runtimeLoopType;
 
         private Rigidbody2D rb;
         private MovementExecuter movementExecuter;
@@ -60,10 +68,16 @@ namespace Levels.Objects.Platform
         {
             _completed = false;
 
-            _destinationIndex = 0;
-            _destinationIndex = GetNextPointIndex();
+            _initialStartIndex = Mathf.Clamp(_initialStartIndex, 0, _runtimePoints.Length - 1);
 
-            transform.position = _runtimePoints[0].position;
+            // initial placement calculation. NOTE: THIS MIGHT LEAD TO SOME WARPING IF CALLED AGAIN. Abstract it?
+            _destinationIndex = GetNextPointIndex(_initialStartIndex); // get next point
+
+            var pos1 = _runtimePoints[_initialStartIndex].position; // get our initial position
+            var pos2 = _runtimePoints[_destinationIndex].position; // get out next position
+            transform.position = ((pos2 - pos1) * _normalizedInitialStartPosition) + pos1; // move towards next depending on _nISP
+            //
+
             _moveDirection = GetDirectionToPoint(_destinationIndex);
             _previousDistance = int.MaxValue; // if not maxed out, the first position will be skipped.
         }
@@ -77,7 +91,7 @@ namespace Levels.Objects.Platform
                     // go to next
                     // even with (what i think is) logically sound index-logic, draining virus/energy and re-adding it sometimes
                     // has a chance to OoB. So, I'm clamping. Ah, well.
-                    int nextDest = Mathf.Clamp(GetNextPointIndex(), 0, _runtimePoints.Length - 1);
+                    int nextDest = Mathf.Clamp(GetNextPointIndex(_destinationIndex), 0, _runtimePoints.Length - 1);
 
                     // get the direction to the next point
                     _moveDirection = GetDirectionToPoint(nextDest);
@@ -107,50 +121,10 @@ namespace Levels.Objects.Platform
 
         /// <summary>
         /// Returns the next point index depending on the looptype. Calculates using
-        /// the current destination index. Be sure to update it!
+        /// the passed index (usually _desinationIndex). Be sure to update it!
         /// </summary>
         /// <returns></returns>
-        private int GetNextPointIndex()
-        {
-            int dir = _isMovingRight ? 1 : -1;
-
-            switch (_runtimeLoopType) // could replace this with an enhanced switch, but nah.
-            {
-                case PlatformLoopType.Wrap: // wraps around if out of bounds
-                    return (_destinationIndex + dir) % _runtimePoints.Length;
-
-                case PlatformLoopType.Pingpong: // bounces back if out of bounds
-                    int next = _destinationIndex + dir;
-
-                    if (next < 0) // hit left side
-                    {
-                        _isMovingRight = true;
-                        return _destinationIndex + 1;
-                    }
-                    else if (next >= _runtimePoints.Length) // hit right side
-                    {
-                        _isMovingRight = false;
-                        return _destinationIndex - 1;
-                    }
-
-                    return next;
-
-                case PlatformLoopType.OneWay: // does not move after hitting opposite side
-                    int nextIndex = _destinationIndex + dir;
-
-                    if (nextIndex < 0 || nextIndex >= _runtimePoints.Length)
-                    {
-                        _completed = true;
-                        return _destinationIndex;
-                    }
-
-                    return nextIndex;
-
-                default: // None
-                    _completed = true;
-                    return _destinationIndex;
-            }
-        }
+        private int GetNextPointIndex(int index) => LoopTypeUtility.GetNextIndex(index, _runtimePoints.Length, ref _isMovingRight, ref _completed, _runtimeLoopType);
 
         /// <summary>
         /// Computes a normalized direction vector pointing towards the given point in the move sequence.
@@ -198,7 +172,7 @@ namespace Levels.Objects.Platform
         /// </summary>
         /// <param name="points"></param>
         /// <param name="shouldRevert"></param>
-        public void SetTrack(Transform[] points, PlatformLoopType type, bool shouldRevert = false)
+        public void SetTrack(Transform[] points, LoopType type, bool shouldRevert = false)
         {
             bool isRedundant;
 
