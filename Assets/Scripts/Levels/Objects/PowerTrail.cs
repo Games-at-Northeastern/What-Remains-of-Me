@@ -1,46 +1,87 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
-public class PowerTrail : MonoBehaviour
+public class PowerTrail : MonoBehaviour, IRenderableTrail
 {
     private MeshRenderer _meshRenderer;
 
-    public static GameObject Setup(string name, LineRenderer renderer)
-    {
-        var g = new GameObject
-        {
-            name = name
-        };
+    [SerializeField] private Material _deadMaterial;
+    [SerializeField] private Material _poweredMaterial;
 
-        var mf = g.AddComponent<MeshFilter>();
-        var mr = g.AddComponent<MeshRenderer>();
+    [Space(15)]
 
-        mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        // TODO: make the materials automated as well? Meh.
+    [SerializeField] private VisualEffect _virusEffect;
+    [SerializeField] private MovingElement _virusEffectMover;
+    [SerializeField, HideInInspector] private Transform[] _initialTrail;
 
-        g.AddComponent<PowerTrail>();
+    [Space(15)]
 
-        Mesh m = new Mesh(); // does this cause a memory leak? Hm.
-        m.name = $"Custom LineRender #{m.GetHashCode()}";
+    [SerializeField, Range(0f, 1f)] private float _doVirusVisualsAt = 0.1f;
+    [SerializeField, Tooltip("What charge does this element become \"powered\" at?")] private float _enableAt = 19.95f;
 
-        renderer.BakeMesh(m);
+    [Space(15)]
 
-        mf.sharedMesh = m;
+    [SerializeField] private AControllable linkedControllable;
 
-        return g;
-    }
+    private bool _isActive = false;
 
     private void Awake()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
+
+        linkedControllable.OnEnergyChange.AddListener(SetActiveStatus);
+        linkedControllable.OnVirusChange.AddListener(SetVirus);
+
+        _virusEffectMover.SetPermanentTrack(_initialTrail);
     }
 
-    public void SetActiveStatus(bool enabled)
-    {
+    public void SetPoints(Transform[] positions) => _virusEffectMover.SetTrack(positions);
 
+#if UNITY_EDITOR
+    public void EditorOnlySetPoints(Transform[] positions)
+    {
+        if (Application.isPlaying)
+        {
+            Debug.LogError("Cannot call Editor-Only methods while playing!");
+            return;
+        }
+
+        _initialTrail = positions;
+    }
+#endif
+
+    public void SetActiveStatus(float energy)
+    {
+        if (enabled == !_isActive)
+        {
+            _meshRenderer.material = energy >= _enableAt ? _poweredMaterial : _deadMaterial;
+        }
     }
 
-    public void SetVirus()
+    public void SetVirus(float virusPercentage)
     {
+        if (_virusEffect)
+        {
+            _virusEffect.SetFloat("Density", virusPercentage);
+        }
 
+        if (virusPercentage > _doVirusVisualsAt)
+        {
+            if (!_virusEffectMover.gameObject.activeInHierarchy)
+            {
+                _virusEffectMover.gameObject.SetActive(true);
+                _virusEffectMover.Activate();
+            }
+
+            _virusEffectMover.SetSpeedModifier(4f * virusPercentage);
+        }
+        else
+        {
+            if (_virusEffectMover.gameObject.activeInHierarchy)
+            {
+                _virusEffectMover.gameObject.SetActive(false);
+                _virusEffectMover.Deactivate();
+            }
+        }
     }
 }

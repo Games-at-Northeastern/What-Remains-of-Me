@@ -20,6 +20,7 @@ public class MovingElement : MonoBehaviour
 
     [SerializeField] private Transform[] _points;
     [SerializeField] private bool _activeByDefault;
+    [SerializeField] private bool _rotateToDirection = false;
 
     [Header("Initial Position")]
     [SerializeField, Tooltip("What point index do we start at (0-indexed)? Is Clamped upon initialization.")]
@@ -46,6 +47,11 @@ public class MovingElement : MonoBehaviour
     {
         _runtimePoints = _points;
         _runtimeLoopType = _loopType;
+
+        if (_runtimePoints.Length == 0)
+        {
+            Debug.LogError("Runtime Points is empty!");
+        }
 
         Init();
 
@@ -124,7 +130,17 @@ public class MovingElement : MonoBehaviour
     /// Computes a normalized direction vector pointing towards the given point in the move sequence.
     /// </summary>
     /// <returns>A normalized Vector3.</returns>
-    private Vector3 GetDirectionToPoint(int pointIndex) => (_runtimePoints[pointIndex].position - transform.position).normalized;
+    private Vector3 GetDirectionToPoint(int pointIndex)
+    {
+        var dir = (_runtimePoints[pointIndex].position - transform.position).normalized;
+
+        if (_rotateToDirection)
+        {
+            transform.forward = dir;
+        }
+
+        return dir;
+    }
 
     /// <summary>
     /// Returns the distance to the given point.
@@ -163,10 +179,12 @@ public class MovingElement : MonoBehaviour
     /// <summary>
     /// Sets the platform's track to the given track, starting at the point closest to the track's current position.
     /// If shouldRevert is true, ignores the given argument and reassigns the original path.
+    /// If type is empty, skips the assignment.
     /// </summary>
     /// <param name="points"></param>
+    /// <param name="type"></param>
     /// <param name="shouldRevert"></param>
-    public void SetTrack(Transform[] points, LoopType type, bool shouldRevert = false)
+    public void SetTrack(Transform[] points, LoopType type = LoopType.None, bool shouldRevert = false)
     {
         bool isRedundant;
 
@@ -182,7 +200,7 @@ public class MovingElement : MonoBehaviour
             isRedundant = _runtimePoints == points;
 
             _runtimePoints = points;
-            _runtimeLoopType = type;
+            _runtimeLoopType = type == LoopType.None ? _loopType : type;
         }
 
         if (isRedundant)
@@ -203,4 +221,10 @@ public class MovingElement : MonoBehaviour
         // get going
         _moveDirection = GetDirectionToPoint(_destinationIndex);
     }
+
+    /// <summary>
+    /// Method to permanetely assign a track.
+    /// </summary>
+    /// <param name="track"></param>
+    public void SetPermanentTrack(Transform[] track) =>_points = track;
 }

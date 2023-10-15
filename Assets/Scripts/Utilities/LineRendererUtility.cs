@@ -9,6 +9,7 @@ public class LineRendererUtility : MonoBehaviour
 {
     [SerializeField, HideInInspector] private LineRenderer lineRenderer;
 
+    [SerializeField] private GameObject _bakedObjectPrefab;
     [SerializeField] private Transform[] _requiredPoints;
 
     [Header("Generation")]
@@ -19,12 +20,16 @@ public class LineRendererUtility : MonoBehaviour
     [Space(10)]
 
     [Header("Randomness")]
+    [SerializeField] private bool _useFunky = false;
     [SerializeField, Range(0f, 1f)] private float _lengthVariance = 0f;
     [SerializeField, Range(0f, 1f)] private float _randomVariance = 0.75f;
     [SerializeField, Range(0.25f, 2f)] private float _deltaMin = 0.75f;
 
     private int _size;
+    private bool _bakedToTransforms = false;
     private Vector3[] _points;
+
+    private Vector3[] _vectors = new Vector3[] { Vector3.left, Vector3.up, Vector3.right, Vector3.down };
 
     private void Awake()
     {
@@ -81,16 +86,17 @@ public class LineRendererUtility : MonoBehaviour
     {
         InitFields();
 
-        foreach (Transform t in transform)
+        for (int i = transform.childCount - 1; i >= 0; i -= 1)
         {
-            DestroyImmediate(t.gameObject);
+            DestroyImmediate(transform.GetChild(i).gameObject);
         }
 
-        int pointIndex = 0;
+
+        int pointIndex = 1;
 
         foreach (var point in _points)
         {
-            Transform childTransform = new GameObject().transform;
+            var childTransform = new GameObject().transform;
 
             childTransform.name = $"Point {pointIndex++}";
 
@@ -98,7 +104,9 @@ public class LineRendererUtility : MonoBehaviour
             childTransform.transform.SetParent(gameObject.transform);
         }
 
-        Debug.Log($"Baked {pointIndex} points into Transforms.");
+        _bakedToTransforms = true;
+
+        Debug.Log($"Baked {pointIndex - 1} points into Transforms.");
     }
 
     /// <summary>
@@ -107,10 +115,45 @@ public class LineRendererUtility : MonoBehaviour
     /// <param name="name"></param>
     public void BakeMeshIntoGameObject(string name)
     {
+        if (!_bakedToTransforms)
+        {
+            Debug.LogError("You cannot bake a path to a IRenderableTrail without baking it to Transforms first!");
+
+            // NOTE:
+            // Ok, technically you *can*, but I wanted to use MovingElements for the moving VFX graph on the PowerTrail
+            // component. Since I don't want to have to magic up transforms out of nowhere, I'm forcing you to bake. Sucks.
+
+            return;
+        }
+
         InitFields();
 
-        PowerTrail.Setup(name, lineRenderer).transform
-            .SetParent(gameObject.transform);
+        var fab = Instantiate(_bakedObjectPrefab);
+        var meshFilter = fab.GetComponent<MeshFilter>();
+
+        fab.name = name;
+
+        Mesh destMesh = new Mesh();
+        destMesh.name = $"Custom LineRender #{destMesh.GetHashCode()}";
+
+        lineRenderer.BakeMesh(destMesh);
+
+        meshFilter.sharedMesh = destMesh;
+
+        if (fab.TryGetComponent(out IRenderableTrail trail))
+        {
+            var children = new Transform[transform.childCount];
+
+            int i = 0;
+            foreach (Transform t in transform)
+            {
+                children[i++] = Instantiate(t.gameObject, fab.transform).transform;
+            }
+
+            trail.EditorOnlySetPoints(children);
+        }
+
+        _bakedToTransforms = false;
 
         Debug.Log($"Created {name} in root hierarchy.");
     }
@@ -151,18 +194,9 @@ public class LineRendererUtility : MonoBehaviour
                 float maxDist = _maxGeneratedSegmentLength * (1f + Random.Range(-_lengthVariance, _lengthVariance));
 
 
-                // determine the directional offset
-                Vector3 offset;
-
-                // if the absolute delta x is greater than the delta y, and the random variance doesn't act up, make a right-segment.
-                if ((adx > ady) || (Random.Range(0f, 1f) > (1f - _randomVariance) && dy > _deltaMin && dx > _deltaMin))
-                {
-                    offset = Mathf.Round(dx / adx) * Mathf.Min(adx, maxDist) * Vector3.right;
-                }
-                else
-                {
-                    offset = Mathf.Round(dy / ady) * Mathf.Min(ady, maxDist) * Vector3.up;
-                }
+                Vector3 offset = _useFunky ?
+                    FunkyAlgo(dx, dy, adx, ady, maxDist, building.Count) :
+                    SimpleAlgo(dx, dy, adx, ady, maxDist);
 
                 // offset us
                 currentPoint += offset;
@@ -177,7 +211,53 @@ public class LineRendererUtility : MonoBehaviour
         _size = building.Count;
         lineRenderer.SetPositions(building.ToArray());
 
+        _bakedToTransforms = false;
+
         Debug.Log($"Successfully generated a path using {building.Count} positions.");
+    }
+
+    // Don't look at the arguments please.
+    // I just pulled out the behaviors and didn't think twice, lol.
+    private Vector3 SimpleAlgo(float dx, float dy, float adx, float ady, float maxDist)
+    {
+        // determine the directional offset
+        Vector3 offset;
+
+        // less powerful randomness
+        if ((adx > ady) || (Random.Range(0f, 1f) > (1f - _randomVariance) && dy > _deltaMin && dx > _deltaMin))
+        {
+            offset = Mathf.Round(dx / adx) * Mathf.Min(adx, maxDist) * Vector3.right;
+        }
+        else
+        {
+            offset = Mathf.Round(dy / ady) * Mathf.Min(ady, maxDist) * Vector3.up;
+        }
+
+        return offset;
+    }
+
+    private Vector3 FunkyAlgo(float dx, float dy, float adx, float ady, float maxDist, int count)
+    {
+        // determine the directional offset
+        Vector3 offset;
+
+        bool doRandom = Random.Range(0f, 1f) > (1f - Mathf.Pow(_randomVariance, count * 1.5f));
+
+        // heavily utilizes randomness
+        if (doRandom && dy > _deltaMin && dx > _deltaMin)
+        {
+            offset = Random.Range(_maxGeneratedSegmentLength / 2f, _maxGeneratedSegmentLength) * _vectors[(int)Random.Range(0f, _vectors.Length)];
+        }
+        else if (adx > ady)
+        {
+            offset = Mathf.Round(dx / adx) * Mathf.Min(adx, maxDist) * Vector3.right;
+        }
+        else
+        {
+            offset = Mathf.Round(dy / ady) * Mathf.Min(ady, maxDist) * Vector3.up;
+        }
+
+        return offset;
     }
 
     /// <summary>
@@ -199,6 +279,7 @@ public class LineRendererUtility : MonoBehaviour
 
     /// <summary>
     /// Attempts to combine similar segments.
+    /// This algorithm is not the best (it doesn't *totally* reduce), but it works well enough for the task.
     /// </summary>
     public void Reduce()
     {
@@ -212,31 +293,51 @@ public class LineRendererUtility : MonoBehaviour
 
         var building = new List<Vector3>();
 
+
+        bool skipLeft = false;
+
         // the logic here is to find left and right positions that, between them, contain meaningless segments.
-        for (int i = 0; i < _size - 2; i += 1)
+        for (int i = 0; i < _size - 1; i += 1)
         {
             var left = _points[i]; // find our left bound
 
-            building.Add(left); // add it
+            // if we didn't already add the segment in the j for loop with the add(right) line, add the current left.
+            if (!skipLeft)
+            {
+                building.Add(left);
+            }
 
             int j;
 
-            // now try to find a right bound
-            for (j = i + 2; j < _size; j += 1)
+            // now try to find a right bound, excluding the last point.
+            for (j = i + 1; j < _size; j += 1)
             {
                 var right = _points[j];
 
                 // if the right is different from the left, add it and the point previous to it
                 if (!Approx(left.x, right.x) && !Approx(left.y, right.y))
                 {
+                    // we need this segment bc it is the one that connects the left and right w/ meaningful data
+                    // "meaningful" = a delta on the opposite 2D axis (x or y) than the previous delta.
+                    // e.g. (0, 1) -> (0, 2) -> (0, 3) => (0, 2) is meaningless since (0, 1) -> (0, 3) is the same line.
                     building.Add(_points[j - 1]);
                     building.Add(right);
+
+                    skipLeft = true; // we don't want to dupe add the "right"
 
                     break;
                 }
             }
 
-            i = j;
+            i = j - 1; // repeat the process, but the right is now the left.
+        }
+
+        // add the Destination point if we didn't already add it.
+        // This is because I'm too lazy to keep bug-fixing the reduction algorithm.
+        // but hey I can afford to code stupid in an Editor script :>
+        if (building[^1] != _points[_size - 1]) // i have never seen the [^i] indexing before, but it is AWESOME!
+        {
+            building.Add(_points[_size - 1]);
         }
 
         if (building.Count == _size)
@@ -250,6 +351,8 @@ public class LineRendererUtility : MonoBehaviour
         lineRenderer.positionCount = building.Count;
         _size = building.Count;
         lineRenderer.SetPositions(building.ToArray());
+
+        _bakedToTransforms = false;
 
         Debug.Log($"Reduced {oldSize} points to {_size} points.");
     }
@@ -272,6 +375,8 @@ public class LineRendererUtility : MonoBehaviour
         }
 
         lineRenderer.SetPositions(newPoints);
+
+        _bakedToTransforms = false;
 
         Debug.Log("Linearized points. Don't forget to Reduce to remove redundancies.");
     }
