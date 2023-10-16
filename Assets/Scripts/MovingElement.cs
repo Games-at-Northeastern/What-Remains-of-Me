@@ -21,6 +21,8 @@ public class MovingElement : MonoBehaviour
     [SerializeField] private Transform[] _points;
     [SerializeField] private bool _activeByDefault;
     [SerializeField] private bool _rotateToDirection = false;
+    [SerializeField, Range(0.0005f, 0.5f), Tooltip("How close do we have to get before moving to next point? Be careful with this value's magnitude. Around 0.05 is fine.")]
+    private float _locationAccuracy = 0.05f;
 
     [Header("Initial Position")]
     [SerializeField, Tooltip("What point index do we start at (0-indexed)? Is Clamped upon initialization.")]
@@ -79,20 +81,27 @@ public class MovingElement : MonoBehaviour
                                                                                        //
 
         _moveDirection = GetDirectionToPoint(_destinationIndex);
-        _previousDistance = int.MaxValue; // if not maxed out, the first position will be skipped.
+        _previousDistance = int.MaxValue; // if not maxed out, the first position might be skipped on lower-end hardware.
     }
 
     private void FixedUpdate()
     {
         if (_shouldMove) // if actionable...
         {
-            if (_previousDistance - GetDistanceToPoint(_destinationIndex) <= 0) // if we've passed the target point...
+            float dist = GetDistanceToPoint(_destinationIndex);
+
+            // both clauses are needed here. The first catches *just before* we hit the point, and the second
+            // catches *just after* we pass the point, in case a fixed-update loop doesn't manage to catch the first in time.
+            // The 2nd case is theoretically never needed as physics always occurs in fixed-update, but if the accuracy is small
+            // enough, the distance might never be smaller than it.
+            if (dist <= _locationAccuracy || dist > _previousDistance) // if we are close enough to point OR if we've passed the target point...
             {
                 // go to next
                 // even with (what i think is) logically sound index-logic, draining virus/energy and re-adding it sometimes
                 // has a chance to OoB. So, I'm clamping. Ah, well.
                 int nextDest = Mathf.Clamp(GetNextPointIndex(_destinationIndex), 0, _runtimePoints.Length - 1);
 
+                Debug.Log(nextDest + " updated");
                 // get the direction to the next point
                 _moveDirection = GetDirectionToPoint(nextDest);
 
