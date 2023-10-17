@@ -13,6 +13,7 @@ public class LineRendererUtility : MonoBehaviour
     [SerializeField] private Transform[] _requiredPoints;
 
     [Header("Generation")]
+    [SerializeField] private bool _cardinalOnly = true;
     [SerializeField, Range(0f, 10f)] private float _maxGeneratedSegmentLength = 2f;
     [SerializeField] private float _zPos = -6f;
     [SerializeField, Range(0.05f, 1f)] private float _thickness = 0.1f;
@@ -181,30 +182,40 @@ public class LineRendererUtility : MonoBehaviour
             var targetPoint = _requiredPoints[i].position;
             var currentPoint = _requiredPoints[i - 1].position;
 
-            // compare every position with the next to see if it's worth making a segment in that cardinal direction.
-            do
+            if (!_cardinalOnly)
             {
-                float dx = targetPoint.x - currentPoint.x;
-                float dy = targetPoint.y - currentPoint.y;
+                // lazy
+                building.Add(targetPoint);
+            }
+            else
+            {
+                // compare every position with the next to see if it's worth making a segment in that cardinal direction.
+                do
+                {
+                    float dx = targetPoint.x - currentPoint.x;
+                    float dy = targetPoint.y - currentPoint.y;
 
-                float adx = Mathf.Abs(dx);
-                float ady = Mathf.Abs(dy);
+                    float adx = Mathf.Abs(dx);
+                    float ady = Mathf.Abs(dy);
 
-                // max distance the segment can travel
-                float maxDist = _maxGeneratedSegmentLength * (1f + Random.Range(-_lengthVariance, _lengthVariance));
+                    // max distance the segment can travel
+                    float maxDist = _maxGeneratedSegmentLength * (1f + Random.Range(-_lengthVariance, _lengthVariance));
 
 
-                Vector3 offset = _useFunky ?
-                    FunkyAlgo(dx, dy, adx, ady, maxDist, building.Count) :
-                    SimpleAlgo(dx, dy, adx, ady, maxDist);
+                    Vector3 offset = _useFunky ?
+                        FunkyAlgo(dx, dy, adx, ady, maxDist, building.Count) :
+                        SimpleAlgo(dx, dy, adx, ady, maxDist);
 
-                // offset us
-                currentPoint += offset;
-                // then add us
-                building.Add(currentPoint);
+                    // offset us
+                    currentPoint += offset;
+                    // then add us
+                    building.Add(currentPoint);
 
-                // all the while making sure we haven't reach the destination yet.
-            } while (Vector3.Distance(currentPoint, targetPoint) > 0.2f);
+                    // all the while making sure we haven't reach the destination yet.
+                } while (Vector3.Distance(currentPoint, targetPoint) > 0.2f);
+            } 
+
+
         }
 
         lineRenderer.positionCount = building.Count;
@@ -280,10 +291,18 @@ public class LineRendererUtility : MonoBehaviour
     /// <summary>
     /// Attempts to combine similar segments.
     /// This algorithm is not the best (it doesn't *totally* reduce), but it works well enough for the task.
+    ///
+    /// Feel free to improve on it!
     /// </summary>
     public void Reduce()
     {
         InitFields();
+
+        if (!_cardinalOnly)
+        {
+            Debug.LogError("Don't Reduce non-cardinal generations! They are already optimal! You can Linearize them if you want, though.");
+            return;
+        }
 
         if (_size < 3)
         {

@@ -19,6 +19,11 @@ public class MovingElement : MonoBehaviour
     private LoopType _runtimeLoopType;
 
     [SerializeField] private Transform[] _points;
+    [SerializeField, Tooltip("If the movement of this body relies on the movement of others (by parenting, by relying on moving points, etc), reference those bodies here.")]
+    private Rigidbody2D[] _relativeBodies;
+
+    [Space(15)]
+
     [SerializeField] private bool _activeByDefault;
     [SerializeField] private bool _rotateToDirection = false;
     [SerializeField, Range(0.0005f, 0.5f), Tooltip("How close do we have to get before moving to next point? Be careful with this value's magnitude. Around 0.05 is fine.")]
@@ -40,10 +45,7 @@ public class MovingElement : MonoBehaviour
     [SerializeField] private LoopType _loopType = LoopType.Wrap;
     [SerializeField] private bool _isMovingRight = true;
 
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
+    private void Awake() => rb = GetComponent<Rigidbody2D>();
 
     private void Start()
     {
@@ -101,7 +103,6 @@ public class MovingElement : MonoBehaviour
                 // has a chance to OoB. So, I'm clamping. Ah, well.
                 int nextDest = Mathf.Clamp(GetNextPointIndex(_destinationIndex), 0, _runtimePoints.Length - 1);
 
-                Debug.Log(nextDest + " updated");
                 // get the direction to the next point
                 _moveDirection = GetDirectionToPoint(nextDest);
 
@@ -113,6 +114,12 @@ public class MovingElement : MonoBehaviour
                 _previousDistance = GetDistanceToPoint(_destinationIndex);
 
                 rb.velocity = _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection;
+
+                // add tracking speeds from other related bodies
+                foreach (Rigidbody2D body in _relativeBodies)
+                {
+                    rb.velocity += body.velocity;
+                }
             }
             else
             {
