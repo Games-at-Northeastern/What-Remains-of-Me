@@ -844,7 +844,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2522988766665784786}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -853,7 +853,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -874,6 +874,7 @@ MonoBehaviour:
   - {fileID: 4954450812005634341}
   _activeByDefault: 0
   _rotateToDirection: 0
+  _locationAccuracy: 0.05
   _initialStartIndex: 0
   _normalizedInitialStartPosition: 0
   _speed: 2

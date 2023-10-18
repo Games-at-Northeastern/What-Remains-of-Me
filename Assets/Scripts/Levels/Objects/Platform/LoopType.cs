@@ -40,7 +40,7 @@ namespace Levels.Objects.Platform
             switch (loopType) // could replace this with an enhanced switch, but nah.
             {
                 case LoopType.Wrap: // wraps around if out of bounds
-                    return (currentIndex + dir) % maxLength;
+                    return currentIndex + dir < 0 ? maxLength - 1 : (currentIndex + dir) % maxLength;
 
                 case LoopType.Pingpong: // bounces back if out of bounds
                     int next = currentIndex + dir;

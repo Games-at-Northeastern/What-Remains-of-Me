@@ -19,8 +19,15 @@ public class MovingElement : MonoBehaviour
     private LoopType _runtimeLoopType;
 
     [SerializeField] private Transform[] _points;
+    [SerializeField, Tooltip("If the movement of this body relies on the movement of others (by parenting, by relying on moving points, etc), reference those bodies here.")]
+    private Rigidbody2D[] _relativeBodies;
+
+    [Space(15)]
+
     [SerializeField] private bool _activeByDefault;
     [SerializeField] private bool _rotateToDirection = false;
+    [SerializeField, Range(0.0005f, 0.5f), Tooltip("How close do we have to get before moving to next point? Be careful with this value's magnitude. Around 0.05 is fine.")]
+    private float _locationAccuracy = 0.05f;
 
     [Header("Initial Position")]
     [SerializeField, Tooltip("What point index do we start at (0-indexed)? Is Clamped upon initialization.")]
@@ -38,10 +45,7 @@ public class MovingElement : MonoBehaviour
     [SerializeField] private LoopType _loopType = LoopType.Wrap;
     [SerializeField] private bool _isMovingRight = true;
 
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
+    private void Awake() => rb = GetComponent<Rigidbody2D>();
 
     private void Start()
     {
@@ -79,14 +83,20 @@ public class MovingElement : MonoBehaviour
                                                                                        //
 
         _moveDirection = GetDirectionToPoint(_destinationIndex);
-        _previousDistance = int.MaxValue; // if not maxed out, the first position will be skipped.
+        _previousDistance = int.MaxValue; // if not maxed out, the first position might be skipped on lower-end hardware.
     }
 
     private void FixedUpdate()
     {
         if (_shouldMove) // if actionable...
         {
-            if (_previousDistance - GetDistanceToPoint(_destinationIndex) <= 0) // if we've passed the target point...
+            float dist = GetDistanceToPoint(_destinationIndex);
+
+            // both clauses are needed here. The first catches *just before* we hit the point, and the second
+            // catches *just after* we pass the point, in case a fixed-update loop doesn't manage to catch the first in time.
+            // The 2nd case is theoretically never needed as physics always occurs in fixed-update, but if the accuracy is small
+            // enough, the distance might never be smaller than it.
+            if (dist <= _locationAccuracy || dist > _previousDistance) // if we are close enough to point OR if we've passed the target point...
             {
                 // go to next
                 // even with (what i think is) logically sound index-logic, draining virus/energy and re-adding it sometimes
@@ -104,6 +114,12 @@ public class MovingElement : MonoBehaviour
                 _previousDistance = GetDistanceToPoint(_destinationIndex);
 
                 rb.velocity = _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection;
+
+                // add tracking speeds from other related bodies
+                foreach (Rigidbody2D body in _relativeBodies)
+                {
+                    rb.velocity += body.velocity;
+                }
             }
             else
             {
