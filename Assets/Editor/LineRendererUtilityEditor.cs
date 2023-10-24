@@ -24,7 +24,7 @@ There are 7 buttons and a text field:
 The textfield just controls the name of the prefab instance.
 
 Controls:
-Cardinaly Only - Do we generate paths only using cardinal segments? If false, directly connects points.
+Cardinal Only - Do we generate paths only using cardinal segments? If false, directly connects points.
 Max Generated Segment Length - Controls how long a segment can be until it is forced to break into another segment. Note that a segment won't always be as long as it can be.
 Z Pos - The Z position of the points generated. This is used for rendering order (i.e. which sprite goes over which).
 Thickness - How thick the line should be. Thicker lines have visible artifacting with more complicated paths.

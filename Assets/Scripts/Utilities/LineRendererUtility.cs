@@ -14,7 +14,7 @@ public class LineRendererUtility : MonoBehaviour
 
     [Header("Generation")]
     [SerializeField] private bool _cardinalOnly = true;
-    [SerializeField, Range(0f, 10f)] private float _maxGeneratedSegmentLength = 2f;
+    [SerializeField, Range(0.1f, 10f)] private float _maxGeneratedSegmentLength = 2f;
     [SerializeField] private float _zPos = -6f;
     [SerializeField, Range(0.05f, 1f)] private float _thickness = 0.1f;
 
@@ -172,15 +172,21 @@ public class LineRendererUtility : MonoBehaviour
             return;
         }
 
+        var vec = _requiredPoints[0].position;
+        vec.z = _zPos;
+
         var building = new List<Vector3>
             {
-                _requiredPoints[0].position
+                vec
             };
 
         for (int i = 1; i < _requiredPoints.Length; i += 1)
         {
             var targetPoint = _requiredPoints[i].position;
             var currentPoint = _requiredPoints[i - 1].position;
+
+            targetPoint.z = _zPos;
+            currentPoint.z = _zPos;
 
             if (!_cardinalOnly)
             {
@@ -208,6 +214,7 @@ public class LineRendererUtility : MonoBehaviour
 
                     // offset us
                     currentPoint += offset;
+
                     // then add us
                     building.Add(currentPoint);
 
@@ -233,7 +240,6 @@ public class LineRendererUtility : MonoBehaviour
     {
         // determine the directional offset
         Vector3 offset;
-
         // less powerful randomness
         if ((adx > ady) || (Random.Range(0f, 1f) > (1f - _randomVariance) && dy > _deltaMin && dx > _deltaMin))
         {
