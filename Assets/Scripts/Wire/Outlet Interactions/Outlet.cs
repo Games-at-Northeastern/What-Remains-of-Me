@@ -20,6 +20,8 @@ public class Outlet : MonoBehaviour
     [SerializeField] AControllable controlled;
     [SerializeField] float energyTransferSpeed;
 
+    public Collider2D grappleOverrideRange;
+
     private void Awake()
     {
         // TODO : This should be moved into one of the player scripts

@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Ink.Parsed;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 /// <summary>
 /// The main script for handling wire controls. Spawns/Fires, despawns, and
@@ -41,6 +44,7 @@ public class WireThrower : MonoBehaviour
     public UnityEvent onDisconnect = new UnityEvent();
 
     private PlugMovementSettings pms; // For calculating grappling range
+    public List<GameObject> outletsInOverrideRange;
 
     private void Awake()
     {
@@ -55,11 +59,13 @@ public class WireThrower : MonoBehaviour
         _lineRenderer.enabled = false;
         ConnectedOutlet = null;
         _framesHeld = 0;
-        reticle.GetComponent<Renderer>().enabled = false;
+        reticle.GetComponent<Light2D>().enabled = false;
         mainCamera = Camera.main;
 
         pms = FindObjectOfType<PlugMovementSettings>();
-    }
+
+        outletsInOverrideRange = new List<GameObject>();
+}
 
     private void Start()
     {
@@ -195,10 +201,32 @@ public class WireThrower : MonoBehaviour
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
 
+    /// <summary>
+    /// Keeps track of which outlets are in override priority range
+    /// </summary>
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("OutletOverrideRange"))
+        {
+            outletsInOverrideRange.Add(collision.GetComponentInParent<Outlet>().gameObject);
+        }
+    }
+
+    /// <summary>
+    /// Keeps track of which outlets are no longer in override priority range
+    /// </summary>
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("OutletOverrideRange"))
+        {
+            outletsInOverrideRange.Remove(collision.GetComponentInParent<Outlet>().gameObject);
+        }
+    }
 
     /// <summary>
     /// Spawns a plug and launches it in the air towards the nearest object with the tag "Outlet",
     /// setting it as the active plug.
+    /// Prioritizes outlets in override range!
     /// Prepares for the possibility of the plug despawning or getting connected.
     /// </summary>
     void FirePlugAutoAim()
@@ -208,14 +236,43 @@ public class WireThrower : MonoBehaviour
         GameObject closest = null;
         float distance = Mathf.Infinity;
         Vector3 position = transform.position;
+        bool closestIsOverride = false;
         foreach (GameObject go in gos)
         {
             Vector3 diff = go.transform.position - position;
             float curDistance = diff.sqrMagnitude;
-            if (curDistance < distance)
+            if (!closestIsOverride)
             {
-                closest = go;
-                distance = curDistance;
+                if (curDistance < distance)
+                {
+                    closest = go;
+                    distance = curDistance;
+                }
+
+                if (go.GetComponent<Outlet>().grappleOverrideRange != null)
+                {
+                    foreach(GameObject overridenOutlet in outletsInOverrideRange)
+                    {
+                        if (go == overridenOutlet)
+                        {
+                            closest = go;
+                            distance = curDistance;
+
+                            closestIsOverride = true;
+                        }
+                    }
+                }
+            }
+            else if (closestIsOverride && curDistance < distance)
+            {
+                foreach (GameObject overridenOutlet in outletsInOverrideRange)
+                {
+                    if (go == overridenOutlet)
+                    {
+                        closest = go;
+                        distance = curDistance;
+                    }
+                }
             }
         }
 
@@ -275,6 +332,7 @@ public class WireThrower : MonoBehaviour
             GameObject closest = null;
             float originalDistance = Vector2.Distance(this.transform.position, _lockOnOutlet.transform.position);
             bool hasOutletsOnScreen = false;
+            bool closestIsOverride = false;
             Vector3 position = transform.position;
             foreach (GameObject go in gos)
             {
@@ -283,14 +341,44 @@ public class WireThrower : MonoBehaviour
                 if (go.GetComponent<SpriteRenderer>().isVisible)
                 {
                     hasOutletsOnScreen = true;
-                    if (curDistance < originalDistance)
+                    if (!closestIsOverride)
                     {
-                        Debug.Log("test");
+                        if (curDistance < originalDistance)
+                        {
+                            closest = go;
+                            _lockOnOutlet = closest;
+                            originalDistance = curDistance;
+                            UpdateMeter(closest);
+                        }
 
-                        closest = go;
-                        _lockOnOutlet = closest;
-                        originalDistance = curDistance;
-                        UpdateMeter(closest);
+                        if (go.GetComponent<Outlet>().grappleOverrideRange != null)
+                        {
+                            foreach (GameObject overridenOutlet in outletsInOverrideRange)
+                            {
+                                if (go == overridenOutlet)
+                                {
+                                    closest = go;
+                                    _lockOnOutlet = closest;
+                                    originalDistance = curDistance;
+                                    UpdateMeter(closest);
+
+                                    closestIsOverride = true;
+                                }
+                            }
+                        }
+                    }
+                    else if (closestIsOverride && curDistance < originalDistance)
+                    {
+                        foreach (GameObject overridenOutlet in outletsInOverrideRange)
+                        {
+                            if (go == overridenOutlet)
+                            {
+                                closest = go;
+                                _lockOnOutlet = closest;
+                                originalDistance = curDistance;
+                                UpdateMeter(closest);
+                            }
+                        }
                     }
                 }
             }
@@ -378,18 +466,18 @@ public class WireThrower : MonoBehaviour
             reticle.transform.position = _lockOnOutlet.transform.position;
 
             // Only show the reticle if the plug is within range
-            if (Vector2.Distance(transform.position, reticle.transform.position) <= pms.StraightSpeed * pms.StraightTimeTillRetraction)
+            if (Vector2.Distance(transform.position, reticle.transform.position) <= pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f)
             {
-                reticle.GetComponent<Renderer>().enabled = true;
+                reticle.GetComponent<Light2D>().enabled = true;
             }
             else
             {
-                reticle.GetComponent<Renderer>().enabled = false;
+                reticle.GetComponent<Light2D>().enabled = false;
             }
         }
         else
         {
-            reticle.GetComponent<Renderer>().enabled = false;
+            reticle.GetComponent<Light2D>().enabled = false;
         }
         HandleLineRendering();
         HandleThrowInputHeld();
