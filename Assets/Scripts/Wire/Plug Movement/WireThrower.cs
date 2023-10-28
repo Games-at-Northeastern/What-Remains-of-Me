@@ -45,6 +45,8 @@ public class WireThrower : MonoBehaviour
 
     private PlugMovementSettings pms; // For calculating grappling range
     public List<GameObject> outletsInOverrideRange;
+    [SerializeField] private MovementExecuter me;
+    [SerializeField] private bool DirectionAffectsPriority;
 
     private void Awake()
     {
@@ -236,7 +238,11 @@ public class WireThrower : MonoBehaviour
         GameObject closest = null;
         float distance = Mathf.Infinity;
         Vector3 position = transform.position;
+
         bool closestIsOverride = false;
+        bool isFacingLeft = me.GetCurrentMove().Flipped();
+        bool currentIsInFront = false;
+
         foreach (GameObject go in gos)
         {
             Vector3 diff = go.transform.position - position;
@@ -251,7 +257,7 @@ public class WireThrower : MonoBehaviour
 
                 if (go.GetComponent<Outlet>().grappleOverrideRange != null)
                 {
-                    foreach(GameObject overridenOutlet in outletsInOverrideRange)
+                    foreach (GameObject overridenOutlet in outletsInOverrideRange)
                     {
                         if (go == overridenOutlet)
                         {
@@ -332,26 +338,49 @@ public class WireThrower : MonoBehaviour
             GameObject closest = null;
             float originalDistance = Vector2.Distance(this.transform.position, _lockOnOutlet.transform.position);
             bool hasOutletsOnScreen = false;
-            bool closestIsOverride = false;
-            Vector3 position = transform.position;
-            foreach (GameObject go in gos)
-            {
-                Vector3 diff = go.transform.position - position;
-                float curDistance = Vector2.Distance(this.transform.position, go.transform.position);
-                if (go.GetComponent<SpriteRenderer>().isVisible)
-                {
-                    hasOutletsOnScreen = true;
-                    if (!closestIsOverride)
-                    {
-                        if (curDistance < originalDistance)
-                        {
-                            closest = go;
-                            _lockOnOutlet = closest;
-                            originalDistance = curDistance;
-                            UpdateMeter(closest);
-                        }
 
-                        if (go.GetComponent<Outlet>().grappleOverrideRange != null)
+            bool closestIsOverride = false;
+            bool isFacingLeft = me.GetCurrentMove().Flipped();
+            bool currentIsInFront = false;
+
+            Vector3 position = transform.position;
+
+            if (!DirectionAffectsPriority)
+            {
+                foreach (GameObject go in gos)
+                {
+                    Vector3 diff = go.transform.position - position;
+                    float curDistance = Vector2.Distance(this.transform.position, go.transform.position);
+                    if (go.GetComponent<SpriteRenderer>().isVisible)
+                    {
+                        hasOutletsOnScreen = true;
+                        if (!closestIsOverride)
+                        {
+                            if (curDistance < originalDistance)
+                            {
+                                closest = go;
+                                _lockOnOutlet = closest;
+                                originalDistance = curDistance;
+                                UpdateMeter(closest);
+                            }
+
+                            if (go.GetComponent<Outlet>().grappleOverrideRange != null)
+                            {
+                                foreach (GameObject overridenOutlet in outletsInOverrideRange)
+                                {
+                                    if (go == overridenOutlet)
+                                    {
+                                        closest = go;
+                                        _lockOnOutlet = closest;
+                                        originalDistance = curDistance;
+                                        UpdateMeter(closest);
+
+                                        closestIsOverride = true;
+                                    }
+                                }
+                            }
+                        }
+                        else if (closestIsOverride && curDistance < originalDistance)
                         {
                             foreach (GameObject overridenOutlet in outletsInOverrideRange)
                             {
@@ -361,27 +390,148 @@ public class WireThrower : MonoBehaviour
                                     _lockOnOutlet = closest;
                                     originalDistance = curDistance;
                                     UpdateMeter(closest);
-
-                                    closestIsOverride = true;
                                 }
-                            }
-                        }
-                    }
-                    else if (closestIsOverride && curDistance < originalDistance)
-                    {
-                        foreach (GameObject overridenOutlet in outletsInOverrideRange)
-                        {
-                            if (go == overridenOutlet)
-                            {
-                                closest = go;
-                                _lockOnOutlet = closest;
-                                originalDistance = curDistance;
-                                UpdateMeter(closest);
                             }
                         }
                     }
                 }
             }
+            // Begin new Directional Targeting System
+            else
+            {
+                foreach (GameObject go in gos)
+                {
+                    Vector3 diff = go.transform.position - position;
+                    float curDistance = Vector2.Distance(this.transform.position, go.transform.position);
+                    if (go.GetComponent<SpriteRenderer>().isVisible)
+                    {
+                        hasOutletsOnScreen = true;
+                        bool isInFront = false;
+                        float xdiff = go.transform.position.x - this.transform.position.x;
+
+                        if (xdiff >= 0 && !isFacingLeft)
+                        {
+                            isInFront = true;
+                        }
+                        else if (xdiff <= 0 && isFacingLeft)
+                        {
+                            isInFront = true;
+                        }
+
+                        if (!closestIsOverride)
+                        {
+                            if (!currentIsInFront)
+                            {
+                                if (isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f)
+                                {
+                                    closest = go;
+                                    _lockOnOutlet = closest;
+                                    originalDistance = curDistance;
+                                    UpdateMeter(closest);
+                                    if (isInFront)
+                                    {
+                                        currentIsInFront = true;
+                                    }
+                                }
+                                else if (!isInFront && curDistance < originalDistance)
+                                {
+                                    closest = go;
+                                    _lockOnOutlet = closest;
+                                    originalDistance = curDistance;
+                                    UpdateMeter(closest);
+                                    if (isInFront)
+                                    {
+                                        currentIsInFront = true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (isInFront && curDistance < originalDistance)
+                                {
+                                    closest = go;
+                                    _lockOnOutlet = closest;
+                                    originalDistance = curDistance;
+                                    UpdateMeter(closest);
+                                    if (isInFront)
+                                    {
+                                        currentIsInFront = true;
+                                    }
+                                }
+                            }
+
+                            if (go.GetComponent<Outlet>().grappleOverrideRange != null)
+                            {
+                                foreach (GameObject overridenOutlet in outletsInOverrideRange)
+                                {
+                                    if (go == overridenOutlet)
+                                    {
+                                        closest = go;
+                                        _lockOnOutlet = closest;
+                                        originalDistance = curDistance;
+                                        UpdateMeter(closest);
+                                        if (isInFront)
+                                        {
+                                            currentIsInFront = true;
+                                        }
+
+                                        closestIsOverride = true;
+                                    }
+                                }
+                            }
+                        }
+                        else if (closestIsOverride && curDistance < originalDistance)
+                        {
+                            foreach (GameObject overridenOutlet in outletsInOverrideRange)
+                            {
+                                if (go == overridenOutlet)
+                                {
+                                    if (!currentIsInFront)
+                                    {
+                                        if (isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f)
+                                        {
+                                            closest = go;
+                                            _lockOnOutlet = closest;
+                                            originalDistance = curDistance;
+                                            UpdateMeter(closest);
+                                            if (isInFront)
+                                            {
+                                                currentIsInFront = true;
+                                            }
+                                        }
+                                        else if (!isInFront && curDistance < originalDistance)
+                                        {
+                                            closest = go;
+                                            _lockOnOutlet = closest;
+                                            originalDistance = curDistance;
+                                            UpdateMeter(closest);
+                                            if (isInFront)
+                                            {
+                                                currentIsInFront = true;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (isInFront && curDistance < originalDistance)
+                                        {
+                                            closest = go;
+                                            _lockOnOutlet = closest;
+                                            originalDistance = curDistance;
+                                            UpdateMeter(closest);
+                                            if (isInFront)
+                                            {
+                                                currentIsInFront = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // End new Directional Targeting System
 
             if (!hasOutletsOnScreen)
             {
