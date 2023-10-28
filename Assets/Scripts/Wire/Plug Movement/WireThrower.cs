@@ -422,18 +422,7 @@ public class WireThrower : MonoBehaviour
                         {
                             if (!currentIsInFront)
                             {
-                                if (isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f)
-                                {
-                                    closest = go;
-                                    _lockOnOutlet = closest;
-                                    originalDistance = curDistance;
-                                    UpdateMeter(closest);
-                                    if (isInFront)
-                                    {
-                                        currentIsInFront = true;
-                                    }
-                                }
-                                else if (!isInFront && curDistance < originalDistance)
+                                if ((isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f) || (!isInFront && curDistance < originalDistance))
                                 {
                                     closest = go;
                                     _lockOnOutlet = closest;
@@ -488,18 +477,7 @@ public class WireThrower : MonoBehaviour
                                 {
                                     if (!currentIsInFront)
                                     {
-                                        if (isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f)
-                                        {
-                                            closest = go;
-                                            _lockOnOutlet = closest;
-                                            originalDistance = curDistance;
-                                            UpdateMeter(closest);
-                                            if (isInFront)
-                                            {
-                                                currentIsInFront = true;
-                                            }
-                                        }
-                                        else if (!isInFront && curDistance < originalDistance)
+                                        if ((isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f) || (!isInFront && curDistance < originalDistance))
                                         {
                                             closest = go;
                                             _lockOnOutlet = closest;
