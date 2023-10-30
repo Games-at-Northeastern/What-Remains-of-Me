@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// why is this just for spikes? TODO, abstract this.
 public class SpikeTeleport : MonoBehaviour
 {
 
@@ -28,24 +29,21 @@ public class SpikeTeleport : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-
-
-            objectToTeleport = other.gameObject;
-            deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
-            deathParticles.Clear();
-            deathParticles.Play();
-            objectToTeleport.SetActive(false);
-
-            Invoke("TeleportPlayer", deathParticles.main.duration);
-
+            PerformDeath(other.gameObject);
         }
     }
 
+    // exposed so that killing things is just more convenient
+    public void PerformDeath(GameObject target)
+    {
+        objectToTeleport = target.gameObject;
+        deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
+        deathParticles.Clear();
+        deathParticles.Play();
+        objectToTeleport.SetActive(false);
 
-
-
-
-
+        Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
+    }
 
     private void TeleportPlayer()
     {
