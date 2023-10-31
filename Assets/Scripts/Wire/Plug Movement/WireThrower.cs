@@ -45,7 +45,7 @@ public class WireThrower : MonoBehaviour
 
     private PlugMovementSettings pms; // For calculating grappling range
     public List<GameObject> outletsInOverrideRange;
-    [SerializeField] private MovementExecuter me;
+    private MovementExecuter me;
     [SerializeField] private bool DirectionAffectsPriority;
 
     private void Awake()
@@ -65,6 +65,7 @@ public class WireThrower : MonoBehaviour
         mainCamera = Camera.main;
 
         pms = FindObjectOfType<PlugMovementSettings>();
+        me = FindObjectOfType<MovementExecuter>();
 
         outletsInOverrideRange = new List<GameObject>();
 }
