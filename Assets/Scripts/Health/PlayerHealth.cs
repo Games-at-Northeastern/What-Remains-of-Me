@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
+    [SerializeField] private GameObject warning;
     public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
@@ -45,6 +46,20 @@ public class PlayerHealth : MonoBehaviour
         {
             EnergyDepletedDeath();
         }
+        /*
+        else if (playerInfo.virus >= playerInfo.maxVirus * 0.75)
+        {
+            VirusWarning();
+        }
+        else if (playerInfo.battery <= playerInfo.maxBattery * 0.25)
+        {
+            EnergyDepletionWarning();
+        }
+        else
+        {
+            warning.GetComponent<WarningAnimation>().StopAnimation();
+        }
+        */
     }
 
     // TODO : Should there be some kind of scene resetting that is triggered by this? I.e. platforms, enemies, etc.?
@@ -74,6 +89,28 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("Death from energy empty upon damage");
 
+    }
+
+
+    // Methods for to triggering audiovisual warnings for when the player is about to die
+
+    /// <summary>
+    /// Triggers warnings for virus death
+    /// </summary>
+    private void VirusWarning()
+    {
+        Debug.Log("Virus Overload Warning");
+        warning.GetComponent<WarningAnimation>().StartAnimation();
+    }
+
+
+    /// <summary>
+    /// Triggers warnings for energy depletion death
+    /// </summary>
+    private void EnergyDepletionWarning()
+    {
+        Debug.Log("Energy Depletion Warning");
+        warning.GetComponent<WarningAnimation>().StartAnimation();
     }
 
 
