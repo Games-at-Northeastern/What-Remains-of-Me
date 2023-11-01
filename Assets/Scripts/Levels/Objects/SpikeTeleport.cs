@@ -16,7 +16,6 @@ public class SpikeTeleport : MonoBehaviour
 
     private GameObject objectToTeleport;
 
-
     private void Awake()
     {
         //Get the objects needed for the sound effects.
@@ -25,6 +24,8 @@ public class SpikeTeleport : MonoBehaviour
     }
 
 
+    // TODO! This triggers 4 times per every collision with the player due to the multiple colliders on them.
+    // That's really weird. Why?
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
