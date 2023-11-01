@@ -1,53 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-/// <summary>
-/// Represents a move in which the player is sliding down a wall, preparing
-/// for a wall jump.
-/// </summary>
-public class WallSlide : AMove
+namespace CharacterController
 {
-    private bool wallJumpPending = false;
-    private bool damageInput;
-
     /// <summary>
-    /// Initializes the WallSlide move and completes any actions that are
-    /// necessary to do at the beginning of a Wall Slide.
+    /// Represents a move in which the player is sliding down a wall, preparing
+    /// for a wall jump.
     /// </summary>
-    public WallSlide()
+    public class WallSlide : IMove
     {
-        dashIsReset = true;
-        CS.Player.Jump.performed += _ => wallJumpPending = true;
-        PH.OnDamageTaken.AddListener(() => damageInput = true);
-    }
-
-    public override void AdvanceTime()
-    {
-        // Nothing
-    }
-
-    public override float XSpeed() => 0;
-
-    public override float YSpeed() => MS.WallSlideSpeed;
-
-    public override IMove GetNextMove()
-    {
-        if (damageInput)
+        private float slideGravity;
+        private ICharacterController character;
+        private float maxWallSlideSpeed;
+        public WallSlide(float slideGravity, float maxWallSlideSpeed, ICharacterController character)
         {
-            return new Knockback();
-        }
-        if (!MI.RightWallDetector.isColliding() && !MI.LeftWallDetector.isColliding())
-        {
-            return new Fall(0, MS.WallSlideSpeed);
-        }
+            this.character = character;
+            this.slideGravity = slideGravity;
+            this.maxWallSlideSpeed = Mathf.Abs(maxWallSlideSpeed);
 
-        if (MI.GroundDetector.isColliding())
-        {
-            return new Idle();
         }
-        return this;
+        public void CancelMove()
+        {
+            //Currently do nothing
+        }
+        public void ContinueMove()
+        {
+            var speed = character.Speed;
+            speed.y = Kinematics.VelocityClamp(character.Speed.y, slideGravity, Mathf.Sign(slideGravity) * maxWallSlideSpeed, Time.fixedDeltaTime);
+            character.Speed = speed;
+        }
+        public AnimationType GetAnimationState() => AnimationType.WALL_SLIDE;
+        /// <summary>
+        /// move isn't complete while the character is not grounded
+        /// </summary>
+        /// <returns></returns>
+        //devnote: may want to in future take into if player is holding into the wall. but as of rn seems more of a job for the character controller 
+        public bool IsMoveComplete() => !character.Grounded;
+        public void StartMove()
+        {
+            //currently when you start sliding you either decelerate straight to max wall slide speed or keep your y speed
+            //would maybe want to change this later
+            character.Speed.Set(0, Mathf.Clamp(character.Speed.y, -maxWallSlideSpeed, maxWallSlideSpeed));
+        }
     }
-
-    public override AnimationType GetAnimationState() => AnimationType.WALL_SLIDE;
 }

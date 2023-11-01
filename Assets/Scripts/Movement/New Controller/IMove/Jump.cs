@@ -1,178 +1,75 @@
 using System;
 using UnityEngine;
-
-/// <summary>
-///     Represents a move in which the player is jumping into the air.
-/// </summary>
-public class Jump : AMove
+namespace CharacterController
 {
-    private bool connectedInput;
-    private bool damageInput;
-
-    private bool dashInput;
-    private float gravity;
-    private bool jumpCanceled;
-    private bool swingInput; // Jump input while connecting to an outlet
-    private float timePassed;
-    private float xAccel; // Don't mess with this outside of calling Mathf.SmoothDamp
-    private float xVel;
-    private float yVel;
-    private static float jumpBufferCounter = MS.JumpBuffer;
-
     /// <summary>
-    ///     Initializes a jump, appropriately setting its horizontal velocity to start
-    ///     with.
+    ///     Represents a move in which the player is jumping into the air.
     /// </summary>
-    public Jump(float initXVel)
+    public class Jump : IMove
     {
-        xVel = initXVel;
-        yVel = MS.JumpInitVelY;
-        gravity = MS.JumpInitGravity;
-        timePassed = 0;
-        CS.Player.Dash.performed += _ => dashInput = true;
-        WT.onConnect.AddListener(() => connectedInput = true);
-        CS.Player.Jump.performed += _ =>
+        private readonly float initialVelocity;
+        private float risingGravity;
+        private JumpType jumpType;
+        private ICharacterController character;
+        private readonly float timeToReachApex;
+        private float timePassed;
+        public Jump(float risingGravity, float jumpHeight, JumpType jumpType, ICharacterController character)
         {
-            if (WT.ConnectedOutlet != null) { swingInput = true; }
-        };
-        PH.OnDamageTaken.AddListener(() => damageInput = true);
-
-
-        if (WT.ConnectedOutlet != null)
+            this.risingGravity = risingGravity;
+            this.initialVelocity = Mathf.Sqrt(-2 * risingGravity * jumpHeight);
+            this.character = character;
+            this.jumpType = jumpType;
+            this.timeToReachApex = -initialVelocity / risingGravity;
+        }
+        public void CancelMove()
         {
-            // Temporarily set the max wire length as the current distance from the connected outlet
-            // This prevents the wire from 'stretching' during a jump with a previous outlet connection
-            Vector2 origPos = MI.transform.position;
-            Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
-            float newDistFromOutlet = Vector2.Distance(origPos, connectedOutletPos);
+            // empty for now but i think it can be useful in regards to jumpBuffers
+            // though i may want that in the character controller itself
+        }
 
-            WT.SetMaxWireLength(Mathf.Min(newDistFromOutlet, MS.WireGeneralMaxDistance));
+        public AnimationType GetAnimationState() => AnimationType.JUMP_RISING;
+        /// <summary>
+        /// is true after character hits apex of the jump
+        /// </summary>
+        /// <returns></returns>
+        public bool IsMoveComplete() => timePassed >= timeToReachApex;
+        /// <summary>
+        /// Changes the character y velocity to what it should be at the beginning of this jump
+        /// </summary>
+
+        public void StartMove()
+        {
+            timePassed = 0;
+            switch (jumpType)
+            {
+                case JumpType.addSpeed:
+                    character.Speed.Set(character.Speed.x, character.Speed.y + initialVelocity);
+                    break;
+                case JumpType.setSpeed:
+                    character.Speed.Set(character.Speed.x, initialVelocity);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        /// <summary>
+        /// decreases the vertical velocity by gravity;
+        /// </summary>
+        public void ContinueMove()
+        {
+            timePassed += Time.fixedDeltaTime;
+            character.Speed.Set(character.Speed.x, character.Speed.y - risingGravity * Time.fixedDeltaTime);
         }
     }
-
-    public Jump() : this(0)
-    {
-        // Default Constructor
-    }
-
-    public override void AdvanceTime()
-    {
-        var timeChange = Time.deltaTime;
-        // General
-        timePassed += timeChange;
-        // Horizontal
-        if (xVel > MS.FallMaxSpeedX * 0.85 && !connectedInput)
-        {
-            xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(),
-                ref xAccel, MS.FallSmoothTimeX * 5);
-        }
-        else
-        {
-            xVel = Mathf.SmoothDamp(xVel, MS.FallMaxSpeedX * CS.Player.Move.ReadValue<float>(),
-            ref xAccel, MS.FallSmoothTimeX);
-        }
-        // Vertical
-        gravity = Mathf.Clamp(gravity + (MS.JumpGravityIncRate * timeChange),
-            MS.JumpInitGravity, MS.JumpMaxGravity);
-        yVel -= gravity * timeChange;
-        if (yVel < MS.JumpMinSpeedY)
-        {
-            yVel = MS.JumpMinSpeedY;
-        }
-
-        // Once the player starts moving downwards, go into a swing instead if already connected to an outlet
-        if (yVel < MS.JumpToSwingMinYVel && WT.ConnectedOutlet != null)
-        {
-            swingInput = true;
-        }
-
-        // Cancellation
-        if (!jumpCanceled && CS.Player.Jump.ReadValue<float>() == 0)
-        {
-            CancelJump(false);
-        }
-
-        if (!jumpCanceled && MI.CeilingDetector.isColliding())
-        {
-            CancelJump(true);
-        }
-
-        // Jump Buffer
-        if (CS.Player.Jump.ReadValue<float>() > 0)
-        {
-            jumpBufferCounter -= timeChange;
-        }
-        else
-        {
-            jumpBufferCounter = MS.JumpBuffer;
-        }
-    }
-
     /// <summary>
-    ///     Causes any consequences that should come from the jump being cancelled at
-    ///     this point in time. Takes in whether a cancellation would mean the jump going
-    ///     straight to zero in Y Velocity or not.
+    /// There are 2 jump types
+    /// AddSpeed: will add some Velocity Value v to your current y Speed
+    /// SetSpeed: will set your y speed to v
     /// </summary>
-    private void CancelJump(bool straightToZeroVel)
+    public enum JumpType
     {
-        jumpCanceled = true;
-        // yVel dipping below zero is the "point of no return" (as in, canceling the jump does nothing)
-        if (yVel > 0)
-        {
-            gravity = MS.JumpMaxGravity;
-            yVel = straightToZeroVel ? 0 : yVel * MS.JumpCancelYVelMultiplier;
-        }
+        addSpeed,
+        setSpeed
     }
-
-    public override float XSpeed() => xVel;
-
-    public override float YSpeed() => yVel;
-
-    public override IMove GetNextMove()
-    {
-        if (damageInput)
-        {
-            return new Knockback();
-        }
-
-        if (connectedInput || swingInput)
-        {
-            return new WireSwing(xVel, yVel);
-        }
-
-        if (dashInput && dashIsReset && UpgradeHandler.DashAllowed)
-        {
-            return new Dash();
-        }
-
-         // Deprecated code for wall jumping.
-        /*if ((MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding()) && yVel < 0)
-        {
-            return new WallSlide();
-        }*/
-
-        if (MI.GroundDetector.isColliding() && jumpBufferCounter > 0 && jumpBufferCounter < MS.JumpBuffer)
-        {
-            WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
-            return new Jump(xVel);
-        }
-
-        if (timePassed > MS.JumpLandableTimer && MI.GroundDetector.isColliding() &&
-            Mathf.Abs(xVel) < MS.RunToIdleSpeed)
-        {
-            WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
-            return new Idle();
-        }
-
-        if (MI.GroundDetector.isColliding() && timePassed > MS.JumpLandableTimer )
-        {
-            WT.SetMaxWireLength(MS.WireGeneralMaxDistance);
-            return new Run(xVel);
-        }
-
-        return this;
-    }
-
-    public override AnimationType GetAnimationState() =>
-        yVel >= 0 ? AnimationType.JUMP_RISING : AnimationType.JUMP_FALLING;
 }

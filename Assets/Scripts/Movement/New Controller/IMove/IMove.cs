@@ -5,7 +5,9 @@ namespace CharacterController
     /// Represents a move that a character can do
     /// Note: when implementing this interface you can pass anything you want the move to know into the constructor
     /// if moves need to be updated with a new inputs you can include a method to update the info stored in a move
-    /// ie if you want to update the horizontal input for a run without creating a new object. 
+    /// ie if you want to update the horizontal input for a run without creating a new object.
+    /// Note2: most moves won't *need* you to nor would you want to create a new object each time as long as startMove wipes any
+    /// previous info from the last time the move was done
     /// </summary>
     public interface IMove
     {
