@@ -87,6 +87,9 @@ public abstract class AControllable : MonoBehaviour, IControllable
         virus = Mathf.Clamp(virus + amount, 0, maxCharge);
         VirusChange(virus / totalEnergy);
         EnergyChange(totalEnergy);
+
+        //Debug.Log("Player Battery: " + playerInfo.battery);
+        //Debug.Log("Player Virus: " + playerInfo.virus);
     }
 
     /// <summary>
@@ -132,6 +135,9 @@ public abstract class AControllable : MonoBehaviour, IControllable
         virus = Mathf.Clamp(virus - amount, 0, maxCharge);
         VirusChange(virus / totalEnergy);
         EnergyChange(totalEnergy);
+
+        //Debug.Log("Player Battery: " + playerInfo.battery);
+        //Debug.Log("Player Virus: " + playerInfo.virus);
     }
 
     /// <summary>
