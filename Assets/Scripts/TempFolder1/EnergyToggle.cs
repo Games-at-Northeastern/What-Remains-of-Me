@@ -1,32 +1,34 @@
 using UnityEngine;
-using UnityEngine.Events;
 
-public class EnergyToggle : AControllable
+/// <summary>
+/// This class is a toggle that fires upon a certain amount of energy being reached, either by going
+/// above the given amount or below the given amount.
+/// </summary>
+public class EnergyToggle : ATriggerToggle
 {
-    public UnityEvent<bool> ToggleableElements;
-
     [SerializeField, Range(0f, 1f)]
     private float _percentActivation = 1f;
-    [SerializeField]
-    private bool _enabledOnStart = true;
 
-    private bool _priorEnabled;
     private bool _enabled;
+    private bool _priorEnabled;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         OnEnergyChange.AddListener(ProcessChange);
-        ToggleableElements.Invoke(_enabledOnStart);
     }
 
 
     private void ProcessChange(float energy)
     {
+        // should it be enabled this frame?
         _enabled = GetPercentFull() >= _percentActivation;
 
+        // if the state is different than the frame before it...
         if (_enabled != _priorEnabled)
         {
-            ToggleableElements.Invoke(_enabled);
+            // fire the event with the new state and record this new state
+            FireEvent(_enabled);
             _priorEnabled = _enabled;
         }
     }

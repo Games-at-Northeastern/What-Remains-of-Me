@@ -84,7 +84,7 @@ public class DeathLaser : MonoBehaviour
     private bool DoRaycast(out RaycastHit2D data)
     {
         data = Physics2D.Raycast(transform.position, _dir, _computedLaserDistance, _mask);
-        Debug.Log("Checking...");
+
         return data.point != Vector2.zero;
     }
 

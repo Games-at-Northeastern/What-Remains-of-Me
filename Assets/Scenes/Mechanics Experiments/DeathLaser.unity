@@ -1431,6 +1431,45 @@ MonoBehaviour:
   ToggleableElements:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 568282920}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _enabledOnStart: 0
+  _percentActivation: 0.9
+--- !u!114 &568282920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568282912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6c3dfaa321d25f4a979ad39e88709d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cleanEnergy: 0
+  maxCharge: 0
+  virus: 0
+  playerInfo: {fileID: 0}
+  OnVirusChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
+  ToggleableElements:
+    m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 568282917}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
@@ -1455,8 +1494,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _percentActivation: 0.75
   _enabledOnStart: 0
+  _useUnscaledTime: 0
+  _resetStateUponReactivation: 0
+  _duration: 1
 --- !u!1001 &570441951
 PrefabInstance:
   m_ObjectHideFlags: 0
