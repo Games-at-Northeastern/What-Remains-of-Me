@@ -125,7 +125,7 @@ public class PlayerHealth : MonoBehaviour
     public void LoseEnergy(float amount)
     {
         playerInfo.battery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0.01f)
+        if (playerInfo.batteryPercentage.Value <= 0f)
         {
             Die();
         }
@@ -159,7 +159,7 @@ public class PlayerHealth : MonoBehaviour
     {
         playerInfo.virus += amount;
         playerInfo.maxBattery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0.01f || playerInfo.virusPercentage.Value >= 0.99f)
+        if (playerInfo.batteryPercentage.Value <= 0f || playerInfo.virusPercentage.Value >= 0.99f)
         {
             Die();
         }

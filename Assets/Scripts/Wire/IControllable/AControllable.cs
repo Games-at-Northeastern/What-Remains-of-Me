@@ -56,13 +56,16 @@ public abstract class AControllable : MonoBehaviour, IControllable
             return;
         }
 
-        // Can only accept what the player can offer
-        amount = Mathf.Min(amount, playerInfo.battery);
+        // Can only accept what the player can offer, don't give energy if it would kill the player
+        if (amount < playerInfo.battery && playerInfo.battery >= 1f)
+        {
+            //amount = Mathf.Min(amount, playerInfo.battery);
 
-        playerInfo.battery -= amount;
+            playerInfo.battery -= amount;
 
-        cleanEnergy = Mathf.Clamp(cleanEnergy + amount, 0, maxCharge);
-        EnergyChange(totalEnergy);
+            cleanEnergy = Mathf.Clamp(cleanEnergy + amount, 0, maxCharge);
+            EnergyChange(totalEnergy);
+        }
     }
 
     /// <summary>
@@ -76,20 +79,21 @@ public abstract class AControllable : MonoBehaviour, IControllable
             return;
         }
 
-        // Can only accept what the player can offer
-        amount = Mathf.Min(amount, playerInfo.virus);
+        // Can only accept what the player can offer, don't give energy if it would kill the player
+        if (amount < playerInfo.battery && amount < playerInfo.virus && playerInfo.battery >= 1f && playerInfo.virus >= 0f)
+        {
+            amount = Mathf.Min(amount, playerInfo.virus);
 
-        playerInfo.virus -= amount;
-        playerInfo.battery -= amount;
+            playerInfo.virus -= amount;
+            playerInfo.battery -= amount;
 
+            virus = Mathf.Clamp(virus + amount, 0, maxCharge);
+            VirusChange(virus / totalEnergy);
+            EnergyChange(totalEnergy);
 
-
-        virus = Mathf.Clamp(virus + amount, 0, maxCharge);
-        VirusChange(virus / totalEnergy);
-        EnergyChange(totalEnergy);
-
-        //Debug.Log("Player Battery: " + playerInfo.battery);
-        //Debug.Log("Player Virus: " + playerInfo.virus);
+            //Debug.Log("Player Battery: " + playerInfo.battery);
+            //Debug.Log("Player Virus: " + playerInfo.virus);
+        }
     }
 
     /// <summary>
