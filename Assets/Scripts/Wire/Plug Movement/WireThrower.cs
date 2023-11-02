@@ -36,6 +36,11 @@ public class WireThrower : MonoBehaviour
     private GameObject _lockOnOutlet;
     private Vector2 _lastRecordedPosition;
 
+    private PlugMovementSettings pms; // For calculating grappling range
+    private MovementExecuter me; // For determining which way the player is facing
+
+    private List<GameObject> outletsInOverrideRange;
+
     private LevelManager levelManager;
 
     // Accessible Fields
@@ -43,10 +48,7 @@ public class WireThrower : MonoBehaviour
     public UnityEvent onConnect = new UnityEvent();
     public UnityEvent onDisconnect = new UnityEvent();
 
-    private PlugMovementSettings pms; // For calculating grappling range
-    public List<GameObject> outletsInOverrideRange;
-    private MovementExecuter me;
-    [SerializeField] private bool DirectionAffectsPriority;
+    [SerializeField] private bool DirectionAffectsPriority; // To enable new directional targeting system
 
     private void Awake()
     {
@@ -135,26 +137,6 @@ public class WireThrower : MonoBehaviour
     }
 
     /// <summary>
-    /// Function that is passed to the control scheme to handle cancelling a throw when the
-    /// controller button for this action is released.
-    /// </summary>
-    void HandleThrowInputReleasedController()
-    {
-        if (_activePlug == null && ConnectedOutlet == null)
-        {
-            Time.timeScale = 1;
-            if (_framesHeld < 0.1)
-                if (_isLockOn)
-                { FirePlugLockOn(); }
-                else
-                { FirePlugAutoAim(); }
-            else
-                FirePlugController();
-        }
-        HandlePotentialDisconnect();
-    }
-
-    /// <summary>
     /// Function passed to the control scheme to handle disconnecting the wire when jumping.
     /// </summary>
     void HandlePotentialDisconnectByJump(InputAction.CallbackContext ctx)
@@ -226,85 +208,11 @@ public class WireThrower : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Spawns a plug and launches it in the air towards the nearest object with the tag "Outlet",
-    /// setting it as the active plug.
-    /// Prioritizes outlets in override range!
-    /// Prepares for the possibility of the plug despawning or getting connected.
-    /// </summary>
-    void FirePlugAutoAim()
-    {
-        GameObject[] gos;
-        gos = GameObject.FindGameObjectsWithTag("Outlet");
-        GameObject closest = null;
-        float distance = Mathf.Infinity;
-        Vector3 position = transform.position;
-
-        bool closestIsOverride = false;
-        bool isFacingLeft = me.GetCurrentMove().Flipped();
-        bool currentIsInFront = false;
-
-        foreach (GameObject go in gos)
-        {
-            Vector3 diff = go.transform.position - position;
-            float curDistance = diff.sqrMagnitude;
-            if (!closestIsOverride)
-            {
-                if (curDistance < distance)
-                {
-                    closest = go;
-                    distance = curDistance;
-                }
-
-                if (go.GetComponent<Outlet>().grappleOverrideRange != null)
-                {
-                    foreach (GameObject overridenOutlet in outletsInOverrideRange)
-                    {
-                        if (go == overridenOutlet)
-                        {
-                            closest = go;
-                            distance = curDistance;
-
-                            closestIsOverride = true;
-                        }
-                    }
-                }
-            }
-            else if (closestIsOverride && curDistance < distance)
-            {
-                foreach (GameObject overridenOutlet in outletsInOverrideRange)
-                {
-                    if (go == overridenOutlet)
-                    {
-                        closest = go;
-                        distance = curDistance;
-                    }
-                }
-            }
-        }
-
-        Vector2 playerScreenPos = mainCamera.WorldToScreenPoint(transform.position);
-        Vector2 fireDir = playerScreenPos;
-
-        if (closest != null)
-        {
-
-            Debug.Log("FOUND");
-            reticle.transform.position = closest.transform.position;
-            //reticle.GetComponent<Renderer>().enabled = true;
-            Vector2 closestPos = mainCamera.WorldToScreenPoint(closest.transform.position);
-            fireDir = closestPos - playerScreenPos;
-        }
-        _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
-        PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
-        pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
-        pme.onTerminateRequest.AddListener(() => DestroyPlug());
-        pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
-    }
-
     private GameObject lastReticleLock;
     /// <summary>
-    /// Sets the lockOnOutlet to the nearest object tagged "Outlet".
+    /// Sets the lockOnOutlet to the nearest object tagged "Outlet"
+    /// Now prioritizes the direction the player is facing if "Direction Affects Priority" is enabled on the WireThrower component
+    /// Also prioritizes outlets within override collider range
     /// </summary>
     void ChangeOutletTarget()
     {
@@ -341,22 +249,28 @@ public class WireThrower : MonoBehaviour
             bool hasOutletsOnScreen = false;
 
             bool closestIsOverride = false;
+
             bool isFacingLeft = me.GetCurrentMove().Flipped();
             bool currentIsInFront = false;
 
             Vector3 position = transform.position;
 
-            if (!DirectionAffectsPriority)
+            if (!DirectionAffectsPriority) // If Direction Affects Priority is disabled, revert to old targeting system
             {
+                // For every oulet in the level
                 foreach (GameObject go in gos)
                 {
                     Vector3 diff = go.transform.position - position;
                     float curDistance = Vector2.Distance(this.transform.position, go.transform.position);
+
+                    // If the outlet is on screen
                     if (go.GetComponent<SpriteRenderer>().isVisible)
                     {
                         hasOutletsOnScreen = true;
+                        // If our currently closest outlet isn't within override range
                         if (!closestIsOverride)
                         {
+                            // If closer than current, target this one instead
                             if (curDistance < originalDistance)
                             {
                                 closest = go;
@@ -365,10 +279,13 @@ public class WireThrower : MonoBehaviour
                                 UpdateMeter(closest);
                             }
 
+                            // If the currently considered outlet has an override range
                             if (go.GetComponent<Outlet>().grappleOverrideRange != null)
                             {
+                                // Check if we are in override range
                                 foreach (GameObject overridenOutlet in outletsInOverrideRange)
                                 {
+                                    // If so, default to this one instead (even if it's further away)
                                     if (go == overridenOutlet)
                                     {
                                         closest = go;
@@ -376,15 +293,19 @@ public class WireThrower : MonoBehaviour
                                         originalDistance = curDistance;
                                         UpdateMeter(closest);
 
+                                        // Make a note that the closest is in override range
                                         closestIsOverride = true;
                                     }
                                 }
                             }
                         }
+                        // If our currently targeted outlet is in override range, and the one we're considering is closer
                         else if (closestIsOverride && curDistance < originalDistance)
                         {
+                            // Check if the new one is also in override range
                             foreach (GameObject overridenOutlet in outletsInOverrideRange)
                             {
+                                // If so, switch to this one
                                 if (go == overridenOutlet)
                                 {
                                     closest = go;
@@ -400,41 +321,54 @@ public class WireThrower : MonoBehaviour
             // Begin new Directional Targeting System
             else
             {
+                // Loop through all outlets in level
                 foreach (GameObject go in gos)
                 {
                     Vector3 diff = go.transform.position - position;
                     float curDistance = Vector2.Distance(this.transform.position, go.transform.position);
+
+                    // If the outlet is on screen
                     if (go.GetComponent<SpriteRenderer>().isVisible)
                     {
                         hasOutletsOnScreen = true;
+
+                        // Check to see if we are facing this outlet
                         bool isInFront = false;
                         float xdiff = go.transform.position.x - this.transform.position.x;
 
+                        // If the outlet is to the right and we're facing right
                         if (xdiff >= 0 && !isFacingLeft)
                         {
                             isInFront = true;
                         }
+                        // Or if the outlet is to the left and we're facing left
                         else if (xdiff <= 0 && isFacingLeft)
                         {
                             isInFront = true;
                         }
 
+                        // If our currently targeted outlet isn't in override range
                         if (!closestIsOverride)
                         {
+                            // If our currently targeted outlet is behind us...
                             if (!currentIsInFront)
                             {
+                                // ...and either the new one is in front and in range, or behind us and closer, set this new one as the target
                                 if ((isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f) || (!isInFront && curDistance < originalDistance))
                                 {
                                     closest = go;
                                     _lockOnOutlet = closest;
                                     originalDistance = curDistance;
                                     UpdateMeter(closest);
+
+                                    // If the new one is in front, make a note of that
                                     if (isInFront)
                                     {
                                         currentIsInFront = true;
                                     }
                                 }
                             }
+                            // If our currently targeted outlet is in front of us, then the new one has to also be in front of us and closer for us to switch to it
                             else
                             {
                                 if (isInFront && curDistance < originalDistance)
@@ -443,65 +377,73 @@ public class WireThrower : MonoBehaviour
                                     _lockOnOutlet = closest;
                                     originalDistance = curDistance;
                                     UpdateMeter(closest);
-                                    if (isInFront)
-                                    {
-                                        currentIsInFront = true;
-                                    }
                                 }
                             }
 
+                            // If the outlet we're considering has an override range
                             if (go.GetComponent<Outlet>().grappleOverrideRange != null)
                             {
+                                // Check to see if we're in override range
                                 foreach (GameObject overridenOutlet in outletsInOverrideRange)
                                 {
+                                    // If we are, switch to this one regardless of which way we're facing
                                     if (go == overridenOutlet)
                                     {
                                         closest = go;
                                         _lockOnOutlet = closest;
                                         originalDistance = curDistance;
                                         UpdateMeter(closest);
+
+                                        // If the new one is in front, make a note of that
                                         if (isInFront)
                                         {
                                             currentIsInFront = true;
                                         }
 
+                                        // Make a note that we're targeting an overridden outlet
                                         closestIsOverride = true;
                                     }
                                 }
                             }
                         }
+                        // If the currently targeted outlet is overridden and the one we're considering is closer
                         else if (closestIsOverride && curDistance < originalDistance)
                         {
+                            // Check if the new one is also overridden
                             foreach (GameObject overridenOutlet in outletsInOverrideRange)
                             {
+                                // If it is...
                                 if (go == overridenOutlet)
                                 {
+                                    // ...and the outlet we're targeting is behind us...
                                     if (!currentIsInFront)
                                     {
+                                        // ...and the new one is either in front of us and within range, or behind us and closer...
                                         if ((isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f) || (!isInFront && curDistance < originalDistance))
                                         {
+                                            // Switch to this one
                                             closest = go;
                                             _lockOnOutlet = closest;
                                             originalDistance = curDistance;
                                             UpdateMeter(closest);
+
+                                            // If the new one is in front, make a note of that
                                             if (isInFront)
                                             {
                                                 currentIsInFront = true;
                                             }
                                         }
                                     }
+                                    // If the outlet we're currently targeting is in front of us
                                     else
                                     {
+                                        // The new outlet must be overridden, in front of us, and closer to swap to it
                                         if (isInFront && curDistance < originalDistance)
                                         {
                                             closest = go;
                                             _lockOnOutlet = closest;
                                             originalDistance = curDistance;
                                             UpdateMeter(closest);
-                                            if (isInFront)
-                                            {
-                                                currentIsInFront = true;
-                                            }
                                         }
                                     }
                                 }
