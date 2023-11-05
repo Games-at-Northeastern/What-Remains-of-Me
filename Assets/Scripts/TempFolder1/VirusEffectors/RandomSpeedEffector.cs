@@ -4,9 +4,9 @@ namespace Levels.Objects.Platform
     /// Applies a movement speed 'glitch' effect to the platforms controlled by this object,
     /// dependent on the ratio of virus to clean energy in the controller (i.e. a higher virus percentage = more glitching).
     /// </summary>
-    public class RandomSpeedEffector : APlatformVirusEffector
+    public class RandomSpeedEffector : AMovingElementVirusEffector
     {
-        protected override void AffectPlatform(MovingElement platform) => platform.SetSpeedModifier((_currentVirusPercentage * 3) + 1);
+        protected override void AffectMovingElement(MovingElement platform) => platform.SetSpeedModifier((_currentVirusPercentage * 3) + 1);
     }
 
 }

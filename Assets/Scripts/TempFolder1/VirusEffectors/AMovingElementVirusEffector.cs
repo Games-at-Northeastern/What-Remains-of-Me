@@ -4,9 +4,10 @@ namespace Levels.Objects.Platform
     using UnityEngine.VFX;
 
     [RequireComponent(typeof(MovingElementController))]
-    public abstract class APlatformVirusEffector : MonoBehaviour
+    public abstract class AMovingElementVirusEffector : MonoBehaviour
     {
-        [SerializeField] private MovingElementController _platformController;
+        [SerializeField, Tooltip("Auto-assigned to the MovingElementController component on this gameobject if null")]
+        private MovingElementController _elementController;
 
         [Space(15), Header("Visuals")]
 
@@ -22,16 +23,16 @@ namespace Levels.Objects.Platform
 
         private void Start()
         {
-            if (_platformController == null)
+            if (_elementController == null)
             {
-                _platformController = GetComponent<MovingElementController>();
+                _elementController = GetComponent<MovingElementController>();
             }
 
-            _platformController.OnVirusChange.AddListener(UpdateVirusPercentageAndApply);
+            _elementController.OnVirusChange.AddListener(UpdateVirusPercentageAndApply);
         }
 
         /// <summary>
-        /// Updates the platform and triggers the effector if the virus percentage is over the doAt amount.
+        /// Updates the moving element and triggers the effector if the virus percentage is over the doAt amount.
         /// </summary>
         /// <param name="virusPercentage"></param>
         private void UpdateVirusPercentageAndApply(float virusPercentage)
@@ -40,14 +41,15 @@ namespace Levels.Objects.Platform
 
             UpdateVirusParticles(_currentVirusPercentage);
 
-            if (_currentVirusPercentage > _doVirusEffectAt)
+            if (ShouldDoEffect(virusPercentage))
             {
-                _platformController.ApplyToAll(AffectPlatform);
+                _currentVirusPercentage = virusPercentage;
+                _elementController.ApplyToAll(AffectMovingElement);
             }
         }
 
         /// <summary>
-        /// Updates the platform's particle system depending on the amount of virus.
+        /// Updates the moving element's particle system depending on the amount of virus.
         /// </summary>
         /// <param name="virusPercentage"></param>
         private void UpdateVirusParticles(float virusPercentage)
@@ -59,9 +61,16 @@ namespace Levels.Objects.Platform
         }
 
         /// <summary>
-        /// Affects the given platform.
+        /// Affects the given moving element.
         /// </summary>
-        /// <param name="platform"></param>
-        protected abstract void AffectPlatform(MovingElement platform);
+        /// <param name="element"></param>
+        protected abstract void AffectMovingElement(MovingElement element);
+
+        /// <summary>
+        /// Given a new percentage of virus (invoked every time it changes), should this effector be activated?
+        /// </summary>
+        /// <param name="newVirusPercentage"></param>
+        /// <returns></returns>
+        protected virtual bool ShouldDoEffect(float newVirusPercentage) => newVirusPercentage >= _doVirusEffectAt;
     }
 }

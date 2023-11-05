@@ -65,6 +65,11 @@ public class MovingElement : MonoBehaviour
         }
     }
 
+    // TODO There are a lot of leftover debug logs bc i think there's still a bug here. It just kinda went away
+    // last time so I don't know if it's fixed or just hiding. Essentially, the moving element would skip a point
+    // sometimes when affected by a HecticMovementEffector. I let atlas swing from a super-fast, rapidly-changing moving
+    // outlet for like 3 minutes and saw nothing, so im assuming the bug just vanished. Definitely wrong, but whatever.
+
     /// <summary>
     /// Sets up an element to start at the initial point going to the next.
     /// </summary>
@@ -83,7 +88,7 @@ public class MovingElement : MonoBehaviour
                                                                                        //
 
         _moveDirection = GetDirectionToPoint(_destinationIndex);
-        _previousDistance = int.MaxValue; // if not maxed out, the first position might be skipped on lower-end hardware.
+        _previousDistance = float.MaxValue; // if not maxed out, the first position might be skipped on lower-end hardware.
     }
 
     private void FixedUpdate()
@@ -91,6 +96,7 @@ public class MovingElement : MonoBehaviour
         if (_shouldMove) // if actionable...
         {
             float dist = GetDistanceToPoint(_destinationIndex);
+            //Debug.Log((dist > _previousDistance ? "Greater! " : "") + $"Distance: {dist}, Previous Distance: {_previousDistance}");
 
             // both clauses are needed here. The first catches *just before* we hit the point, and the second
             // catches *just after* we pass the point, in case a fixed-update loop doesn't manage to catch the first in time.
@@ -98,15 +104,8 @@ public class MovingElement : MonoBehaviour
             // enough, the distance might never be smaller than it.
             if (dist <= _locationAccuracy || dist > _previousDistance) // if we are close enough to point OR if we've passed the target point...
             {
-                // go to next
-                // even with (what i think is) logically sound index-logic, draining virus/energy and re-adding it sometimes
-                // has a chance to OoB. So, I'm clamping. Ah, well.
-                int nextDest = Mathf.Clamp(GetNextPointIndex(_destinationIndex), 0, _runtimePoints.Length - 1);
-
-                // get the direction to the next point
-                _moveDirection = GetDirectionToPoint(nextDest);
-
-                _destinationIndex = nextDest; // nextDest can be removed, but this makes it more readable.
+                //Debug.Log("Fired for the following reason: " + (dist > _previousDistance ? $"distance ({dist}) is greater than previous ({_previousDistance})" : "within accuracy"));
+                UpdateDestinationAndDirection();
             }
 
             if (!_completed) // if the track isn't already completed...
@@ -133,6 +132,27 @@ public class MovingElement : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
         }
+    }
+
+    /// <summary>
+    /// Update the path of the moving element by changing the direction and destination index.
+    /// </summary>
+    private void UpdateDestinationAndDirection()
+    {
+        // this needs to be maximized bc if it isn't, you might skip a point when manually invoking this method.
+        _previousDistance = float.MaxValue;
+
+        // go to next
+        // even with (what i think is) logically sound index-logic, draining virus/energy and re-adding it sometimes
+        // has a chance to OoB. So, I'm clamping. Ah, well.
+        int nextDest = Mathf.Clamp(GetNextPointIndex(_destinationIndex), 0, _runtimePoints.Length - 1);
+
+        // get the direction to the next point
+        _moveDirection = GetDirectionToPoint(nextDest);
+
+        //Debug.Log("Moving to the " + (_isMovingRight ? "right" : "left") + $" from {_destinationIndex} to {nextDest}");
+
+        _destinationIndex = nextDest; // nextDest can be removed, but this makes it more readable.
     }
 
     /// <summary>
@@ -177,6 +197,13 @@ public class MovingElement : MonoBehaviour
         _shouldMove = false;
         rb.velocity = Vector2.zero;
     }
+
+    // TODO: These setters (excluding setTrack and setDir) are remnants of old code. For future developers, find a way
+    // to avoid having to make new setters every time you want to add new behavior to the platform via
+    // a virus effector. Also, get rid of the speed modifiers and just make one for modifying a platform's
+    // speed directly.
+    //
+    // Cut out the middleman, please. He makes me sad.
 
     /// <summary>
     /// Sets the platform's random speed modifier to the given modifier, capped out by the platform's max speed modifier.
@@ -243,4 +270,36 @@ public class MovingElement : MonoBehaviour
     /// </summary>
     /// <param name="track"></param>
     public void SetPermanentTrack(Transform[] track) =>_points = track;
+
+    /// <summary>
+    /// Sets the direction of movement of the element.
+    /// </summary>
+    /// <param name="isMovingRight"></param>
+    public void SetDir(bool isMovingRight)
+    {
+        if (_isMovingRight == isMovingRight)
+        {
+            return;
+        }
+
+        _isMovingRight = isMovingRight;
+
+        UpdateDestinationAndDirection(); // we need to go in the opposite direction, so force an update
+    }
+
+    /// <summary>
+    /// Gets the direction of movement of the element.
+    /// </summary>
+    /// <returns></returns>
+    public bool GetDir() => _isMovingRight;
+
+    /// <summary>
+    /// Flips the direction of movement.
+    /// </summary>
+    public void ToggleDir()
+    {
+        //Debug.Log("Toggled direction");
+        SetDir(!_isMovingRight);
+    }
+
 }
