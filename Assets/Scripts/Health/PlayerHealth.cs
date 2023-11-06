@@ -100,7 +100,7 @@ public class PlayerHealth : MonoBehaviour
     private void VirusWarning()
     {
         Debug.Log("Virus Overload Warning");
-        warning.GetComponent<WarningAnimation>().StartAnimation();
+        //warning.GetComponent<WarningAnimation>().StartAnimation();
     }
 
 
@@ -110,7 +110,7 @@ public class PlayerHealth : MonoBehaviour
     private void EnergyDepletionWarning()
     {
         Debug.Log("Energy Depletion Warning");
-        warning.GetComponent<WarningAnimation>().StartAnimation();
+        //warning.GetComponent<WarningAnimation>().StartAnimation();
     }
 
 
