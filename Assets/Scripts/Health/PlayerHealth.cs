@@ -46,7 +46,6 @@ public class PlayerHealth : MonoBehaviour
         {
             EnergyDepletedDeath();
         }
-        /*
         else if (playerInfo.virus >= playerInfo.maxVirus * 0.75)
         {
             VirusWarning();
@@ -59,7 +58,6 @@ public class PlayerHealth : MonoBehaviour
         {
             warning.GetComponent<WarningAnimation>().StopAnimation();
         }
-        */
     }
 
     // TODO : Should there be some kind of scene resetting that is triggered by this? I.e. platforms, enemies, etc.?
@@ -99,7 +97,7 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     private void VirusWarning()
     {
-        Debug.Log("Virus Overload Warning");
+       // Debug.Log("Virus Overload Warning");
         warning.GetComponent<WarningAnimation>().StartAnimation();
     }
 
@@ -109,7 +107,7 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     private void EnergyDepletionWarning()
     {
-        Debug.Log("Energy Depletion Warning");
+       // Debug.Log("Energy Depletion Warning");
         warning.GetComponent<WarningAnimation>().StartAnimation();
     }
 

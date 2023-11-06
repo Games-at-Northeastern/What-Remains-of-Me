@@ -17,7 +17,7 @@ public class WarningAnimation : MonoBehaviour
     void Start()
     {
         _runAnimation = false;
-        time = -0.5f;
+        time = 0.0f;
     }
 
     /// <summary>
@@ -27,17 +27,18 @@ public class WarningAnimation : MonoBehaviour
     {
         if (_runAnimation)
         {
-            if (time <= 0.01)   // Since time is set to a negative number in Start and StopAnimation, 
+            if (time <= 0.1)   // Since time is set to a negative number in Start and StopAnimation, 
                                 // this line is always true on first update when _runAnimation is true
             {
                 warning.GetComponent<UnityEngine.UI.Image>().enabled = !warning.GetComponent<UnityEngine.UI.Image>().isActiveAndEnabled;
-                time = 0.02f;
+                time = 0.11f;
             }
-            else if (time >= 1.0)
+            else if (time >= 1.1)
             {
                 time = 0.0f;
             }
             time += Time.deltaTime;
+           // Debug.Log(time);
         }
     }
 
@@ -56,6 +57,6 @@ public class WarningAnimation : MonoBehaviour
     {
         _runAnimation = false;
         warning.GetComponent<UnityEngine.UI.Image>().enabled = false;
-        time = -0.5f;
+        time = 0.0f;
     }
 }
