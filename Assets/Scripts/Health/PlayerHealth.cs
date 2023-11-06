@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private GameObject warning;
+    //[SerializeField] private GameObject warning;
     public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
@@ -51,15 +51,15 @@ public class PlayerHealth : MonoBehaviour
         {
             VirusWarning();
         }
-        else if (playerInfo.battery <= playerInfo.maxBattery * 0.25)
+        else if (playerInfo.battery <= 1f)
         {
             EnergyDepletionWarning();
         }
         else
         {
             warning.GetComponent<WarningAnimation>().StopAnimation();
-        }
-        */
+        }*/
+        
     }
 
     // TODO : Should there be some kind of scene resetting that is triggered by this? I.e. platforms, enemies, etc.?
