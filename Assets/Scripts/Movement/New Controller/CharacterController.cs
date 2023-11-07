@@ -18,6 +18,7 @@ namespace CharacterController
         /// the current velocity of the character according to the attached rigidBody2d
         /// </summary>
         public Vector2 Velocity { get; }
+        public Vector3 position { get; }
         /// <summary>
         /// is the 
         /// </summary>
