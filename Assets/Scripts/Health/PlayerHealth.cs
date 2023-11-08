@@ -58,7 +58,8 @@ public class PlayerHealth : MonoBehaviour
         else
         {
             warning.GetComponent<WarningAnimation>().StopAnimation();
-        }*/
+        }
+        */
         
     }
 
@@ -110,7 +111,7 @@ public class PlayerHealth : MonoBehaviour
     private void EnergyDepletionWarning()
     {
         Debug.Log("Energy Depletion Warning");
-        //warning.GetComponent<WarningAnimation>().StartAnimation();
+       // warning.GetComponent<WarningAnimation>().StartAnimation();
     }
 
 

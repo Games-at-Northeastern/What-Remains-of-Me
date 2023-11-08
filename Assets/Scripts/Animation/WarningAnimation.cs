@@ -10,6 +10,7 @@ public class WarningAnimation : MonoBehaviour
     private bool _runAnimation;
     [SerializeField] private GameObject warning;
     private float time;
+    private Animator anim;
 
     /// <summary>
     /// Initializes animation to not run, and initializes time
@@ -18,6 +19,7 @@ public class WarningAnimation : MonoBehaviour
     {
         _runAnimation = false;
         time = -1.0f;
+        anim = warning.GetComponent<Animator>();
     }
 
     /// <summary>
@@ -25,7 +27,7 @@ public class WarningAnimation : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (_runAnimation)
+        if (anim == null && _runAnimation)
         {
             if (time <= 0.1)   // Since time is set to a negative number in Start and StopAnimation, 
                                 // this line is always true on first update when _runAnimation is true
@@ -47,6 +49,11 @@ public class WarningAnimation : MonoBehaviour
     public void StartAnimation()
     {
         _runAnimation = true;
+        if (anim != null)
+        {
+            anim.enabled = true;
+            warning.GetComponent<UnityEngine.UI.Image>().enabled = true;
+        }
     }
 
     /// <summary>
@@ -57,5 +64,10 @@ public class WarningAnimation : MonoBehaviour
         _runAnimation = false;
         warning.GetComponent<UnityEngine.UI.Image>().enabled = false;
         time = -1.0f;
+        if (anim != null)
+        {
+            anim.enabled = false;
+            warning.GetComponent<UnityEngine.UI.Image>().enabled = false;
+        }
     }
 }
