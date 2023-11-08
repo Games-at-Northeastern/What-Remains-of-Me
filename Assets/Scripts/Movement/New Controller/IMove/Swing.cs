@@ -25,6 +25,20 @@ namespace CharacterController
 
         // Initializes a wire control move, deciding what angular vel to start with, setting the
         // wire's max distance, and initializing events.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="WT">The wireThrower</param>
+        /// <param name="character"> the character swing from a wire</param>
+        /// <param name="fallGravity"> the gravity exerted on the character while swinging</param>
+        /// <param name="WireSwingNaturalAccelMultiplier"> A natural Acceleration force on the swing(IAssume if there is no input from the player)</param>
+        /// <param name="WireSwingMaxAngularVelocity"> max angular velocity</param>
+        /// <param name="WireSwingDecayMultiplier"> deceleration on the wire</param>
+        /// <param name="WireSwingBounceDecayMultiplier"> energy loss upon bouncing on a wall</param>
+        /// <param name="WireSwingReferenceWireLength"></param>
+        /// <param name="WireSwingManualAccelMultiplier">I assume the acceleration for the player kicking back and forth</param>
+        /// <param name="wireGeneralMaxDistance"></param>
+        /// <param name="MI"></param>
         public Swing(WireThrower WT, ICharacterController character, float fallGravity,float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float WireSwingReferenceWireLength, float WireSwingManualAccelMultiplier, float wireGeneralMaxDistance, MovementInfo MI)
         {
             this.WireSwingManualAccelMultiplier = WireSwingManualAccelMultiplier;
