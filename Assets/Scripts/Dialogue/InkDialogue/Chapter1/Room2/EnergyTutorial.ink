@@ -1,4 +1,4 @@
-﻿INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
+INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 ->main
 
 === main ===
@@ -7,11 +7,15 @@
 
 
 ===firstInteraction===
-MESSAGE:: You’ll need to keep your battery charged at all times. #portrait:isp #speaker:I.S.P.
+MESSAGE:: All the facilities here run on special energy. #portrait:isp #speaker:I.S.P.
 
-MESSAGE:: You can latch onto these stations with your cord and absorb their charge with <Q>. 
+MESSAGE:: Traversal of the premises without use of these facilities will prove rather difficult, if not categorically impossible.
 
-MESSAGE:: You can also drain your charge into them to power them with <E>.  
+MESSAGE:: You possess the functions necessary to charge and drain these facilities. Latch onto the outlets with the wire.
+
+MESSAGE:: Press <Q> to drain them of energy and to charge yourself.
+
+MESSAGE:: Press <E> to use your own energy to charge the outlets. The associated facilities will activate shortly after.  
 
 ->DONE
 
