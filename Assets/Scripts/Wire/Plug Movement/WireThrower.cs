@@ -1,13 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Ink.Parsed;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 /// <summary>
 /// The main script for handling wire controls. Spawns/Fires, despawns, and
