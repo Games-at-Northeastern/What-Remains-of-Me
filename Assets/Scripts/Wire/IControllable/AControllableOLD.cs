@@ -9,7 +9,7 @@ using UnityEngine.Events;
 /// such as a general implementation of the GainEnergy() and LoseEnergy()
 /// methods, and a representation of energy.
 /// </summary>
-public abstract class AControllable : MonoBehaviour, IControllable
+public abstract class AControllableOLD : MonoBehaviour, IControllable
 {
     [SerializeField] protected float cleanEnergy;
     [SerializeField] protected float maxCharge;
@@ -51,27 +51,24 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void GainEnergy(float amount)
     {
-        if (amount <= 0 || totalEnergy >= maxCharge || playerInfo.battery <= 1f)
+        if (amount <= 0 || (cleanEnergy + virus) >= maxCharge || playerInfo.batteryPercentage.Value <= 0)
         {
             return;
         }
 
-        amount = Mathf.Min(amount, maxCharge - totalEnergy);
-        amount = Mathf.Min(amount, playerInfo.battery - 1f);
+        // Can only accept what the player can offer, don't give energy if it would kill the player
+        if (amount < playerInfo.battery && playerInfo.battery >= 1f)
+        {
+            //amount = Mathf.Min(amount, playerInfo.battery);
 
-        float virusProportion = playerInfo.virus / playerInfo.battery;
+            playerInfo.battery -= amount;
 
-        playerInfo.battery -= amount;
-        playerInfo.virus -= amount * virusProportion;
+            cleanEnergy = Mathf.Clamp(cleanEnergy + amount, 0, maxCharge);
+            EnergyChange(totalEnergy);
 
-        cleanEnergy += amount * (1f - virusProportion);
-        virus += amount * virusProportion;
-
-        VirusChange(virus / totalEnergy);
-        EnergyChange(totalEnergy);
-
-        //Debug.Log("battery: " + cleanEnergy + " clean energy units, " + virus + " virus units.");
-        //Debug.Log("player: " + (playerInfo.battery - playerInfo.virus) + " clean energy units, " + playerInfo.virus + " virus units");
+            //Debug.Log("battery: " + cleanEnergy + " clean energy units, " + virus + " virus units.");
+            //Debug.Log("player: " + (playerInfo.battery - playerInfo.virus) + " clean energy units, " + playerInfo.virus + " virus units");
+        }
     }
 
     /// <summary>
@@ -80,7 +77,26 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void GainVirus(float amount)
     {
-        // in theory this function should be removed, as under this model, it no longer serves a purpose
+        if (amount <= 0 || (cleanEnergy + virus) >= maxCharge || playerInfo.virusPercentage.Value <= 0)
+        {
+            return;
+        }
+
+        // Can only accept what the player can offer, don't give energy if it would kill the player
+        if (amount < playerInfo.battery && amount < playerInfo.virus && playerInfo.battery >= 1f && playerInfo.virus >= 0f)
+        {
+            amount = Mathf.Min(amount, playerInfo.virus);
+
+            playerInfo.virus -= amount;
+            playerInfo.battery -= amount;
+
+            virus = Mathf.Clamp(virus + amount, 0, maxCharge);
+            VirusChange(virus / totalEnergy);
+            EnergyChange(totalEnergy);
+
+            Debug.Log("battery: " + cleanEnergy + " clean energy units, " + virus + " virus units.");
+            Debug.Log("player: " + (playerInfo.battery - playerInfo.virus) + " clean energy units, " + playerInfo.virus + " virus units");
+        }
     }
 
     /// <summary>
@@ -89,23 +105,18 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void LoseEnergy(float amount)
     {
-        if (amount <= 0 || totalEnergy <= 0 || playerInfo.battery >= playerInfo.maxBattery)
+        if (amount <= 0 || cleanEnergy <= 0 || playerInfo.batteryPercentage.Value >= 1f)
         {
             return;
         }
 
-        amount = Mathf.Min(amount, totalEnergy);
-        amount = Mathf.Min(amount, playerInfo.maxBattery - playerInfo.battery);
-
-        float virusProportion = virus / totalEnergy;
+        // Can only provide what the player can take
+        float remainingEmptyBatteryAmount = playerInfo.maxBattery - playerInfo.battery;
+        amount = Mathf.Min(remainingEmptyBatteryAmount, amount);
 
         playerInfo.battery += amount;
-        playerInfo.virus += amount * virusProportion;
 
-        cleanEnergy -= amount * (1f - virusProportion);
-        virus -= amount * virusProportion;
-
-        VirusChange(virus / totalEnergy);
+        cleanEnergy = Mathf.Clamp(cleanEnergy - amount, 0, maxCharge);
         EnergyChange(totalEnergy);
 
         //Debug.Log("battery: " + cleanEnergy + " clean energy units, " + virus + " virus units.");
@@ -118,7 +129,25 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public void LoseVirus(float amount)
     {
-        // in theory this function should be removed, as under this model, it no longer serves a purpose
+        if (amount <= 0 || virus <= 0 || playerInfo.virusPercentage.Value >= 1f)
+        {
+            return;
+        }
+
+        // Can only provide what the player can take
+        float remainingEmptyVirusAmount = playerInfo.maxVirus - playerInfo.virus;
+        amount = Mathf.Min(remainingEmptyVirusAmount, amount);
+
+        playerInfo.virus += amount;
+        playerInfo.battery += amount;
+
+
+        virus = Mathf.Clamp(virus - amount, 0, maxCharge);
+        VirusChange(virus / totalEnergy);
+        EnergyChange(totalEnergy);
+
+        Debug.Log("battery: " + cleanEnergy + " clean energy units, " + virus + " virus units.");
+        Debug.Log("player: " + (playerInfo.battery - playerInfo.virus) + " clean energy units, " + playerInfo.virus + " virus units");
     }
 
     /// <summary>
@@ -126,7 +155,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     public float GetPercentFull()
     {
-        return totalEnergy / maxCharge;
+        return (cleanEnergy + virus) / maxCharge;
     }
 
     /// <summary>
@@ -135,7 +164,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     bool canLoseEnergy(float amount)
     {
-        return totalEnergy >= amount;
+        return cleanEnergy >= amount;
     }
 
 
@@ -145,15 +174,6 @@ public abstract class AControllable : MonoBehaviour, IControllable
     /// </summary>
     bool canGainEnergy(float amount)
     {
-        return totalEnergy + amount <= maxCharge;
+        return cleanEnergy <= maxCharge - amount;
     }
-
-    //Debug Control
-    /*
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            Debug.Log("player virus percentage: " + (playerInfo.virus / playerInfo.battery));
-        }
-    }
-    */
 }
