@@ -2026,7 +2026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 5.4
+      value: 7.2
       objectReference: {fileID: 0}
     - target: {fileID: 5507190965753065182, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_CameraDistance
@@ -23408,6 +23408,7 @@ MonoBehaviour:
   taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
   controlled: {fileID: 4418657956602877422}
   energyTransferSpeed: 20
+  grappleOverrideRange: {fileID: 0}
 --- !u!1 &44260479351536885
 GameObject:
   m_ObjectHideFlags: 0
@@ -24585,6 +24586,7 @@ MonoBehaviour:
   taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
   controlled: {fileID: 8352849787645214606}
   energyTransferSpeed: 20
+  grappleOverrideRange: {fileID: 0}
 --- !u!212 &3467120087097666254
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -25347,14 +25349,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84d08918ec1fb4429ea27ce9824b047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 1206139866}
   _doVisualEffect: 1
   _doVirusEffectAt: 0.085
   _virusPath:
   - {fileID: 730308883}
   - {fileID: 1116351868}
-  _revertPathWhenBelow: 0.45
   _overrideLoopType: 2
 --- !u!114 &4418657956602877422
 MonoBehaviour:

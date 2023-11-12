@@ -2073,7 +2073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f63784003ac9e459f036b84ad6403f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 205528739}
   _doVisualEffect: 1
   _doVirusEffectAt: 0
@@ -5107,7 +5107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f63784003ac9e459f036b84ad6403f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 552175252}
   _doVisualEffect: 1
   _doVirusEffectAt: 0.2
@@ -5123,14 +5123,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84d08918ec1fb4429ea27ce9824b047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 552175252}
   _doVisualEffect: 1
   _doVirusEffectAt: 0.5
   _virusPath:
   - {fileID: 2126843975}
   - {fileID: 1954920137}
-  _revertPathWhenBelow: 0.45
   _overrideLoopType: 0
 --- !u!1001 &553482191
 PrefabInstance:
@@ -8090,13 +8089,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84d08918ec1fb4429ea27ce9824b047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 1422093442}
   _doVisualEffect: 1
   _doVirusEffectAt: 0.1
   _virusPath:
   - {fileID: 1531613101}
-  _revertPathWhenBelow: 0.45
   _overrideLoopType: 3
 --- !u!1 &920606884
 GameObject:
@@ -8674,7 +8672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f63784003ac9e459f036b84ad6403f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 953002904}
   _doVisualEffect: 1
   _doVirusEffectAt: 0
@@ -8695,13 +8693,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84d08918ec1fb4429ea27ce9824b047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 953002904}
   _doVisualEffect: 1
   _doVirusEffectAt: 0.6
   _virusPath:
   - {fileID: 119014820}
-  _revertPathWhenBelow: 0.45
   _overrideLoopType: 0
 --- !u!1 &953532744
 GameObject:
@@ -21879,6 +21876,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6902242501039288396, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7646161081565351625, guid: 431e5ea6c54a74e7eac5fc9e41145146, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -28495,7 +28496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f63784003ac9e459f036b84ad6403f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 2146521393}
   _doVisualEffect: 1
   _doVirusEffectAt: 0
@@ -28511,14 +28512,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84d08918ec1fb4429ea27ce9824b047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 2146521393}
   _doVisualEffect: 1
   _doVirusEffectAt: 0.5
   _virusPath:
   - {fileID: 533289506}
   - {fileID: 13137524}
-  _revertPathWhenBelow: 0.45
   _overrideLoopType: 0
 --- !u!1001 &115808361627630104
 PrefabInstance:
@@ -29858,7 +29858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 3.825
+      value: 4.655
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
@@ -52175,7 +52175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f63784003ac9e459f036b84ad6403f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 1902508918367716344}
   _doVisualEffect: 1
   _doVirusEffectAt: 0
@@ -52191,13 +52191,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84d08918ec1fb4429ea27ce9824b047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _platformController: {fileID: 0}
+  _elementController: {fileID: 0}
   _virusEffect: {fileID: 1902508918367716344}
   _doVisualEffect: 1
   _doVirusEffectAt: 0.1
   _virusPath:
   - {fileID: 6820331151417387110}
-  _revertPathWhenBelow: 0.45
   _overrideLoopType: 0
 --- !u!4 &6820331151398233840
 Transform:

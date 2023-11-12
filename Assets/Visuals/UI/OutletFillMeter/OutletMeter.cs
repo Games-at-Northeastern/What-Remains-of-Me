@@ -87,7 +87,7 @@ public class OutletMeter : MonoBehaviour
         powered = true;
         if (coroutineRunning || plugConnected)
         { return; }
-        Debug.Log("startVisuals");
+        // Debug.Log("startVisuals");
         StartCoroutine(UpdateVisuals());
     }
 
@@ -96,7 +96,7 @@ public class OutletMeter : MonoBehaviour
     {
         if (plugConnected)
         { return; }
-        Debug.Log("endVisuals");
+        // Debug.Log("endVisuals");
         powered = false;
     }
 
@@ -117,7 +117,7 @@ public class OutletMeter : MonoBehaviour
     // Coroutine for updating the meter visuals
     private IEnumerator UpdateVisuals()
     {
-        Debug.Log("Starting outletmeter coroutine");
+        // Debug.Log("Starting outletmeter coroutine");
         coroutineRunning = true;
         while (true)
         {
@@ -160,7 +160,7 @@ public class OutletMeter : MonoBehaviour
                 currentVirus = 0;
                 currentClean = 0;
                 coroutineRunning = false;
-                Debug.Log("Stopping outletmeter coroutine");
+                // Debug.Log("Stopping outletmeter coroutine");
                 StopAllCoroutines();
             }
 
