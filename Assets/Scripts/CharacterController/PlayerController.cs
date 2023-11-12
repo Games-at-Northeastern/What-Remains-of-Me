@@ -9,6 +9,46 @@ namespace PlayerControllerRefresh
 
 
     {
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            Start();
+        }
+#endif
+
+
+        #region External
+        private Vector2 _speed;
+
+        public Vector2 Velocity => rb.velocity;
+
+        public Vector3 position => this.transform.position;
+
+        public bool Grounded => this.TouchingGround();
+
+        public Vector2 Direction => this.transform.forward;
+        public AnimationType GetAnimationState() => AnimationType.IDLE;
+        public Vector2 SetSpeed(Vector2 newSpeed) => _speed = newSpeed;
+
+        Facing ICharacterController.LeftOrRight => LeftOrRight();
+
+        public Vector2 Speed => _speed;
+
+        private Facing LeftOrRight()
+        {
+            if(playerInputs.MoveInput.x < 0)
+            {
+                return Facing.left;
+            }
+            return Facing.right;
+        }
+
+        private bool inputsLocked = false;
+        public void LockInputs() => inputsLocked = true;
+        public void UnlockInputs() => inputsLocked = false;
+
+
+
         #region Collision
         public bool TouchingLeftWall()
         {
@@ -35,23 +75,10 @@ namespace PlayerControllerRefresh
         }
         #endregion
 
-
-        public Vector2 Speed { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
-        public Vector2 Velocity => throw new System.NotImplementedException();
-
-        public Vector3 position => throw new System.NotImplementedException();
-
-        public bool Grounded => throw new System.NotImplementedException();
-
-        public Vector2 Direction => throw new System.NotImplementedException();
-
-        public Facing LeftOrRight => throw new System.NotImplementedException();
-
-        public void LockInputs() => throw new System.NotImplementedException();
-        public void UnlockInputs() => throw new System.NotImplementedException();
+        #endregion
 
         public PlayerSettings settings;
+        [HideInInspector] Rigidbody2D rb;
         [HideInInspector] public CapsuleCollider2D col;
         public LayerMask playerLayer;
         GroundMovement groundMovement;
@@ -64,25 +91,25 @@ namespace PlayerControllerRefresh
         WallSlide wallSlide;
 
         PlayerInputHandler playerInputs;
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            Start();
-        }
-#endif
+
 
         // Start is called before the first frame update
         void Start()
         {
             col = GetComponent<CapsuleCollider2D>();
             groundMovement = new GroundMovement(settings.maxRunSpeed, settings.groundedAcceleration, settings.groundedDeceleration, this);
+            playerInputs = GetComponent<PlayerInputHandler>();
+            rb = GetComponent<Rigidbody2D>();
         }
 
         // Update is called once per frame
         void Update()
         {
+            _speed = rb.velocity;
             groundMovement.UpdateDirection(playerInputs.MoveInput.x);
             groundMovement.ContinueMove();
+            Debug.Log("PCSPEED" + _speed);
+            rb.velocity = Speed;
         }
         [Header("CollisionDetectors")]
         [Tooltip("X is the width Y is the height")]
@@ -110,5 +137,7 @@ namespace PlayerControllerRefresh
             GizmosPlus.BoxCast(origin + new Vector2(0, ceilingOffset), new Vector2(ceilingBounds.x, 0.01f), 0, Vector2.up, ceilingBounds.y - 0.01f, ~playerLayer);
             GizmosPlus.BoxCast(origin + new Vector2(0, -groundOffset), new Vector2(groundBounds.x, 0.01f), 0, Vector2.down, groundBounds.y - 0.01f, ~playerLayer);
         }
+
+
     }
 }

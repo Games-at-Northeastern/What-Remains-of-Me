@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CharacterController;
 
 /// <summary>
 /// Manipulates the player visually based on the current move being executed.
@@ -9,9 +10,12 @@ using UnityEngine;
 /// </summary>
 public class SpriteFlipper : MonoBehaviour
 {
-    [SerializeField] private MovementExecuter me;
+    [SerializeField] private ICharacterController cc;
     //[SerializeField] SpriteRenderer[] spriteRenderers;
-
+    private void Start()
+    {
+        cc = GetComponentInParent<ICharacterController>();
+    }
     [SerializeField] private Transform playerTransform;
 
     private void Update()
@@ -36,18 +40,14 @@ public class SpriteFlipper : MonoBehaviour
     /// </summary>
     void HandleFlipping()
     {
-        bool flipped = me.GetCurrentMove().Flipped();
-        if (flipped)
+        switch (cc.LeftOrRight)
         {
-            playerTransform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+            case Facing.left:
+                playerTransform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+                break;
+            case Facing.right:
+                playerTransform.rotation = new Quaternion(0f, 0f, 0f, 0f);
+                break;
         }
-        else
-        {
-            playerTransform.rotation = new Quaternion(0f, 0f, 0f, 0f);
-        }
-        /*        foreach(SpriteRenderer sr in spriteRenderers)
-                {
-                    sr.flipX = flipped;
-                }*/
     }
 }

@@ -85,7 +85,7 @@ namespace CharacterController
             float angle = Mathf.Atan2(origPos.y - connectedOutletPos.y, origPos.x - connectedOutletPos.x);
             float radius = Vector2.Distance(origPos, connectedOutletPos);
             // Check for bouncing against wall/ceiling
-            if (MI.LeftWallDetector.isColliding() || MI.RightWallDetector.isColliding() || MI.CeilingDetector.isColliding())
+            if (character.TouchingLeftWall() || character.TouchingRightWall() || character.TouchingCeiling())
             {
                 if (!inBounceMode)
                 {
@@ -137,13 +137,13 @@ namespace CharacterController
             radius = Mathf.Lerp(radius, initRadius, Time.deltaTime * 10f);
 
             Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
-            character.Speed = (newPos - origPos) / Time.deltaTime;
+            character.SetSpeed((newPos - origPos) / Time.deltaTime);
             // Add some free-fall to the mix if above the lowest point possible right now
             //if (initRadius - radius > 0.01f || Mathf.Sin(angle) > 0)
             if (Mathf.Sin(angle) > 0)
             {
                 gravityVel -= fallGravity * Time.deltaTime;
-                character.Speed += new Vector2(0, gravityVel);
+                character.SetSpeed(character.Speed + new Vector2(0, gravityVel));
             }
             else
             {

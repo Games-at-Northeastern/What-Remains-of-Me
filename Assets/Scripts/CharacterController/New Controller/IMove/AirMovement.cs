@@ -10,15 +10,15 @@ namespace CharacterController
         ICharacterController character;
         public AirMovement(Vector2 direction, float maxAirSpeed, float terminalVelocity, float airAcceleration, float fallGravity, ICharacterController character)
         {
-            if(maxAirSpeed < 0)
+            if (maxAirSpeed < 0)
             {
                 Debug.LogWarning("MaxAirSpeed should be positive");
             }
-            if(airAcceleration < 0)
+            if (airAcceleration < 0)
             {
                 Debug.LogWarning("airAcceleration should be positive");
             }
-            if(Mathf.Sign(terminalVelocity) == Mathf.Sign(fallGravity))
+            if (Mathf.Sign(terminalVelocity) == Mathf.Sign(fallGravity))
             {
                 Debug.LogWarning("you likely want terminal Velocity and fall gravity to share the same sign");
             }
@@ -39,7 +39,7 @@ namespace CharacterController
             Vector2 speed = character.Speed;
             speed.x = Kinematics.VelocityTarget(speed.x, maxAirSpeed * direction.x, airAcceleration, Time.fixedDeltaTime);
             speed.y = Kinematics.VelocityTarget(speed.y, terminalVelocity, fallGravity, Time.fixedDeltaTime);
-            character.Speed = speed;
+            character.SetSpeed(speed);
         }
         public AnimationType GetAnimationState() => AnimationType.JUMP_FALLING;
         public bool IsMoveComplete() => character.Grounded;

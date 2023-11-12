@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
-
+using CharacterController;
 /// <summary>
 /// The main script for handling wire controls. Spawns/Fires, despawns, and
 /// connects the wire. Also controls bullet time while the wire is being aimed.
@@ -22,7 +22,6 @@ public class WireThrower : MonoBehaviour
     private GameObject _activePlug;
     private ControlSchemes _controlSchemes;
     [SerializeField] private PlugMovementSettings _plugMovementSettings;
-    [SerializeField] private MovementExecuter _movementExecuter;
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private DistanceJoint2D _distanceJoint;
     [SerializeField] private GameObject reticle;
@@ -32,7 +31,7 @@ public class WireThrower : MonoBehaviour
     private Vector2 _lastRecordedPosition;
 
     private PlugMovementSettings pms; // For calculating grappling range
-    private MovementExecuter me; // For determining which way the player is facing
+    private ICharacterController cc; // For determining which way the player is facing
 
     private List<GameObject> outletsInOverrideRange;
 
@@ -62,7 +61,7 @@ public class WireThrower : MonoBehaviour
         mainCamera = Camera.main;
 
         pms = FindObjectOfType<PlugMovementSettings>();
-        me = FindObjectOfType<MovementExecuter>();
+        cc = GetComponentInParent<ICharacterController>();
 
         outletsInOverrideRange = new List<GameObject>();
 }
@@ -136,10 +135,7 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void HandlePotentialDisconnectByJump(InputAction.CallbackContext ctx)
     {
-        if (_movementExecuter.GetCurrentMove().DisconnectByJumpOkay())
-        {
             HandlePotentialDisconnect();
-        }
     }
 
     /// <summary>
@@ -245,7 +241,7 @@ public class WireThrower : MonoBehaviour
 
             bool closestIsOverride = false;
 
-            bool isFacingLeft = me.GetCurrentMove().Flipped();
+            bool isFacingLeft = cc.LeftOrRight == Facing.left;
             bool currentIsInFront = false;
 
             Vector3 position = transform.position;

@@ -21,7 +21,7 @@ namespace CharacterController
         /// <param name="RisingGravity"> Gravity applied during the startup of the jump</param>
         /// <param name="distance"> how high wall Jump takes the character and  and how far in the x direction the character traveled when at the apex of the jump</param>
         /// <param name="lockOutInputTime"> How long Input should be taked away from the player to avoiding moving back into the wall immediately</param>
-        public WallJump(ICharacterController character,float RisingGravity, Vector2 distance, float lockOutInputTime)
+        public WallJump(ICharacterController character, float RisingGravity, Vector2 distance, float lockOutInputTime)
         {
             this.character = character;
             this.RisingGravity = RisingGravity;
@@ -34,16 +34,16 @@ namespace CharacterController
             var initY = Kinematics.InitialVelocity(0, RisingGravity, distance.y);
             if (character.LeftOrRight == Facing.left)
             {
-                character.Speed = new Vector2(distance.x / (initY / RisingGravity), initY);
+                character.SetSpeed(new Vector2(distance.x / (initY / RisingGravity), initY));
             }
             else
             {
-                character.Speed = new Vector2(-distance.x / (initY / RisingGravity), initY);
+                character.SetSpeed(new Vector2(-distance.x / (initY / RisingGravity), initY));
             }
         }
         public void ContinueMove()
         {
-            character.Speed = new Vector2(character.Speed.x, character.Speed.y - RisingGravity);
+            character.SetSpeed(new Vector2(character.Speed.x, character.Speed.y - RisingGravity));
             timePassed += Time.deltaTime;
         }
         public void CancelMove()

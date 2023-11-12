@@ -31,7 +31,7 @@ namespace CharacterController
         }
 
         public AnimationType GetAnimationState() => AnimationType.KNOCKBACK;
-        public void StartMove() => character.Speed = vel;
+        public void StartMove() => character.SetSpeed(vel);
         public void ContinueMove()
         {
             timePassed += Time.fixedDeltaTime;

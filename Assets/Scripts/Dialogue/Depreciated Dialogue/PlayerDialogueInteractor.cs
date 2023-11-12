@@ -26,6 +26,7 @@ public class PlayerDialogueInteractor : MonoBehaviour
     _cs = new ControlSchemes();
     _cs.Enable();
     _cs.Player.Dialogue.performed += _ => PlayDialogue();
+        player = GetComponentInParent<PlayerController>();
   }
 
   /// <summary>

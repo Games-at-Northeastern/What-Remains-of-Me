@@ -17,16 +17,18 @@ namespace CharacterController
         /// Initializes a dash, taking in whether it is going to the right (true)
         /// or left (false).
         /// </summary>
-        public Dash(ICharacterController character,float dashSpeed, float dashTime)
+        public Dash(ICharacterController character, float dashSpeed, float dashTime)
         {
             timePassed = 0;
             this.dashSpeed = dashSpeed;
             this.character = character;
         }
-        public void CancelMove() {
+        public void CancelMove()
+        {
 
         }
-        public void ContinueMove() {
+        public void ContinueMove()
+        {
             timePassed += Time.deltaTime;
         }
         public AnimationType GetAnimationState() => AnimationType.DASH;
@@ -35,12 +37,12 @@ namespace CharacterController
         {
             timePassed = 0;
             switch (character.LeftOrRight)
-            {       
+            {
                 case Facing.right:
-                    character.Speed = new Vector2(dashSpeed, 0);
+                    character.SetSpeed(new Vector2(dashSpeed, 0));
                     break;
                 case Facing.left:
-                    character.Speed = new Vector2(-dashSpeed, 0);
+                    character.SetSpeed(new Vector2(-dashSpeed, 0));
                     break;
             }
         }

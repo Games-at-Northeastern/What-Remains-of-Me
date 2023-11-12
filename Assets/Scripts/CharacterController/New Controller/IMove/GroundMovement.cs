@@ -17,11 +17,11 @@ namespace CharacterController
         public GroundMovement(float maxRunSpeed, float acceleration, float deceleration, ICharacterController character)
         {
 
-            if(deceleration > 0)
+            if (deceleration > 0)
             {
                 Debug.LogWarning("Deceleration should be a negative value");
             }
-            if(acceleration < 0)
+            if (acceleration < 0)
             {
                 Debug.LogWarning("Acceleration should be a positive valuie");
             }
@@ -35,7 +35,7 @@ namespace CharacterController
         public void ContinueMove()
         {
             Vector2 speed = character.Speed;
-            if(Mathf.Abs(speed.x) > Mathf.Abs(maxRunSpeed * xInput))
+            if (Mathf.Abs(speed.x) > Mathf.Abs(maxRunSpeed * xInput))
             {
                 //decelerating
                 speed.x = Kinematics.VelocityTarget(speed.x, Mathf.Sign(xInput) * deceleration, xInput * maxRunSpeed, Time.fixedDeltaTime);
@@ -44,7 +44,8 @@ namespace CharacterController
             {
                 speed.x = Kinematics.VelocityTarget(speed.x, acceleration * Mathf.Sign(xInput), xInput * maxRunSpeed, Time.fixedDeltaTime);
             }
-            character.Speed = speed;
+            Debug.Log("PCSPEEDINNER" + speed);
+            character.SetSpeed(speed);
         }
         public AnimationType GetAnimationState() => throw new System.NotImplementedException();
         public bool IsMoveComplete() => true;
