@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayerControllerRefresh;
 
 /// <summary>
 /// Script to be held by the player. When the player's dialogue detector
@@ -11,7 +12,7 @@ using UnityEngine;
 public class PlayerDialogueInteractor : MonoBehaviour
 {
   private Dialogue _activeDialogue; // Either the dialogue being prompted or the dialogue being read
-  [SerializeField] private CollisionDetector dialogueCollisionDetector;
+  [SerializeField] private PlayerController player;
 
   // There is only one prompt sprite in the game, and it is either
   // inactive or over a specific dialogue holding gameObject.
@@ -46,8 +47,8 @@ public class PlayerDialogueInteractor : MonoBehaviour
   /// </summary>
   private void Update()
   {
-    // d should have dialogue component if able to be collided with by dialogueCollisionDetector
-    GameObject dGameObject = dialogueCollisionDetector.CollidingWith(); 
+        // d should have dialogue component if able to be collided with by dialogueCollisionDetector
+        GameObject dGameObject = Physics2D.BoxCast(player.position, player.col.size, 0, Vector2.right, 2).collider.gameObject; 
     if (dGameObject != null)
     {
       var dialogue = dGameObject.GetComponent<Dialogue>();

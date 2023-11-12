@@ -41,6 +41,11 @@ namespace CharacterController
         /// and do moves
         /// </summary>
         public void UnlockInputs();
+
+        public bool TouchingLeftWall();
+        public bool TouchingRightWall();
+        public bool TouchingCeiling();
+        public bool TouchingGround();
     }
     public enum Facing
     {

@@ -35,7 +35,7 @@ namespace CharacterController
         {
             timePassed = 0;
             switch (character.LeftOrRight)
-            {
+            {       
                 case Facing.right:
                     character.Speed = new Vector2(dashSpeed, 0);
                     break;
