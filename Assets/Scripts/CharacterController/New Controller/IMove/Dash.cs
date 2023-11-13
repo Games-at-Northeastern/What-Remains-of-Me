@@ -39,10 +39,10 @@ namespace CharacterController
             switch (character.LeftOrRight)
             {
                 case Facing.right:
-                    character.SetSpeed(new Vector2(dashSpeed, 0));
+                    character.Speed = (new Vector2(dashSpeed, 0));
                     break;
                 case Facing.left:
-                    character.SetSpeed(new Vector2(-dashSpeed, 0));
+                    character.Speed = (new Vector2(-dashSpeed, 0));
                     break;
             }
         }

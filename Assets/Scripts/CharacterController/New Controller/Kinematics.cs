@@ -3,32 +3,23 @@ using UnityEngine;
 public class Kinematics
 {
 
-    #region Velocity
-    /// <summary>
-    ///     calculates velocity based on initial Velocity and acceleration
-    /// </summary>
 
+    #region Velocity
+    //calculates velocity based on initial Velocity and acceleration
     public static float Velocity(float initialVelocity, float acceleration, float time)
     {
         return initialVelocity + acceleration * time;
     }
-    /// <summary>
-    /// calculates velocity based on acceleration, distance, and initial Velocity
-    /// </summary>
-    /// <param name="finalVelocity"></param>
-    /// <param name="acceleration"></param>
-    /// <param name="distance"></param>
-    /// <returns></returns>
+    //calculates velocity based on acceleration, distance, and initial Velocity
+    public static float Velocity2(float initialVelocity, float acceleration, float distance)
+    {
+        return Mathf.Sqrt(Mathf.Pow(initialVelocity, 2) + 2 * acceleration * distance);
+    }
     public static float InitialVelocity(float finalVelocity, float acceleration, float distance)
     {
         return Mathf.Sqrt(Mathf.Pow(finalVelocity, 2) - (2 * acceleration * distance));
     }
-    /// <summary>
-    /// calculates velocity based on initial Velocity and acceleration caps at target
-    /// not exceeding acceleration in chage in velocity
-    /// if accelerating already outside of target bounds will continue going further away 
-    /// </summary>
-
+    //calculates velocity based on initial Velocity and acceleration caps at target
     public static float VelocityTarget(float initialVelocity, float acceleration, float target, float time)
     {
         float directionToTarget = Mathf.Sign(target - initialVelocity);
@@ -37,25 +28,11 @@ public class Kinematics
         {
             if (directionToTarget < 0)
             {
-                if (newSpeed < target)
-                {
-                    return target;
-                }
-                else
-                {
-                    return newSpeed;
-                }
+                return newSpeed < target ? target : newSpeed;
             }
             else
             {
-                if (newSpeed > target)
-                {
-                    return target;
-                }
-                else
-                {
-                    return newSpeed;
-                }
+                return newSpeed > target ? target : newSpeed;
             }
         }
         else
@@ -63,35 +40,22 @@ public class Kinematics
             return newSpeed;
         }
     }
-    /// <summary>
-    /// calculates the velocity and clamps it to + or minus target
-    /// </summary>
-    /// <param name="initialVelocity"></param>
-    /// <param name="acceleration"></param>
-    /// <param name="target"></param>
-    /// <param name="time"></param>
-    /// <returns></returns>
-    public static float VelocityClamp(float initialVelocity, float acceleration, float target, float time)
+    //moves velocity towards target
+    public static float VelocityTowards(float initialVelocity, float acceleration, float target, float time)
     {
-        target = Mathf.Abs(target);
-
-        return Mathf.Clamp(Velocity(initialVelocity, acceleration, time), -target, target);
+        return Mathf.MoveTowards(initialVelocity, target, acceleration * time);
     }
-    /// <summary>
-    /// Calculates change in velocity based on delta time
-    /// </summary>
-
+    //calculates velocity based on force and mass
+    public static Vector2 DeltaVelocity(Vector2 force, float mass, float time)
+    {
+        return DeltaVelocity(Acceleration(force, mass), time);
+    }
+    //Calculates change in velocity based on delta time
     public static Vector2 DeltaVelocity(Vector2 acceleration, float time)
     {
         return acceleration * time;
     }
-    /// <summary>
-    /// Calculates change in velocity based on delta time
-    /// </summary>
-    /// <param name="acceleration"></param>
-    /// <param name="time"></param>
-    /// <returns></returns>
-
+    //Calculates change in velocity based on delta time
     public static float DeltaVelocity(float acceleration, float time)
     {
         return acceleration * time;

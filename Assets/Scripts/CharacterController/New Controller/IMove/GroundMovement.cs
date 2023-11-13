@@ -19,7 +19,7 @@ namespace CharacterController
 
             if (deceleration > 0)
             {
-                Debug.LogWarning("Deceleration should be a negative value");
+                Debug.LogWarning("Deceleration should be a positive value");
             }
             if (acceleration < 0)
             {
@@ -34,18 +34,20 @@ namespace CharacterController
         public void CancelMove() { }
         public void ContinueMove()
         {
+
             Vector2 speed = character.Speed;
+            Vector2 b4 = speed;
             if (Mathf.Abs(speed.x) > Mathf.Abs(maxRunSpeed * xInput))
             {
                 //decelerating
-                speed.x = Kinematics.VelocityTarget(speed.x, Mathf.Sign(xInput) * deceleration, xInput * maxRunSpeed, Time.fixedDeltaTime);
+                speed.x = Kinematics.VelocityTowards(speed.x,deceleration, xInput * maxRunSpeed, Time.fixedDeltaTime);
             }
             else
             {
-                speed.x = Kinematics.VelocityTarget(speed.x, acceleration * Mathf.Sign(xInput), xInput * maxRunSpeed, Time.fixedDeltaTime);
+                speed.x = Kinematics.VelocityTowards(speed.x, acceleration, xInput * maxRunSpeed, Time.fixedDeltaTime);
             }
-            Debug.Log("PCSPEEDINNER" + speed);
-            character.SetSpeed(speed);
+            Debug.Log("before speed: " + b4 + "AfterSpeed: " + speed);
+            character.Speed = speed;
         }
         public AnimationType GetAnimationState() => throw new System.NotImplementedException();
         public bool IsMoveComplete() => true;

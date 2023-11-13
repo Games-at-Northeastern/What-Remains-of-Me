@@ -13,8 +13,7 @@ namespace CharacterController
         /// the current speed of the character
         /// at the end of the frame the attached rigidbody2D velocity is mutated to this value to move the character.
         /// </summary>
-        public Vector2 Speed { get; }
-        public Vector2 SetSpeed(Vector2 newSpeed);
+        public Vector2 Speed { get; set; }
         /// <summary>
         /// the current velocity of the character according to the attached rigidBody2d
         /// </summary>

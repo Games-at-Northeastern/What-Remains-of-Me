@@ -11,7 +11,9 @@ namespace PlayerControllerRefresh
         public bool JumpHeld { get; private set; }
         public bool JumpCanceled { get; private set; }
         public Vector2 MoveInput { get; private set; }
-        public bool dashPressed { get; private set; }
+        public bool DashPressed { get; private set; }
+
+        public bool WireThrown { get; private set; }
         public float deadZone = 0.1f;
 
         // Update is called once per frame
@@ -19,6 +21,8 @@ namespace PlayerControllerRefresh
         {
             //Makes sure jumpPressed is held for an entire fixed frame so if inputed outside of fixed frame won't be eaten
             JumpPressed = false;
+            DashPressed = false;
+            WireThrown = false;
         }
 
 
@@ -43,8 +47,12 @@ namespace PlayerControllerRefresh
 
         public void Dash(InputAction.CallbackContext context)
         {
-            dashPressed = dashPressed || context.started;
+            DashPressed = DashPressed || context.started;
         }
 
+        public void Wire(InputAction.CallbackContext context)
+        {
+            WireThrown = WireThrown || context.started;
+        }
     }
 }

@@ -16,10 +16,11 @@ namespace CharacterController
         public Jump(float risingGravity, float jumpHeight, JumpType jumpType, ICharacterController character)
         {
             this.risingGravity = risingGravity;
-            this.initialVelocity = Mathf.Sqrt(-2 * risingGravity * jumpHeight);
+            this.initialVelocity = Kinematics.InitialVelocity(0, risingGravity, jumpHeight);
             this.character = character;
             this.jumpType = jumpType;
             this.timeToReachApex = -initialVelocity / risingGravity;
+            Debug.Log("IV" + initialVelocity + Kinematics.InitialVelocity(0, risingGravity, jumpHeight));
         }
         public void CancelMove()
         {
@@ -46,11 +47,11 @@ namespace CharacterController
                     character.Speed.Set(character.Speed.x, character.Speed.y + initialVelocity);
                     break;
                 case JumpType.setSpeed:
-                    character.Speed.Set(character.Speed.x, initialVelocity);
-                    break;
-                default:
+                    Debug.Log("IN switch");
+                    character.Speed = new Vector2(character.Speed.x, initialVelocity);
                     break;
             }
+            Debug.Log("JumpSpeed" + character.Speed.y);
 
         }
         /// <summary>

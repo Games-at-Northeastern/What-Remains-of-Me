@@ -39,7 +39,7 @@ namespace CharacterController
         /// <param name="WireSwingManualAccelMultiplier">I assume the acceleration for the player kicking back and forth</param>
         /// <param name="wireGeneralMaxDistance"></param>
         /// <param name="MI"></param>
-        public Swing(WireThrower WT, ICharacterController character, float fallGravity,float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float WireSwingReferenceWireLength, float WireSwingManualAccelMultiplier, float wireGeneralMaxDistance, MovementInfo MI)
+        public Swing(WireThrower WT, ICharacterController character, float fallGravity,float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float WireSwingReferenceWireLength, float WireSwingManualAccelMultiplier, float wireGeneralMaxDistance)
         {
             this.WireSwingManualAccelMultiplier = WireSwingManualAccelMultiplier;
             this.wireGeneralMaxDistance = wireGeneralMaxDistance;
@@ -137,13 +137,13 @@ namespace CharacterController
             radius = Mathf.Lerp(radius, initRadius, Time.deltaTime * 10f);
 
             Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
-            character.SetSpeed((newPos - origPos) / Time.deltaTime);
+            character.Speed = (newPos - origPos) / Time.deltaTime;
             // Add some free-fall to the mix if above the lowest point possible right now
             //if (initRadius - radius > 0.01f || Mathf.Sin(angle) > 0)
             if (Mathf.Sin(angle) > 0)
             {
                 gravityVel -= fallGravity * Time.deltaTime;
-                character.SetSpeed(character.Speed + new Vector2(0, gravityVel));
+                character.Speed += new Vector2(0, gravityVel);
             }
             else
             {
