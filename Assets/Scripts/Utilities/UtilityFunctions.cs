@@ -61,4 +61,13 @@ public class UtilityFunctions
         found = null;
         return false;
     }
+
+    /// <summary>
+    /// Returns true if a value is within (inclusive) the min and max.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="min"></param>
+    /// <param name="max"></param>
+    /// <returns></returns>
+    public static bool ValueInRange(float value, float min, float max) => value >= min && value <= max;
 }
