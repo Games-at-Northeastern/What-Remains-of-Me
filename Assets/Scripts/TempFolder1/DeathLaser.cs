@@ -12,8 +12,11 @@ public class DeathLaser : MonoBehaviour
 
     [SerializeField, Tooltip("Does the laser just draw the line all the way to the target?")]
     private bool _drawToTarget = true;
-    [SerializeField, Tooltip("Do the laser direction and length need to be recalculated every frame? I.e. is the target or the source moving?")]
+    [SerializeField, Tooltip("Do the laser direction and length need to be recalculated every frame? I.e. is the target or the source moving? Be warned that having a lot of updating lasers is bad for performance.")]
     private bool _needsRecalculation = false;
+    // TODO: this needs to regenerate the mesh every frame. Granted, it's a super simple mesh, but it's a mesh generation every frame regardless.
+    // Rework this so that regeneration is performed ONLY WHEN the properties of the laser should change. E.g. if a laser is obstructed by a door,
+    // regenerate the laser once the door is open/closed.
 
     [Space(15)]
 
@@ -35,7 +38,10 @@ public class DeathLaser : MonoBehaviour
     private Vector3[] _points; // invariant: this array has 2 elements.
     private Vector3 _dir;
     private bool _lockout = false;
-    private float _computedLaserDistance;
+    private float _realLaserDistance;
+
+    private RaycastHit2D _data;
+    private bool _didCastHit; // equivalent to _data.point != Vector2.zero
 
     private void Awake()
     {
@@ -45,6 +51,8 @@ public class DeathLaser : MonoBehaviour
 
     private void Update()
     {
+        _didCastHit = DoRaycast(out _data);
+
         if (_needsRecalculation)
         {
             Recalculate();
@@ -58,32 +66,36 @@ public class DeathLaser : MonoBehaviour
         _dir = (_laserTarget.position - transform.position).normalized;
         Vector3 targetPos;
 
+        bool needsRealLaserDistance = _laserDistance <= 0;
+
+        _realLaserDistance = needsRealLaserDistance ? Vector3.Distance(transform.position, _laserTarget.position) : _laserDistance;
+
         // draw laser to target point
         if (_drawToTarget)
         {
             targetPos = _laserTarget.position;
         }
         // draw laser in direction of target point until we hit something
-        else if (_laserDistance <= 0 && DoRaycast(out RaycastHit2D data))
+        else if (needsRealLaserDistance && _didCastHit)
         {
-            targetPos = data.point;
+            targetPos = _data.point;
+            // we don't need to reassign _realLaserDistance to dist(position, data point) here because the death ray itself
+            // is already stopped by the collider.
         }
         // draw laser in direction of target for a certain distance.
         else
         {
-            targetPos = transform.position + (_dir * _laserDistance);
+            targetPos = transform.position + (_dir * _realLaserDistance);
         }
 
         _points = new Vector3[] { transform.position, targetPos };
-
-        _computedLaserDistance = Vector3.Distance(transform.position, targetPos);
 
         _renderer.SetPositions(_points);
     }
 
     private bool DoRaycast(out RaycastHit2D data)
     {
-        data = Physics2D.Raycast(transform.position, _dir, _computedLaserDistance, _mask);
+        data = Physics2D.Raycast(transform.position, _dir, _realLaserDistance, _mask);
 
         return data.point != Vector2.zero;
     }
@@ -97,9 +109,9 @@ public class DeathLaser : MonoBehaviour
         // as the player; the rest are untagged children. Therefore, I need to look through all the parents (limited to 3, since that's
         // the max relevant hierachy level) to find the player tag. This is very sad. Oh well.
         if (!_lockout
-            && DoRaycast(out RaycastHit2D data)
-            && data.collider != null
-            && UtilityFunctions.CompareTagOfHierarchy(data.collider.transform, _tag, out Transform player, PlayerHierarchyLayerIndex))
+            && _didCastHit
+            && _data.collider is not null
+            && UtilityFunctions.CompareTagOfHierarchy(_data.collider.transform, _tag, out var player, PlayerHierarchyLayerIndex))
         {
             _deathTeleporter.PerformDeath(player.gameObject);
             _lockout = true;
@@ -107,7 +119,7 @@ public class DeathLaser : MonoBehaviour
             Invoke(nameof(LockoutCooldownInvocation), _lockoutTime);
         }
     }
-
+    
     // IEnumerators are an optimzation for the future.
     private void LockoutCooldownInvocation() => _lockout = false;
 }

@@ -39,11 +39,9 @@ public class UtilityFunctions
     public static bool CompareTagOfHierarchy(Transform root, string tag, out Transform found, int layersToCheck = 2)
     {
         var item = root;
-        Debug.Log("started check");
 
         for (int layer = 0; layer < layersToCheck; layer += 1)
         {
-            Debug.Log("checking " + item.name);
             if (item == null)
             {
                 break;

@@ -104,13 +104,13 @@ MonoBehaviour:
   _laserTarget: {fileID: 1900537394966229806}
   _deathTeleporter: {fileID: 2117168905214845682}
   _drawToTarget: 1
-  _needsRecalculation: 1
+  _needsRecalculation: 0
   _tag: Player
   _laserDistance: -1
   _mask:
     serializedVersion: 2
     m_Bits: 2147483647
-  _lockoutTime: 0.5
+  _lockoutTime: 1.5
 --- !u!120 &1900537394148297890
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -131,7 +131,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 60b4f2d5d1d364ae7bf35b25ecac1af8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -163,7 +163,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.15566635
+        value: 0.046962738
         inSlope: 0
         outSlope: 0
         tangentMode: 0
