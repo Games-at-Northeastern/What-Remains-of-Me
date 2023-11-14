@@ -20,6 +20,7 @@ namespace PlayerControllerRefresh
         public LayerMask playerLayer;
         GroundMovement groundMovement;
         AirMovement airMovement;
+        AirMovement airMovementZeroG;
         Jump jump;
         Dash dash;
         Swing swing;
@@ -44,18 +45,27 @@ namespace PlayerControllerRefresh
         public Vector2 Direction => this.transform.forward;
         public AnimationType GetAnimationState() => AnimationType.IDLE;
 
-        public Facing LeftOrRight => direction();
+
 
         public Vector2 Speed => _speed;
 
         Vector2 ICharacterController.Speed { get => _speed; set => _speed = value; }
 
+        public Facing LeftOrRight => direction();
+
+        private Facing currentDirection = Facing.right;
         private Facing direction()
         {
+            if(playerInputs.MoveInput.x == 0)
+            {
+                return currentDirection;
+            }
             if (playerInputs.MoveInput.x < 0)
             {
+                currentDirection = Facing.left;
                 return Facing.left;
             }
+            currentDirection = Facing.right;
             return Facing.right;
         }
 
@@ -80,6 +90,7 @@ namespace PlayerControllerRefresh
         {
             groundMovement = new GroundMovement(settings.maxRunSpeed, settings.groundedAcceleration, settings.groundedDeceleration, this);
             airMovement = new AirMovement(settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration, settings.fallGravity, this);
+            airMovementZeroG = new AirMovement(settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration, 0, this);
             jump = new Jump(settings.risingGravity, settings.jumpHeight, JumpType.setSpeed, this);
             dash = new Dash(this, settings.dashSpeedX, settings.dashTime);
             swing = new Swing(wire, this, settings.fallGravity, settings.wireSwingNaturalAccelMultiplier, settings.wireSwingMaxAngularVelocity, settings.wireSwingDecayMultiplier, settings.wireSwingDecayMultiplier, settings.wireSwingReferenceWireLength, settings.wireSwingManualAccelMultiplier, settings.wireLength);
@@ -107,46 +118,41 @@ namespace PlayerControllerRefresh
         
         void FixedUpdate()
         {
+            _speed = rb.velocity;
             SwitchState();
             switch (currentState)
             {
                 case PlayerState.Grounded:
                     groundMovement.UpdateDirection(playerInputs.MoveInput.x);
                     groundMovement.ContinueMove();
+                    HandleJump();
                     break;
                 case PlayerState.Aerial:
-                    airMovement.UpdateDirection(playerInputs.MoveInput);
-                    airMovement.ContinueMove();
+                    if (jumped)
+                    {
+                        HandleJump();
+                        airMovementZeroG.UpdateDirection(playerInputs.MoveInput);
+                        airMovementZeroG.ContinueMove();
+                    }
+                    else
+                    {
+                        airMovement.UpdateDirection(playerInputs.MoveInput);
+                        airMovement.ContinueMove();
+                    }
+
+
                     break;
                 case PlayerState.OnWall:
                     wallSlide.ContinueMove();
                     break;
                 case PlayerState.Swinging:
+                    swing.UpdateInput(playerInputs.MoveInput.x);
+                    swing.ContinueMove();
+                    if (playerInputs.JumpPressed)
+                    {
+                        wire.DisconnectWire();
+                    }
                     break;
-            }
-            Debug.Log("Jump?" + playerInputs.JumpPressed);
-            if (!jump.IsMoveComplete())
-            {
-                jump.ContinueMove();
-            }
-            else
-            {
-                jump.CancelMove();
-            }
-            if (TouchingGround())
-            {
-                groundMovement.UpdateDirection(playerInputs.MoveInput.x);
-                groundMovement.ContinueMove();
-                if (playerInputs.JumpPressed)
-                {
-                    this._speed.y = 0;
-                    jump.StartMove();
-                }
-            }
-            else
-            {
-                airMovement.UpdateDirection(playerInputs.MoveInput);
-                airMovement.ContinueMove();
             }
 
 
@@ -176,6 +182,7 @@ namespace PlayerControllerRefresh
                     break;
                 case PlayerState.Swinging:
                     swing.StartMove();
+                    jump.CancelMove();
                     break;
                 default:
                     break;
@@ -203,6 +210,30 @@ namespace PlayerControllerRefresh
             
         }
 
+        #region Jump
+        private bool ShouldJump => Grounded && playerInputs.TimeSinceJumpWasPressed < settings.jumpBuffer && !jump.IsMoveComplete();
+        private bool jumped;
+        private void HandleJump()
+        {
+            if (ShouldJump)
+            {
+                jump.StartMove();
+                jumped = true;
+            }else
+            {
+                if (jumped)
+                {
+                    jump.ContinueMove();
+                }
+                if (!playerInputs.JumpHeld)
+                {
+                    jump.CancelMove();
+                    jumped = false;
+                }
+            }
+
+        }
+        #endregion
 
         #region Collision
 

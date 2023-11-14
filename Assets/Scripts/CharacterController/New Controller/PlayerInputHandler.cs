@@ -6,7 +6,7 @@ namespace PlayerControllerRefresh
 {
     public class PlayerInputHandler : MonoBehaviour
     {
-
+        public float TimeSinceJumpWasPressed { get; private set; }
         public bool JumpPressed { get; private set; }
         public bool JumpHeld { get; private set; }
         public bool JumpCanceled { get; private set; }
@@ -23,12 +23,17 @@ namespace PlayerControllerRefresh
             JumpPressed = false;
             DashPressed = false;
             WireThrown = false;
+            TimeSinceJumpWasPressed += Time.fixedDeltaTime;
         }
 
 
         public void Jump(InputAction.CallbackContext context)
         {
             JumpPressed = JumpPressed || context.started;
+            if (context.started)
+            {
+                TimeSinceJumpWasPressed = 0;
+            }
             JumpHeld = JumpPressed || context.performed;
         }
 

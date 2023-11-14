@@ -18,8 +18,6 @@ namespace PlayerControllerRefresh
         public float groundedAcceleration;
         [Tooltip("how fast the player slowdowns when the let go of a movement key")]
         public float groundedDeceleration;
-        [Tooltip("how close the player has to be to the ground to be considered grounded")]
-        public float grounderDistance;
 
         [Header("Air")]
         [Tooltip("the max speed the player can be moving in the air")]

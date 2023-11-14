@@ -12,19 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 893fc80af9187124086ee96b71efeb5b, type: 3}
   m_Name: AtlasControlSettings
   m_EditorClassIdentifier: 
-  maxRunSpeed: 7
-  groundedAcceleration: 110
-  groundedDeceleration: 100
-  grounderDistance: 0
-  maxAirSpeed: 23.3
-  airAcceleration: 21.38
-  terminalVelocity: -79.16
-  fallGravity: -79.44
-  jumpHeight: 6
-  risingGravity: -60
+  maxRunSpeed: 5
+  groundedAcceleration: 50
+  groundedDeceleration: 50
+  maxAirSpeed: 5
+  airAcceleration: 29.21
+  terminalVelocity: -20.65
+  fallGravity: 20
+  jumpHeight: 4
+  risingGravity: -10
   jumpEndedEarlyMultiplier: 1
-  coyoteTime: 0.48
-  jumpBuffer: 0.24
+  coyoteTime: 0.1
+  jumpBuffer: 0.1
   wallSlideGravity: 0
   maxWallSlideSpeed: 0
   WallJumpDistance: {x: 0, y: 0}
@@ -34,12 +33,12 @@ MonoBehaviour:
     m_Extent: {x: 0, y: 0, z: 0}
   dashSpeedX: 0
   dashTime: 0
-  wireSwingBounceDecayMultiplier: 0
-  wireSwingDecayMultiplier: 0
-  wireSwingNaturalAccelMultiplier: 0
-  wireSwingManualAccelMultiplier: 0
-  wireSwingAngularVelOfDash: 0
-  wireSwingReferenceWireLength: 0
-  wireSwingMaxAngularVelocity: 0
-  wireLength: 0
-  defaultKnockBack: {x: 0, y: 0}
+  wireSwingBounceDecayMultiplier: 0.25
+  wireSwingDecayMultiplier: 1.5
+  wireSwingNaturalAccelMultiplier: 7
+  wireSwingManualAccelMultiplier: 1.7
+  wireSwingAngularVelOfDash: 3
+  wireSwingReferenceWireLength: 5
+  wireSwingMaxAngularVelocity: 6
+  wireLength: 10
+  defaultKnockBack: {x: 4, y: 6}
