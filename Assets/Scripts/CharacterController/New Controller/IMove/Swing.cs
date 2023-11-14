@@ -14,14 +14,12 @@ namespace CharacterController
         private float WireSwingDecayMultiplier;
         private ICharacterController character;
         private float horizontalInput;
-        private float WireSwingManualAccelMultiplier;
-        private float WireSwingBounceDecayMultiplier;
-        private float WireSwingReferenceWireLength;
-        private float WireSwingMaxAngularVelocity;
+        private float PlayerSwayAcceleration;
+        private float SwingBounceDecayMultiplier;
+        private float MaxAngularVelocity;
         private float WireSwingNaturalAccelMultiplier;
         private float fallGravity;
-        private float wireGeneralMaxDistance;
-        private MovementInfo MI;
+        private float maxWireLength;
 
         // Initializes a wire control move, deciding what angular vel to start with, setting the
         // wire's max distance, and initializing events.
@@ -36,22 +34,19 @@ namespace CharacterController
         /// <param name="WireSwingDecayMultiplier"> deceleration on the wire</param>
         /// <param name="WireSwingBounceDecayMultiplier"> energy loss upon bouncing on a wall</param>
         /// <param name="WireSwingReferenceWireLength"></param>
-        /// <param name="WireSwingManualAccelMultiplier">I assume the acceleration for the player kicking back and forth</param>
+        /// <param name="PlayerSwayAccel">I assume the acceleration for the player kicking back and forth</param>
         /// <param name="wireGeneralMaxDistance"></param>
-        /// <param name="MI"></param>
-        public Swing(WireThrower WT, ICharacterController character, float fallGravity,float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float WireSwingReferenceWireLength, float WireSwingManualAccelMultiplier, float wireGeneralMaxDistance)
+        public Swing(WireThrower WT, ICharacterController character, float fallGravity,float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float PlayerSwayAccel, float maxWireLength)
         {
-            this.WireSwingManualAccelMultiplier = WireSwingManualAccelMultiplier;
-            this.wireGeneralMaxDistance = wireGeneralMaxDistance;
-            this.WireSwingBounceDecayMultiplier = WireSwingBounceDecayMultiplier;
-            this.WireSwingMaxAngularVelocity = WireSwingMaxAngularVelocity;
+            this.PlayerSwayAcceleration = PlayerSwayAccel;
+            this.maxWireLength = maxWireLength;
+            this.SwingBounceDecayMultiplier = WireSwingBounceDecayMultiplier;
+            this.MaxAngularVelocity = WireSwingMaxAngularVelocity;
             this.WireSwingNaturalAccelMultiplier = WireSwingNaturalAccelMultiplier;
             this.fallGravity = fallGravity;
-            this.WireSwingReferenceWireLength = WireSwingReferenceWireLength;
             this.WT = WT;
             this.WireSwingDecayMultiplier = WireSwingDecayMultiplier;
             this.character = character;
-            this.MI = MI;
         }
         public void UpdateInput(float horizontalInput)
         {
@@ -73,24 +68,24 @@ namespace CharacterController
         }
         public void ContinueMove()
         {
-            // If the wire has just disconnected, don't modify anything (would cause errors to try and refer to null outlet)
-            if (WT.ConnectedOutlet == null)
-            {
-                return;
-            }
+            string debugString = "Swing: ";
             // Get initial positions
             Vector2 origPos = character.position;
             Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
             // Angle going from outlet to player
             float angle = Mathf.Atan2(origPos.y - connectedOutletPos.y, origPos.x - connectedOutletPos.x);
             float radius = Vector2.Distance(origPos, connectedOutletPos);
+            debugString += angularVelocity + " ";
             // Check for bouncing against wall/ceiling
             if (character.TouchingLeftWall() || character.TouchingRightWall() || character.TouchingCeiling())
             {
                 if (!inBounceMode)
                 {
+                    debugString += "BounceMode";
                     inBounceMode = true;
-                    angularVelocity = -angularVelocity * WireSwingBounceDecayMultiplier;
+                    angularVelocity = -angularVelocity * SwingBounceDecayMultiplier;
+                    Debug.Log("SBDM" + SwingBounceDecayMultiplier);
+                    debugString += " " + angularVelocity;
                 }
             }
             else
@@ -98,27 +93,16 @@ namespace CharacterController
                 inBounceMode = false;
             }
 
-            // Check for dash input
-            /*
-            // COMMENTING OUT THE ABILITY TO DASH WHILE WIRE IS ATTACHED FOR RIGHT NOW (SUMMER 2023) BECAUSE CHAPTER 1 DOESN'T NEED IT
-            if (dashInput)
-            {
-                float change = MS.WireSwingAngularVelOfDash * (MS.WireSwingReferenceWireLength / GetCurrentWireLength());
-                change = change * -Mathf.Sin(angle);
-                angularVelocity = Flipped() ? -change : change;
-                dashInput = false;
-            }*/
-            // Get Angular Acceleration
             float inputPower = horizontalInput * Mathf.Clamp(Mathf.Abs(Mathf.Sin(angle)), 0, 1);
 
             // if the player is actively colliding against something, only consider the manual input to prevent infinite force buildup
             if (inBounceMode)
             {
-                angularAccel = inputPower * WireSwingManualAccelMultiplier;
+                angularAccel = inputPower * PlayerSwayAcceleration;
             }
             else
             {
-                angularAccel = (-Mathf.Cos(angle) * WireSwingNaturalAccelMultiplier) + (inputPower * WireSwingManualAccelMultiplier);
+                angularAccel = (-Mathf.Cos(angle) * WireSwingNaturalAccelMultiplier) + (inputPower * PlayerSwayAcceleration);
             }
             // Add decay if accel and vel are in different directions
             if (Mathf.Sign(angularAccel) != Mathf.Sign(angularVelocity))
@@ -126,10 +110,11 @@ namespace CharacterController
                 angularAccel *= WireSwingDecayMultiplier;
             }
             // Use the angular acceleration to change the angular vel, enact angular vel
-            angularVelocity += angularAccel * Time.deltaTime * (WireSwingReferenceWireLength / GetCurrentWireLength());
+            angularVelocity += angularAccel * Time.deltaTime;
+            debugString += " " + angularVelocity;
 
             // Clamp the angular velocity - again, to prevent infinite buildup or crazy speeds.
-            angularVelocity = Mathf.Clamp(angularVelocity, -WireSwingMaxAngularVelocity, WireSwingMaxAngularVelocity);
+            angularVelocity = Mathf.Clamp(angularVelocity, -MaxAngularVelocity, MaxAngularVelocity);
 
             float newAngle = angle + (angularVelocity * Time.deltaTime);
 
@@ -139,16 +124,16 @@ namespace CharacterController
             Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
             character.Speed = (newPos - origPos) / Time.deltaTime;
             // Add some free-fall to the mix if above the lowest point possible right now
-            //if (initRadius - radius > 0.01f || Mathf.Sin(angle) > 0)
             if (Mathf.Sin(angle) > 0)
             {
-                gravityVel -= fallGravity * Time.deltaTime;
-                character.Speed += new Vector2(0, gravityVel);
+                gravityVel = fallGravity * Time.deltaTime;
+                character.Speed += new Vector2(0, fallGravity * Time.deltaTime);
             }
             else
             {
                 gravityVel = 0;
             }
+            Debug.Log(debugString);
         }
         /// <summary>
         /// Get the length of the wire connecting to an outlet. You should be
@@ -157,7 +142,7 @@ namespace CharacterController
         protected float GetCurrentWireLength() => Vector2.Distance(character.position, WT.ConnectedOutlet.transform.position);
         public void CancelMove()
         {
-            WT.SetMaxWireLength(wireGeneralMaxDistance);
+            WT.SetMaxWireLength(maxWireLength);
             // If the vel isn't 0 upon disconnect, weird bugs will happen (line in old cold may need to keep this in mind)
 
         }

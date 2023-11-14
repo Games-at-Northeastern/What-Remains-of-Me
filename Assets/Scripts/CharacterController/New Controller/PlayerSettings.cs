@@ -70,14 +70,10 @@ namespace PlayerControllerRefresh
         public float wireSwingDecayMultiplier;
         [Tooltip("")]
         public float wireSwingNaturalAccelMultiplier;
+        [Tooltip("The amount of acceleration to player swaying causes")]
+        public float PlayerSwayAccel;
         [Tooltip("")]
-        public float wireSwingManualAccelMultiplier;
-        [Tooltip("")]
-        public float wireSwingAngularVelOfDash;
-        [Tooltip("")]
-        public float wireSwingReferenceWireLength;
-        [Tooltip("")]
-        public float wireSwingMaxAngularVelocity;
+        public float SwingMaxAngularVelocity;
 
 
         [Header("Wire General")]

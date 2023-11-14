@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using CharacterController;
 using More2DGizmos;
+using System;
+
 namespace PlayerControllerRefresh
 {
     public class PlayerController : MonoBehaviour, ICharacterController
-
-
     {
 
 
@@ -43,7 +43,39 @@ namespace PlayerControllerRefresh
         public bool Grounded => this.TouchingGround();
 
         public Vector2 Direction => this.transform.forward;
-        public AnimationType GetAnimationState() => AnimationType.IDLE;
+        public AnimationType GetAnimationState() {
+            switch (currentState)
+            {
+                case PlayerState.Grounded:
+                    if(Mathf.Abs(playerInputs.MoveInput.x) > 0.1f)
+                    {
+                        return AnimationType.RUN;
+                    }
+                    else
+                    {
+                       return AnimationType.IDLE;
+                    }
+                    break;
+                case PlayerState.Aerial:
+                    if(_speed.y > 0)
+                    {
+                        return AnimationType.JUMP_RISING;
+                    }
+                    else
+                    {
+                        return AnimationType.JUMP_FALLING;
+                    }
+                    break;
+                case PlayerState.OnWall:
+                    break;
+                case PlayerState.Swinging:
+                    return AnimationType.WIRE_SWING;
+                    break;
+            }
+            //Temporary
+            return AnimationType.IDLE;
+        }
+       
 
 
 
@@ -83,7 +115,6 @@ namespace PlayerControllerRefresh
         private void OnValidate()
         {
             Start();
-            Debug.Log("Validate");
         }
         [ContextMenu("Update Moves to New Settings")]
         private void SetupMoves()
@@ -93,7 +124,7 @@ namespace PlayerControllerRefresh
             airMovementZeroG = new AirMovement(settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration, 0, this);
             jump = new Jump(settings.risingGravity, settings.jumpHeight, JumpType.setSpeed, this);
             dash = new Dash(this, settings.dashSpeedX, settings.dashTime);
-            swing = new Swing(wire, this, settings.fallGravity, settings.wireSwingNaturalAccelMultiplier, settings.wireSwingMaxAngularVelocity, settings.wireSwingDecayMultiplier, settings.wireSwingDecayMultiplier, settings.wireSwingReferenceWireLength, settings.wireSwingManualAccelMultiplier, settings.wireLength);
+            swing = new Swing(wire,this,settings.fallGravity,settings.wireSwingNaturalAccelMultiplier,settings.SwingMaxAngularVelocity,settings.wireSwingDecayMultiplier,settings.wireSwingBounceDecayMultiplier,settings.PlayerSwayAccel, settings.wireLength);
             wallJump = new WallJump(this, settings.risingGravity, settings.WallJumpDistance, settings.takeControlAwayTime);
             wallSlide = new WallSlide(settings.wallSlideGravity, settings.maxWallSlideSpeed, this);
         }
@@ -156,7 +187,7 @@ namespace PlayerControllerRefresh
             }
 
 
-            Debug.Log("PCSPEED" + _speed);
+            //Debug.Log("PCSPEED" + _speed);
             rb.velocity = Speed;
         }
         private void SwitchState()
@@ -173,6 +204,7 @@ namespace PlayerControllerRefresh
             {
                 case PlayerState.Grounded:
                     groundMovement.StartMove();
+                    jumped = false;
                     break;
                 case PlayerState.Aerial:
                     airMovement.StartMove();
@@ -183,6 +215,7 @@ namespace PlayerControllerRefresh
                 case PlayerState.Swinging:
                     swing.StartMove();
                     jump.CancelMove();
+                    jumped = false;
                     break;
                 default:
                     break;
@@ -225,7 +258,7 @@ namespace PlayerControllerRefresh
                 {
                     jump.ContinueMove();
                 }
-                if (!playerInputs.JumpHeld)
+                if (!playerInputs.JumpHeld || jump.IsMoveComplete());
                 {
                     jump.CancelMove();
                     jumped = false;
@@ -235,9 +268,22 @@ namespace PlayerControllerRefresh
         }
         #endregion
 
-        #region Collision
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.layer.Equals("Damages"))
+            {
+                OnHurt();
+            }
+        }
 
-        [Header("CollisionDetectors")]
+        private void OnHurt()
+        {
+         knockback.StartMove();
+        }
+
+            #region Collision
+
+            [Header("CollisionDetectors")]
         [Tooltip("X is the width Y is the height")]
         [SerializeField] private Vector2 ceilingBounds;
         [Min(0)]

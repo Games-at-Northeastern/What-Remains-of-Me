@@ -46,7 +46,7 @@ namespace CharacterController
             {
                 speed.x = Kinematics.VelocityTowards(speed.x, acceleration, xInput * maxRunSpeed, Time.fixedDeltaTime);
             }
-            Debug.Log("before speed: " + b4 + "AfterSpeed: " + speed);
+            //Debug.Log("before speed: " + b4 + "AfterSpeed: " + speed);
             character.Speed = speed;
         }
         public AnimationType GetAnimationState() => throw new System.NotImplementedException();
