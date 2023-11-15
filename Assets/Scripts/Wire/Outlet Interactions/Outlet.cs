@@ -18,7 +18,10 @@ public class Outlet : MonoBehaviour
 
     ControlSchemes CS;
     [SerializeField] AControllable controlled;
+    [SerializeField] List<AControllable> controlledSecondaries;
     [SerializeField] float energyTransferSpeed;
+
+    public Collider2D grappleOverrideRange;
 
     private void Awake()
     {
@@ -64,6 +67,13 @@ public class Outlet : MonoBehaviour
         while (true)
         {
             controlled.GainEnergy(energyTransferSpeed * Time.deltaTime);
+            foreach(AControllable cSec in controlledSecondaries)
+            {
+                if (cSec != null)
+                {
+                    cSec.GainEnergy(energyTransferSpeed * Time.deltaTime);
+                }
+            }
             yield return new WaitForEndOfFrame();
 
             // SFX
@@ -80,6 +90,13 @@ public class Outlet : MonoBehaviour
         while (true)
         {
             controlled.GainVirus(energyTransferSpeed * Time.deltaTime);
+            foreach (AControllable cSec in controlledSecondaries)
+            {
+                if (cSec != null)
+                {
+                    cSec.GainVirus(energyTransferSpeed * Time.deltaTime);
+                }
+            }
             yield return new WaitForEndOfFrame();
 
             // SFX
@@ -96,6 +113,13 @@ public class Outlet : MonoBehaviour
         while (true)
         {
             controlled.LoseEnergy(energyTransferSpeed * Time.deltaTime);
+            foreach (AControllable cSec in controlledSecondaries)
+            {
+                if (cSec != null)
+                {
+                    cSec.LoseEnergy(energyTransferSpeed * Time.deltaTime);
+                }
+            }
             yield return new WaitForEndOfFrame();
 
             // SFX
@@ -112,6 +136,13 @@ public class Outlet : MonoBehaviour
         while (true)
         {
             controlled.LoseVirus(energyTransferSpeed * Time.deltaTime);
+            foreach (AControllable cSec in controlledSecondaries)
+            {
+                if (cSec != null)
+                {
+                    cSec.LoseVirus(energyTransferSpeed * Time.deltaTime);
+                }
+            }
             yield return new WaitForEndOfFrame();
 
             // SFX
@@ -123,9 +154,17 @@ public class Outlet : MonoBehaviour
     // Get the maximum charge of the controlled object
     public float GetMaxCharge()
     {
+        float maxCharge = 0f;
         if (controlled != null)
         {
-            return controlled.GetMaxCharge();
+            foreach (AControllable cSec in controlledSecondaries)
+            {
+                if (cSec != null)
+                {
+                    maxCharge += cSec.GetMaxCharge();
+                }
+            }
+            return maxCharge + controlled.GetMaxCharge();
         }
         return 0f;
     }
@@ -133,9 +172,17 @@ public class Outlet : MonoBehaviour
     // Get the energy level of the controlled object
     public float GetEnergy()
     {
+        float energy = 0f;
         if (controlled != null)
         {
-            return controlled.GetEnergy();
+            foreach (AControllable cSec in controlledSecondaries)
+            {
+                if (cSec != null)
+                {
+                    energy += cSec.GetEnergy();
+                }
+            }
+            return energy + controlled.GetEnergy();
         }
         return 0f;
     }
@@ -143,9 +190,17 @@ public class Outlet : MonoBehaviour
     // Get the virus level of the controlled object
     public float GetVirus()
     {
+        float virus = 0f;
         if (controlled != null)
         {
-            return controlled.GetVirus();
+            foreach (AControllable cSec in controlledSecondaries)
+            {
+                if (cSec != null)
+                {
+                    virus += cSec.GetVirus();
+                }
+            }
+            return virus + controlled.GetVirus();
         }
         return 0f;
     }

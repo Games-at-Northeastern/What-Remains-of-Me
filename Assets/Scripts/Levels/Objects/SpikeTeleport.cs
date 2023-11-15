@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// why is this just for spikes? TODO, abstract this.
 public class SpikeTeleport : MonoBehaviour
 {
 
@@ -15,7 +16,6 @@ public class SpikeTeleport : MonoBehaviour
 
     private GameObject objectToTeleport;
 
-
     private void Awake()
     {
         //Get the objects needed for the sound effects.
@@ -24,28 +24,27 @@ public class SpikeTeleport : MonoBehaviour
     }
 
 
+    // TODO! This triggers 4 times per every collision with the player due to the multiple colliders on them.
+    // That's really weird. Why?
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-
-
-            objectToTeleport = other.gameObject;
-            deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
-            deathParticles.Clear();
-            deathParticles.Play();
-            objectToTeleport.SetActive(false);
-
-            Invoke("TeleportPlayer", deathParticles.main.duration);
-
+            PerformDeath(other.gameObject);
         }
     }
 
+    // exposed so that killing things is just more convenient
+    public void PerformDeath(GameObject target)
+    {
+        objectToTeleport = target.gameObject;
+        deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
+        deathParticles.Clear();
+        deathParticles.Play();
+        objectToTeleport.SetActive(false);
 
-
-
-
-
+        Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
+    }
 
     private void TeleportPlayer()
     {

@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
+    //[SerializeField] private GameObject warning;
     public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
@@ -45,6 +46,22 @@ public class PlayerHealth : MonoBehaviour
         {
             EnergyDepletedDeath();
         }
+        /*
+        else if (playerInfo.virus >= playerInfo.maxVirus * 0.75)
+        {
+            VirusWarning();
+        }
+        else if (playerInfo.battery <= 1f)
+        {
+            EnergyDepletionWarning();
+        }
+        else
+        {
+            warning.GetComponent<WarningAnimation>().StopAnimation();
+            warning.GetComponent<WarningAnimation>().RegularVirus();
+        }*/
+        
+        
     }
 
     // TODO : Should there be some kind of scene resetting that is triggered by this? I.e. platforms, enemies, etc.?
@@ -77,6 +94,28 @@ public class PlayerHealth : MonoBehaviour
     }
 
 
+    // Methods for to triggering audiovisual warnings for when the player is about to die
+
+    /// <summary>
+    /// Triggers warnings for virus death
+    /// </summary>
+    private void VirusWarning()
+    {
+        Debug.Log("Virus Overload Warning");
+      //  warning.GetComponent<WarningAnimation>().HighVirus();
+    }
+
+
+    /// <summary>
+    /// Triggers warnings for energy depletion death
+    /// </summary>
+    private void EnergyDepletionWarning()
+    {
+        Debug.Log("Energy Depletion Warning");
+       // warning.GetComponent<WarningAnimation>().StartAnimation();
+    }
+
+
     // -------------- Are these being used? Don't think so --------------
 
     /*
@@ -88,7 +127,7 @@ public class PlayerHealth : MonoBehaviour
     public void LoseEnergy(float amount)
     {
         playerInfo.battery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0.01f)
+        if (playerInfo.batteryPercentage.Value <= 0f)
         {
             Die();
         }
@@ -122,7 +161,7 @@ public class PlayerHealth : MonoBehaviour
     {
         playerInfo.virus += amount;
         playerInfo.maxBattery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0.01f || playerInfo.virusPercentage.Value >= 0.99f)
+        if (playerInfo.batteryPercentage.Value <= 0f || playerInfo.virusPercentage.Value >= 0.99f)
         {
             Die();
         }

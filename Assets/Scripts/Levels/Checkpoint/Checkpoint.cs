@@ -40,7 +40,7 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("checkpoint hit");
+        // Debug.Log("checkpoint hit");
 
         // Check to see if the collision is the player or not
         if (!collision.CompareTag("Player"))
