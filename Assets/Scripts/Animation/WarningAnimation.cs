@@ -9,8 +9,12 @@ public class WarningAnimation : MonoBehaviour
 {
     private bool _runAnimation;
     [SerializeField] private GameObject warning;
+    [SerializeField] private GameObject lightA;
+    [SerializeField] private GameObject lightB;
     private float time;
     private Animator anim;
+    private Color colorA;
+    private Color colorB;
 
     /// <summary>
     /// Initializes animation to not run, and initializes time
@@ -32,7 +36,8 @@ public class WarningAnimation : MonoBehaviour
             if (time <= 0.1)   // Since time is set to a negative number in Start and StopAnimation, 
                                 // this line is always true on first update when _runAnimation is true
             {
-                warning.GetComponent<UnityEngine.UI.Image>().enabled = !warning.GetComponent<UnityEngine.UI.Image>().isActiveAndEnabled;
+                //warning.GetComponent<UnityEngine.UI.Image>().enabled = !warning.GetComponent<UnityEngine.UI.Image>().isActiveAndEnabled;
+                warning.GetComponent<SpriteRenderer>().enabled = !warning.GetComponent<SpriteRenderer>().enabled;
                 time = 0.1f;
             }
             else if (time >= 1.1)
@@ -52,7 +57,7 @@ public class WarningAnimation : MonoBehaviour
         if (anim != null)
         {
             anim.enabled = true;
-            warning.GetComponent<UnityEngine.UI.Image>().enabled = true;
+            warning.GetComponent<SpriteRenderer>().enabled = true;
         }
     }
 
@@ -62,12 +67,22 @@ public class WarningAnimation : MonoBehaviour
     public void StopAnimation()
     {
         _runAnimation = false;
-        warning.GetComponent<UnityEngine.UI.Image>().enabled = false;
+        warning.GetComponent<SpriteRenderer>().enabled = false;
         time = -1.0f;
         if (anim != null)
         {
             anim.enabled = false;
-            warning.GetComponent<UnityEngine.UI.Image>().enabled = false;
+            warning.GetComponent<SpriteRenderer>().enabled = false;
         }
+    }
+
+    public void HighVirus()
+    {
+
+    }
+
+    public void RegularVirus()
+    {
+
     }
 }
