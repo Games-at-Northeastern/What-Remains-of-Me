@@ -1,4 +1,4 @@
-INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
+﻿INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 ->main
 
 === main ===
@@ -7,9 +7,9 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 
-Make sure to pay attention to your energy level, Atlas. #layout:left #portrait:Handler #speaker:The Handler
+Robots need energy to function, Atlas. #layout:left #portrait:Handler #speaker:The Handler
 
-You can see it in the bottom left corner of the screen. Robots need energy to function. Avoid running out of energy. Avoid shutting down.
+Have you ever wondered what would happen if you ran out of energy? 
 
 ->DONE
 

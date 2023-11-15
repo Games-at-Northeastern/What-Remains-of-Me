@@ -3,9 +3,6 @@ namespace Levels.Objects.Platform
     using System;
     using UnityEngine;
 
-    // TODO: Remove this script. Its behaviors are covered by Platform.cs.
-
-
     /// <summary>
     /// Moves this platform between the given points sequentially and in
     /// straight lines. After the last point has been reached, goes back

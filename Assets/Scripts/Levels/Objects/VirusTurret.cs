@@ -61,7 +61,7 @@ public class VirusTurret : MonoBehaviour
                 // Determine the nearest collision from the turret's shooting line towards the player,
                 // and set the line renderer to display until that collision point
                 RaycastHit2D hit = Physics2D.Raycast(shootingPoint.position, shootingPoint.right, maxLaserDistance, laserCollidesWith);
-                // Debug.Log(hit.collider.gameObject); why is this left in here? it errors.
+                Debug.Log(hit.collider.gameObject);
                 lineRenderer.SetPosition(0, shootingPoint.position);
                 lineRenderer.SetPosition(1, hit.point);
 
@@ -70,7 +70,7 @@ public class VirusTurret : MonoBehaviour
                 lineRenderer.material.mainTextureScale = new Vector2(Vector2.Distance(lineRenderer.GetPosition(0), lineRenderer.GetPosition(1)), 1f);
 
                 // If the shooting line/laser hits the player, manually adjust the player's energy and virus appropriately
-                if (LayerMask.LayerToName(hit.transform.gameObject.layer) == "Player") // this also tends to error? is this a setup issue?
+                if (LayerMask.LayerToName(hit.transform.gameObject.layer) == "Player")
                 {
                     playerInfo.battery += energyTransferPerSecond * Time.fixedDeltaTime;
                     playerInfo.virus += virusTransferPerSecond * Time.fixedDeltaTime;

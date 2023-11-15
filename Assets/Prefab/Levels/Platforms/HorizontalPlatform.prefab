@@ -322,6 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4954450812213478032}
   - component: {fileID: 4954450812213478046}
+  - component: {fileID: 7461121457707927452}
   m_Layer: 0
   m_Name: HorizontalPlatform
   m_TagString: Untagged
@@ -370,8 +371,22 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
-  _movingElements:
-  - {fileID: 8703004793340764474}
+  _platforms:
+  - {fileID: 4954450812249458764}
+--- !u!114 &7461121457707927452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4954450812213478033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12f63784003ac9e459f036b84ad6403f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformController: {fileID: 4954450812213478046}
+  virusEffect: {fileID: 1346175620}
 --- !u!1 &4954450812249458767
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,7 +398,6 @@ GameObject:
   - component: {fileID: 4954450812249458766}
   - component: {fileID: 1454763101332441418}
   - component: {fileID: 4954450812249458764}
-  - component: {fileID: 8703004793340764474}
   - component: {fileID: 1144668445}
   - component: {fileID: 1144163196}
   m_Layer: 0
@@ -439,31 +453,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cb08d2b68c44c0495c17497d9c8e394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _eventCollisionTag: 
---- !u!114 &8703004793340764474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4954450812249458767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ecca7f80a7095249ad4cf7f325fc36f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _speed: 2
   _points:
   - {fileID: 4954450813027920154}
   - {fileID: 4954450812005634341}
-  _activeByDefault: 0
-  _initialStartIndex: 0
-  _normalizedInitialStartPosition: 0
-  _speed: 2
-  _randomSpeedModifier: 0
-  _maxSpeedModifier: 3
-  _speedModifier: 1
-  _loopType: 0
-  _isMovingRight: 1
+  randomSpeedModifier: 0
+  maxSpeedModifier: 3
+  speedModifier: 1
 --- !u!50 &1144668445
 Rigidbody2D:
   serializedVersion: 4
