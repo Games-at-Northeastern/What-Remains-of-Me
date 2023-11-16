@@ -31,7 +31,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         return maxCharge;
     }
 
-    // Gets the virus energy contained within this controllable
+    // Gets the number of units of virus contained within this controllable
     public float GetVirus()
     {
         return virus;
@@ -122,11 +122,22 @@ public abstract class AControllable : MonoBehaviour, IControllable
     }
 
     /// <summary>
-    /// Returns the percentage of energy that the player has.
+    /// Returns the percentage of total energy out of max energy that this AControllable has.
     /// </summary>
     public float GetPercentFull()
     {
         return totalEnergy / maxCharge;
+    }
+
+    /// <summary>
+    /// Returns the percentage of total energy in this AControllable which is infected by virus.
+    /// </summary>
+    public float? GetVirusPercent()
+    {
+        if (totalEnergy == 0f) {
+            return null;
+        }
+        return virus / totalEnergy;
     }
 
     /// <summary>
