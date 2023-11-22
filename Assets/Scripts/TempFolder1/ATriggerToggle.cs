@@ -9,13 +9,15 @@ using UnityEngine.Events;
 /// </summary>
 public abstract class ATriggerToggle : AControllable
 {
-    [SerializeField]
-    private UnityEvent<bool> ToggleableElements;
+    [Space(20)]
+    [Header("ATriggerToggle Fields")]
     [SerializeField]
     protected bool _enabledOnStart = true;
+    [SerializeField]
+    private UnityEvent<bool> ToggleableElements;
 
     protected virtual void Awake() => FireEvent(_enabledOnStart);
 
-    protected void FireEvent(bool state) => ToggleableElements.Invoke(state);
+    protected virtual void FireEvent(bool state) => ToggleableElements.Invoke(state);
 
 }

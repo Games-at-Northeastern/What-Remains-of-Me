@@ -37,8 +37,11 @@ public class InkDialogueTrigger : MonoBehaviour
     {
         playerInRange = false;
         _firstInteraction = true;
-        visualCue.SetActive(true);
     }
+
+    private void OnEnable() => visualCue.SetActive(_firstInteraction);
+
+    private void OnDisable() => visualCue.SetActive(false);
 
     private void Update()
     {
