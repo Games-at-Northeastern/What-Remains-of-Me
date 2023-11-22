@@ -1,7 +1,11 @@
 using UnityEngine;
 
+/// <summary>
+/// It's a laser of death.
+/// RAD stands for Rapid Atlas Disassembly.
+/// </summary>
 [RequireComponent(typeof(LineRenderer))]
-public class DeathLaser : MonoBehaviour
+public class RADLaser : MonoBehaviour
 {
     [SerializeField, Tooltip("Draws the laser in the direction of this target.")]
     private Transform _laserTarget;
