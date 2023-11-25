@@ -20,7 +20,6 @@ namespace CharacterController
             this.character = character;
             this.jumpType = jumpType;
             this.timeToReachApex = -initialVelocity / risingGravity;
-            Debug.Log("IV" + initialVelocity + Kinematics.InitialVelocity(0, risingGravity, jumpHeight));
         }
         public void CancelMove()
         {
@@ -44,15 +43,12 @@ namespace CharacterController
             switch (jumpType)
             {
                 case JumpType.addSpeed:
-                    character.Speed.Set(character.Speed.x, character.Speed.y + initialVelocity);
+                    character.Speed = new Vector2(character.Speed.x, character.Speed.y + initialVelocity);
                     break;
                 case JumpType.setSpeed:
-                    Debug.Log("IN switch");
                     character.Speed = new Vector2(character.Speed.x, initialVelocity);
                     break;
             }
-            Debug.Log("JumpSpeed" + character.Speed.y);
-
         }
         /// <summary>
         /// decreases the vertical velocity by gravity;

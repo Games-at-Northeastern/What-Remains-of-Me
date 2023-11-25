@@ -18,6 +18,7 @@ namespace PlayerControllerRefresh
         [HideInInspector] Rigidbody2D rb;
         [HideInInspector] public CapsuleCollider2D col;
         public LayerMask playerLayer;
+        [HideInInspector] public CheckpointManager checkpointManager;
         GroundMovement groundMovement;
         AirMovement airMovement;
         AirMovement airMovementZeroG;
@@ -134,6 +135,9 @@ namespace PlayerControllerRefresh
             SetupMoves();
             playerInputs = GetComponent<PlayerInputHandler>();
             rb = GetComponent<Rigidbody2D>();
+            checkpointManager = GetComponent<CheckpointManager>();
+            GetComponent<LevelManager>().OnPlayerReset.AddListener(Respawn);
+            GetComponent<LevelManager>().OnPlayerDeath.AddListener(Respawn);
         }
 
         #endregion
@@ -280,10 +284,25 @@ namespace PlayerControllerRefresh
         {
          knockback.StartMove();
         }
+        /// <summary>
+        /// Respawns the player at a given location.
+        /// </summary>
+        private void Respawn()
+        {
+            Debug.Log("Respawn Called");
+            if (checkpointManager != null)
+            {
+                Debug.Log("has Cp manager");
+                checkpointManager.RespawnAtRecent(rb.transform);
+            }
 
-            #region Collision
+            rb.velocity = Vector2.zero;
+            currentState = PlayerState.Aerial;
+        }
 
-            [Header("CollisionDetectors")]
+        #region Collision
+
+        [Header("CollisionDetectors")]
         [Tooltip("X is the width Y is the height")]
         [SerializeField] private Vector2 ceilingBounds;
         [Min(0)]
