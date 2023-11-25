@@ -135,9 +135,10 @@ namespace PlayerControllerRefresh
             SetupMoves();
             playerInputs = GetComponent<PlayerInputHandler>();
             rb = GetComponent<Rigidbody2D>();
-            checkpointManager = GetComponent<CheckpointManager>();
-            GetComponent<LevelManager>().OnPlayerReset.AddListener(Respawn);
-            GetComponent<LevelManager>().OnPlayerDeath.AddListener(Respawn);
+            checkpointManager = FindObjectOfType<CheckpointManager>();
+
+            FindObjectOfType<LevelManager>().OnPlayerReset.AddListener(Respawn);
+            FindObjectOfType<LevelManager>().OnPlayerDeath.AddListener(Respawn);
         }
 
         #endregion
