@@ -58,8 +58,9 @@ public class PlayerHealth : MonoBehaviour
         else
         {
             warning.GetComponent<WarningAnimation>().StopAnimation();
-        }
-        */
+            warning.GetComponent<WarningAnimation>().RegularVirus();
+        }*/
+        
         
     }
 
@@ -101,7 +102,7 @@ public class PlayerHealth : MonoBehaviour
     private void VirusWarning()
     {
         Debug.Log("Virus Overload Warning");
-        //warning.GetComponent<WarningAnimation>().StartAnimation();
+      //  warning.GetComponent<WarningAnimation>().HighVirus();
     }
 
 
