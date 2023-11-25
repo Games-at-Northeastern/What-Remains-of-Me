@@ -139,6 +139,9 @@ namespace PlayerControllerRefresh
 
             FindObjectOfType<LevelManager>().OnPlayerReset.AddListener(Respawn);
             FindObjectOfType<LevelManager>().OnPlayerDeath.AddListener(Respawn);
+            filter = new ContactFilter2D().NoFilter();
+            filter.SetLayerMask(~playerLayer);
+
         }
 
         #endregion
@@ -323,23 +326,34 @@ namespace PlayerControllerRefresh
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
 
-            return GizmosPlus.BoxCast(origin + new Vector2(-leftOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.left, sideBounds.x - 0.01f, ~playerLayer);
+            return Physics2D.BoxCast(origin + new Vector2(-leftOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.left, sideBounds.x - 0.01f, ~playerLayer);
 
         }
         public bool TouchingRightWall()
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
-            return GizmosPlus.BoxCast(origin + new Vector2(rightOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.right, sideBounds.x - 0.01f, ~playerLayer);
+            return Physics2D.BoxCast(origin + new Vector2(rightOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.right, sideBounds.x - 0.01f, ~playerLayer);
         }
         public bool TouchingCeiling()
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
-            return GizmosPlus.BoxCast(origin + new Vector2(0, ceilingOffset), new Vector2(ceilingBounds.x, 0.01f), 0, Vector2.up, ceilingBounds.y - 0.01f, ~playerLayer);
+            return Physics2D.BoxCast(origin + new Vector2(0, ceilingOffset), new Vector2(ceilingBounds.x, 0.01f), 0, Vector2.up, ceilingBounds.y - 0.01f, ~playerLayer);
         }
+        private ContactFilter2D filter;
         public bool TouchingGround()
         {
+
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
-            return GizmosPlus.BoxCast(origin + new Vector2(0, -groundOffset), new Vector2(groundBounds.x, 0.01f), 0, Vector2.down, groundBounds.y - 0.01f, ~playerLayer);
+            List<RaycastHit2D> hits = new List<RaycastHit2D>();
+            Physics2D.BoxCast(origin + new Vector2(0, -groundOffset), new Vector2(groundBounds.x, 0.01f), 0, Vector2.down, filter, hits ,groundBounds.y - 0.01f);
+            foreach(RaycastHit2D hit in hits)
+            {
+                if (!hit.collider.isTrigger)
+                {
+                    return true;
+                }
+            }
+            return false;
 
         }
 
