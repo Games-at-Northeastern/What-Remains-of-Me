@@ -60,10 +60,18 @@ public class OutletMeter : MonoBehaviour
         set { _cleanState = Mathf.Clamp(value, 0, cleanSprites.Length - 1); }
     }
 
+    public bool visualsAlwaysDisplayed; // If true, meter sprite visuals will always display
+    private bool isDisplayed; // Don't want to restart the visuals if they're already displayed
+
     private void Awake()
     {
         outlet = transform.GetComponentInParent<Outlet>();
         GetValues();
+
+        if (visualsAlwaysDisplayed)
+        {
+            StartVisuals();
+        }
     }
 
     // Get the initial values from the associated Outlet object
@@ -84,20 +92,28 @@ public class OutletMeter : MonoBehaviour
     // Start the visuals update coroutine
     public void StartVisuals()
     {
-        powered = true;
-        if (coroutineRunning || plugConnected)
-        { return; }
-        // Debug.Log("startVisuals");
-        StartCoroutine(UpdateVisuals());
+        if (!isDisplayed)
+        {
+            powered = true;
+            isDisplayed = true;
+            if (coroutineRunning || plugConnected)
+            { return; }
+            // Debug.Log("startVisuals");
+            StartCoroutine(UpdateVisuals());
+        }
     }
 
     // End the visuals update coroutine
     public void EndVisuals()
     {
-        if (plugConnected)
-        { return; }
-        // Debug.Log("endVisuals");
-        powered = false;
+        if (!visualsAlwaysDisplayed)
+        {
+            if (plugConnected)
+            { return; }
+            // Debug.Log("endVisuals");
+            powered = false;
+            isDisplayed = false;
+        }
     }
 
     // Connect the plug to the outlet
