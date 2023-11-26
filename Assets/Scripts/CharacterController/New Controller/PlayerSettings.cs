@@ -26,6 +26,9 @@ namespace PlayerControllerRefresh
         [Tooltip("how fast the player speeds up in the air")]
         [Min(0)]
         public float airAcceleration;
+        [Min(0)]
+        [Tooltip("rate which playerslows down in air")]
+        public float airDeceleration;
         [Tooltip("the fastest speed the player can fall")]
         public float terminalVelocity;
         [Tooltip("acceleration due to gravity while falling")]

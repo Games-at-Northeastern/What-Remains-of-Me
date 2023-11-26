@@ -122,8 +122,8 @@ namespace PlayerControllerRefresh
         private void SetupMoves()
         {
             groundMovement = new GroundMovement(settings.maxRunSpeed, settings.groundedAcceleration, settings.groundedDeceleration, this);
-            airMovement = new AirMovement(settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration, settings.fallGravity, this);
-            airMovementZeroG = new AirMovement(settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration, 0, this);
+            airMovement = new AirMovement(settings.maxRunSpeed,settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration,settings.airDeceleration , settings.fallGravity, this);
+            airMovementZeroG = new AirMovement(settings.maxRunSpeed,settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration, settings.airDeceleration,0, this);
             jump = new Jump(settings.risingGravity, settings.jumpHeight, JumpType.setSpeed, this);
             dash = new Dash(this, settings.dashSpeedX, settings.dashTime);
             swing = new Swing(wire, this, settings.fallGravity, settings.wireSwingNaturalAccelMultiplier, settings.SwingMaxAngularVelocity, settings.wireSwingDecayMultiplier, settings.wireSwingBounceDecayMultiplier, settings.PlayerSwayAccel, settings.wireLength);
@@ -191,6 +191,7 @@ namespace PlayerControllerRefresh
                     if (playerInputs.JumpPressed)
                     {
                         wire.DisconnectWire();
+                        Debug.Log("DC wire");
                     }
                     break;
             }
