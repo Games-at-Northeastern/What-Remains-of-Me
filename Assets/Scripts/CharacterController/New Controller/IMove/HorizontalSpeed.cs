@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace CharacterController
 {
-    public class GroundMovement : IMove
+    public class HorizontalSpeed : IMove
     {
         private float maxRunSpeed;
         private float acceleration;
@@ -14,10 +14,11 @@ namespace CharacterController
         {
             this.xInput = xInput;
         }
-        public GroundMovement(float maxRunSpeed, float acceleration, float deceleration, ICharacterController character)
+
+        public HorizontalSpeed(float maxRunSpeed, float acceleration, float deceleration, ICharacterController character)
         {
 
-            if (deceleration > 0)
+            if (deceleration < 0)
             {
                 Debug.LogWarning("Deceleration should be a positive value");
             }

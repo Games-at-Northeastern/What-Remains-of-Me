@@ -19,9 +19,9 @@ namespace PlayerControllerRefresh
         [HideInInspector] public CapsuleCollider2D col;
         public LayerMask playerLayer;
         [HideInInspector] public CheckpointManager checkpointManager;
-        GroundMovement groundMovement;
-        AirMovement airMovement;
-        AirMovement airMovementZeroG;
+        HorizontalSpeed groundMovement;
+        HorizontalSpeed airMovement;
+        VerticalFallSpeed airFall;
         Jump jump;
         Dash dash;
         Swing swing;
@@ -121,9 +121,9 @@ namespace PlayerControllerRefresh
         [ContextMenu("Update Moves to New Settings")]
         private void SetupMoves()
         {
-            groundMovement = new GroundMovement(settings.maxRunSpeed, settings.groundedAcceleration, settings.groundedDeceleration, this);
-            airMovement = new AirMovement(settings.maxRunSpeed,settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration,settings.airDeceleration , settings.fallGravity, this);
-            airMovementZeroG = new AirMovement(settings.maxRunSpeed,settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration, settings.airDeceleration,0, this);
+            groundMovement = new HorizontalSpeed(settings.maxRunSpeed, settings.groundedAcceleration, settings.groundedDeceleration, this);
+            airMovement = new HorizontalSpeed(settings.maxAirSpeed, settings.airAcceleration, settings.airDeceleration, this);
+            airFall = new VerticalFallSpeed(settings.terminalVelocity, settings.fallGravity, this);
             jump = new Jump(settings.risingGravity, settings.jumpHeight, JumpType.setSpeed, this);
             dash = new Dash(this, settings.dashSpeedX, settings.dashTime);
             swing = new Swing(wire, this, settings.fallGravity, settings.wireSwingNaturalAccelMultiplier, settings.SwingMaxAngularVelocity, settings.wireSwingDecayMultiplier, settings.wireSwingBounceDecayMultiplier, settings.PlayerSwayAccel, settings.wireLength);
@@ -154,7 +154,7 @@ namespace PlayerControllerRefresh
             Swinging,
             OnWall,
         }
-        private PlayerState currentState = PlayerState.Aerial;
+        public PlayerState currentState = PlayerState.Aerial;
 
         void FixedUpdate()
         {
@@ -171,15 +171,13 @@ namespace PlayerControllerRefresh
                     if (jumped)
                     {
                         HandleJump();
-                        airMovementZeroG.UpdateDirection(playerInputs.MoveInput);
-                        airMovementZeroG.ContinueMove();
                     }
                     else
                     {
-                        airMovement.UpdateDirection(playerInputs.MoveInput);
-                        airMovement.ContinueMove();
+                        airFall.ContinueMove();
                     }
-
+                    airMovement.UpdateDirection(playerInputs.MoveInput.x);
+                    airMovement.ContinueMove();
 
                     break;
                 case PlayerState.OnWall:
@@ -188,6 +186,7 @@ namespace PlayerControllerRefresh
                 case PlayerState.Swinging:
                     swing.UpdateInput(playerInputs.MoveInput.x);
                     swing.ContinueMove();
+                    Debug.Log("SwingSwitch" + playerInputs.JumpPressed);
                     if (playerInputs.JumpPressed)
                     {
                         wire.DisconnectWire();

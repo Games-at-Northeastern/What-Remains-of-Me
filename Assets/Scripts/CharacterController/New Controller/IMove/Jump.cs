@@ -56,7 +56,7 @@ namespace CharacterController
         public void ContinueMove()
         {
             timePassed += Time.fixedDeltaTime;
-            character.Speed.Set(character.Speed.x, character.Speed.y - risingGravity * Time.fixedDeltaTime);
+            character.Speed = new Vector2(character.Speed.x, character.Speed.y - risingGravity * Time.fixedDeltaTime);
         }
     }
     /// <summary>
