@@ -44,21 +44,22 @@ namespace PlayerControllerRefresh
         public bool Grounded => this.TouchingGround();
 
         public Vector2 Direction => this.transform.forward;
-        public AnimationType GetAnimationState() {
+        public AnimationType GetAnimationState()
+        {
             switch (currentState)
             {
                 case PlayerState.Grounded:
-                    if(Mathf.Abs(playerInputs.MoveInput.x) > 0.1f)
+                    if (Mathf.Abs(playerInputs.MoveInput.x) > 0.1f)
                     {
                         return AnimationType.RUN;
                     }
                     else
                     {
-                       return AnimationType.IDLE;
+                        return AnimationType.IDLE;
                     }
                     break;
                 case PlayerState.Aerial:
-                    if(_speed.y > 0)
+                    if (_speed.y > 0)
                     {
                         return AnimationType.JUMP_RISING;
                     }
@@ -76,7 +77,7 @@ namespace PlayerControllerRefresh
             //Temporary
             return AnimationType.IDLE;
         }
-       
+
 
 
 
@@ -89,7 +90,7 @@ namespace PlayerControllerRefresh
         private Facing currentDirection = Facing.right;
         private Facing direction()
         {
-            if(playerInputs.MoveInput.x == 0)
+            if (playerInputs.MoveInput.x == 0)
             {
                 return currentDirection;
             }
@@ -125,7 +126,7 @@ namespace PlayerControllerRefresh
             airMovementZeroG = new AirMovement(settings.maxAirSpeed, settings.terminalVelocity, settings.airAcceleration, 0, this);
             jump = new Jump(settings.risingGravity, settings.jumpHeight, JumpType.setSpeed, this);
             dash = new Dash(this, settings.dashSpeedX, settings.dashTime);
-            swing = new Swing(wire,this,settings.fallGravity,settings.wireSwingNaturalAccelMultiplier,settings.SwingMaxAngularVelocity,settings.wireSwingDecayMultiplier,settings.wireSwingBounceDecayMultiplier,settings.PlayerSwayAccel, settings.wireLength);
+            swing = new Swing(wire, this, settings.fallGravity, settings.wireSwingNaturalAccelMultiplier, settings.SwingMaxAngularVelocity, settings.wireSwingDecayMultiplier, settings.wireSwingBounceDecayMultiplier, settings.PlayerSwayAccel, settings.wireLength);
             wallJump = new WallJump(this, settings.risingGravity, settings.WallJumpDistance, settings.takeControlAwayTime);
             wallSlide = new WallSlide(settings.wallSlideGravity, settings.maxWallSlideSpeed, this);
         }
@@ -154,7 +155,7 @@ namespace PlayerControllerRefresh
             OnWall,
         }
         private PlayerState currentState = PlayerState.Aerial;
-        
+
         void FixedUpdate()
         {
             _speed = rb.velocity;
@@ -200,7 +201,7 @@ namespace PlayerControllerRefresh
         }
         private void SwitchState()
         {
-            if(GetNewState() == currentState)
+            if (GetNewState() == currentState)
             {
                 return;
             }
@@ -248,7 +249,7 @@ namespace PlayerControllerRefresh
                 }
             }
 
-            
+
         }
 
         #region Jump
@@ -260,13 +261,15 @@ namespace PlayerControllerRefresh
             {
                 jump.StartMove();
                 jumped = true;
-            }else
+            }
+            else
             {
                 if (jumped)
                 {
                     jump.ContinueMove();
                 }
-                if (!playerInputs.JumpHeld || jump.IsMoveComplete());
+                if (!playerInputs.JumpHeld || jump.IsMoveComplete())
+                    ;
                 {
                     jump.CancelMove();
                     jumped = false;
@@ -286,7 +289,7 @@ namespace PlayerControllerRefresh
 
         private void OnHurt()
         {
-         knockback.StartMove();
+            knockback.StartMove();
         }
         /// <summary>
         /// Respawns the player at a given location.
@@ -325,19 +328,23 @@ namespace PlayerControllerRefresh
         public bool TouchingLeftWall()
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
-
-            return Physics2D.BoxCast(origin + new Vector2(-leftOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.left, sideBounds.x - 0.01f, ~playerLayer);
-
+            List<RaycastHit2D> hits = new List<RaycastHit2D>();
+            Physics2D.BoxCast(origin + new Vector2(-leftOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.left, filter, hits, sideBounds.x - 0.01f);
+            return HitSolidObject(hits);
         }
         public bool TouchingRightWall()
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
-            return Physics2D.BoxCast(origin + new Vector2(rightOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.right, sideBounds.x - 0.01f, ~playerLayer);
+            List<RaycastHit2D> hits = new List<RaycastHit2D>();
+            Physics2D.BoxCast(origin + new Vector2(rightOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.right, filter, hits, sideBounds.x - 0.01f);
+            return HitSolidObject(hits);
         }
         public bool TouchingCeiling()
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
-            return Physics2D.BoxCast(origin + new Vector2(0, ceilingOffset), new Vector2(ceilingBounds.x, 0.01f), 0, Vector2.up, ceilingBounds.y - 0.01f, ~playerLayer);
+            List<RaycastHit2D> hits = new List<RaycastHit2D>();
+            Physics2D.BoxCast(origin + new Vector2(0, ceilingOffset), new Vector2(ceilingBounds.x, 0.01f), 0, Vector2.up, filter, hits, ceilingBounds.y - 0.01f);
+            return HitSolidObject(hits);
         }
         private ContactFilter2D filter;
         public bool TouchingGround()
@@ -345,8 +352,14 @@ namespace PlayerControllerRefresh
 
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
             List<RaycastHit2D> hits = new List<RaycastHit2D>();
-            Physics2D.BoxCast(origin + new Vector2(0, -groundOffset), new Vector2(groundBounds.x, 0.01f), 0, Vector2.down, filter, hits ,groundBounds.y - 0.01f);
-            foreach(RaycastHit2D hit in hits)
+            Physics2D.BoxCast(origin + new Vector2(0, -groundOffset), new Vector2(groundBounds.x, 0.01f), 0, Vector2.down, filter, hits, groundBounds.y - 0.01f);
+            return HitSolidObject(hits);
+
+        }
+
+        private static bool HitSolidObject(List<RaycastHit2D> hits)
+        {
+            foreach (RaycastHit2D hit in hits)
             {
                 if (!hit.collider.isTrigger)
                 {
@@ -354,7 +367,6 @@ namespace PlayerControllerRefresh
                 }
             }
             return false;
-
         }
 
 
