@@ -26,7 +26,6 @@ namespace PlayerControllerRefresh
             TimeSinceJumpWasPressed += Time.fixedDeltaTime;
         }
 
-
         public void Jump(InputAction.CallbackContext context)
         {
             JumpPressed = JumpPressed || context.started;

@@ -72,7 +72,7 @@ public class PlayerHealth : MonoBehaviour
     private void VirusFullDeath()
     {
         Debug.Log("Death from virus full");
-        LevelManager.Instance.PlayerDeath();
+        LevelManager.PlayerDeath();
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public class PlayerHealth : MonoBehaviour
     private void EnergyDepletedDeath()
     {
         Debug.Log("Death from energy depleted");
-        LevelManager.Instance.PlayerDeath();
+        LevelManager.PlayerDeath();
     }
 
     /// <summary>

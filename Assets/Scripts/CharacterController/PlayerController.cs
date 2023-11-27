@@ -137,9 +137,8 @@ namespace PlayerControllerRefresh
             playerInputs = GetComponent<PlayerInputHandler>();
             rb = GetComponent<Rigidbody2D>();
             checkpointManager = FindObjectOfType<CheckpointManager>();
-
-            FindObjectOfType<LevelManager>().OnPlayerReset.AddListener(Respawn);
-            FindObjectOfType<LevelManager>().OnPlayerDeath.AddListener(Respawn);
+            LevelManager.OnPlayerDeath.AddListener(Respawn);
+            LevelManager.OnPlayerReset.AddListener(Respawn);
             filter = new ContactFilter2D().NoFilter();
             filter.SetLayerMask(~playerLayer);
 
@@ -186,11 +185,9 @@ namespace PlayerControllerRefresh
                 case PlayerState.Swinging:
                     swing.UpdateInput(playerInputs.MoveInput.x);
                     swing.ContinueMove();
-                    Debug.Log("SwingSwitch" + playerInputs.JumpPressed);
-                    if (playerInputs.JumpPressed)
+                    if (playerInputs.TimeSinceJumpWasPressed < settings.jumpBuffer)
                     {
                         wire.DisconnectWire();
-                        Debug.Log("DC wire");
                     }
                     break;
             }
@@ -294,7 +291,8 @@ namespace PlayerControllerRefresh
         /// <summary>
         /// Respawns the player at a given location.
         /// </summary>
-        private void Respawn()
+        [ContextMenu("RESPAWN")]
+        public void Respawn()
         {
             Debug.Log("Respawn Called");
             if (checkpointManager != null)

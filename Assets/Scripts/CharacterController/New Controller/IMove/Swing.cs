@@ -133,7 +133,7 @@ namespace CharacterController
             {
                 gravityVel = 0;
             }
-            Debug.Log(debugString);
+            //Debug.Log(debugString);
         }
         /// <summary>
         /// Get the length of the wire connecting to an outlet. You should be

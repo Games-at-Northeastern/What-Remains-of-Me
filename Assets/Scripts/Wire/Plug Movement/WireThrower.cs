@@ -78,16 +78,13 @@ public class WireThrower : MonoBehaviour
 
     private void Start()
     {
-        levelManager = LevelManager.Instance;
         RegisterEvents();
     }
 
     private void RegisterEvents()
     {
-        levelManager.OnPlayerReset.AddListener(DespawnWire);
-        levelManager.OnPlayerDeath.AddListener(DespawnWire);
-        levelManager.OnPlayerPause.AddListener(_controlSchemes.Disable);
-        levelManager.OnPlayerUnpause.AddListener(_controlSchemes.Enable);
+        LevelManager.OnPlayerReset.AddListener(DespawnWire);
+        LevelManager.OnPlayerDeath.AddListener(DespawnWire);
     }
     #endregion
 
