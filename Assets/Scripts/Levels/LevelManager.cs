@@ -23,7 +23,7 @@ public class LevelManager : MonoBehaviour
     public static UnityEvent OnPlayerReset = new UnityEvent();
     [Header("Event to trigger player death events.")]
     public static UnityEvent OnPlayerDeath = new UnityEvent();
-
+    public static CheckpointManager checkpointManager;
 
     // Event start functions that are accessible for other objects to trigger events
     /// <summary>
@@ -40,6 +40,10 @@ public class LevelManager : MonoBehaviour
         OnPlayerReset.RemoveAllListeners();
         OnPlayerDeath.RemoveAllListeners();
         PlayerRef = FindObjectOfType<PlayerControllerRefresh.PlayerController>().gameObject;
+    }
+    private void Start()
+    {
+        checkpointManager = FindObjectOfType<CheckpointManager>();
     }
 
     /// <summary>

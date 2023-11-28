@@ -18,7 +18,6 @@ namespace PlayerControllerRefresh
         [HideInInspector] Rigidbody2D rb;
         [HideInInspector] public CapsuleCollider2D col;
         public LayerMask playerLayer;
-        [HideInInspector] public CheckpointManager checkpointManager;
         HorizontalSpeed groundMovement;
         HorizontalSpeed airMovement;
         VerticalFallSpeed airFall;
@@ -138,8 +137,7 @@ namespace PlayerControllerRefresh
             SetupMoves();
             playerInputs = GetComponent<PlayerInputHandler>();
             rb = GetComponent<Rigidbody2D>();
-            checkpointManager = FindObjectOfType<CheckpointManager>();
-            LevelManager.OnPlayerDeath.AddListener(Respawn);
+            LevelManager.OnPlayerDeath.AddListener(Restart);
             LevelManager.OnPlayerReset.AddListener(Respawn);
             filter = new ContactFilter2D().NoFilter();
             filter.SetLayerMask(~playerLayer);
@@ -298,13 +296,17 @@ namespace PlayerControllerRefresh
         [ContextMenu("RESPAWN")]
         public void Respawn()
         {
-            Debug.Log("Respawn Called");
-            if (checkpointManager != null)
-            {
-                Debug.Log("has Cp manager");
-                checkpointManager.RespawnAtRecent(rb.transform);
-            }
-
+            LevelManager.checkpointManager.RespawnAtRecent(rb.transform);
+            rb.velocity = Vector2.zero;
+            currentState = PlayerState.Aerial;
+            ExternalVelocity = Vector2.zero;
+        }
+        /// <summary>
+        /// Resets the player to their original position. For debugging only.
+        /// </summary>
+        private void Restart()
+        {
+            LevelManager.checkpointManager.RespawnAtBeginning(rb.transform);
             rb.velocity = Vector2.zero;
             currentState = PlayerState.Aerial;
             ExternalVelocity = Vector2.zero;
