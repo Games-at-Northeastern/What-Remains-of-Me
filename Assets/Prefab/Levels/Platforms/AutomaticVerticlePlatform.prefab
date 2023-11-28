@@ -178,10 +178,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1356603267965378351}
   - component: {fileID: 1356603267965378345}
-  - component: {fileID: 1356603267965378350}
   - component: {fileID: 1316763705}
   - component: {fileID: 7131962846902356811}
   - component: {fileID: 6192619221828689598}
+  - component: {fileID: 8598896248831896409}
   m_Layer: 0
   m_Name: PlatformObject
   m_TagString: Untagged
@@ -230,19 +230,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.99, y: 0.3}
   m_EdgeRadius: 0
---- !u!114 &1356603267965378350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1356603267965378348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cb08d2b68c44c0495c17497d9c8e394, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _eventCollisionTag: 
 --- !u!50 &1316763705
 Rigidbody2D:
   serializedVersion: 4
@@ -335,6 +322,33 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8598896248831896409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356603267965378348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7019f7f8b2e061046ae966a84c8f3e9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _points:
+  - {fileID: 3175746268635689118}
+  - {fileID: 3175746269257402529}
+  _relativeBodies: []
+  _activeByDefault: 0
+  _rotateToDirection: 0
+  _locationAccuracy: 0.05
+  _initialStartIndex: 0
+  _normalizedInitialStartPosition: 0
+  _speed: 3
+  _randomSpeedModifier: 0
+  _maxSpeedModifier: 3
+  _speedModifier: 1
+  _loopType: 0
+  _isMovingRight: 1
 --- !u!1 &1356603269782670811
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,7 +708,8 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
-  _movingElements: []
+  _movingElements:
+  - {fileID: 8598896248831896409}
 --- !u!1 &3568636639886647686
 GameObject:
   m_ObjectHideFlags: 0

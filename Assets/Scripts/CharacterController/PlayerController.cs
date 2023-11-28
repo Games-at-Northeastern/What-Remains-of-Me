@@ -78,8 +78,9 @@ namespace PlayerControllerRefresh
             return AnimationType.IDLE;
         }
 
+        public Vector2 ExternalVelocity;
 
-
+        public float ExternalVelocityDecay;
 
         public Vector2 Speed => _speed;
 
@@ -132,6 +133,7 @@ namespace PlayerControllerRefresh
         }
         void Start()
         {
+            ExternalVelocityDecay = settings.airDeceleration;
             col = GetComponent<CapsuleCollider2D>();
             SetupMoves();
             playerInputs = GetComponent<PlayerInputHandler>();
@@ -157,7 +159,7 @@ namespace PlayerControllerRefresh
 
         void FixedUpdate()
         {
-            _speed = rb.velocity;
+            _speed = rb.velocity - ExternalVelocity;
             SwitchState();
             switch (currentState)
             {
@@ -194,7 +196,9 @@ namespace PlayerControllerRefresh
 
 
             //Debug.Log("PCSPEED" + _speed);
-            rb.velocity = Speed;
+            rb.velocity = Speed + ExternalVelocity;
+            ExternalVelocity.x = Mathf.Max(0, ExternalVelocity.x - ExternalVelocityDecay * Time.fixedDeltaTime);
+            ExternalVelocity.y = Mathf.Max(0, ExternalVelocity.y - ExternalVelocityDecay * Time.fixedDeltaTime);
         }
         private void SwitchState()
         {
