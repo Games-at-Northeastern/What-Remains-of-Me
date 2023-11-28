@@ -28,5 +28,9 @@ public class MovingPlatform : MovingElement
         {
             player.ExternalVelocity = MovePlatform();
         }
+        else
+        {
+            MovePlatform();
+        }
     }
 }

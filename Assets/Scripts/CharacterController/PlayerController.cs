@@ -307,6 +307,7 @@ namespace PlayerControllerRefresh
 
             rb.velocity = Vector2.zero;
             currentState = PlayerState.Aerial;
+            ExternalVelocity = Vector2.zero;
         }
 
         #region Collision
