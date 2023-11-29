@@ -9,6 +9,8 @@ namespace Levels.Objects.Platform
     /// </summary>
     public class HecticMovementEffector : AMovingElementVirusEffector
     {
+        [SerializeField] private bool _doRandomizeToggle = true;
+        
         [SerializeField] private Range _randomRange;
 
         [Space(15)]
@@ -79,11 +81,18 @@ namespace Levels.Objects.Platform
 
         private IEnumerator IEProcess(MovingElement element)
         {
+            if (_doRandomizeSpeed)
+            {
+                element.SetRandomSpeedModifier(_speedRange.GetValue()); // what's the difference between random speed mod and speed mod?
+            }
+
             while (true)
             {
                 yield return new WaitForSeconds(_randomRange.GetValue());
 
-                element.ToggleDir();
+                if (_doRandomizeToggle) {
+                    element.ToggleDir();   
+                }
 
                 if (_doRandomizeSpeed)
                 {

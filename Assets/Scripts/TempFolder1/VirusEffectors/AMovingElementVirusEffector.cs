@@ -29,6 +29,11 @@ namespace Levels.Objects.Platform
             }
 
             _elementController.OnVirusChange.AddListener(UpdateVirusPercentageAndApply);
+
+            float? startPercent = _elementController.GetVirusPercent();
+            if (startPercent.HasValue) {
+                UpdateVirusPercentageAndApply(startPercent.Value);
+            }
         }
 
         /// <summary>
@@ -38,7 +43,7 @@ namespace Levels.Objects.Platform
         private void UpdateVirusPercentageAndApply(float virusPercentage)
         {
             _currentVirusPercentage = virusPercentage;
-
+            
             UpdateVirusParticles(_currentVirusPercentage);
 
             if (ShouldDoEffect(virusPercentage))
@@ -56,7 +61,11 @@ namespace Levels.Objects.Platform
         {
             if (_doVisualEffect && _virusEffect)
             {
-                _virusEffect.SetFloat("Density", virusPercentage);
+                if (virusPercentage >= _doVirusEffectAt) {
+                    _virusEffect.SetFloat("Density", virusPercentage);
+                } else {
+                    _virusEffect.SetFloat("Density", 0f);
+                }
             }
         }
 

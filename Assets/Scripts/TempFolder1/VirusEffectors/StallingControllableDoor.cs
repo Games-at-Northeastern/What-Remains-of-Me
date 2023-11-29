@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 /// <summary>
 /// Represents a door which can be moved up or down based on the amount of energy
@@ -14,6 +15,9 @@ public class StallingControllableDoor : AControllable
     
     [SerializeField] 
     private float doVirusEffectAt;
+
+    [SerializeField]
+    private VisualEffect virusEffect;
 
     [SerializeField]
     private float doorMoveSpeed;
@@ -31,11 +35,18 @@ public class StallingControllableDoor : AControllable
     void Update()
     {
         float? virusPercent = GetVirusPercent();
-        Debug.Log("virus percent: " + virusPercent);
-        if (virusPercent != null && virusPercent < doVirusEffectAt) {
-            Vector2 targetPos = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, this.GetPercentFull());
-            Debug.Log("target pos: " + targetPos);
-            transform.position = Vector2.MoveTowards(transform.position, targetPos, doorMoveSpeed * Time.deltaTime);
+        //Debug.Log("virus percent: " + virusPercent);
+        if (virusPercent != null) {
+            if (virusPercent < doVirusEffectAt) {
+                virusEffect.SetFloat("Density", 0f);
+                Vector2 targetPos = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, this.GetPercentFull());
+                //Debug.Log("target pos: " + targetPos);
+                transform.position = Vector2.MoveTowards(transform.position, targetPos, doorMoveSpeed * Time.deltaTime);
+            } else {
+                virusEffect.SetFloat("Density", virusPercent.Value);
+            }
+        } else {
+            virusEffect.SetFloat("Density", 0f);
         }
     }
 }

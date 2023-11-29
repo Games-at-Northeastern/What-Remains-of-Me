@@ -105,6 +105,9 @@ public class MovingElement : MonoBehaviour
             if (dist <= _locationAccuracy || dist > _previousDistance) // if we are close enough to point OR if we've passed the target point...
             {
                 //Debug.Log("Fired for the following reason: " + (dist > _previousDistance ? $"distance ({dist}) is greater than previous ({_previousDistance})" : "within accuracy"));
+                if (_runtimePoints.Length == 1) {
+                    transform.position = _runtimePoints[0].position;
+                }
                 UpdateDestinationAndDirection();
             }
 
