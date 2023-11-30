@@ -17,6 +17,8 @@ public class LevelManager : MonoBehaviour
     private int toWarpID;
     private bool loadedNewScene = false;
     private GameObject playerRef;
+    private Vector2 recentCheckpointHolder;
+    private bool checkpointHeld;
 
     // Level events
     [Header("Event to trigger player respawn after obstacle collision.")]
@@ -107,6 +109,13 @@ public class LevelManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
+        if (Input.GetKeyDown(KeyCode.LeftBracket)) {
+            CheckpointManager checkpointManager = FindObjectOfType<CheckpointManager>();
+            recentCheckpointHolder = checkpointManager.getMostRecentPoint().getRespawnPosition();
+            checkpointHeld = true;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
         /* Commented out cause prevents game from pausing
          * if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -133,5 +142,18 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(warpDestination);
         playerRef = null; // Comment out if player is DontDestroyOnLoad
         loadedNewScene = true;
+    }
+
+    /// <summary>
+    /// Returns the checkpoint being held by this LevelManager and stops holding it. In theory, since the LevelManager is persistent, this method should only
+    /// need to be called when we have reloaded a level mid-progress and wish to preserve the player's physical progress through the level.
+    /// </summary>
+    public Vector2 extractRecentCheckpoint() {
+        checkpointHeld = false;
+        return recentCheckpointHolder;
+    }
+
+    public bool holdingCheckpoint() {
+        return checkpointHeld;
     }
 }

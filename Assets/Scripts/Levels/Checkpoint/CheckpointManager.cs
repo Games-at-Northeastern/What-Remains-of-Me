@@ -18,6 +18,11 @@ public class CheckpointManager : MonoBehaviour
 
     private void Start()
     {
+        if (LevelManager.Instance.holdingCheckpoint()) {
+            Vector2 teleportPoint = LevelManager.Instance.extractRecentCheckpoint();
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>().position = teleportPoint;
+        }
+
         if (mostRecentPoint == null)
         {
             mostRecentPoint = levelStartPoint;
@@ -93,5 +98,14 @@ public class CheckpointManager : MonoBehaviour
                 levelStartPoint = mostRecentPoint;
             }
         }
+    }
+
+    /// <summary>
+    /// Provides access to the most recent checkpoint that this CheckpointManager registered. Note that this getter is necessary
+    /// because, in the case of saving player progress but resetting level state, we need the information of most recent checkpoint
+    /// to persist longer than the lifespan of this CheckpointManager object.
+    /// </summary>
+    public Checkpoint getMostRecentPoint() {
+        return mostRecentPoint;
     }
 }
