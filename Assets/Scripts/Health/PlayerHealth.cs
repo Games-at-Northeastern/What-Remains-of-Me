@@ -47,7 +47,7 @@ public class PlayerHealth : MonoBehaviour
             EnergyDepletedDeath();
         }
         /*
-        else if (playerInfo.virus >= playerInfo.maxVirus * 0.75)
+        else if (playerInfo.virus >= playerInfo.maxVirus * 0.01)
         {
             VirusWarning();
         }
@@ -59,7 +59,8 @@ public class PlayerHealth : MonoBehaviour
         {
             warning.GetComponent<WarningAnimation>().StopAnimation();
             warning.GetComponent<WarningAnimation>().RegularVirus();
-        }*/
+        }
+        */
         
         
     }
@@ -73,6 +74,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("Death from virus full");
         LevelManager.Instance.PlayerDeath();
+        //warning.GetComponent<WarningAnimation>().ResetVirus();
     }
 
     /// <summary>
@@ -101,8 +103,15 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     private void VirusWarning()
     {
-        Debug.Log("Virus Overload Warning");
-      //  warning.GetComponent<WarningAnimation>().HighVirus();
+       // warning.GetComponent<WarningAnimation>().VirusControl(playerInfo.virus / playerInfo.maxVirus);
+        if (playerInfo.virus >= playerInfo.maxVirus * 0.8f)
+        {
+            Debug.Log("Virus Overload Warning");
+            //warning.GetComponent<WarningAnimation>().StartAnimation();
+        } else
+        {
+            //warning.GetComponent<WarningAnimation>().StopAnimation();
+        }
     }
 
 
@@ -112,7 +121,7 @@ public class PlayerHealth : MonoBehaviour
     private void EnergyDepletionWarning()
     {
         Debug.Log("Energy Depletion Warning");
-       // warning.GetComponent<WarningAnimation>().StartAnimation();
+        //warning.GetComponent<WarningAnimation>().StartAnimation();
     }
 
 
