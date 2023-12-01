@@ -16,8 +16,8 @@ public class LevelManager : MonoBehaviour
     private string warpDestination;
     private int toWarpID;
     private bool loadedNewScene = false;
-    private Vector2 recentCheckpointHolder;
-    private bool checkpointHeld;
+    private static Vector2 recentCheckpointHolder;
+    private static bool checkpointHeld;
     public static GameObject PlayerRef { get; private set; }
 
     // Level events
@@ -114,12 +114,12 @@ public class LevelManager : MonoBehaviour
     /// Returns the checkpoint being held by this LevelManager and stops holding it. In theory, since the LevelManager is persistent, this method should only
     /// need to be called when we have reloaded a level mid-progress and wish to preserve the player's physical progress through the level.
     /// </summary>
-    public Vector2 extractRecentCheckpoint() {
+    public static Vector2 extractRecentCheckpoint() {
         checkpointHeld = false;
         return recentCheckpointHolder;
     }
 
-    public bool holdingCheckpoint() {
+    public static bool holdingCheckpoint() {
         return checkpointHeld;
     }
 }

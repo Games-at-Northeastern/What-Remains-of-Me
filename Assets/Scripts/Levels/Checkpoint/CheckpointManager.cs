@@ -18,8 +18,8 @@ public class CheckpointManager : MonoBehaviour
 
     private void Start()
     {
-        if (LevelManager.Instance.holdingCheckpoint()) {
-            Vector2 teleportPoint = LevelManager.Instance.extractRecentCheckpoint();
+        if (LevelManager.holdingCheckpoint()) {
+            Vector2 teleportPoint = LevelManager.extractRecentCheckpoint();
             GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>().position = teleportPoint;
         }
 
