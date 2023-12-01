@@ -59,7 +59,7 @@ public class SpikeTeleport : MonoBehaviour
         }
 
         objectToTeleport.SetActive(true);
-        LevelManager.Instance.PlayerReset();
+        LevelManager.PlayerReset();
         InkDialogueVariables.deathCount++;
 
         //play the player death sound using PlayerSFX

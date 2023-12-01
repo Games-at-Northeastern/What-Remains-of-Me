@@ -31,7 +31,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""9462c04d-585c-4c37-a004-c1215e6da1d1"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -156,9 +156,9 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""1D Axis"",
+                    ""name"": ""2D Vector"",
                     ""id"": ""45b2076e-40ab-48c6-8bf4-87e8d21d086f"",
-                    ""path"": ""1DAxis"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -167,8 +167,30 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
+                    ""name"": ""Up"",
                     ""id"": ""843c48ee-6a16-45bd-b1e2-fb63dfd53366"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Down"",
+                    ""id"": ""1a51a183-3ee7-4ebc-ae1e-38766e77e918"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Left"",
+                    ""id"": ""bb57f019-0195-455a-882e-dcec0d87d5c0"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -178,8 +200,8 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""1a51a183-3ee7-4ebc-ae1e-38766e77e918"",
+                    ""name"": ""Right"",
+                    ""id"": ""d5860826-3fe5-4844-9f01-269074b8725f"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -191,7 +213,7 @@ public partial class @ControlSchemes : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""016638cf-eb80-4a08-8cae-3347608c1110"",
-                    ""path"": ""<Gamepad>/leftStick/x"",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

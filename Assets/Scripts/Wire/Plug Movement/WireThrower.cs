@@ -3,40 +3,30 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
-
+using CharacterController;
+using System;
 /// <summary>
 /// The main script for handling wire controls. Spawns/Fires, despawns, and
 /// connects the wire. Also controls bullet time while the wire is being aimed.
 /// </summary>
 public class WireThrower : MonoBehaviour
 {
+    #region SerializedFields
     [Header("SFX")]
     public AudioSource src;
     public AudioClip shootWire;
     public float aimDistance;
 
     // Non-accessible fields
-    private Camera mainCamera;
+
     [SerializeField] GameObject plugPrefab;
-    [SerializeField] float timeScaleForAim;
-    private GameObject _activePlug;
-    private ControlSchemes _controlSchemes;
+    //[SerializeField] float timeScaleForAim;
+
     [SerializeField] private PlugMovementSettings _plugMovementSettings;
-    [SerializeField] private MovementExecuter _movementExecuter;
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private DistanceJoint2D _distanceJoint;
     [SerializeField] private GameObject reticle;
-    private float _framesHeld;
-    private bool _isLockOn = false; // Whether or not Atlas is locking on to an outlet
-    private GameObject _lockOnOutlet;
-    private Vector2 _lastRecordedPosition;
 
-    private PlugMovementSettings pms; // For calculating grappling range
-    private MovementExecuter me; // For determining which way the player is facing
-
-    private List<GameObject> outletsInOverrideRange;
-
-    private LevelManager levelManager;
 
     // Accessible Fields
     public Outlet ConnectedOutlet { get; private set; } // If null, disconnected. Otherwise, connected.
@@ -44,7 +34,26 @@ public class WireThrower : MonoBehaviour
     public UnityEvent onDisconnect = new UnityEvent();
 
     [SerializeField] private bool DirectionAffectsPriority; // To enable new directional targeting system
+    #endregion
 
+    #region Internal References
+    private Camera mainCamera;
+    private GameObject _activePlug;
+    private ControlSchemes _controlSchemes;
+    private float _framesHeld;
+    private bool _isLockOn = false; // Whether or not Atlas is locking on to an outlet
+    private GameObject _lockOnOutlet;
+    private Vector2 _lastRecordedPosition;
+
+    private PlugMovementSettings pms; // For calculating grappling range
+    private ICharacterController cc; // For determining which way the player is facing
+
+    private List<GameObject> outletsInOverrideRange;
+
+    private LevelManager levelManager;
+    #endregion
+
+    #region StartUp
     private void Awake()
     {
         // Add left click handling functionality
@@ -53,7 +62,7 @@ public class WireThrower : MonoBehaviour
         _controlSchemes.Player.Throw.started += HandleThrowInputReleasedKeyboard;
         //_controlSchemes.Player.ThrowController.canceled += _ => HandleThrowInputReleasedController();
         //_controlSchemes.Player.ThrowMouse.canceled += _ => HandleThrowInputReleasedKeyboard();
-        _controlSchemes.Player.Jump.performed += HandlePotentialDisconnectByJump;
+        //_controlSchemes.Player.Jump.performed += HandlePotentialDisconnectByJump;
         // Handle line renderer
         _lineRenderer.enabled = false;
         ConnectedOutlet = null;
@@ -62,54 +71,30 @@ public class WireThrower : MonoBehaviour
         mainCamera = Camera.main;
 
         pms = FindObjectOfType<PlugMovementSettings>();
-        me = FindObjectOfType<MovementExecuter>();
+        cc = GetComponentInParent<ICharacterController>();
 
         outletsInOverrideRange = new List<GameObject>();
-}
+    }
 
     private void Start()
     {
-        levelManager = LevelManager.Instance;
         RegisterEvents();
     }
 
-    /// <summary>
-    /// Register this as a listener to any necessary events
-    /// </summary>
     private void RegisterEvents()
     {
-        levelManager.OnPlayerReset.AddListener(DespawnWire);
-        levelManager.OnPlayerDeath.AddListener(DespawnWire);
-        levelManager.OnPlayerPause.AddListener(_controlSchemes.Disable);
-        levelManager.OnPlayerUnpause.AddListener(_controlSchemes.Enable);
+        LevelManager.OnPlayerReset.AddListener(DespawnWire);
+        LevelManager.OnPlayerDeath.AddListener(DespawnWire);
     }
+    #endregion
 
-    private void OnDestroy()
+    #region External Commands
+    public void DisconnectWire()
     {
-        _controlSchemes.Player.Throw.started -= HandleThrowInputReleasedKeyboard;
-        _controlSchemes.Player.Jump.performed -= HandlePotentialDisconnectByJump;
+        HandlePotentialDisconnect();
     }
-
-    /// <summary>
-    /// Function that is passed to the control scheme to handle the start of a throw.
-    /// </summary>
-    void HandleThrowInputHeld()
+    public void ThrowWire()
     {
-        if (_activePlug == null && ConnectedOutlet == null)
-        {
-            // Prepare to fire wire
-            Time.timeScale = 1;
-            _framesHeld = 0;
-        }
-    }
-
-    /// <summary>
-    /// Function that is passed to the control scheme to handle cancelling a throw when the
-    /// keyboard/mouse button for this action is released.
-    /// </summary>
-    void HandleThrowInputReleasedKeyboard(InputAction.CallbackContext ctx)
-    {
-        Debug.Log("LOCKED ON: " + _isLockOn);
         if (_activePlug == null && ConnectedOutlet == null)
         {
             Time.timeScale = 1;
@@ -132,16 +117,43 @@ public class WireThrower : MonoBehaviour
     }
 
     /// <summary>
-    /// Function passed to the control scheme to handle disconnecting the wire when jumping.
+    /// To be called by the movement system to set the maximum wire length,
+    /// this restricting player movement while attached to the wire.
     /// </summary>
-    void HandlePotentialDisconnectByJump(InputAction.CallbackContext ctx)
+    public void SetMaxWireLength(float amount)
     {
-        if (_movementExecuter.GetCurrentMove().DisconnectByJumpOkay())
+        _distanceJoint.distance = amount;
+    }
+    #endregion
+
+    #region Handlers
+    /// <summary>
+    /// Function that is passed to the control scheme to handle the start of a throw.
+    /// </summary>
+    void HandleThrowInputHeld()
+    {
+        if (_activePlug == null && ConnectedOutlet == null)
         {
-            HandlePotentialDisconnect();
+            // Prepare to fire wire
+            Time.timeScale = 1;
+            _framesHeld = 0;
         }
     }
+    /// <summary>
+    /// Is the wire connected to an object
+    /// </summary>
+    /// <returns></returns>
+    public bool IsConnected() => ConnectedOutlet != null;
 
+
+    /// <summary>
+    /// Function that is passed to the control scheme to handle cancelling a throw when the
+    /// keyboard/mouse button for this action is released.
+    /// </summary>
+    void HandleThrowInputReleasedKeyboard(InputAction.CallbackContext ctx)
+    {
+        ThrowWire();
+    }
     /// <summary>
     /// Handles disconnection of wire.
     /// </summary>
@@ -152,6 +164,71 @@ public class WireThrower : MonoBehaviour
             Disconnect();
         }
     }
+    /// <summary>
+    /// Depending on the state of the wire, decides how to handle line
+    /// rendering (and whether to do it at all)
+    /// </summary>
+    void HandleLineRendering()
+    {
+        _lineRenderer.enabled = _activePlug != null || ConnectedOutlet != null;
+        if (_activePlug != null)
+        {
+            _lineRenderer.SetPosition(0, transform.position);
+            _lineRenderer.SetPosition(1, _activePlug.transform.position);
+        }
+        else if (ConnectedOutlet != null)
+        {
+            _lineRenderer.SetPosition(0, transform.position);
+            _lineRenderer.SetPosition(1, ConnectedOutlet.transform.position);
+        }
+    }
+
+    /// <summary>
+    /// Manage any physics inherent in wire connection that needs to be
+    /// managed frame by frame.
+    /// This includes updating the position of the connected outlet, in case
+    /// that position ever changes.
+    /// </summary>
+    void HandleConnectionPhysics()
+    {
+        if (ConnectedOutlet != null)
+        {
+            _distanceJoint.connectedAnchor = ConnectedOutlet.transform.position;
+        }
+    }
+    #endregion
+
+    #region On blank
+    private void OnDestroy()
+    {
+        _controlSchemes.Player.Throw.started -= HandleThrowInputReleasedKeyboard;
+    }
+
+    /// <summary>
+    /// Keeps track of which outlets are in override priority range
+    /// </summary>
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("OutletOverrideRange"))
+        {
+            outletsInOverrideRange.Add(collision.GetComponentInParent<Outlet>().gameObject);
+        }
+    }
+
+    /// <summary>
+    /// Keeps track of which outlets are no longer in override priority range
+    /// </summary>
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("OutletOverrideRange"))
+        {
+            outletsInOverrideRange.Remove(collision.GetComponentInParent<Outlet>().gameObject);
+        }
+    }
+
+    #endregion
+
+    #region Lockon
 
     /// <summary>
     /// Spawns a plug and launches it in the air towards the target outlet (found by calling ChangeOutletTarget).
@@ -181,27 +258,6 @@ public class WireThrower : MonoBehaviour
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
 
-    /// <summary>
-    /// Keeps track of which outlets are in override priority range
-    /// </summary>
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("OutletOverrideRange"))
-        {
-            outletsInOverrideRange.Add(collision.GetComponentInParent<Outlet>().gameObject);
-        }
-    }
-
-    /// <summary>
-    /// Keeps track of which outlets are no longer in override priority range
-    /// </summary>
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("OutletOverrideRange"))
-        {
-            outletsInOverrideRange.Remove(collision.GetComponentInParent<Outlet>().gameObject);
-        }
-    }
 
     private GameObject lastReticleLock;
     /// <summary>
@@ -245,7 +301,7 @@ public class WireThrower : MonoBehaviour
 
             bool closestIsOverride = false;
 
-            bool isFacingLeft = me.GetCurrentMove().Flipped();
+            bool isFacingLeft = cc.LeftOrRight == Facing.left;
             bool currentIsInFront = false;
 
             Vector3 position = transform.position;
@@ -480,6 +536,7 @@ public class WireThrower : MonoBehaviour
         outletMeter?.StartVisuals();
     }
 
+    #endregion
 
     /// <summary>
     /// Using a mouse for input, Spawns a plug and launches it in the air,
@@ -504,24 +561,17 @@ public class WireThrower : MonoBehaviour
     }
 
     /// <summary>
-    /// Using a controller for input, Spawns a plug and launches it in the air,
-    /// setting it as the active plug.
-    /// Prepares for the possibility of the plug despawning or getting connected.
+    /// Determines whether or not the Wire for this WireThrower exits.
     /// </summary>
-    void FirePlugController()
+    /// <returns>the state of the line renderer attached to this game object</returns>
+    public bool WireExists()
     {
-        Vector2 fireDir = _controlSchemes.Player.AimController.ReadValue<Vector2>();
-        _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
-        PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
-        pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
-
-        // Play SFX for shooting plug
-        src.clip = shootWire;
-        src.Play();
-
-        pme.onTerminateRequest.AddListener(() => DestroyPlug());
-        pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
+        return _lineRenderer.enabled;
     }
+
+    /// <summary>
+    /// Register this as a listener to any necessary events
+    /// </summary>
 
     private void Update()
     {
@@ -549,6 +599,7 @@ public class WireThrower : MonoBehaviour
         HandleThrowInputHeld();
         HandleConnectionPhysics();
         _framesHeld += Time.deltaTime;
+
         // REMOVED THIS AND REPLACED THIS WITH AUTO TARGETING RETICLE
         //if (Input.GetKeyDown(KeyCode.Q)) { _isLockOn = !_isLockOn; }
         // if (_isLockOn && Input.GetKeyDown(KeyCode.E)) { ChangeOutletTarget(); }
@@ -560,38 +611,7 @@ public class WireThrower : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// Depending on the state of the wire, decides how to handle line
-    /// rendering (and whether to do it at all)
-    /// </summary>
-    void HandleLineRendering()
-    {
-        _lineRenderer.enabled = _activePlug != null || ConnectedOutlet != null;
-        if (_activePlug != null)
-        {
-            _lineRenderer.SetPosition(0, transform.position);
-            _lineRenderer.SetPosition(1, _activePlug.transform.position);
-        }
-        else if (ConnectedOutlet != null)
-        {
-            _lineRenderer.SetPosition(0, transform.position);
-            _lineRenderer.SetPosition(1, ConnectedOutlet.transform.position);
-        }
-    }
 
-    /// <summary>
-    /// Manage any physics inherent in wire connection that needs to be
-    /// managed frame by frame.
-    /// This includes updating the position of the connected outlet, in case
-    /// that position ever changes.
-    /// </summary>
-    void HandleConnectionPhysics()
-    {
-        if (ConnectedOutlet != null)
-        {
-            _distanceJoint.connectedAnchor = ConnectedOutlet.transform.position;
-        }
-    }
 
 
     /// <summary>
@@ -633,23 +653,7 @@ public class WireThrower : MonoBehaviour
             Destroy(_activePlug);
     }
 
-    /// <summary>
-    /// To be called by the movement system to set the maximum wire length,
-    /// this restricting player movement while attached to the wire.
-    /// </summary>
-    public void SetMaxWireLength(float amount)
-    {
-        _distanceJoint.distance = amount;
-    }
 
-    /// <summary>
-    /// Determines whether or not the Wire for this WireThrower exits.
-    /// </summary>
-    /// <returns>the state of the line renderer attached to this game object</returns>
-    public bool WireExists()
-    {
-        return _lineRenderer.enabled;
-    }
 
     /// <summary>
     /// Disconnects and immediately destroys the plug
@@ -659,4 +663,26 @@ public class WireThrower : MonoBehaviour
         HandlePotentialDisconnect();
         DestroyPlug();
     }
+
+    #region Deprecated
+    /// <summary>
+    /// Using a controller for input, Spawns a plug and launches it in the air,
+    /// setting it as the active plug.
+    /// Prepares for the possibility of the plug despawning or getting connected.
+    /// </summary>
+    void FirePlugController()
+    {
+        Vector2 fireDir = _controlSchemes.Player.AimController.ReadValue<Vector2>();
+        _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
+        PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
+        pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
+
+        // Play SFX for shooting plug
+        src.clip = shootWire;
+        src.Play();
+
+        pme.onTerminateRequest.AddListener(() => DestroyPlug());
+        pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
+    }
+    #endregion
 }

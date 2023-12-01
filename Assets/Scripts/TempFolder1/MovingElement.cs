@@ -20,7 +20,7 @@ public class MovingElement : MonoBehaviour
 
     [SerializeField] private Transform[] _points;
     [SerializeField, Tooltip("If the movement of this body relies on the movement of others (by parenting, by relying on moving points, etc), reference those bodies here.")]
-    private Rigidbody2D[] _relativeBodies;
+    protected Rigidbody2D[] _relativeBodies;
 
     [Space(15)]
 
@@ -36,10 +36,10 @@ public class MovingElement : MonoBehaviour
     private float _normalizedInitialStartPosition = 0f;
 
     [Header("Speed")]
-    [SerializeField] private float _speed = 1f;
-    [SerializeField] private float _randomSpeedModifier = 0f;
-    [SerializeField] private float _maxSpeedModifier = 3;
-    [SerializeField] private float _speedModifier = 1f;
+    [SerializeField] protected float _speed = 1f;
+    [SerializeField] protected float _randomSpeedModifier = 0f;
+    [SerializeField] protected float _maxSpeedModifier = 3;
+    [SerializeField] protected float _speedModifier = 1f;
 
     [Header("Loop Info")]
     [SerializeField] private LoopType _loopType = LoopType.Wrap;
@@ -91,7 +91,12 @@ public class MovingElement : MonoBehaviour
         _previousDistance = float.MaxValue; // if not maxed out, the first position might be skipped on lower-end hardware.
     }
 
-    private void FixedUpdate()
+    protected void FixedUpdate()
+    {
+        MovePlatform();
+    }
+
+    protected Vector2 MovePlatform()
     {
         if (_shouldMove) // if actionable...
         {
@@ -135,6 +140,7 @@ public class MovingElement : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
         }
+        return rb.velocity;
     }
 
     /// <summary>

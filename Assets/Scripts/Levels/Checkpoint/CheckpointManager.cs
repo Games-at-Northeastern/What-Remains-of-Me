@@ -43,7 +43,7 @@ public class CheckpointManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         // If there is a 'starting' chamber at the beginning of the scene, have the player
         // come out of that respawn chamber.
-        LevelManager.Instance.PlayerReset();
+        LevelManager.PlayerReset();
         yield return null;
     }
 
