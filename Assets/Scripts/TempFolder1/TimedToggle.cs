@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// A time-based item toggler.
 /// </summary>
-public class TimedToggle : ATriggerToggle
+public class TimedToggle : AEventToggle
 {
     [SerializeField]
     private bool _useUnscaledTime = false;
