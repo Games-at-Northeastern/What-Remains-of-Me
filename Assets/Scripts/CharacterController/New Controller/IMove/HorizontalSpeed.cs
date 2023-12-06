@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace CharacterController
 {
+    /// <summary>
+    /// Moves player horizontally according to acceleration
+    /// </summary>
     public class HorizontalSpeed : IMove
     {
         private float maxRunSpeed;
