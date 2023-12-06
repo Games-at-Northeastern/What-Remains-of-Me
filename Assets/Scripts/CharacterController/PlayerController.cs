@@ -79,7 +79,7 @@ namespace PlayerControllerRefresh
 
         public Vector2 ExternalVelocity;
 
-        public float ExternalVelocityDecay;
+        [SerializeField]private float ExternalVelocityDecay;
 
         public Vector2 Speed => _speed;
 
