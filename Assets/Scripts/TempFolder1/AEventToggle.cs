@@ -4,8 +4,8 @@ using UnityEngine.Events;
 /// <summary>
 /// An abstract class for scripts that toggle gameobjects under certain conditions.
 /// This class provides the basic implementation for the event itself.
-/// Extended by AListenerToggles, toggles that trigger upon observations.
-/// Extended by TimedToggle, a toggle that triggers periodically.
+/// Used by by AListenerToggles, toggles that trigger upon observations.
+/// Used by by TimedToggle, a toggle that triggers periodically.
 ///
 /// Generally, this class should be extended by toggles that trigger w/o observations.
 /// For instance, a hitbox-based toggle or a time-based toggle.

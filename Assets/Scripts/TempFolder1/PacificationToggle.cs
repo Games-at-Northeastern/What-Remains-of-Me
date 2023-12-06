@@ -10,8 +10,10 @@ public class PacificationToggle : AListenerToggle
     [SerializeField, Tooltip("Whenever ToggleableElements fires, this event fires with the opposite value.")]
     private UnityEvent<bool> InvertedToggleableElements;
 
+    [SerializeField] private bool _percentageBased = false;
+
     [SerializeField]
-    private float _pacifiedWhenBelow = 25f;
+    private float _pacifiedWhenBelow = 0.4f;
 
     protected override void FireEvent(bool state)
     {
@@ -21,5 +23,5 @@ public class PacificationToggle : AListenerToggle
 
     // The gameobject is "pacified" when the energy enters below a certain value.
     // The event fires when state changes. It fires with a value of true when pacified.
-    protected override bool IsToggleActive() => _observed.GetVirus() <= _pacifiedWhenBelow;
+    protected override bool IsToggleActive() => (_percentageBased ? _observed.GetVirusPercent() : _observed.GetVirus()) <= _pacifiedWhenBelow;
 }
