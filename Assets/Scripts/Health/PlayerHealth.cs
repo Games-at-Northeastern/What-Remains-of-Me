@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
-    //[SerializeField] private GameObject warning;
+    [SerializeField] private GameObject warning;
     public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
@@ -37,32 +37,38 @@ public class PlayerHealth : MonoBehaviour
         // replaced with an AControllable component, but that would require some rework of the AControllable class
         // to not directly reference the PlayerInfo
 
-        // check if player has reached maximum virus amount (with a bit of float forgiveness)
-        if (playerInfo.virus >= playerInfo.maxVirus - 0.01)
-        {
-            VirusFullDeath();
-        }
-        else if (playerInfo.battery <= 0.01)
+        // check if player has depleted all health (with some float forgiveness)
+        if (playerInfo.battery <= 0.01)
         {
             EnergyDepletedDeath();
         }
-        /*
-        else if (playerInfo.virus >= playerInfo.maxVirus * 0.01)
-        {
-            VirusWarning();
-        }
+        // check if player has reached minimum health (the player cannot drain any more health)
         else if (playerInfo.battery <= 1f)
         {
             EnergyDepletionWarning();
         }
         else
         {
-            warning.GetComponent<WarningAnimation>().StopAnimation();
-            warning.GetComponent<WarningAnimation>().RegularVirus();
+            warning.GetComponent<WarningController>().StopLowHealthWarning();
         }
-        */
-        
-        
+
+        // check if the player has reached 100% virus (with some float forgiveness)
+        if (playerInfo.virus >= playerInfo.maxVirus - 0.01)
+        {
+            VirusFullDeath();
+        }
+        // check if the player has any virus
+        else if (playerInfo.virus >= 0.01)
+        {
+            VirusWarning();
+        }
+        else
+        {
+            warning.GetComponent<WarningController>().StopLightBlinking();
+            warning.GetComponent<WarningController>().ResetVirus();
+        }
+
+
     }
 
     // TODO : Should there be some kind of scene resetting that is triggered by this? I.e. platforms, enemies, etc.?
@@ -98,29 +104,31 @@ public class PlayerHealth : MonoBehaviour
     // Methods for to triggering audiovisual warnings for when the player is about to die
 
     /// <summary>
-    /// Triggers warnings for virus death
+    /// Triggers the virus warning (blinking headlight) at high virus percentages.
+    /// Additionally, updates eye and light color to match virus percentage.
     /// </summary>
     private void VirusWarning()
     {
-       // warning.GetComponent<WarningAnimation>().VirusControl(playerInfo.virus / playerInfo.maxVirus);
+        warning.GetComponent<WarningController>().VirusControl(playerInfo.virus / playerInfo.maxVirus);
         if (playerInfo.virus >= playerInfo.maxVirus * 0.8f)
         {
             Debug.Log("Virus Overload Warning");
-            //warning.GetComponent<WarningAnimation>().StartAnimation();
-        } else
+            warning.GetComponent<WarningController>().StartLightBlinking();
+        }
+        else
         {
-            //warning.GetComponent<WarningAnimation>().StopAnimation();
+            warning.GetComponent<WarningController>().StopLightBlinking();
         }
     }
 
 
     /// <summary>
-    /// Triggers warnings for energy depletion death
+    /// Triggers warnings for reaching minimum energy
     /// </summary>
     private void EnergyDepletionWarning()
     {
         Debug.Log("Energy Depletion Warning");
-        //warning.GetComponent<WarningAnimation>().StartAnimation();
+        warning.GetComponent<WarningController>().StartLowHealthWarning();
     }
 
 

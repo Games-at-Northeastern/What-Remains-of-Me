@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace CharacterController
 {
+    /// <summary>
+    /// Simulates gravity with a terminal velocity
+    /// </summary>
     public class VerticalFallSpeed : IMove
     {
         float terminalVelocity, fallGravity;

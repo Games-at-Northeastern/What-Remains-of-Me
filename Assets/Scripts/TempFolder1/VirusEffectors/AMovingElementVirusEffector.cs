@@ -81,5 +81,15 @@ namespace Levels.Objects.Platform
         /// <param name="newVirusPercentage"></param>
         /// <returns></returns>
         protected virtual bool ShouldDoEffect(float newVirusPercentage) => newVirusPercentage >= _doVirusEffectAt;
+
+        /// <summary>
+        /// Determines whether or not the proportion of virus held by this AMovingElementVirusEffector is at or above
+        /// the threshold for virus behavior set in editor.
+        /// </summary>
+        /// <param name="newVirusPercentage"></param>
+        /// <returns></returns>
+        public bool VirusThresholdMet() {
+            return _currentVirusPercentage >= _doVirusEffectAt;
+        }
     }
 }

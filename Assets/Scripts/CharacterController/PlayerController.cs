@@ -79,7 +79,7 @@ namespace PlayerControllerRefresh
 
         public Vector2 ExternalVelocity;
 
-        public float ExternalVelocityDecay;
+        [SerializeField]private float ExternalVelocityDecay;
 
         public Vector2 Speed => _speed;
 
@@ -145,7 +145,9 @@ namespace PlayerControllerRefresh
         }
 
         #endregion
-
+        /// <summary>
+        /// Defines the states the player can be in to control different movement physics
+        /// </summary>
         public enum PlayerState
         {
             Grounded,
@@ -153,7 +155,7 @@ namespace PlayerControllerRefresh
             Swinging,
             OnWall,
         }
-        public PlayerState currentState = PlayerState.Aerial;
+        private PlayerState currentState = PlayerState.Aerial;
 
         void FixedUpdate()
         {
@@ -198,6 +200,10 @@ namespace PlayerControllerRefresh
             ExternalVelocity.x = Mathf.Max(0, ExternalVelocity.x - ExternalVelocityDecay * Time.fixedDeltaTime);
             ExternalVelocity.y = Mathf.Max(0, ExternalVelocity.y - ExternalVelocityDecay * Time.fixedDeltaTime);
         }
+        /// <summary>
+        /// Switches the current player state to the new state.
+        /// if state switches performs startMove methods.
+        /// </summary>
         private void SwitchState()
         {
             if (GetNewState() == currentState)
@@ -229,6 +235,10 @@ namespace PlayerControllerRefresh
                     break;
             }
         }
+        /// <summary>
+        /// Returns the state the player should switch to
+        /// </summary>
+        /// <returns></returns>
         PlayerState GetNewState()
         {
             if (Grounded)
@@ -247,8 +257,6 @@ namespace PlayerControllerRefresh
                     return PlayerState.Aerial;
                 }
             }
-
-
         }
 
         #region Jump
@@ -280,6 +288,7 @@ namespace PlayerControllerRefresh
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            //calls the player to do what they need to take damage
             if (collision.gameObject.layer.Equals("Damages"))
             {
                 OnHurt();
@@ -330,6 +339,10 @@ namespace PlayerControllerRefresh
         [SerializeField] private Vector2 groundBounds;
         [Min(0)]
         [SerializeField] private float groundOffset;
+        /// <summary>
+        /// Is player touching wall to their left
+        /// </summary>
+        /// <returns></returns>
         public bool TouchingLeftWall()
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
@@ -337,6 +350,10 @@ namespace PlayerControllerRefresh
             Physics2D.BoxCast(origin + new Vector2(-leftOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.left, filter, hits, sideBounds.x - 0.01f);
             return HitSolidObject(hits);
         }
+        /// <summary>
+        /// Is player touching wall to their right
+        /// </summary>
+        /// <returns></returns>
         public bool TouchingRightWall()
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
@@ -344,6 +361,10 @@ namespace PlayerControllerRefresh
             Physics2D.BoxCast(origin + new Vector2(rightOffset, 0), new Vector2(0.01f, sideBounds.y), 0, Vector2.right, filter, hits, sideBounds.x - 0.01f);
             return HitSolidObject(hits);
         }
+        /// <summary>
+        /// Is player touching the ceiling?
+        /// </summary>
+        /// <returns></returns>
         public bool TouchingCeiling()
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
@@ -352,6 +373,10 @@ namespace PlayerControllerRefresh
             return HitSolidObject(hits);
         }
         private ContactFilter2D filter;
+        /// <summary>
+        /// Is player touching the ground
+        /// </summary>
+        /// <returns></returns>
         public bool TouchingGround()
         {
 
@@ -361,7 +386,11 @@ namespace PlayerControllerRefresh
             return HitSolidObject(hits);
 
         }
-
+        /// <summary>
+        /// Did raycast hit a solid object
+        /// </summary>
+        /// <param name="hits"></param>
+        /// <returns></returns>
         private static bool HitSolidObject(List<RaycastHit2D> hits)
         {
             foreach (RaycastHit2D hit in hits)

@@ -153,6 +153,7 @@ GameObject:
   - component: {fileID: 836829321497502675}
   - component: {fileID: 3734666650002976715}
   - component: {fileID: 3734666650002976713}
+  - component: {fileID: 3487652063560705456}
   - component: {fileID: 3734666650002976714}
   m_Layer: 7
   m_Name: New NPC
@@ -352,6 +353,28 @@ MonoBehaviour:
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: -1
+--- !u!114 &3487652063560705456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3734666650002976717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca38855ab7c671540862ababac4a5c78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cleanEnergy: 0
+  maxCharge: 100
+  virus: 50
+  playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
+  OnVirusChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3734666650002976714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,16 +387,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55ecc0fdba4ee004d86a66e7270304d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cleanEnergy: 0
-  maxCharge: 100
-  virus: 0
-  playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
-  OnVirusChange:
-    m_PersistentCalls:
-      m_Calls: []
-  OnEnergyChange:
-    m_PersistentCalls:
-      m_Calls: []
   _enabledOnStart: 1
   ToggleableElements:
     m_PersistentCalls:
@@ -390,6 +403,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _observed: {fileID: 3487652063560705456}
+  _controllableListenerType: 1
   InvertedToggleableElements:
     m_PersistentCalls:
       m_Calls:
@@ -524,7 +539,7 @@ MonoBehaviour:
     autoPageTurn: 0
     stopMovement: 1
     pageTurnWait: 0
-  _paired: {fileID: 3734666650002976714}
+  _paired: {fileID: 3487652063560705456}
 --- !u!1 &5810440998312365035
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,6 +894,7 @@ MonoBehaviour:
   virusMeter: {fileID: 5810440998342243848}
   cleanMeter: {fileID: 5810440998456267472}
   visualFillSpeed: 2
+  visualsAlwaysDisplayed: 0
 --- !u!225 &5810440998469801936
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1273,7 +1289,7 @@ MonoBehaviour:
   src: {fileID: 6768136271412845769}
   giving: {fileID: 8300000, guid: 98178cfa1fc651b488561930413d0661, type: 3}
   taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
-  controlled: {fileID: 3734666650002976714}
+  controlled: {fileID: 3487652063560705456}
   controlledSecondaries: []
   energyTransferSpeed: 50
   grappleOverrideRange: {fileID: 0}
