@@ -132,7 +132,6 @@ namespace PlayerControllerRefresh
         }
         void Start()
         {
-            ExternalVelocityDecay = settings.airDeceleration;
             col = GetComponent<CapsuleCollider2D>();
             SetupMoves();
             playerInputs = GetComponent<PlayerInputHandler>();
