@@ -6,7 +6,7 @@ namespace CharacterController
     /// A controller for a character. that uses a rigidBody2D for collision detection.
     /// it's velocity can be changed to move the character upon each fixed frame
     /// </summary>
-    public interface ICharacterController
+    public interface CharacterController2D
     {
 
         /// <summary>

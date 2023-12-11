@@ -41,10 +41,11 @@ public class LevelManager : MonoBehaviour
     {
         OnPlayerReset.RemoveAllListeners();
         OnPlayerDeath.RemoveAllListeners();
-        PlayerRef = FindObjectOfType<PlayerControllerRefresh.PlayerController>().gameObject;
+
     }
     private void Start()
     {
+        PlayerRef = FindObjectOfType<PlayerController.PlayerController2D>().gameObject;
         checkpointManager = FindObjectOfType<CheckpointManager>();
     }
 

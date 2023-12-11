@@ -11,14 +11,14 @@ namespace CharacterController
         private float maxRunSpeed;
         private float acceleration;
         private float deceleration;
-        ICharacterController character;
+        CharacterController2D character;
         float xInput;
         public void UpdateDirection(float xInput)
         {
             this.xInput = xInput;
         }
 
-        public HorizontalSpeed(float maxRunSpeed, float acceleration, float deceleration, ICharacterController character)
+        public HorizontalSpeed(float maxRunSpeed, float acceleration, float deceleration, CharacterController2D character)
         {
 
             if (deceleration < 0)

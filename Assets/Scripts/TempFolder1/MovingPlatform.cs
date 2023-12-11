@@ -1,22 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerControllerRefresh;
+using PlayerController;
 public class MovingPlatform : MovingElement
 {
     protected virtual bool IsOnTop(Vector2 normal) => Vector2.Dot(transform.up, normal) < -0.5f;
 
-    PlayerController player;
+    PlayerController2D player;
     protected virtual void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.collider.GetComponent<PlayerController>() != null)
+        if (col.collider.GetComponent<PlayerController2D>() != null)
         {
-            player = col.collider.GetComponent<PlayerController>();
+            if(Vector2.Dot(transform.up, col.GetContact(0).normal) < -0.5f)
+            {
+                player = col.collider.GetComponent<PlayerController2D>();
+            }
         }
     }
     private void OnCollisionExit2D(Collision2D col)
     {
-        if (col.collider.GetComponent<PlayerController>() != null)
+        if (col.collider.GetComponent<PlayerController2D>() != null)
         {
             player = null;
         }

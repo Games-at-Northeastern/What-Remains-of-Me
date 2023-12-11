@@ -10,7 +10,7 @@ namespace CharacterController
 
 
         private Vector2 vel;
-        private ICharacterController character;
+        private CharacterController2D character;
         private readonly bool unlockOnGrounded;
         private readonly float lockOutTime;
         private float timePassed;
@@ -21,7 +21,7 @@ namespace CharacterController
         /// and horizontal speed.
         /// when x and y in accelerations is positive x will decelerate to 0 and y wil got accelerate to -maxFallSpeed
         /// </summary>
-        public Knockback(Vector2 direction, float magnitude,Vector2 acceleration, float maxFallSpeed, bool unlockOnGrounded, float lockOutTime, ICharacterController character)
+        public Knockback(Vector2 direction, float magnitude,Vector2 acceleration, float maxFallSpeed, bool unlockOnGrounded, float lockOutTime, CharacterController2D character)
         {
             this.unlockOnGrounded = unlockOnGrounded;
             vel = direction.normalized * magnitude;

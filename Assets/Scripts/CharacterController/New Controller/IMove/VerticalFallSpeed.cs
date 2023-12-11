@@ -9,8 +9,8 @@ namespace CharacterController
     public class VerticalFallSpeed : IMove
     {
         float terminalVelocity, fallGravity;
-        ICharacterController character;
-        public VerticalFallSpeed(float terminalVelocity, float fallGravity, ICharacterController character)
+        CharacterController2D character;
+        public VerticalFallSpeed(float terminalVelocity, float fallGravity, CharacterController2D character)
         {
             if (Mathf.Sign(terminalVelocity) == Mathf.Sign(fallGravity))
             {

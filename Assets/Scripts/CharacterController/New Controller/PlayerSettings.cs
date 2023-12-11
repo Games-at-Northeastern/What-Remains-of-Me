@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace PlayerControllerRefresh
+namespace PlayerController
 {
     /// <summary>
     /// Settings for the playerMovement
@@ -18,7 +18,7 @@ namespace PlayerControllerRefresh
         public float groundedAcceleration;
         [Tooltip("how fast the player slowdowns when the let go of a movement key")]
         public float groundedDeceleration;
-
+        public float ExternalVelocityDecay = 1;
         [Header("Air")]
         [Tooltip("the max speed the player can be moving in the air")]
         [Min(0)]
@@ -86,5 +86,23 @@ namespace PlayerControllerRefresh
         [Header("Knockback")]
         [Tooltip("")]
         public Vector2 defaultKnockBack;
+        [Header("CollisionDetectors")]
+        [Tooltip("X is the width Y is the height")]
+        public Vector2 ceilingBounds;
+        [Min(0)]
+        public float ceilingOffset;
+
+        [Tooltip("X is the width Y is the height")]
+        public Vector2 sideBounds;
+        [Min(0)]
+        public float leftOffset;
+        public float rightOffset;
+
+        [Tooltip("X is the width Y is the height")]
+        public Vector2 groundBounds;
+        [Min(0)]
+        public float groundOffset;
+        [Tooltip("Layers to ignore collision with")]
+        public LayerMask IgnoreLayers;
     }
 }

@@ -10,9 +10,9 @@ namespace CharacterController
     public class WallSlide : IMove
     {
         private float slideGravity;
-        private ICharacterController character;
+        private CharacterController2D character;
         private float maxWallSlideSpeed;
-        public WallSlide(float slideGravity, float maxWallSlideSpeed, ICharacterController character)
+        public WallSlide(float slideGravity, float maxWallSlideSpeed, CharacterController2D character)
         {
             this.character = character;
             this.slideGravity = slideGravity;

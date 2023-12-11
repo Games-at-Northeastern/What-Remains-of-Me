@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerControllerRefresh;
+using PlayerController;
 
 /// <summary>
 /// Script to be held by the player. When the player's dialogue detector
@@ -12,7 +12,7 @@ using PlayerControllerRefresh;
 public class PlayerDialogueInteractor : MonoBehaviour
 {
     private Dialogue _activeDialogue; // Either the dialogue being prompted or the dialogue being read
-    [SerializeField] private PlayerController player;
+    [SerializeField] private PlayerController2D player;
 
     // There is only one prompt sprite in the game, and it is either
     // inactive or over a specific dialogue holding gameObject.
@@ -26,7 +26,7 @@ public class PlayerDialogueInteractor : MonoBehaviour
         _cs = new ControlSchemes();
         _cs.Enable();
         _cs.Player.Dialogue.performed += _ => PlayDialogue();
-        player = GetComponentInParent<PlayerController>();
+        player = GetComponentInParent<PlayerController2D>();
     }
 
     /// <summary>

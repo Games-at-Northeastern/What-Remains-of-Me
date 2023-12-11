@@ -20,10 +20,10 @@ public class PlayerAnimation : MonoBehaviour
     /// <summary>
     /// a reference to the movement script, to better understand the location of the player
     /// </summary>
-    [SerializeField] private ICharacterController cc;
+    [SerializeField] private CharacterController2D cc;
     private void Start()
     {
-        cc = GetComponentInParent<ICharacterController>();
+        cc = GetComponentInParent<CharacterController2D>();
     }
     /// <summary>
     /// a reference to the wire, to better understand the location of the wire

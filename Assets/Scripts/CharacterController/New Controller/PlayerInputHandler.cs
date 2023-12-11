@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-namespace PlayerControllerRefresh
+namespace PlayerController
 {
     public class PlayerInputHandler : MonoBehaviour
     {

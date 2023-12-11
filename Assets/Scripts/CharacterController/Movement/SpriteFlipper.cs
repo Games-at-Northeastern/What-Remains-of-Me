@@ -10,11 +10,11 @@ using CharacterController;
 /// </summary>
 public class SpriteFlipper : MonoBehaviour
 {
-    [SerializeField] private ICharacterController cc;
+    [SerializeField] private CharacterController2D cc;
     //[SerializeField] SpriteRenderer[] spriteRenderers;
     private void Start()
     {
-        cc = GetComponentInParent<ICharacterController>();
+        cc = GetComponentInParent<CharacterController2D>();
     }
     [SerializeField] private Transform playerTransform;
 

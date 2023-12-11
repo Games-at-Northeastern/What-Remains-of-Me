@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerControllerRefresh;
+using PlayerController;
 public class ConveyorBelt : MonoBehaviour
 {
     [Tooltip("How fast the conveyor moves. negative values are counter clockwise. positive are clockwise")]
@@ -18,9 +18,9 @@ public class ConveyorBelt : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.GetComponent<PlayerController>() != null)
+        if (collision.gameObject.GetComponent<PlayerController2D>() != null)
         {
-            collision.gameObject.GetComponent<PlayerController>().ExternalVelocity = ConveyorVelocity();
+            collision.gameObject.GetComponent<PlayerController2D>().ExternalVelocity = ConveyorVelocity();
         }
         else
         if (collision.rigidbody != null)
@@ -30,9 +30,9 @@ public class ConveyorBelt : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<PlayerController>() != null)
+        if (collision.gameObject.GetComponent<PlayerController2D>() != null)
         {
-            collision.gameObject.GetComponent<PlayerController>().ExternalVelocity = ConveyorVelocity();
+            collision.gameObject.GetComponent<PlayerController2D>().ExternalVelocity = ConveyorVelocity();
         }
         else if (collision.attachedRigidbody != null)
         {
@@ -41,9 +41,9 @@ public class ConveyorBelt : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent<PlayerController>() != null)
+        if (other.gameObject.GetComponent<PlayerController2D>() != null)
         {
-            other.gameObject.GetComponent<PlayerController>().ExternalVelocity = ConveyorVelocity();
+            other.gameObject.GetComponent<PlayerController2D>().ExternalVelocity = ConveyorVelocity();
         }
         else
 if (other.attachedRigidbody != null)

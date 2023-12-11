@@ -12,7 +12,7 @@ namespace CharacterController
         private bool inBounceMode; // Currently in the process of bouncing off a wall/ceiling?
         private WireThrower WT;
         private float WireSwingDecayMultiplier;
-        private ICharacterController character;
+        private CharacterController2D character;
         private float horizontalInput;
         private float PlayerSwayAcceleration;
         private float SwingBounceDecayMultiplier;
@@ -36,7 +36,7 @@ namespace CharacterController
         /// <param name="WireSwingReferenceWireLength"></param>
         /// <param name="PlayerSwayAccel">I assume the acceleration for the player kicking back and forth</param>
         /// <param name="wireGeneralMaxDistance"></param>
-        public Swing(WireThrower WT, ICharacterController character, float fallGravity,float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float PlayerSwayAccel, float maxWireLength)
+        public Swing(WireThrower WT, CharacterController2D character, float fallGravity,float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float PlayerSwayAccel, float maxWireLength)
         {
             this.PlayerSwayAcceleration = PlayerSwayAccel;
             this.maxWireLength = maxWireLength;

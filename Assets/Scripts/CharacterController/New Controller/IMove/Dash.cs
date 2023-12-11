@@ -12,12 +12,12 @@ namespace CharacterController
         private float timePassed;
         private float dashSpeed;
         private float dashTime;
-        private ICharacterController character;
+        private CharacterController2D character;
         /// <summary>
         /// Initializes a dash, taking in whether it is going to the right (true)
         /// or left (false).
         /// </summary>
-        public Dash(ICharacterController character, float dashSpeed, float dashTime)
+        public Dash(CharacterController2D character, float dashSpeed, float dashTime)
         {
             timePassed = 0;
             this.dashSpeed = dashSpeed;

@@ -655,8 +655,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.025300145, y: -0.09246439}
-  m_Size: {x: 0.735754, y: 1.385121}
+  m_Offset: {x: 0, y: -0.12138724}
+  m_Size: {x: 0.5101366, y: 1.2123446}
   m_Direction: 0
 --- !u!50 &6860228394538578388
 Rigidbody2D:
@@ -710,21 +710,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83dfc1d866f4ce54f9aa00ad217def1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: 587debca046dd6748879c19fe3fb34ed, type: 2}
+  startState: 1
+  ExternalVelocity: {x: 0, y: 0}
+  _stats: {fileID: 11400000, guid: 587debca046dd6748879c19fe3fb34ed, type: 2}
   wire: {fileID: 7803416330169813700}
   col: {fileID: 1911170117102511828}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  ExternalVelocity: {x: 0, y: 0}
-  ExternalVelocityDecay: 0.27
-  ceilingBounds: {x: 0.69, y: 0.12}
-  ceilingOffset: 0.55
-  sideBounds: {x: 0.06, y: 1.23}
-  leftOffset: 0.36
-  rightOffset: 0.36
-  groundBounds: {x: 0.64, y: 0.33}
-  groundOffset: 0.41
+  timeSinceJumpWasTriggered: 0
+  jumpCanceled: 0
+  jumped: 0
 --- !u!114 &6931513395316122100
 MonoBehaviour:
   m_ObjectHideFlags: 0

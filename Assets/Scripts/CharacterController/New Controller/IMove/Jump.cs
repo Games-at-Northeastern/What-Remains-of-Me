@@ -10,10 +10,10 @@ namespace CharacterController
         private readonly float initialVelocity;
         private float risingGravity;
         private JumpType jumpType;
-        private ICharacterController character;
+        private CharacterController2D character;
         private readonly float timeToReachApex;
         private float timePassed;
-        public Jump(float risingGravity, float jumpHeight, JumpType jumpType, ICharacterController character)
+        public Jump(float risingGravity, float jumpHeight, JumpType jumpType, CharacterController2D character)
         {
             this.risingGravity = risingGravity;
             this.initialVelocity = Kinematics.InitialVelocity(0, risingGravity, jumpHeight);

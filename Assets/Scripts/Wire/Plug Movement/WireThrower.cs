@@ -46,7 +46,7 @@ public class WireThrower : MonoBehaviour
     private Vector2 _lastRecordedPosition;
 
     private PlugMovementSettings pms; // For calculating grappling range
-    private ICharacterController cc; // For determining which way the player is facing
+    private CharacterController2D cc; // For determining which way the player is facing
 
     private List<GameObject> outletsInOverrideRange;
 
@@ -71,7 +71,7 @@ public class WireThrower : MonoBehaviour
         mainCamera = Camera.main;
 
         pms = FindObjectOfType<PlugMovementSettings>();
-        cc = GetComponentInParent<ICharacterController>();
+        cc = GetComponentInParent<CharacterController2D>();
 
         outletsInOverrideRange = new List<GameObject>();
     }

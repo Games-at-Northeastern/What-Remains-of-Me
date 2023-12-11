@@ -19,8 +19,8 @@ MonoBehaviour:
   airAcceleration: 49.88
   airDeceleration: 0.27
   terminalVelocity: -20.65
-  fallGravity: 25
-  jumpHeight: 4
+  fallGravity: -25
+  jumpHeight: 2.8
   risingGravity: -10
   jumpEndedEarlyMultiplier: 1
   coyoteTime: 0.1
@@ -41,3 +41,13 @@ MonoBehaviour:
   SwingMaxAngularVelocity: 5
   wireLength: 10
   defaultKnockBack: {x: 4, y: 6}
+  ceilingBounds: {x: 0.29, y: 0.1}
+  ceilingOffset: 0.58
+  sideBounds: {x: 0.03, y: 0.9}
+  leftOffset: 0.25
+  rightOffset: 0.25
+  groundBounds: {x: 0.42, y: 0.04}
+  groundOffset: 0.61
+  IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 65920
