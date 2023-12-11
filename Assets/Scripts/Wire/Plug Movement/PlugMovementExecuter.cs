@@ -54,7 +54,7 @@ public class PlugMovementExecuter : MonoBehaviour
     /// </summary>
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        print(collision.gameObject);
+        //print(collision.gameObject);
         if (collision.gameObject.layer == 8) // Outlet Collision
         {
             onConnectionRequest.Invoke(collision.gameObject);

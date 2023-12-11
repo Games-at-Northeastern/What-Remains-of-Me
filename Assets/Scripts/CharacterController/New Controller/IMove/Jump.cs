@@ -13,6 +13,7 @@ namespace CharacterController
         private CharacterController2D character;
         private readonly float timeToReachApex;
         private float timePassed;
+        private bool jumpCanceled;
         public Jump(float risingGravity, float jumpHeight, JumpType jumpType, CharacterController2D character)
         {
             this.risingGravity = risingGravity;
@@ -25,6 +26,7 @@ namespace CharacterController
         {
             // empty for now but i think it can be useful in regards to jumpBuffers
             // though i may want that in the character controller itself
+            jumpCanceled = true;
         }
 
         public AnimationType GetAnimationState() => AnimationType.JUMP_RISING;
@@ -32,7 +34,7 @@ namespace CharacterController
         /// is true after character hits apex of the jump
         /// </summary>
         /// <returns></returns>
-        public bool IsMoveComplete() => timePassed >= timeToReachApex;
+        public bool IsMoveComplete() => timePassed >= timeToReachApex || jumpCanceled;
         /// <summary>
         /// Changes the character y velocity to what it should be at the beginning of this jump
         /// </summary>
@@ -40,6 +42,7 @@ namespace CharacterController
         public void StartMove()
         {
             timePassed = 0;
+            jumpCanceled = false;
             switch (jumpType)
             {
                 case JumpType.addSpeed:
