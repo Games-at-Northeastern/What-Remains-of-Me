@@ -19,7 +19,7 @@ public class MovingPlatform : MovingElement
     }
     private void OnCollisionExit2D(Collision2D col)
     {
-        if (col.collider.GetComponent<PlayerController2D>() != null)
+        if (col.collider.GetComponent<PlayerController2D>() == player)
         {
             player = null;
         }

@@ -40,7 +40,17 @@ namespace PlayerController
         PlayerInputHandler inputs;
         private Vector2 _speed = Vector2.zero;
 
-
+        private void SetupMoves()
+        {
+            groundMovement = new HorizontalSpeed(_stats.maxRunSpeed, _stats.groundedAcceleration, _stats.groundedDeceleration, this);
+            airMovement = new HorizontalSpeed(_stats.maxAirSpeed, _stats.airAcceleration, _stats.airDeceleration, this);
+            airFall = new VerticalFallSpeed(_stats.terminalVelocity, _stats.fallGravity, this);
+            jump = new Jump(_stats.risingGravity, _stats.jumpHeight, JumpType.setSpeed, this);
+            dash = new Dash(this, _stats.dashSpeedX, _stats.dashTime);
+            swing = new Swing(wire, this, _stats.fallGravity, _stats.wireSwingNaturalAccelMultiplier, _stats.SwingMaxAngularVelocity, _stats.wireSwingDecayMultiplier, _stats.wireSwingBounceDecayMultiplier, _stats.PlayerSwayAccel, _stats.wireLength);
+            wallJump = new WallJump(this, _stats.risingGravity, _stats.WallJumpDistance, _stats.takeControlAwayTime);
+            wallSlide = new WallSlide(_stats.wallSlideGravity, _stats.maxWallSlideSpeed, this);
+        }
         #endregion
 
         #region external
@@ -51,6 +61,7 @@ namespace PlayerController
         #region ControllerCore
         private void Start()
         {
+            SetupMoves();
             _rb = GetComponent<Rigidbody2D>();
             col = GetComponent<CapsuleCollider2D>();
             inputs = GetComponent<PlayerInputHandler>();
@@ -85,45 +96,47 @@ namespace PlayerController
                     HandleGroundedJump();
                     break;
             }
-         
+
+            Debug.Log("before:" + _speed);
+            Debug.Log("After: " + _speed + ExternalVelocity);
             _rb.velocity = _speed + ExternalVelocity;
             HandleExternalVelocityDecay();
         }
         private Vector2 FrameStartingSpeed()
         {
-            Vector2 _speed = Vector2.zero;
+            Vector2 speed = Vector2.zero;
             if (_rb.velocity.x > 0)
             {
-                _speed.x = _rb.velocity.x - ExternalVelocity.x;
-                if (_speed.x < 0)
+                speed.x = _rb.velocity.x - ExternalVelocity.x;
+                if (speed.x < 0)
                 {
-                    _speed.x = _rb.velocity.x;
+                    speed.x = _rb.velocity.x;
                 }
 
             }
             else
             {
                 _speed.x = _rb.velocity.x + ExternalVelocity.x;
-                if (_speed.x > 0)
+                if (speed.x > 0)
                 {
-                    _speed.x = _rb.velocity.x;
+                    speed.x = _rb.velocity.x;
                 }
             }
             if (_rb.velocity.y > 0)
             {
-                _speed.y = _rb.velocity.y - ExternalVelocity.y;
-                if (_speed.y < 0)
+                speed.y = _rb.velocity.y - ExternalVelocity.y;
+                if (speed.y < 0)
                 {
-                    _speed.x = _rb.velocity.x;
+                    speed.x = _rb.velocity.x;
                 }
 
             }
             else
             {
-                _speed.y = _rb.velocity.y + ExternalVelocity.y;
+                speed.y = _rb.velocity.y + ExternalVelocity.y;
                 if (_speed.x > 0)
                 {
-                    _speed.y = _rb.velocity.y;
+                    speed.y = _rb.velocity.y;
                 }
             }
             return _rb.velocity - ExternalVelocity;
@@ -132,11 +145,11 @@ namespace PlayerController
         private void HandleExternalVelocityDecay()
         {
             ExternalVelocity.x = Mathf.MoveTowards(ExternalVelocity.x, 0, _stats.ExternalVelocityDecay * Time.fixedDeltaTime);
-            if (ExternalVelocity.y < 0)
+            if (_rb.velocity.y < 0)
             {
                 ExternalVelocity.y = Mathf.MoveTowards(ExternalVelocity.y, 0, _stats.ExternalVelocityDecay * Time.fixedDeltaTime);
             }
-            else
+            else if(_rb.velocity.y >= 0)
             {
                 ExternalVelocity.y = Mathf.MoveTowards(ExternalVelocity.y, 0, Mathf.Abs(_stats.fallGravity) * Time.fixedDeltaTime);
             }
@@ -234,7 +247,7 @@ namespace PlayerController
             if (TimeSinceLanded == 0 && Grounded)
             {
                 currentGravity = _stats.fallGravity;
-                _speed.y = 0;
+                _speed.y = -1 * Time.fixedDeltaTime;
                 ExternalVelocity.y = 0;
                 jumpCanceled = true;
             }
@@ -324,8 +337,6 @@ namespace PlayerController
                 TriggerJump();
 
             }
-            Debug.Log("jumpheld" + inputs.JumpHeld + " ShouldCancel" + (!inputs.JumpHeld && !jumpCanceled)); //|| (!jumpCanceled
-               // && (Kinematics.InitialVelocity(0, _stats.risingGravity, _stats.jumpHeight) / -_stats.risingGravity) < timeSinceJumpWasTriggered)));
             if ((!inputs.JumpHeld && !jumpCanceled) || (!jumpCanceled
                 && (Kinematics.InitialVelocity(0, _stats.risingGravity, _stats.jumpHeight) / -_stats.risingGravity) < timeSinceJumpWasTriggered))
             {
