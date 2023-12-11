@@ -9,9 +9,9 @@ namespace PlayerController
 {
     public class PlayerController2D : MonoBehaviour, CharacterController2D
     {
+        public Vector2 ExternalVelocity;
         [Header("General")]
         public PlayerState startState = PlayerState.Aerial;
-        public Vector2 ExternalVelocity;
         public enum PlayerState
         {
             Grounded,
@@ -82,77 +82,25 @@ namespace PlayerController
         private void FixedUpdate()
         {
 
-            _speed = FrameStartingSpeed();
             FlagUpdates();
             SwitchState();
             switch (currentState)
             {
                 case PlayerState.Grounded:
-                    HandleSpeed();
+                    HandleHorizontal();
                     HandleGroundedJump();
                     break;
                 case PlayerState.Aerial:
-                    HandleSpeed();
+                    HandleHorizontal();
+                    HandleVertical();
                     HandleGroundedJump();
                     break;
+                case PlayerState.Swinging:
+                    swing.UpdateInput(inputs.MoveInput.x);
+                    swing.ContinueMove();
+                    break;
             }
-
-            Debug.Log("before:" + _speed);
-            Debug.Log("After: " + _speed + ExternalVelocity);
             _rb.velocity = _speed + ExternalVelocity;
-            HandleExternalVelocityDecay();
-        }
-        private Vector2 FrameStartingSpeed()
-        {
-            Vector2 speed = Vector2.zero;
-            if (_rb.velocity.x > 0)
-            {
-                speed.x = _rb.velocity.x - ExternalVelocity.x;
-                if (speed.x < 0)
-                {
-                    speed.x = _rb.velocity.x;
-                }
-
-            }
-            else
-            {
-                _speed.x = _rb.velocity.x + ExternalVelocity.x;
-                if (speed.x > 0)
-                {
-                    speed.x = _rb.velocity.x;
-                }
-            }
-            if (_rb.velocity.y > 0)
-            {
-                speed.y = _rb.velocity.y - ExternalVelocity.y;
-                if (speed.y < 0)
-                {
-                    speed.x = _rb.velocity.x;
-                }
-
-            }
-            else
-            {
-                speed.y = _rb.velocity.y + ExternalVelocity.y;
-                if (_speed.x > 0)
-                {
-                    speed.y = _rb.velocity.y;
-                }
-            }
-            return _rb.velocity - ExternalVelocity;
- 
-        }
-        private void HandleExternalVelocityDecay()
-        {
-            ExternalVelocity.x = Mathf.MoveTowards(ExternalVelocity.x, 0, _stats.ExternalVelocityDecay * Time.fixedDeltaTime);
-            if (_rb.velocity.y < 0)
-            {
-                ExternalVelocity.y = Mathf.MoveTowards(ExternalVelocity.y, 0, _stats.ExternalVelocityDecay * Time.fixedDeltaTime);
-            }
-            else if(_rb.velocity.y >= 0)
-            {
-                ExternalVelocity.y = Mathf.MoveTowards(ExternalVelocity.y, 0, Mathf.Abs(_stats.fallGravity) * Time.fixedDeltaTime);
-            }
         }
 
         #region StateTransition
@@ -169,23 +117,26 @@ namespace PlayerController
             }
             else
             {
+                if(currentState == PlayerState.Swinging)
+                {
+                    swing.CancelMove();
+                }
                 currentState = GetNewState();
             }
             switch (currentState)
             {
                 case PlayerState.Grounded:
-                    //groundMovement.StartMove();
+                    groundMovement.StartMove();
                     break;
                 case PlayerState.Aerial:
-                    //airMovement.StartMove();
+                    airMovement.StartMove();
                     break;
                 case PlayerState.OnWall:
-                    //wallSlide.StartMove();
+                    wallSlide.StartMove();
                     break;
                 case PlayerState.Swinging:
-                    //swing.StartMove();
-                    //jump.CancelMove();
-                    //jumped = false;
+                    swing.UpdateInput(inputs.MoveInput.x);
+                    swing.StartMove();
                     break;
                 default:
                     break;
@@ -203,10 +154,9 @@ namespace PlayerController
             }
             else
             {
-                if (((wire.IsConnected() && Velocity.y < 0) || (PlayerState.Swinging == currentState && wire.IsConnected())))
+                if (((wire.IsConnected() && !Grounded) || (PlayerState.Swinging == currentState && wire.IsConnected())))
                 {
-                    //return PlayerState.Swinging;
-                    return PlayerState.Aerial;
+                    return PlayerState.Swinging;
                 }
                 else
                 {
@@ -248,7 +198,6 @@ namespace PlayerController
             {
                 currentGravity = _stats.fallGravity;
                 _speed.y = -1 * Time.fixedDeltaTime;
-                ExternalVelocity.y = 0;
                 jumpCanceled = true;
             }
             timeSinceJumpWasTriggered += Time.fixedDeltaTime;
@@ -264,33 +213,15 @@ namespace PlayerController
         }
         protected virtual void HandleHorizontal()
         {
-            float HI = inputs.MoveInput.x;
             if (Grounded)
             {
-                //Acceleration to max speed
-
-                //Deceleration;
-                if (HI == 0)
-                {
-                    _speed.x = Kinematics.VelocityTowards(_speed.x, _stats.groundedDeceleration, 0, Time.fixedDeltaTime);
-                }
-                else
-                {
-                    _speed.x = Kinematics.VelocityTowards(_speed.x, _stats.groundedAcceleration, HI * _stats.maxRunSpeed, Time.fixedDeltaTime);
-                }
+                groundMovement.UpdateDirection(inputs.MoveInput.x);
+                groundMovement.ContinueMove();
             }
             else
             {
-
-                //Deceleration;
-                if (HI == 0)
-                {
-                    _speed.x = Kinematics.VelocityTowards(_speed.x, _stats.airDeceleration, 0, Time.fixedDeltaTime);
-                }
-                else
-                {
-                    _speed.x = Kinematics.VelocityTowards(_speed.x, _stats.airAcceleration, HI * _stats.maxRunSpeed, Time.fixedDeltaTime);
-                }
+                airMovement.UpdateDirection(inputs.MoveInput.x);
+                airMovement.ContinueMove();
             }
 
 
@@ -332,10 +263,7 @@ namespace PlayerController
         {
             if (ShouldTriggerJump())
             {
-
-                //Debug.Log("TriggeredJump");
                 TriggerJump();
-
             }
             if ((!inputs.JumpHeld && !jumpCanceled) || (!jumpCanceled
                 && (Kinematics.InitialVelocity(0, _stats.risingGravity, _stats.jumpHeight) / -_stats.risingGravity) < timeSinceJumpWasTriggered))
@@ -345,15 +273,15 @@ namespace PlayerController
         }
         protected virtual void CancelJump()
         {
+            jump.CancelMove();
             currentGravity = _stats.fallGravity;
-            _speed.y *= _stats.jumpEndedEarlyMultiplier;
             jumpCanceled = true;
         }
         protected virtual void TriggerJump()
         {
+            jump.StartMove();
             currentGravity = _stats.risingGravity;
             jumpCanceled = false;
-            _speed.y = Kinematics.InitialVelocity(0, _stats.risingGravity, _stats.jumpHeight);
             timeSinceJumpWasTriggered = 0;
         }
         #endregion Jump
@@ -474,7 +402,6 @@ namespace PlayerController
             LevelManager.checkpointManager.RespawnAtRecent(_rb.transform);
             _rb.velocity = Vector2.zero;
             currentState = PlayerState.Aerial;
-            ExternalVelocity = Vector2.zero;
         }
         /// <summary>
         /// Resets the player to their original position. For debugging only.
@@ -484,7 +411,6 @@ namespace PlayerController
             LevelManager.checkpointManager.RespawnAtBeginning(_rb.transform);
             _rb.velocity = Vector2.zero;
             currentState = PlayerState.Aerial;
-            ExternalVelocity = Vector2.zero;
         }
 
 
