@@ -9,12 +9,12 @@ public class WarningController : MonoBehaviour
 {
     private bool _runLightBlink;
     private bool _runLowHealthAnimation;
-    [SerializeField] private GameObject lowHealthWarning;
     [SerializeField] private GameObject virusEyes;
     [SerializeField] private GameObject headlightA;
     [SerializeField] private GameObject headlightB;
     [SerializeField] private Color targetLightColorA;
     [SerializeField] private Color targetLightColorB;
+    private GameObject lowHealthWarning;
     private float time;
     private Color initLightColorA;
     private Color initLightColorB;
@@ -25,6 +25,10 @@ public class WarningController : MonoBehaviour
     /// </summary>
     void Start()
     {
+        if (GameObject.FindGameObjectsWithTag("LowHealthWarning").Length > 0)
+        {
+            lowHealthWarning = GameObject.FindGameObjectsWithTag("LowHealthWarning")[0];
+        }
         _runLowHealthAnimation = true;
         time = -1.0f;
         initLightColorA = headlightA.GetComponent<UnityEngine.Rendering.Universal.Light2D>().color;
