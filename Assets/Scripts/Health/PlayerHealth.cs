@@ -127,7 +127,7 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     private void EnergyDepletionWarning()
     {
-        Debug.Log("Energy Depletion Warning");
+       // Debug.Log("Energy Depletion Warning");
         warning.GetComponent<WarningController>().StartLowHealthWarning();
     }
 

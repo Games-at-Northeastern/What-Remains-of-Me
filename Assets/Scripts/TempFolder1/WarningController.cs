@@ -25,7 +25,7 @@ public class WarningController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        _runLowHealthAnimation = false;
+        _runLowHealthAnimation = true;
         time = -1.0f;
         initLightColorA = headlightA.GetComponent<UnityEngine.Rendering.Universal.Light2D>().color;
         initLightColorB = headlightB.GetComponent<UnityEngine.Rendering.Universal.Light2D>().color;
@@ -39,6 +39,7 @@ public class WarningController : MonoBehaviour
     /// </summary>
     void Update()
     {
+        //if (lowHealthWarning != null && lowHealthWarning.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("No Warning"))
         if (_runLightBlink)
         {
             
@@ -89,11 +90,12 @@ public class WarningController : MonoBehaviour
     /// </summary>
     public void StartLowHealthWarning()
     {
-        if (lowHealthWarning != null)
+        if (lowHealthWarning != null && lowHealthWarning.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("No Warning") && _runLowHealthAnimation)
         {
-            lowHealthWarning.GetComponent<UnityEngine.UI.Image>().enabled = true;
-            lowHealthWarning.GetComponent<Animator>().enabled = true;
+            lowHealthWarning.GetComponent<Animator>().SetTrigger("Activate");
+            lowHealthWarning.GetComponent<Animator>().SetTrigger("Inactive");
         }
+        _runLowHealthAnimation = false;
     }
 
     /// <summary>
@@ -103,8 +105,7 @@ public class WarningController : MonoBehaviour
     {
         if (lowHealthWarning != null)
         {
-            lowHealthWarning.GetComponent<UnityEngine.UI.Image>().enabled = false;
-            lowHealthWarning.GetComponent<Animator>().enabled = false;
+            _runLowHealthAnimation = true;
         }
     }
 

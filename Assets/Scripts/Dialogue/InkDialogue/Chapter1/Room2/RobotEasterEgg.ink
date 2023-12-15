@@ -7,7 +7,9 @@
 
 ===firstInteraction===
 
-Wh...y.... did y-you lea&&ve me h..here? #layout:left #portrait:isp #speaker:???
+w... Y did U l-l33v3 m33? #layout:left #portrait:isp #speaker:???
+
+Wh-wh-u-u-u-......w0t did I d-d-oo r-r..ong…?
 
 ->DONE
 
