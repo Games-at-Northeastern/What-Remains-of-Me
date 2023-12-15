@@ -5,8 +5,10 @@ using UnityEditor;
 /**
  * Code added by Marco Zepeda from his personal code library to have additional gizmos drawing tool
  */
+
 namespace More2DGizmos
 {
+#if UNITY_EDITOR
     public class GizmosPlus
     {
         #region Capsules
@@ -336,4 +338,5 @@ public class CapsuleSim
         float rotation = obj.transform.eulerAngles.z;
         return pos + Kinematics.GetVector(col.offset.y, rotation + 90) + Kinematics.GetVector(col.offset.x, rotation);
     }
+#endif
 }

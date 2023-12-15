@@ -493,7 +493,7 @@ namespace PlayerController
         #endregion
 
 
-
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
@@ -502,7 +502,7 @@ namespace PlayerController
             GizmosPlus.BoxCast(origin + new Vector2(0, _stats.ceilingOffset), new Vector2(_stats.ceilingBounds.x, 0.01f), 0, Vector2.up, _stats.ceilingBounds.y - 0.01f, ~_stats.IgnoreLayers);
             GizmosPlus.BoxCast(origin + new Vector2(0, -_stats.groundOffset), new Vector2(_stats.groundBounds.x, 0.01f), 0, Vector2.down, _stats.groundBounds.y - 0.01f, ~_stats.IgnoreLayers);
         }
-
+#endif
 
     }
 
