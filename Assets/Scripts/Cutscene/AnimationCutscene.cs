@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using PlayerController;
 
 public class AnimationCutscene : MonoBehaviour
 {
@@ -15,8 +16,9 @@ public class AnimationCutscene : MonoBehaviour
     // put the default virtual cam for the player here.
     public CinemachineVirtualCamera playerCam;
     // put the player's rigidbody here.
-    public Rigidbody2D playerBody;
-    private bool doCutscene;
+    [SerializeField]
+    private PlayerController2D cc;
+        private bool doCutscene;
     private bool moveCamera;
     [SerializeField] float waitTime = 1; // the amount of time to wait between moving the camera and starting the animation. Set to zero if you aren't moving the camera.
     // Start is called before the first frame update
@@ -30,7 +32,7 @@ public class AnimationCutscene : MonoBehaviour
     {
         if (moveCamera)
         {
-            playerBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            cc.LockInputs();
             if (panCam != playerCam)
                 panCam.Priority = playerCam.Priority + 1;
             waitTime -= Time.deltaTime;
@@ -49,7 +51,7 @@ public class AnimationCutscene : MonoBehaviour
                 if (panCam != playerCam)
                     panCam.Priority = playerCam.Priority - 1;
                 doCutscene = false;
-                playerBody.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+                cc.UnlockInputs();
                 animator.SetBool("didAnimate", true);
                 Destroy(gameObject);
             }

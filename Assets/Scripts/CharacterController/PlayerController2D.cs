@@ -20,6 +20,7 @@ namespace PlayerController
             OnWall,
         }
         private PlayerState currentState = PlayerState.Aerial;
+        private bool isLocked = false;
         #region Internal References
 
         public PlayerSettings _stats;
@@ -67,17 +68,18 @@ namespace PlayerController
         private Facing currentDirection = Facing.right;
         private Facing direction()
         {
-            if (inputs.MoveInput.x == 0)
-            {
-                return currentDirection;
-            }
-            if (inputs.MoveInput.x < 0)
+            if (inputs.MoveInput.x < 0 && !isLocked)
             {
                 currentDirection = Facing.left;
                 return Facing.left;
             }
-            currentDirection = Facing.right;
-            return Facing.right;
+            else if (inputs.MoveInput.x > 0 && !isLocked)
+            {
+                currentDirection = Facing.right;
+                return Facing.right;
+            }
+            else
+                return currentDirection;
         }
         #endregion
 
@@ -254,12 +256,26 @@ namespace PlayerController
         #region Grounded and Aerial
         protected virtual void HandleAirHorizontal()
         {
-            airMovement.UpdateDirection(inputs.MoveInput.x);
+            if (!isLocked)
+            {
+                airMovement.UpdateDirection(inputs.MoveInput.x);
+            }
+            else
+            {
+                airMovement.UpdateDirection(0);
+            }
             airMovement.ContinueMove();
         }
         protected virtual void HandleGroundHorizontal()
         {
-            groundMovement.UpdateDirection(inputs.MoveInput.x);
+            if (!isLocked)
+            {
+                groundMovement.UpdateDirection(inputs.MoveInput.x);
+            }
+            else
+            {
+                groundMovement.UpdateDirection(0);
+            }
             groundMovement.ContinueMove();
         }
 
@@ -308,7 +324,7 @@ namespace PlayerController
 
         protected virtual bool CanGroundedJump()
         {
-            return Grounded && JumpBuffered;
+            return Grounded && JumpBuffered && !isLocked;
         }
 
         protected virtual void HandleGroundedJump()
@@ -455,14 +471,20 @@ namespace PlayerController
 
         #region Conditions
 
-        public void LockInputs() => throw new NotImplementedException();
-        public void UnlockInputs() => throw new NotImplementedException();
+        public void LockInputs()
+        {
+            isLocked = true;
+        }
+        public void UnlockInputs()
+        {
+            isLocked = false;
+        }
         public AnimationType GetAnimationState()
         {
             switch (currentState)
             {
                 case PlayerState.Grounded:
-                    if (Mathf.Abs(inputs.MoveInput.x) > 0.1f)
+                    if (_speed.x != 0)
                     {
                         return AnimationType.RUN;
                     }
