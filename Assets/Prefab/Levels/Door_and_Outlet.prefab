@@ -157,11 +157,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb6439f5312bc4408898997a011b210e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energy: 0
+  cleanEnergy: 0
   maxCharge: 50
   virus: 0
-  maxVirus: 0
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
+  OnVirusChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!1001 &5445610359586298925
 PrefabInstance:
