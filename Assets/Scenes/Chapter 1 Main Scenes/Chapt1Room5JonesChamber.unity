@@ -3148,6 +3148,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &755181572 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6492400416709544474, guid: 856e8113b5051c049a078f2730ef6433, type: 3}
+  m_PrefabInstance: {fileID: 495639937}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &755181574
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755181572}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b49b7e216d8a346599c8e5adcaad616f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &764489133
 GameObject:
   m_ObjectHideFlags: 0
@@ -8425,6 +8450,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1065947360339903343, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6860228394538578389, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -9668,6 +9697,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1424468423}
   - component: {fileID: 1424468426}
+  - component: {fileID: 1424468427}
   - component: {fileID: 1424468425}
   - component: {fileID: 1424468424}
   m_Layer: 0
@@ -9783,7 +9813,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a24c7c83a0244452fb285215cfc90ac4, type: 3}
+  m_Sprite: {fileID: 380291168, guid: 320077cc101c14f588ae9995a70527e6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -9794,6 +9824,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &1424468427
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424468422}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 82ac1cd0ed30e48ed96e99801cb3364c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &1445311816
 GameObject:
   m_ObjectHideFlags: 0
@@ -10027,7 +10077,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813679797165868, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6499311
+      value: 2.8499303
       objectReference: {fileID: 0}
     - target: {fileID: 3482813679797165868, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10037,6 +10087,10 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 1028354829}
+    - target: {fileID: 3482813679797165869, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.4184377
@@ -10055,7 +10109,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6499311
+      value: 2.8499303
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10063,7 +10117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 3.27
+      value: 6.685
       objectReference: {fileID: 0}
     - target: {fileID: 5507190965753065182, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_BiasX
@@ -10265,6 +10319,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1508278259}
   - component: {fileID: 1508278262}
+  - component: {fileID: 1508278263}
   - component: {fileID: 1508278261}
   - component: {fileID: 1508278260}
   m_Layer: 0
@@ -10380,7 +10435,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a24c7c83a0244452fb285215cfc90ac4, type: 3}
+  m_Sprite: {fileID: 380291168, guid: 320077cc101c14f588ae9995a70527e6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -10391,6 +10446,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &1508278263
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508278258}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 82ac1cd0ed30e48ed96e99801cb3364c, type: 2}
+  m_CullingMode: 2
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &1509369481
 GameObject:
   m_ObjectHideFlags: 0
@@ -32788,6 +32863,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1775548169}
   - component: {fileID: 1775548172}
+  - component: {fileID: 1775548173}
   - component: {fileID: 1775548171}
   - component: {fileID: 1775548170}
   m_Layer: 0
@@ -32914,6 +32990,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &1775548173
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775548168}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 82ac1cd0ed30e48ed96e99801cb3364c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &1818186907
 GameObject:
   m_ObjectHideFlags: 0
@@ -34833,9 +34929,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 808095022}
     - target: {fileID: 345987115, guid: 262a912dfcd344e478f02443909af6a7, type: 3}
+      propertyPath: doorAnimator
+      value: 
+      objectReference: {fileID: 1424468427}
+    - target: {fileID: 345987115, guid: 262a912dfcd344e478f02443909af6a7, type: 3}
       propertyPath: doorCollider
       value: 
       objectReference: {fileID: 1424468425}
+    - target: {fileID: 345987115, guid: 262a912dfcd344e478f02443909af6a7, type: 3}
+      propertyPath: doorAnimator2
+      value: 
+      objectReference: {fileID: 1775548173}
+    - target: {fileID: 345987115, guid: 262a912dfcd344e478f02443909af6a7, type: 3}
+      propertyPath: doorAnimator3
+      value: 
+      objectReference: {fileID: 1508278263}
     - target: {fileID: 345987115, guid: 262a912dfcd344e478f02443909af6a7, type: 3}
       propertyPath: doorCollider2
       value: 
@@ -34901,6 +35009,10 @@ PrefabInstance:
       value: Jones
       objectReference: {fileID: 0}
     - target: {fileID: 3350418609647837630, guid: 262a912dfcd344e478f02443909af6a7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298791228854622705, guid: 262a912dfcd344e478f02443909af6a7, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
