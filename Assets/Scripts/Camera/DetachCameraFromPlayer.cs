@@ -32,9 +32,9 @@ public class DetachCameraFromPlayer : MonoBehaviour
         if(collision.gameObject.tag == "Player")
         {
             VirtualCam.Follow = bossRoomCameraCenter;
+            VirtualCam.m_Lens.OrthographicSize = 6;
             GameCamera.transform.position = bossRoomCameraCenter.position; //hardcoded :P
         }
     }
-
 
 }
