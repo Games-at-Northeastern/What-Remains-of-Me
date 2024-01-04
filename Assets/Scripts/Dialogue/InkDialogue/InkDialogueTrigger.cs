@@ -24,6 +24,7 @@ public class InkDialogueTrigger : MonoBehaviour
 
     private ControlSchemes _cs;
 
+    //I think this is not used...?
     private bool _playerInRange;
     private bool _firstInteraction;
 

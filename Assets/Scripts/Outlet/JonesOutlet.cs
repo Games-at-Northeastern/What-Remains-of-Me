@@ -5,10 +5,6 @@ using UnityEngine.UI;
 
 public class JonesOutlet : AControllable
 {
-    [SerializeField] private SpriteRenderer door;
-    [SerializeField] private Sprite openDoorSprite;
-    [SerializeField] private Collider2D doorCollider;
-    [SerializeField] private Animator doorAnimator;
 
     [SerializeField] private SpriteRenderer door2;
     [SerializeField] private Sprite openDoorSprite2;
@@ -29,11 +25,6 @@ public class JonesOutlet : AControllable
 
         if (GetVirus() >= 80f)
         {
-            explosionParticles.Play();
-            door.sprite = openDoorSprite;
-            doorAnimator.enabled = false;
-            doorCollider.enabled = false;
-
 	        door2.sprite = openDoorSprite2;
             doorAnimator2.enabled = false;
             doorCollider2.enabled = false;

@@ -352,9 +352,9 @@ if (result == null)
 return result;
 }
 
-// this method will allow of a variable defined in globals.ink to be set using C# code
-    public void SetVariableState(string variableName, Ink.Runtime.Object variableValue) 
-    {
+// this method will allow for a variable defined in globals.ink to be set using C# code
+public void SetVariableState(string variableName, Ink.Runtime.Object variableValue) 
+{
         if (dialogueVariables.variables.ContainsKey(variableName)) 
         {
             dialogueVariables.variables.Remove(variableName);
@@ -364,7 +364,7 @@ return result;
         {
             Debug.LogWarning("Tried to update variable that wasn't initialized by globals.ink: " + variableName);
         }
-    }
+}
 
 
 public void ChangeVariableState(string variableName, Ink.Runtime.Object newValue)
