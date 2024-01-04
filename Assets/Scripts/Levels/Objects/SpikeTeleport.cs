@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayerController;
 
 // why is this just for spikes? TODO, abstract this.
 public class SpikeTeleport : MonoBehaviour
@@ -37,11 +38,16 @@ public class SpikeTeleport : MonoBehaviour
     // exposed so that killing things is just more convenient
     public void PerformDeath(GameObject target)
     {
-        objectToTeleport = target.gameObject;
+        objectToTeleport = target;
         deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
         deathParticles.Clear();
         deathParticles.Play();
-        objectToTeleport.SetActive(false);
+        objectToTeleport.GetComponentInChildren<SpriteRenderer>().enabled = false;
+
+        objectToTeleport.GetComponentInChildren<PlayerController2D>().LockInputs();
+
+        //play the player death sound using PlayerSFX
+        sfx.Died();
 
         Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
     }
@@ -58,12 +64,12 @@ public class SpikeTeleport : MonoBehaviour
             objectToTeleport.transform.position = teleportLocation.position;
         }
 
+        objectToTeleport.GetComponentInChildren<SpriteRenderer>().enabled = true;
+        objectToTeleport.GetComponentInChildren<PlayerController2D>().UnlockInputs();
+
         objectToTeleport.SetActive(true);
         LevelManager.PlayerReset();
         InkDialogueVariables.deathCount++;
-
-        //play the player death sound using PlayerSFX
-        sfx.Died();
     }
 }
 
