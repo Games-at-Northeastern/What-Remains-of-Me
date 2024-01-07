@@ -14,6 +14,7 @@ public class DetachCameraFromPlayer : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             VirtualCam.Follow = collision.gameObject.transform;
+            VirtualCam.m_Lens.OrthographicSize = 4;
         }
 
     }
