@@ -13,7 +13,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===withoutVoiceModule===
 
-Do not attempt to leave this facility. #layout:left #portrait:isp #speaker:Jones_AI
+Do not attempt to leave this facility. #layout:left #portrait:jones1 #speaker:Jones_AI
 
 You are flawed.
 
