@@ -5,6 +5,7 @@ using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
+using PlayerController;
 
 public class InkDialogueManager : MonoBehaviour
 {
@@ -33,6 +34,9 @@ public class InkDialogueManager : MonoBehaviour
     public bool dialogueEnded;
 
     public bool dialogueIsPlaying { get; private set; }
+
+
+    public PlayerController2D cc;
 
     // constants for ink tags (ink tags allow you to change the state of the game from ink json files)
     private const string SPEAKER_TAG = "speaker";
@@ -137,17 +141,10 @@ public class InkDialogueManager : MonoBehaviour
 
         ContinueStory();
 
-        // this works, but it also depends on a single player existing in the scene
-        // and is using FindGameObjectsWithTag which is
-        // VERY BAD PRACTICE, DON'T DO THIS!!!
-        // also using GetComponent usually isn't good practice compared to [SerializeField]
-        // I am using GetComponent here so that you don't have to assign the player to every InkDialogueManager in every scene
-        // if there is a better way to implement this please do
-        // this just prevents the player's rigidbody from moving along the X Axis while dialogue is playing
+        // This now requires a character controller for the player to be placed into the dialogue manager in every level.
         if (stopMovement)
         {
-            Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
-            playerRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            cc.LockInputs();
         }
     }
 
@@ -173,8 +170,7 @@ public class InkDialogueManager : MonoBehaviour
         //turns off the X constraint on the player's rigidbody when dialogue has stopped
         if (stopMovement)
         {
-            Rigidbody2D playerRB = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
-            playerRB.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            cc.UnlockInputs();
         }
         //btw if you ever want to adjust this, know that RigidbodyContraints2D are something called a "Bitmap" so they can't be set normally
         // https://answers.unity.com/questions/1104653/im-trying-to-freeze-both-positionx-and-rotation-in.html 
@@ -355,6 +351,21 @@ if (result == null)
 }
 return result;
 }
+
+// this method will allow for a variable defined in globals.ink to be set using C# code
+public void SetVariableState(string variableName, Ink.Runtime.Object variableValue) 
+{
+        if (dialogueVariables.variables.ContainsKey(variableName)) 
+        {
+            dialogueVariables.variables.Remove(variableName);
+            dialogueVariables.variables.Add(variableName, variableValue);
+        }
+        else 
+        {
+            Debug.LogWarning("Tried to update variable that wasn't initialized by globals.ink: " + variableName);
+        }
+}
+
 
 public void ChangeVariableState(string variableName, Ink.Runtime.Object newValue)
 {

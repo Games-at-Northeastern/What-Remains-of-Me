@@ -10,6 +10,8 @@ using System.Collections.Generic;
 /// </summary>
 public class EnemyAIAstar : MonoBehaviour
 {
+    // TODO: Why are these all public?
+
     [Header("Pathfinding")]
     // object enemey is following (should be player)
     public Transform target;
@@ -32,8 +34,6 @@ public class EnemyAIAstar : MonoBehaviour
 
     // add behavior modifiers as necessary for enemy ai navigation
     [Header("Custom Enemy Behavior Modifiers")]
-    // toggle enable enemy to follow (should be true for script to work)
-    public bool followEnabled = true;
     // toggle enable enemy to be able to jump
     public bool jumpEnabled = true;
     // toggle enable enemy to look at target
@@ -42,6 +42,11 @@ public class EnemyAIAstar : MonoBehaviour
     public float attackRadius = 2f;
     // how long between enemy attacks (in seconds)
     public float attackCooldown = 2f;
+
+
+    // toggle enable enemy to follow (should be true for script to work)
+    // Note: This is now a property so i can expose it to UnityEvents.
+    public bool followEnabled { get; set; } = true;
 
     // private variables
     // use variable provided by A* Pathfinding library package
