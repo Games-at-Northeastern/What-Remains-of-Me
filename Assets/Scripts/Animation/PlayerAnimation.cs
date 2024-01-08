@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CharacterController;
+
 /// <summary>
 ///  This class helps with the transitions between animation states. 
 ///  It has 3 private variables: animator, the animator object,
@@ -20,11 +20,7 @@ public class PlayerAnimation : MonoBehaviour
     /// <summary>
     /// a reference to the movement script, to better understand the location of the player
     /// </summary>
-    [SerializeField] private CharacterController2D cc;
-    private void Start()
-    {
-        cc = GetComponentInParent<CharacterController2D>();
-    }
+    [SerializeField] private MovementExecuter _movementExecuter;
     /// <summary>
     /// a reference to the wire, to better understand the location of the wire
     /// </summary>
@@ -37,7 +33,7 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     void Update()
     {
-        _animator.SetInteger("StateID", (int) cc.GetAnimationState());
+        _animator.SetInteger("StateID", (int) _movementExecuter.GetCurrentMove().GetAnimationState());
         _animator.SetBool("WireOut", _wireThrower.WireExists());
     }
 }

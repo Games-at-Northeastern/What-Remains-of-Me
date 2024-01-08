@@ -20,7 +20,7 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
         ResetHealth();
 
         // Register the reset health event to occur when the player dies
-        LevelManager.OnPlayerDeath.AddListener(ResetHealth);
+        LevelManager.Instance.OnPlayerDeath.AddListener(ResetHealth);
     }
 
     /// <summary>

@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private GameObject warning;
     public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
@@ -37,38 +36,15 @@ public class PlayerHealth : MonoBehaviour
         // replaced with an AControllable component, but that would require some rework of the AControllable class
         // to not directly reference the PlayerInfo
 
-        // check if player has depleted all health (with some float forgiveness)
-        if (playerInfo.battery <= 0.01)
-        {
-            EnergyDepletedDeath();
-        }
-        // check if player has reached minimum health (the player cannot drain any more health)
-        else if (playerInfo.battery <= 1f)
-        {
-            EnergyDepletionWarning();
-        }
-        else
-        {
-            warning.GetComponent<WarningController>().StopLowHealthWarning();
-        }
-
-        // check if the player has reached 100% virus (with some float forgiveness)
+        // check if player has reached maximum virus amount (with a bit of float forgiveness)
         if (playerInfo.virus >= playerInfo.maxVirus - 0.01)
         {
             VirusFullDeath();
         }
-        // check if the player has any virus
-        else if (playerInfo.virus >= 0.01)
+        else if (playerInfo.battery <= 0.01)
         {
-            VirusWarning();
+            EnergyDepletedDeath();
         }
-        else
-        {
-            warning.GetComponent<WarningController>().StopLightBlinking();
-            warning.GetComponent<WarningController>().ResetVirus();
-        }
-
-
     }
 
     // TODO : Should there be some kind of scene resetting that is triggered by this? I.e. platforms, enemies, etc.?
@@ -79,7 +55,7 @@ public class PlayerHealth : MonoBehaviour
     private void VirusFullDeath()
     {
         Debug.Log("Death from virus full");
-        LevelManager.PlayerDeath();
+        LevelManager.Instance.PlayerDeath();
     }
 
     /// <summary>
@@ -88,7 +64,7 @@ public class PlayerHealth : MonoBehaviour
     private void EnergyDepletedDeath()
     {
         Debug.Log("Death from energy depleted");
-        LevelManager.PlayerDeath();
+        LevelManager.Instance.PlayerDeath();
     }
 
     /// <summary>
@@ -98,37 +74,6 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("Death from energy empty upon damage");
 
-    }
-
-
-    // Methods for to triggering audiovisual warnings for when the player is about to die
-
-    /// <summary>
-    /// Triggers the virus warning (blinking headlight) at high virus percentages.
-    /// Additionally, updates eye and light color to match virus percentage.
-    /// </summary>
-    private void VirusWarning()
-    {
-        warning.GetComponent<WarningController>().VirusControl(playerInfo.virus / playerInfo.maxVirus);
-        if (playerInfo.virus >= playerInfo.maxVirus * 0.8f)
-        {
-            Debug.Log("Virus Overload Warning");
-            warning.GetComponent<WarningController>().StartLightBlinking();
-        }
-        else
-        {
-            warning.GetComponent<WarningController>().StopLightBlinking();
-        }
-    }
-
-
-    /// <summary>
-    /// Triggers warnings for reaching minimum energy
-    /// </summary>
-    private void EnergyDepletionWarning()
-    {
-       // Debug.Log("Energy Depletion Warning");
-        warning.GetComponent<WarningController>().StartLowHealthWarning();
     }
 
 
@@ -143,7 +88,7 @@ public class PlayerHealth : MonoBehaviour
     public void LoseEnergy(float amount)
     {
         playerInfo.battery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0f)
+        if (playerInfo.batteryPercentage.Value <= 0.01f)
         {
             Die();
         }
@@ -177,7 +122,7 @@ public class PlayerHealth : MonoBehaviour
     {
         playerInfo.virus += amount;
         playerInfo.maxBattery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0f || playerInfo.virusPercentage.Value >= 0.99f)
+        if (playerInfo.batteryPercentage.Value <= 0.01f || playerInfo.virusPercentage.Value >= 0.99f)
         {
             Die();
         }

@@ -16,37 +16,63 @@ public class LevelManager : MonoBehaviour
     private string warpDestination;
     private int toWarpID;
     private bool loadedNewScene = false;
-    private static Vector2 recentCheckpointHolder;
-    private static bool checkpointHeld;
-    public static GameObject PlayerRef { get; private set; }
+    private GameObject playerRef;
 
     // Level events
     [Header("Event to trigger player respawn after obstacle collision.")]
-    public static UnityEvent OnPlayerReset = new UnityEvent();
+    public UnityEvent OnPlayerReset;
     [Header("Event to trigger player death events.")]
-    public static UnityEvent OnPlayerDeath = new UnityEvent();
-    public static CheckpointManager checkpointManager;
+    public UnityEvent OnPlayerDeath;
+    [Header("Event to trigger player pausing (i.e. movement, wire throwing, etc.)")]
+    public UnityEvent OnPlayerPause;
+    [Header("Event to trigger player unpausing (i.e. movement, wire throwing, etc.)")]
+    public UnityEvent OnPlayerUnpause;
+
 
     // Event start functions that are accessible for other objects to trigger events
     /// <summary>
     /// Event to trigger player respawn after obstacle collision. This should respawn the player at the nearest checkpoint.
     /// </summary>
-    public static void PlayerReset() => OnPlayerReset?.Invoke();
+    public void PlayerReset() => OnPlayerReset?.Invoke();
     /// <summary>
     /// Event to trigger full player death event. This should respawn the player at the beginning of the level.
     /// </summary>
-    public static void PlayerDeath() => OnPlayerDeath?.Invoke(); // TODO: We may want to take in a type of death for this function
+    public void PlayerDeath() => OnPlayerDeath?.Invoke(); // TODO: We may want to take in a type of death for this function
+    public void PlayerPause()
+    {
+        Debug.Log("Player Pause Event");
+        OnPlayerPause?.Invoke();
+    }
 
+    public void PlayerUnpause() => OnPlayerUnpause?.Invoke();
+    // Singleton
+    public static LevelManager Instance { get; private set; }
+
+    /// <summary>
+    /// Since the LevelManager is a singleton, makes sure to keep the same instance
+    /// of this game object
+    /// </summary>
     private void Awake()
     {
-        OnPlayerReset.RemoveAllListeners();
-        OnPlayerDeath.RemoveAllListeners();
-
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
+
+    /// <summary>
+    /// If there is no player reference, sets the player reference to the player game object.
+    /// Do not destroy this singleton object when a new scene is loaded.
+    /// </summary>
     private void Start()
     {
-        PlayerRef = FindObjectOfType<PlayerController.PlayerController2D>().gameObject;
-        checkpointManager = FindObjectOfType<CheckpointManager>();
+        playerRef = player;
+
+        DontDestroyOnLoad(this);
     }
 
     /// <summary>
@@ -57,6 +83,10 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (playerRef == null && GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            playerRef = GameObject.FindGameObjectWithTag("Player");
+        }
         if (loadedNewScene)
         {
             GameObject[] warpZones = GameObject.FindGameObjectsWithTag("WarpZone");
@@ -65,7 +95,7 @@ public class LevelManager : MonoBehaviour
                 LevelWarpZone wz = warpZone.GetComponent<LevelWarpZone>();
                 if (wz.id == toWarpID)
                 {
-                    PlayerRef.transform.position = wz.loadInPosition.position;
+                    playerRef.transform.position = wz.loadInPosition.position;
                     loadedNewScene = false;
                     return;
                 }
@@ -74,13 +104,6 @@ public class LevelManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.RightBracket))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftBracket)) {
-            CheckpointManager checkpointManager = FindObjectOfType<CheckpointManager>();
-            recentCheckpointHolder = checkpointManager.getMostRecentPoint().getRespawnPosition();
-            checkpointHeld = true;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
@@ -108,19 +131,7 @@ public class LevelManager : MonoBehaviour
     public void WarpToScene()
     {
         SceneManager.LoadScene(warpDestination);
+        playerRef = null; // Comment out if player is DontDestroyOnLoad
         loadedNewScene = true;
-    }
-
-    /// <summary>
-    /// Returns the checkpoint being held by this LevelManager and stops holding it. In theory, since the LevelManager is persistent, this method should only
-    /// need to be called when we have reloaded a level mid-progress and wish to preserve the player's physical progress through the level.
-    /// </summary>
-    public static Vector2 extractRecentCheckpoint() {
-        checkpointHeld = false;
-        return recentCheckpointHolder;
-    }
-
-    public static bool holdingCheckpoint() {
-        return checkpointHeld;
     }
 }

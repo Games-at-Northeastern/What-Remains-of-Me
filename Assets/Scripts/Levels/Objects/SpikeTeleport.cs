@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerController;
 
-// why is this just for spikes? TODO, abstract this.
 public class SpikeTeleport : MonoBehaviour
 {
 
@@ -17,6 +15,7 @@ public class SpikeTeleport : MonoBehaviour
 
     private GameObject objectToTeleport;
 
+
     private void Awake()
     {
         //Get the objects needed for the sound effects.
@@ -25,32 +24,28 @@ public class SpikeTeleport : MonoBehaviour
     }
 
 
-    // TODO! This triggers 4 times per every collision with the player due to the multiple colliders on them.
-    // That's really weird. Why?
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            PerformDeath(other.gameObject);
+
+
+            objectToTeleport = other.gameObject;
+            deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
+            deathParticles.Clear();
+            deathParticles.Play();
+            objectToTeleport.SetActive(false);
+
+            Invoke("TeleportPlayer", deathParticles.main.duration);
+
         }
     }
 
-    // exposed so that killing things is just more convenient
-    public void PerformDeath(GameObject target)
-    {
-        objectToTeleport = target;
-        deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
-        deathParticles.Clear();
-        deathParticles.Play();
-        objectToTeleport.GetComponentInChildren<SpriteRenderer>().enabled = false;
 
-        objectToTeleport.GetComponentInChildren<PlayerController2D>().LockInputs();
 
-        //play the player death sound using PlayerSFX
-        sfx.Died();
 
-        Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
-    }
+
+
 
     private void TeleportPlayer()
     {
@@ -64,12 +59,12 @@ public class SpikeTeleport : MonoBehaviour
             objectToTeleport.transform.position = teleportLocation.position;
         }
 
-        objectToTeleport.GetComponentInChildren<SpriteRenderer>().enabled = true;
-        objectToTeleport.GetComponentInChildren<PlayerController2D>().UnlockInputs();
-
         objectToTeleport.SetActive(true);
-        LevelManager.PlayerReset();
+        LevelManager.Instance.PlayerReset();
         InkDialogueVariables.deathCount++;
+
+        //play the player death sound using PlayerSFX
+        sfx.Died();
     }
 }
 

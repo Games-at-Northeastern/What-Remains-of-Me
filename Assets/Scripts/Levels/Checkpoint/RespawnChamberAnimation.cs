@@ -40,6 +40,8 @@ public class RespawnChamberAnimation : MonoBehaviour
     /// </summary>
     private void RespawnStarted()
     {
+        LevelManager.Instance.PlayerPause();
+
         // Set the layer to show above the player
         spriteRenderer.sortingLayerName = "Foreground";
 
@@ -51,6 +53,8 @@ public class RespawnChamberAnimation : MonoBehaviour
     private void RespawnCompleted() {
         // Set the layer to show below the player
         spriteRenderer.sortingLayerName = "Interactables";
+
+        LevelManager.Instance.PlayerUnpause();
         anim.SetBool("isOpen", false);
     }
 

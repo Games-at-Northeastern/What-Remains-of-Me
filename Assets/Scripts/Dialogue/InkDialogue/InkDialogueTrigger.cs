@@ -24,7 +24,6 @@ public class InkDialogueTrigger : MonoBehaviour
 
     private ControlSchemes _cs;
 
-    //I think this is not used...?
     private bool _playerInRange;
     private bool _firstInteraction;
 
@@ -38,11 +37,8 @@ public class InkDialogueTrigger : MonoBehaviour
     {
         playerInRange = false;
         _firstInteraction = true;
+        visualCue.SetActive(true);
     }
-
-    private void OnEnable() => visualCue.SetActive(_firstInteraction);
-
-    private void OnDisable() => visualCue.SetActive(false);
 
     private void Update()
     {

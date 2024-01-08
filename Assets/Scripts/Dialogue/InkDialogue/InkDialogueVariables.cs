@@ -5,14 +5,13 @@ using Ink.Runtime;
 public class InkDialogueVariables
 {
     // dictionary where vars are stored
-    public Dictionary<string, Ink.Runtime.Object> variables { get; set; }
+    public Dictionary<string, Ink.Runtime.Object> variables { get; private set; }
 
     public static int deathCount;
 
     // constructor
     public InkDialogueVariables(TextAsset textAsset)
     {
-        
         Story globalVars = new Story(textAsset.text);
 
         // initializes dictionary

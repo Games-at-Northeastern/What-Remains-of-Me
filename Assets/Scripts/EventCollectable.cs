@@ -17,15 +17,6 @@ public class EventCollectable : MonoBehaviour
         {
             onCollected.Invoke();
             Destroy(gameObject);
-            //test for setting the global voice command ink var.
-            //this will need to be a more generic robust system that can set arbitrary
-            //global ink vars not just this hard coded one. Also will need to add persistance
-            //saving the globals to a file.
-            // convert the variable into a Ink.Runtime.Object value
-            bool voiceModuleObtained = true;
-            Ink.Runtime.Object obj = new Ink.Runtime.BoolValue(voiceModuleObtained);
-            // call the DialogueManager to set the variable in the globals dictionary
-            InkDialogueManager.GetInstance().SetVariableState("voiceModuleObtained", obj);
         }
     }
 }

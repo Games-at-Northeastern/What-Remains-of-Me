@@ -5,16 +5,9 @@ using UnityEngine.UI;
 
 public class JonesOutlet : AControllable
 {
-
-    [SerializeField] private SpriteRenderer door2;
-    [SerializeField] private Sprite openDoorSprite2;
-    [SerializeField] private Collider2D doorCollider2;
-    [SerializeField] private Animator doorAnimator2;
-    
-    [SerializeField] private SpriteRenderer door3;
-    [SerializeField] private Sprite openDoorSprite3;
-    [SerializeField] private Collider2D doorCollider3;
-    [SerializeField] private Animator doorAnimator3;
+    [SerializeField] private SpriteRenderer door;
+    [SerializeField] private Sprite openDoorSprite;
+    [SerializeField] private Collider2D doorCollider;
 
     [SerializeField] private Slider slider;
 
@@ -25,13 +18,9 @@ public class JonesOutlet : AControllable
 
         if (GetVirus() >= 80f)
         {
-	        door2.sprite = openDoorSprite2;
-            doorAnimator2.enabled = false;
-            doorCollider2.enabled = false;
-
-	        door3.sprite = openDoorSprite3;
-            doorAnimator3.enabled = false;
-            doorCollider3.enabled = false;
+            explosionParticles.Play();
+            door.sprite = openDoorSprite;
+            doorCollider.enabled = false;
         }
     }
 }

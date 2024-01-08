@@ -24,7 +24,7 @@ public class PlayerEnergy : EnergyControl
     private void VirusFullDeath()
     {
         Debug.Log("Death from virus full");
-        LevelManager.PlayerDeath();
+        LevelManager.Instance.PlayerDeath();
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ public class PlayerEnergy : EnergyControl
     private void EnergyDepletedDeath()
     {
         Debug.Log("Death from energy depleted");
-        LevelManager.PlayerDeath();
+        LevelManager.Instance.PlayerDeath();
     }
     // TODO : trigger this upon energy change in EnergyControl
     private void updatePlayerInfo()
