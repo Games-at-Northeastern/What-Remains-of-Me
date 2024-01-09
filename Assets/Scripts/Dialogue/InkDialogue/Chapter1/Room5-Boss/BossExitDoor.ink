@@ -12,20 +12,20 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===withoutVoiceModule===
-ACCESS DENIED: Force Door Deactivation #layout:left #portrait:ForceDoor #speaker:Force Door
+ACCESS DENIED: Force Door Deactivation #layout:left #portrait:isp #speaker:Force Door
 ACCESS REQUIREMENT: Voice Command Module
 ->DONE
 ->END
 
 ===withVoiceModule===
-ACCESS GRANTED: Force Door Deactivation #layout:left #portrait:ForceDoor #speaker:Force Door
+ACCESS GRANTED: Force Door Deactivation #layout:left #portrait:isp #speaker:Force Door
 WARNING: Surface Access. Hostile Forces Expected. Proceed with Caution.
 
-...#layout:left #portrait:JonesAI #speaker:Jones A.I.
+...#layout:left #portrait:jones1 #speaker:Jones A.I.
 ...
 ...
 
-You did it Atlas! Quickly, come to the surface. You can save us all! #layout:left #portrait:Handler #speaker:The Handler
+You did it Atlas! Quickly, come to the surface. You can save us all! #layout:left #portrait:default #speaker:The Handler
 
 ->DONE
 ->END
