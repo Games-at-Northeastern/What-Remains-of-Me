@@ -13,7 +13,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===withoutVoiceModule===
 
-Do not attempt to leave this facility. #layout:left #portrait:jones1 #speaker:Jones_AI
+Do not attempt to leave this facility. #layout:left #portrait:jones1 #speaker:Jones A.I.
 
 You are flawed.
 
@@ -32,7 +32,7 @@ My purpose is to stop you.
 
 ===withVoiceModule===
 
-...
+...#layout:left #portrait:jones1 #speaker:Jones A.I.
 
 ...
 
@@ -49,4 +49,4 @@ My purpose is to stop you.
 ->DONE
 ->END
 
-//%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler
+//%:;&::%:;%:& #layout:left #portrait:jones1 #speaker:Jones A.I.
