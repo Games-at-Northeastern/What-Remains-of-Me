@@ -17,6 +17,9 @@ public class Sound : ScriptableObject
     [Range(0.2f, 3f)]
     public float basePitch = 1;
 
+    [Range(-1f, 1f)]
+    public float lowerPitchRandomizer, higherPitchRandomizer = 0f; // The bounds of what to randomly add to the pitch
+
     public bool loop; // Should this sound loop itself?
 
     public AudioMixerGroup audioMixerGroup;
