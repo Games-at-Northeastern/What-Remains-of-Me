@@ -19,7 +19,9 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void WalkLeftFoot()
     {
-        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_WalkLeftFoot"));
+        Sound s = _playerSounds.GetSoundObject("Player_WalkLeftFoot");
+        _playerAudioSource.pitch = s.basePitch + Random.Range(s.lowerPitchRandomizer, s.higherPitchRandomizer);
+        _playerAudioSource.PlayOneShot(s.clip);
         //PlaySound("Player_WalkLeftFoot");
         //        soundController.PlaySound("Player_WalkLeftFoot");
     }
@@ -30,7 +32,9 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void WalkRightFoot()
     {
-        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_WalkRightFoot"));
+        Sound s = _playerSounds.GetSoundObject("Player_WalkRightFoot");
+        _playerAudioSource.pitch = s.basePitch + Random.Range(s.lowerPitchRandomizer, s.higherPitchRandomizer);
+        _playerAudioSource.PlayOneShot(s.clip);
 
         //PlaySound("Player_WalkRightFoot");
         //        soundController.PlaySound("Player_WalkRightFoot");
@@ -41,7 +45,9 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void JumpUp()
     {
-        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_JumpUp"));
+        Sound s = _playerSounds.GetSoundObject("Player_JumpUp");
+        _playerAudioSource.pitch = s.basePitch + Random.Range(s.lowerPitchRandomizer, s.higherPitchRandomizer);
+        _playerAudioSource.PlayOneShot(s.clip);
         //PlaySound("Player_JumpUp");
         //soundController.PlaySound("Player_JumpUp");
     }
