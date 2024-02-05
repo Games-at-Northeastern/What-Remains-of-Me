@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 using CharacterController;
 using System;
+using PlayerController;
 /// <summary>
 /// The main script for handling wire controls. Spawns/Fires, despawns, and
 /// connects the wire. Also controls bullet time while the wire is being aimed.
@@ -26,12 +27,13 @@ public class WireThrower : MonoBehaviour
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private DistanceJoint2D _distanceJoint;
     [SerializeField] private GameObject reticle;
-
-
+    
     // Accessible Fields
     public Outlet ConnectedOutlet { get; private set; } // If null, disconnected. Otherwise, connected.
     public UnityEvent onConnect = new UnityEvent();
     public UnityEvent onDisconnect = new UnityEvent();
+    public PlayerController2D pc;
+
 
     [SerializeField] private bool DirectionAffectsPriority; // To enable new directional targeting system
     #endregion
@@ -152,7 +154,10 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void HandleThrowInputReleasedKeyboard(InputAction.CallbackContext ctx)
     {
+        if(!pc.LockedOrNot()) 
+        {
         ThrowWire();
+        }
     }
     /// <summary>
     /// Handles disconnection of wire.

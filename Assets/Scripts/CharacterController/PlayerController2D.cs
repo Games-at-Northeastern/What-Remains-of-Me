@@ -488,6 +488,10 @@ namespace PlayerController
         {
             isLocked = false;
         }
+        public bool LockedOrNot() 
+        {
+            return isLocked;
+        }
         public AnimationType GetAnimationState()
         {
             switch (currentState)
