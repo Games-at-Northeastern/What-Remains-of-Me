@@ -590,7 +590,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d98deb179357924ba7e182ce45768fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lowHealthWarning: {fileID: 0}
   virusEyes: {fileID: 3305428300401156300}
   headlightA: {fileID: 1987736687173844117}
   headlightB: {fileID: 7279311233505151241}
@@ -710,8 +709,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83dfc1d866f4ce54f9aa00ad217def1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startState: 1
   ExternalVelocity: {x: 0, y: 0}
+  startState: 1
   _stats: {fileID: 11400000, guid: 587debca046dd6748879c19fe3fb34ed, type: 2}
   wire: {fileID: 7803416330169813700}
   col: {fileID: 1911170117102511828}
@@ -1451,6 +1450,7 @@ MonoBehaviour:
   onDisconnect:
     m_PersistentCalls:
       m_Calls: []
+  pc: {fileID: 4467459801094715970}
   DirectionAffectsPriority: 1
 --- !u!61 &2120683061
 BoxCollider2D:
