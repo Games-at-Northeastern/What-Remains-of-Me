@@ -418,21 +418,12 @@ namespace PlayerController
         /// </summary>
         /// <param name="hits"></param>
         /// <returns></returns>
-        private bool HitSolidObject(List<RaycastHit2D> hits)
+        private static bool HitSolidObject(List<RaycastHit2D> hits)
         {
             foreach (RaycastHit2D hit in hits)
             {
                 if (!hit.collider.isTrigger)
                 {
-                    /* Adds a moving platforms velocity as this external velocity. Needed because platform collider can't be modified due to platforms being 'sprite renderers'
-                     * this led to collisions not being detected on way down causing external velocity to not be applied properly causing Atlas to bounce)
-                     * To clean up -> Refactor all external velocities to potentially use similar format. Move code out of hit solid object
-                     * and make generic class/component for objects that apply external velocities, instead of getting MovingPlatform component here.
-                     */
-                    if (hit.collider.GetComponentInParent<MovingPlatform>() != null)
-                    {
-                        ExternalVelocity = hit.collider.GetComponentInParent<MovingPlatform>().GetVelocity();
-                    }
                     return true;
                 }
             }
