@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 1837545767}
   - component: {fileID: 1936179947}
   - component: {fileID: 7953021352572956855}
+  - component: {fileID: 3112357093167276009}
   - component: {fileID: 7982011735628750263}
   m_Layer: 0
   m_Name: PlatformObject
@@ -141,7 +142,7 @@ BoxCollider2D:
     oldSize: {x: 2, y: 0.3125}
     newSize: {x: 2, y: 0.3125}
     adaptiveTilingThreshold: 0.5
-    drawMode: 2
+    drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 1
   serializedVersion: 2
@@ -232,13 +233,39 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 2
+  m_DrawMode: 0
   m_Size: {x: 2, y: 0.3125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &3112357093167276009
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356603267965378348}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.2}
+  m_SpriteTilingProperty:
+    border: {x: 0.3125, y: 0, z: 0.34375, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2, y: 0.3125}
+    newSize: {x: 2, y: 0.3125}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2, y: 0.1}
+  m_EdgeRadius: 0
 --- !u!114 &7982011735628750263
 MonoBehaviour:
   m_ObjectHideFlags: 0
