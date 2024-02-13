@@ -7,18 +7,24 @@ public class MovingPlatform : MovingElement
     protected virtual bool IsOnTop(Vector2 normal) => Vector2.Dot(transform.up, normal) < -0.5f;
 
     PlayerController2D player;
-   
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.GetComponent<PlayerController2D>() != null)
         {
-            player = collision.GetComponent<PlayerController2D>();
+            if (transform.position.y < collision.ClosestPoint(transform.position).y)
+            {
+                Debug.Log("ENTER");
+                player = collision.GetComponent<PlayerController2D>();
+            }
         }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.GetComponent<PlayerController2D>() == player)
         {
+            Debug.Log("EXIT");
             player = null;
         }
     }
