@@ -59,6 +59,11 @@ public class PlugMovementExecuter : MonoBehaviour
         {
             onConnectionRequest.Invoke(collision.gameObject);
         }
+        else if (collision.gameObject.layer == 0)
+        {
+            Debug.Log("Collision with default layer");
+            Destroy(gameObject);
+        }
         else // Normal Collision
         {
             model.HandleCollision();
