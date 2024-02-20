@@ -51,6 +51,7 @@ public class PlugMovementExecuter : MonoBehaviour
     /// <summary>
     /// For checking if this plug has come into contact with a plug. If this
     /// has happened, the move should end.
+    /// Also checks for collision with the world. If the plug hits a world object that's not a plug it gets destroyed.
     /// </summary>
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -69,4 +70,15 @@ public class PlugMovementExecuter : MonoBehaviour
             model.HandleCollision();
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D trigger)
+    {
+        if(trigger.gameObject.layer == 0)
+        {
+            Debug.Log("Trigger with default layer");
+            Destroy(gameObject);
+        }
+    }
+
+
 }
