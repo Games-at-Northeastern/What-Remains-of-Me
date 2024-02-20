@@ -30,6 +30,8 @@ using UnityEngine.Audio;
 
 public class SoundController : MonoBehaviour
 {
+    public static SoundController instance;
+
     [SerializeField] private AudioMixer masterMixer;
 
     public SoundPackPresets[] soundPresets;
@@ -54,6 +56,15 @@ public class SoundController : MonoBehaviour
 
     public void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+
         loopingSounds = new List<string>();
         soundsToFade = new List<string>();
         soundFadeRate = new List<float>();
@@ -71,6 +82,7 @@ public class SoundController : MonoBehaviour
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Swing"));
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Damaged"));
 					sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Die"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Checkpoint"));
                     break;
                 case SoundPackPresets.Enemy:
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Enemy_Walk"));
@@ -80,6 +92,8 @@ public class SoundController : MonoBehaviour
                     break;
                 case SoundPackPresets.WireSystem:
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Plug_In"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Giving_Charge"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Taking_Charge"));
                     break;
             }
         }
@@ -160,12 +174,14 @@ public class SoundController : MonoBehaviour
         {
             if (s.soundName == name)
             {
+                //Debug.Log("sound played " + name + " source : " + s.source + ", " + s.source.gameObject.name);
                 s.source.Stop();
-                s.source.Play();
+                s.source.pitch = s.basePitch + Random.Range(s.lowerPitchRandomizer, s.higherPitchRandomizer);
                 s.source.volume = s.baseVolume;
+                s.source.Play();
 
                 if (s.loop)
-                {                
+                {
                     if (!loopingSounds.Contains(s.soundName))
                     {
                         loopingSounds.Add(s.soundName);
@@ -207,7 +223,7 @@ public class SoundController : MonoBehaviour
             {
                 s.source.Pause();
                 if (s.loop)
-                {                
+                {
                     loopingSounds.Remove(s.soundName);
                 }
                 return;
@@ -223,6 +239,39 @@ public class SoundController : MonoBehaviour
                     if (layeredSounds[i].layers[x].loop)
                     {
                         layeredSounds[i].layers[x].source.Pause();
+                        loopingSounds.Remove(layeredSounds[i].layers[x].soundName);
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+    //Stop given sound by name.
+    public void StopSound(string name)
+    {
+        foreach (Sound s in sounds)
+        {
+            if (s.soundName == name)
+            {
+                s.source.Stop();
+                if (s.loop)
+                {
+                    loopingSounds.Remove(s.soundName);
+                }
+                return;
+            }
+        }
+
+        for (int i = 0; i < layeredSounds.Length; i++)
+        {
+            for (int x = 0; x < layeredSounds[i].layers.Length; x++)
+            {
+                if (layeredSounds[i].layers[x].soundName == name)
+                {
+                    if (layeredSounds[i].layers[x].loop)
+                    {
+                        layeredSounds[i].layers[x].source.Stop();
                         loopingSounds.Remove(layeredSounds[i].layers[x].soundName);
                     }
                     return;
@@ -248,6 +297,7 @@ public class SoundController : MonoBehaviour
                 {
                     s.layers[i].source.Stop();
                     s.layers[i].source.Play();
+                    s.layers[i].source.pitch = Random.Range(s.layers[i].lowerPitchRandomizer, s.layers[i].higherPitchRandomizer);
                     s.layers[i].source.volume = volumeLevels[i];
 
                     if (s.layers[i].loop)

@@ -127,12 +127,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OutletSounds: {fileID: 11400000, guid: 49073f7be34c27b4593c3f13d17ca2c3, type: 2}
-  src: {fileID: 7182333160013304755}
-  giving: {fileID: 8300000, guid: 98178cfa1fc651b488561930413d0661, type: 3}
-  taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
+  giving: Giving_Charge
+  taking: Taking_Charge
   controlled: {fileID: 0}
+  controlledSecondaries: []
   energyTransferSpeed: 20
-  visuals: {fileID: 7990318869653575848}
+  grappleOverrideRange: {fileID: 0}
 --- !u!82 &7182333160013304755
 AudioSource:
   m_ObjectHideFlags: 0
@@ -330,17 +330,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}
---- !u!114 &7990318869653575848 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5170075248149157215, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}
-  m_PrefabInstance: {fileID: 2980429293012979191}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c3576e1a3be5524e9db4c2c4ff315e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &7990318869653575851 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5170075248149157212, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}

@@ -8,20 +8,13 @@ using UnityEngine;
 /// <summary>
 public class PlayerSFX : MonoBehaviour
 {
-    [SerializeField] private SoundArray _playerSounds;
-    [SerializeField] private AudioSource _playerAudioSource;
-
-
-
 
     /// <summary>
     /// Plays the left foot's walking audio clip at the player's location
     /// <summary>
     public void WalkLeftFoot()
     {
-        Sound s = _playerSounds.GetSoundObject("Player_WalkLeftFoot");
-        _playerAudioSource.pitch = s.basePitch + Random.Range(s.lowerPitchRandomizer, s.higherPitchRandomizer);
-        _playerAudioSource.PlayOneShot(s.clip);
+        SoundController.instance.PlaySound("Player_WalkLeftFoot");
         //PlaySound("Player_WalkLeftFoot");
         //        soundController.PlaySound("Player_WalkLeftFoot");
     }
@@ -32,12 +25,10 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void WalkRightFoot()
     {
-        Sound s = _playerSounds.GetSoundObject("Player_WalkRightFoot");
-        _playerAudioSource.pitch = s.basePitch + Random.Range(s.lowerPitchRandomizer, s.higherPitchRandomizer);
-        _playerAudioSource.PlayOneShot(s.clip);
-
         //PlaySound("Player_WalkRightFoot");
         //        soundController.PlaySound("Player_WalkRightFoot");
+
+        SoundController.instance.PlaySound("Player_WalkRightFoot");
     }
 
     /// <summary>
@@ -45,11 +36,9 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void JumpUp()
     {
-        Sound s = _playerSounds.GetSoundObject("Player_JumpUp");
-        _playerAudioSource.pitch = s.basePitch + Random.Range(s.lowerPitchRandomizer, s.higherPitchRandomizer);
-        _playerAudioSource.PlayOneShot(s.clip);
         //PlaySound("Player_JumpUp");
         //soundController.PlaySound("Player_JumpUp");
+        SoundController.instance.PlaySound("Player_JumpUp");
     }
 
     /*
@@ -66,7 +55,7 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void Swing()
     {
-        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_Swing"));
+        SoundController.instance.PlaySound("Player_Swing");
         //PlaySound("Player_Swing");
         //soundController.PlaySound("Player_Swing");
     }
@@ -76,7 +65,7 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void Damaged()
     {
-        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_Damaged"));
+        SoundController.instance.PlaySound("Player_Damaged");
         //PlaySound("Player_Damaged");
         //soundController.PlaySound("Player_Damaged");
     }
@@ -86,7 +75,7 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     public void Died()
     {
-        _playerAudioSource.PlayOneShot(_playerSounds.GetSound("Player_Die"));
+        SoundController.instance.PlaySound("Player_Die");
         //PlaySound("Player_Died");
         //soundController.PlaySound("Player_Die");
     }

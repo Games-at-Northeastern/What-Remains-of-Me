@@ -9,14 +9,12 @@ using UnityEngine;
 public class EnemySFX : MonoBehaviour
 {
 
-    [SerializeField] private SoundController soundController;
-
     /// <summary>
     /// Plays the walking audio clip at the enemy's location
     /// <summary>
     void Walk()
     {
-        soundController.PlaySound("Enemy_Walk");
+        SoundController.instance.PlaySound("Enemy_Walk");
     }
 
     /// <summary>
@@ -24,7 +22,7 @@ public class EnemySFX : MonoBehaviour
     /// <summary>
     void Attack()
     {
-        soundController.PlaySound("Enemy_Attack");
+        SoundController.instance.PlaySound("Enemy_Attack");
     }
 
     /// <summary>
@@ -32,6 +30,6 @@ public class EnemySFX : MonoBehaviour
     /// <summary>
     void OverLoaded()
     {
-        soundController.PlaySound("Enemy_Overloaded");
+        SoundController.instance.PlaySound("Enemy_Overloaded");
     }
 }

@@ -12,9 +12,8 @@ public class Outlet : MonoBehaviour
     [SerializeField] private SoundArray OutletSounds;
 
     [Header("SFX")]
-    public AudioSource src;
-    public AudioClip giving;
-    public AudioClip taking;
+    public string giving;
+    public string taking;
 
     ControlSchemes CS;
     [SerializeField] AControllable controlled;
@@ -29,13 +28,13 @@ public class Outlet : MonoBehaviour
         CS = new ControlSchemes();
         CS.Player.GiveEnergy.performed += _ => { if (controlled != null) { StartCoroutine("GiveEnergy"); } };
         CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); } };
-        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); src.Stop(); } };
-        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); src.Stop(); } };
+        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); SoundController.instance.StopSound(giving); } };
+        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(taking); } };
 
         CS.Player.GiveVirus.performed += _ => { if (controlled != null) { StartCoroutine("GiveVirus"); } };
         CS.Player.TakeVirus.performed += _ => { if (controlled != null) { StartCoroutine("TakeVirus"); } };
-        CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); src.Stop(); } };
-        CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); src.Stop(); } };
+        CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); SoundController.instance.StopSound(giving); } };
+        CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); SoundController.instance.StopSound(taking); } };
 
         //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
     }
@@ -46,7 +45,8 @@ public class Outlet : MonoBehaviour
     public void Connect()
     {
         CS.Enable();
-        src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
+        SoundController.instance.PlaySound("Plug_In");
+        //src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
         //soundController.PlaySound("Plug_In");
     }
 
@@ -77,8 +77,7 @@ public class Outlet : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             // SFX
-            src.clip = giving;
-            src.Play();
+            SoundController.instance.PlaySound(giving);
         }
     }
 
@@ -100,8 +99,7 @@ public class Outlet : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             // SFX
-            src.clip = giving;
-            src.Play();
+            SoundController.instance.PlaySound(giving);
         }
     }
 
@@ -123,8 +121,7 @@ public class Outlet : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             // SFX
-            src.clip = taking;
-            src.Play();
+            SoundController.instance.PlaySound(taking);
         }
     }
 
@@ -146,8 +143,7 @@ public class Outlet : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             // SFX
-            src.clip = taking;
-            src.Play();
+            SoundController.instance.PlaySound(taking);
         }
     }
 

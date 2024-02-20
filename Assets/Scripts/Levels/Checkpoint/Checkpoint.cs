@@ -15,7 +15,7 @@ public class Checkpoint : MonoBehaviour
     [SerializeField] private Transform respawnPoint;
     // The list of objects that should be activated (like lights, holograms, etc.) when this station is activated
     [SerializeField] private GameObject[] objectsToActivate;
-    [SerializeField] private AudioSource checkpointAudio;
+    [SerializeField] private string checkpointAudioName;
 
     private bool isActive;
 
@@ -31,11 +31,6 @@ public class Checkpoint : MonoBehaviour
     private void Start()
     {
         checkpointManager = FindObjectOfType<CheckpointManager>();
-
-        if (checkpointAudio == null)
-        {
-            checkpointAudio.GetComponent<AudioSource>();
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -64,7 +59,7 @@ public class Checkpoint : MonoBehaviour
         {
             // TODO : fade activation light on here (or in a separate script)
             Array.ForEach(objectsToActivate, gameObject => gameObject.SetActive(true));
-            checkpointAudio.Play();
+            SoundController.instance.PlaySound(checkpointAudioName);
             isActive = true;
         }
     }
