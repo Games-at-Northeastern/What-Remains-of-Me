@@ -14,7 +14,6 @@ public class MovingPlatform : MovingElement
         {
             if (transform.position.y < collision.ClosestPoint(transform.position).y)
             {
-                Debug.Log("ENTER");
                 player = collision.GetComponent<PlayerController2D>();
             }
         }
@@ -24,7 +23,6 @@ public class MovingPlatform : MovingElement
     {
         if (collision.GetComponent<PlayerController2D>() == player)
         {
-            Debug.Log("EXIT");
             player = null;
         }
     }
