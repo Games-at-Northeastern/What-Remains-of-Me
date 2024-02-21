@@ -6,32 +6,37 @@ public class MovingPlatform : MovingElement
 {
     protected virtual bool IsOnTop(Vector2 normal) => Vector2.Dot(transform.up, normal) < -0.5f;
 
-    private Vector2 velocity = new Vector2(0 ,0);
-
     PlayerController2D player;
-    protected virtual void OnCollisionEnter2D(Collision2D col)
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (col.collider.GetComponent<PlayerController2D>() != null)
+        if (collision.GetComponent<PlayerController2D>() != null)
         {
-            if(Vector2.Dot(transform.up, col.GetContact(0).normal) < -0.5f)
+            if (transform.position.y < collision.ClosestPoint(transform.position).y)
             {
-                player = col.collider.GetComponent<PlayerController2D>();
+                player = collision.GetComponent<PlayerController2D>();
             }
         }
     }
-    private void OnCollisionExit2D(Collision2D col)
+
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (col.collider.GetComponent<PlayerController2D>() == player)
+        if (collision.GetComponent<PlayerController2D>() == player)
         {
             player = null;
         }
     }
 
-    public Vector2 GetVelocity() => velocity;
-
     // Update is called once per frame
     void FixedUpdate()
     {
-        velocity = MovePlatform();
+        if (player != null)
+        {
+            player.ExternalVelocity = MovePlatform();
+        }
+        else
+        {
+            MovePlatform();
+        }
     }
 }

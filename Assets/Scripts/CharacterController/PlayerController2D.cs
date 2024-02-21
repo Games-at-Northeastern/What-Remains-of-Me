@@ -155,7 +155,6 @@ namespace PlayerController
         /// </summary>
         private void SwitchState()
         {
-
             if (GetNewState() == currentState)
             {
                 return;
@@ -409,7 +408,7 @@ namespace PlayerController
 
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
             List<RaycastHit2D> hits = new List<RaycastHit2D>();
-            Physics2D.BoxCast(origin + new Vector2(0, -_stats.groundOffset), new Vector2(_stats.groundBounds.x, 0.01f), 0, Vector2.down, filter, hits, _stats.groundBounds.y - 0.01f);
+            Physics2D.BoxCast(origin + new Vector2(0, -_stats.groundOffset), new Vector2(_stats.groundBounds.x, 0.02f), 0, Vector2.down, filter, hits, 0.05f);
             return HitSolidObject(hits);
 
         }
@@ -418,21 +417,12 @@ namespace PlayerController
         /// </summary>
         /// <param name="hits"></param>
         /// <returns></returns>
-        private bool HitSolidObject(List<RaycastHit2D> hits)
+        private static bool HitSolidObject(List<RaycastHit2D> hits)
         {
             foreach (RaycastHit2D hit in hits)
             {
                 if (!hit.collider.isTrigger)
                 {
-                    /* Adds a moving platforms velocity as this external velocity. Needed because platform collider can't be modified due to platforms being 'sprite renderers'
-                     * this led to collisions not being detected on way down causing external velocity to not be applied properly causing Atlas to bounce)
-                     * To clean up -> Refactor all external velocities to potentially use similar format. Move code out of hit solid object
-                     * and make generic class/component for objects that apply external velocities, instead of getting MovingPlatform component here.
-                     */
-                    if (hit.collider.GetComponentInParent<MovingPlatform>() != null)
-                    {
-                        ExternalVelocity = hit.collider.GetComponentInParent<MovingPlatform>().GetVelocity();
-                    }
                     return true;
                 }
             }
@@ -535,7 +525,7 @@ namespace PlayerController
             GizmosPlus.BoxCast(origin + new Vector2(_stats.rightOffset, 0), new Vector2(0.01f, _stats.sideBounds.y), 0, Vector2.right, _stats.sideBounds.x - 0.01f, ~_stats.IgnoreLayers);
             GizmosPlus.BoxCast(origin + new Vector2(-_stats.leftOffset, 0), new Vector2(0.01f, _stats.sideBounds.y), 0, Vector2.left, _stats.sideBounds.x - 0.01f, ~_stats.IgnoreLayers);
             GizmosPlus.BoxCast(origin + new Vector2(0, _stats.ceilingOffset), new Vector2(_stats.ceilingBounds.x, 0.01f), 0, Vector2.up, _stats.ceilingBounds.y - 0.01f, ~_stats.IgnoreLayers);
-            GizmosPlus.BoxCast(origin + new Vector2(0, -_stats.groundOffset), new Vector2(_stats.groundBounds.x, 0.01f), 0, Vector2.down, _stats.groundBounds.y - 0.01f, ~_stats.IgnoreLayers);
+            GizmosPlus.BoxCast(origin + new Vector2(0, -_stats.groundOffset), new Vector2(_stats.groundBounds.x, 0.01f), 0, Vector2.down, 0.05f, ~_stats.IgnoreLayers);
         }
 #endif
 
