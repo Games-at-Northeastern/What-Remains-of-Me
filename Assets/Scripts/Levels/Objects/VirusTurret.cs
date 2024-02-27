@@ -102,6 +102,11 @@ public class VirusTurret : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        
+    }
+
 
     private void SetVirusBeamActive(bool isActive)
     {
