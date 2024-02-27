@@ -36,6 +36,7 @@ namespace PlayerController
         Knockback knockback;
         WallJump wallJump;
         WallSlide wallSlide;
+        PlayerSFX playerSFX;
 
         PlayerInputHandler inputs;
         private Vector2 _speed = Vector2.zero;
@@ -91,6 +92,7 @@ namespace PlayerController
             _rb = GetComponent<Rigidbody2D>();
             col = GetComponent<CapsuleCollider2D>();
             inputs = GetComponent<PlayerInputHandler>();
+            playerSFX = GetComponentInChildren<PlayerSFX>();
             currentState = startState;
             timeSinceJumpWasTriggered = Mathf.Infinity;
             jumped = true;
@@ -224,6 +226,7 @@ namespace PlayerController
             if (!lastGroundedState && _grounded)
             {
                 TimeSinceLanded = 0;
+                PlayLandingNoise();
             }
             else if (lastGroundedState && !_grounded)
             {
@@ -319,6 +322,14 @@ namespace PlayerController
         {
             return (TimeSinceLeftGround < _stats.coyoteTime)
                 && (JumpBuffered);
+        }
+
+        protected virtual void PlayLandingNoise()
+        {
+            if (TimeSinceLeftGround >= 0.2)
+            {
+                playerSFX.JumpLand();
+            }
         }
 
         protected virtual bool CanGroundedJump()

@@ -41,14 +41,12 @@ public class PlayerSFX : MonoBehaviour
         SoundController.instance.PlaySound("Player_JumpUp");
     }
 
-    /*
-    void JumpLand() {
-       src.clip = jumpLand;
-       src.Play();
+    /// <summary>
+    /// Plays the ground hit sound effect for when atlas lands from a jump
+    /// </summary>
+    public void JumpLand() {
+        SoundController.instance.PlaySound("Player_JumpLand");
     }
-    */
-
-    
 
     /// <summary>
     /// Plays the swinging audio clip at the player's location
