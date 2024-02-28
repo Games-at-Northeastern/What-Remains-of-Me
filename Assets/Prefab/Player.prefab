@@ -1159,8 +1159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326b23119f03c4f4f89803f2ad16c3f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerSounds: {fileID: 11400000, guid: 1a58408fb5a4dc94685578494c771d77, type: 2}
-  _playerAudioSource: {fileID: 1065947360339903343}
 --- !u!1 &7803416329464112783
 GameObject:
   m_ObjectHideFlags: 0
@@ -1451,6 +1449,20 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   pc: {fileID: 4467459801094715970}
+  contactFilter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 1
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
   DirectionAffectsPriority: 1
 --- !u!61 &2120683061
 BoxCollider2D:

@@ -33,12 +33,14 @@ public class WireThrower : MonoBehaviour
     public UnityEvent onConnect = new UnityEvent();
     public UnityEvent onDisconnect = new UnityEvent();
     public PlayerController2D pc;
+    public ContactFilter2D contactFilter;
 
 
     [SerializeField] private bool DirectionAffectsPriority; // To enable new directional targeting system
     #endregion
 
     #region Internal References
+    private RaycastHit2D[] hits = new RaycastHit2D[1];
     private Camera mainCamera;
     private GameObject _activePlug;
     private ControlSchemes _controlSchemes;
@@ -199,6 +201,18 @@ public class WireThrower : MonoBehaviour
         if (ConnectedOutlet != null)
         {
             _distanceJoint.connectedAnchor = ConnectedOutlet.transform.position;
+
+            Vector3 wireThrowerPosition = transform.position;
+            Vector3 directionToConnectedOutlet = (ConnectedOutlet.transform.position - wireThrowerPosition).normalized;
+            
+            float distanceToOutlet = Vector2.Distance(wireThrowerPosition, ConnectedOutlet.transform.position);
+            bool hitSomething = Physics2D.Raycast(wireThrowerPosition, directionToConnectedOutlet, contactFilter, hits, distanceToOutlet) > 0;
+
+            if (hitSomething)
+            {
+                RaycastHit2D wireRayCast2D = hits[0];
+                HandlePotentialDisconnect();
+            }
         }
     }
     #endregion
