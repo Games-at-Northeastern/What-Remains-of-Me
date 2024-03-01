@@ -26,4 +26,9 @@ public interface IPlugMovementModel
     /// Should the plug cease to exist at this point in the move? 
     /// </summary>
     public bool Terminate();
+
+    /// <summary>
+    /// Sets the retracting variable of the plug.
+    /// </summary>
+    public void setRetracting(bool isRetracting);
 }

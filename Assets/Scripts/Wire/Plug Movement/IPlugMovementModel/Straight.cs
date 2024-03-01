@@ -79,4 +79,13 @@ public class Straight : IPlugMovementModel
         return (retracting && Vector2.Distance(myTransform.position, returnTransform.position) < 0.1f)
             || timePassed > 1;
     }
+
+    /// <summary>
+    /// A function that allows another class to set the straight to retracting or not retracting
+    /// </summary>
+    /// <param name="isRetracting"></param>
+    public void setRetracting(bool isRetracting)
+    {
+        retracting = isRetracting;
+    }
 }

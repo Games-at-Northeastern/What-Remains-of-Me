@@ -63,7 +63,7 @@ public class PlugMovementExecuter : MonoBehaviour
         else if (collision.gameObject.layer == 0)
         {
             Debug.Log("Collision with default layer");
-            Destroy(gameObject);
+            model.setRetracting(true);
         }
         else // Normal Collision
         {
@@ -76,7 +76,7 @@ public class PlugMovementExecuter : MonoBehaviour
         if(trigger.gameObject.layer == 0)
         {
             Debug.Log("Trigger with default layer");
-            Destroy(gameObject);
+            model.setRetracting(true);
         }
     }
 
