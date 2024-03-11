@@ -168,8 +168,8 @@ public class SoundController : MonoBehaviour
         }
     }
 
-    //Play given looping or non-looping sound by name. Volume will be set to base volume. 
-    public void PlaySound(string name)
+    //Play given looping or non-looping sound by name. Volume will be set to base volume with optional volumeModifier for runtime volume adjustement.
+    public void PlaySound(string name, float volumeModifier = 1f)
     {
         foreach (Sound s in sounds)
         {
@@ -178,7 +178,7 @@ public class SoundController : MonoBehaviour
                 //Debug.Log("sound played " + name + " source : " + s.source + ", " + s.source.gameObject.name);
                 s.source.Stop();
                 s.source.pitch = s.basePitch + Random.Range(s.lowerPitchRandomizer, s.higherPitchRandomizer);
-                s.source.volume = s.baseVolume;
+                s.source.volume = s.baseVolume * volumeModifier;
                 s.source.Play();
 
                 if (s.loop)

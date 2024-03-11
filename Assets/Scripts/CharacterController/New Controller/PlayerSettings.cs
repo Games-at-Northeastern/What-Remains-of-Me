@@ -44,6 +44,8 @@ namespace PlayerController
         public float coyoteTime;
         [Tooltip("how long a jump input is held for if pressed right before landing")]
         public float jumpBuffer;
+        [Tooltip("Time at which maximum jump landing volume is played.")]
+        public float landingVolumeTime;
 
         [Header("Wall Slide")]
         [Tooltip("the acceleration the player experiences when sliding on a wall")]

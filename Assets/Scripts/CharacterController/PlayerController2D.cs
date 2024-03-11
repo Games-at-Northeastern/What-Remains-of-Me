@@ -217,6 +217,7 @@ namespace PlayerController
         }
         #endregion
         private float TimeSinceLeftGround = Mathf.Infinity;
+        private float TimeSincePeakJump = 0;
         private float TimeSinceLanded = Mathf.Infinity;
         private bool _grounded = false;
         protected virtual void FlagUpdates()
@@ -231,11 +232,16 @@ namespace PlayerController
             else if (lastGroundedState && !_grounded)
             {
                 TimeSinceLeftGround = 0;
+                TimeSincePeakJump = 0;
             }
             else if (!_grounded)
             {
                 TimeSinceLeftGround += Time.fixedDeltaTime;
 
+                if (_rb.velocity.y < 0)
+                {
+                    TimeSincePeakJump += Time.fixedDeltaTime;
+                }
             }
             else
             {
@@ -326,9 +332,9 @@ namespace PlayerController
 
         protected virtual void PlayLandingNoise()
         {
-            if (TimeSinceLeftGround >= 0.2)
+            if (TimeSincePeakJump > 0)
             {
-                playerSFX.JumpLand();
+                playerSFX.JumpLand(Math.Min(2f, TimeSincePeakJump / _stats.landingVolumeTime));
             }
         }
 

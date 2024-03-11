@@ -44,8 +44,9 @@ public class PlayerSFX : MonoBehaviour
     /// <summary>
     /// Plays the ground hit sound effect for when atlas lands from a jump
     /// </summary>
-    public void JumpLand() {
-        SoundController.instance.PlaySound("Player_JumpLand");
+    public void JumpLand(float VolRatio = float.MaxValue) {
+
+        SoundController.instance.PlaySound("Player_JumpLand", VolRatio);
     }
 
     /// <summary>
