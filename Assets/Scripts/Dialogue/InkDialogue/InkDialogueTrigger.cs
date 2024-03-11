@@ -32,6 +32,7 @@ public class InkDialogueTrigger : MonoBehaviour
     {
         _cs = new ControlSchemes();
         _cs.Enable();
+        Debug.Log(InkDialogueManager.GetInstance());
     }
 
     private void Awake()

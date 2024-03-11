@@ -15,10 +15,14 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private float exitDialogueTime = 1.0f;
     
     [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialoguePanel;
-    [SerializeField] private TextMeshProUGUI dialogueText;
-    [SerializeField] private TextMeshProUGUI displayNameText;
-    [SerializeField] private Animator portraitAnimator;
+    [SerializeField] private GameObject dialoguePanelRight;
+    [SerializeField] private GameObject dialoguePanelTop; 
+    [SerializeField] private TextMeshProUGUI dialogueTextRight;
+    [SerializeField] private TextMeshProUGUI dialogueTextTop;
+    [SerializeField] private TextMeshProUGUI displayNameTextRight;
+    [SerializeField] private TextMeshProUGUI displayNameTextTop;
+    [SerializeField] private Animator portraitAnimatorRight;
+    [SerializeField] private Animator portraitAnimatorTop;
 
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
@@ -55,6 +59,7 @@ public class InkDialogueManager : MonoBehaviour
     private ControlSchemes _cs;
     private bool canSkip = false;
     private bool submitSkip = false;
+    private TextMeshProUGUI dialogueText;
 
     [HideInInspector]
     public bool isTutorialDialogue = false;
@@ -80,11 +85,13 @@ public class InkDialogueManager : MonoBehaviour
         _cs = new ControlSchemes();
         _cs.Enable();
         dialogueIsPlaying = false;
-        dialoguePanel.SetActive(false);
+        dialogueText = dialogueTextRight;
+        dialoguePanelRight.SetActive(false);
+        dialoguePanelTop.SetActive(false);
         stopMovement = true;
         dialogueEnded = false;
 
-        layoutAnimator = dialoguePanel.GetComponent<Animator>();
+        layoutAnimator = dialoguePanelRight.GetComponent<Animator>();
 
         // get all of the choices text 
         choicesText = new TextMeshProUGUI[choices.Length];
@@ -112,11 +119,17 @@ public class InkDialogueManager : MonoBehaviour
         // handle continuing to the next line in the dialogue when submit is pressed
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
         if (canContinueToNextLine
-            && currentStory.currentChoices.Count == 0
-            && (_cs.Player.Dialogue.WasPressedThisFrame() || autoTurnPage))
+            && currentStory.currentChoices.Count == 0)
+             {
+            if((_cs.Player.Dialogue.WasPressedThisFrame() && dialogueText == dialogueTextRight) || autoTurnPage)
         {
             ContinueStory();
         }
+        else if(dialogueText == dialogueTextTop && dialogueText.maxVisibleCharacters == dialogueText.text.Length) {
+
+            ContinueStory();
+        }
+    }
     }
 
     private IEnumerator ContinueWithDelay()
@@ -125,27 +138,30 @@ public class InkDialogueManager : MonoBehaviour
         ContinueStory();
     }
 
-    public void EnterDialogueMode(TextAsset inkJSON)
+    public void EnterDialogueMode(TextAsset inkJSON) 
     {
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
-        dialoguePanel.SetActive(true);
+        
+        // This now requires a character controller for the player to be placed into the dialogue manager in every level.
+        if (stopMovement)
+        {
+            dialoguePanelRight.SetActive(true);
+            cc.LockInputs();
+        } else {
+            dialoguePanelTop.SetActive(true);
+        }
 
         dialogueVariables.StartListening(currentStory);
         dialogueVariables.updateInkVarsThatChangeInGame(currentStory);
 
         // resets to defaults (makes sure that ink tags don't carry over between npcs)
-        displayNameText.text = "???";
-        portraitAnimator.Play("default");
+        displayNameTextRight.text = "???";
+        portraitAnimatorRight.Play("default");
         layoutAnimator.Play("right");
 
         ContinueStory();
 
-        // This now requires a character controller for the player to be placed into the dialogue manager in every level.
-        if (stopMovement)
-        {
-            cc.LockInputs();
-        }
     }
 
 
@@ -164,18 +180,20 @@ public class InkDialogueManager : MonoBehaviour
 
         dialogueIsPlaying = false;
         dialogueEnded = true;
-        dialoguePanel.SetActive(false);
-        dialogueText.text = "";
-
         //turns off the X constraint on the player's rigidbody when dialogue has stopped
         if (stopMovement)
         {
+            dialoguePanelRight.SetActive(false);
             cc.UnlockInputs();
+        } else {
+            dialoguePanelTop.SetActive(false);
         }
         //btw if you ever want to adjust this, know that RigidbodyContraints2D are something called a "Bitmap" so they can't be set normally
         // https://answers.unity.com/questions/1104653/im-trying-to-freeze-both-positionx-and-rotation-in.html 
         // The constraints property is a Bitmask. Simply setting it to a single option only sets that option. You need to use the | (bitwise OR) operator to merge them together before setting it i.e.
         // constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezepositionX;
+       
+        dialogueText.text = "";
 }
 
 private void ContinueStory()
@@ -202,6 +220,12 @@ else
 
 private IEnumerator DisplayLine(string line)
 {
+    if(stopMovement) {
+        dialogueText = dialogueTextRight;
+    } else {
+        dialogueText = dialogueTextTop;
+    }
+    
 // empty dialogue text
 dialogueText.text = line;
 dialogueText.maxVisibleCharacters = 0;
@@ -218,7 +242,7 @@ HideChoices();
 foreach (char letter in line.ToCharArray())
 {
     // if player presses 'submit', entire dialogue line is displayed
-    if (canSkip && submitSkip)
+    if (canSkip && submitSkip && dialogueText == dialogueTextRight)
     {
         submitSkip = false;
         dialogueText.maxVisibleCharacters = line.Length;
@@ -239,8 +263,14 @@ if (canSkip)
 {
     yield return new WaitForSeconds(waitBeforePageTurn);
 }
-
+if(dialogueText == dialogueTextRight) {
 canContinueToNextLine = true;
+}
+else 
+{
+yield return new WaitForSeconds(2.0f);
+canContinueToNextLine = true;
+}
 canSkip = false;
 }
 
@@ -275,17 +305,36 @@ foreach(string tag in currentTags)
     // handle the tag
     switch (tagKey)
     {
+        //This can definetly get coded better. But the method i was using kept getting a NullRefrenceException error so I reverted to this way. 
         case SPEAKER_TAG:
-            displayNameText.text = tagValue;
+        if(stopMovement) {
+            displayNameTextRight.text = tagValue;
             Debug.Log("Speaker = " + tagValue);
+        } else {
+            displayNameTextTop.text = tagValue;
+            Debug.Log("Speaker = " + tagValue);
+        }
             break;
         case PORTRAIT_TAG:
-            portraitAnimator.Play(tagValue);
+        if(stopMovement) {
+            portraitAnimatorRight.Play(tagValue);
             Debug.Log("Potrait = " + tagValue);
+        } else {
+            portraitAnimatorTop.Play(tagValue);
+            Debug.Log("Potrait = " + tagValue);  
+        }
             break;
         case LAYOUT_TAG:
+        if(stopMovement) {
+            layoutAnimator = dialoguePanelRight.GetComponent<Animator>();
             layoutAnimator.Play(tagValue);
             Debug.Log("Layout = " + tagValue);
+        } else {
+            layoutAnimator = dialoguePanelTop.GetComponent<Animator>();
+            layoutAnimator.Play(tagValue);
+            Debug.Log("Layout = " + tagValue);
+
+        }
             break;
         default:
             Debug.LogWarning("Tag came in but isn't being handled" + tag);
