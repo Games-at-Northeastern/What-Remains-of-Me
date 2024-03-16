@@ -8,12 +8,6 @@ using UnityEngine;
 /// </summary>
 public class Outlet : MonoBehaviour
 {
-    //private SoundController soundController;
-    [SerializeField] private SoundArray OutletSounds;
-
-    [Header("SFX")]
-    public string giving;
-    public string taking;
 
     ControlSchemes CS;
     [SerializeField] AControllable controlled;
@@ -22,19 +16,23 @@ public class Outlet : MonoBehaviour
 
     public Collider2D grappleOverrideRange;
 
+    private string plugInSound = "Plug_In";
+    private string givingChargeSound = "Giving_Charge";
+    private string takingChargeSound = "Taking_Charge";
+
     private void Awake()
     {
         // TODO : This should be moved into one of the player scripts
         CS = new ControlSchemes();
         CS.Player.GiveEnergy.performed += _ => { if (controlled != null) { StartCoroutine("GiveEnergy"); } };
         CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); } };
-        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); SoundController.instance.StopSound(giving); } };
-        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(taking); } };
+        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); SoundController.instance.StopSound(givingChargeSound); } };
+        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); } };
 
         CS.Player.GiveVirus.performed += _ => { if (controlled != null) { StartCoroutine("GiveVirus"); } };
         CS.Player.TakeVirus.performed += _ => { if (controlled != null) { StartCoroutine("TakeVirus"); } };
-        CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); SoundController.instance.StopSound(giving); } };
-        CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); SoundController.instance.StopSound(taking); } };
+        CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); SoundController.instance.StopSound(givingChargeSound); } };
+        CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); SoundController.instance.StopSound(takingChargeSound); } };
 
         //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
     }
@@ -45,7 +43,7 @@ public class Outlet : MonoBehaviour
     public void Connect()
     {
         CS.Enable();
-        SoundController.instance.PlaySound("Plug_In");
+        SoundController.instance.PlaySound(plugInSound);
         //src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
         //soundController.PlaySound("Plug_In");
     }
@@ -77,7 +75,7 @@ public class Outlet : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             // SFX
-            SoundController.instance.PlaySound(giving);
+            SoundController.instance.PlaySound(givingChargeSound);
         }
     }
 
@@ -99,7 +97,7 @@ public class Outlet : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             // SFX
-            SoundController.instance.PlaySound(giving);
+            SoundController.instance.PlaySound(givingChargeSound);
         }
     }
 
@@ -121,7 +119,7 @@ public class Outlet : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             // SFX
-            SoundController.instance.PlaySound(taking);
+            SoundController.instance.PlaySound(takingChargeSound);
         }
     }
 
@@ -143,7 +141,7 @@ public class Outlet : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             // SFX
-            SoundController.instance.PlaySound(taking);
+            SoundController.instance.PlaySound(takingChargeSound);
         }
     }
 
@@ -157,7 +155,7 @@ public class Outlet : MonoBehaviour
             {
                 if (cSec != null)
                 {
-                    maxCharge += cSec.GetMaxCharge();
+                    maxCharge += cSec.GetMaxCharge(); 
                 }
             }
             return maxCharge + controlled.GetMaxCharge();
