@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class RechargeLeakBatteryPack : AControllable
 {
-    [SerializeField] Boolean fillBattery;
+    [SerializeField] bool fillBattery;
     [SerializeField] protected float maxCharge;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
-    void private void FixedUpdate() {
+    private void FixedUpdate() {
         if (fillBattery) {
             chargeBattery();
         }
@@ -23,16 +18,14 @@ public class RechargeLeakBatteryPack : AControllable
     }
 
     void chargeBattery() {
-        if (totalEnergy >= maxCharge/2 & playerInfo == null){
-            totalEnergy += Time.deltaTime;
+        if (totalEnergy >= maxCharge & playerInfo == null){
+            //totalEnergy += Time.deltaTime;  //Does not work (totalEnergy is protected)
         }
     }
 
     void drainBattery() {
         if (totalEnergy >= 0 & playerInfo == null){
-            totalEnergy -= Time.deltaTime;
+            //totalEnergy -= Time.deltaTime; Does not work (totalEnergy is protected)
         }
     }
-
-    
 }
