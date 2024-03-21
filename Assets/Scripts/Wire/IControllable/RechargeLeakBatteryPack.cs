@@ -5,7 +5,7 @@ using UnityEngine;
 public class RechargeLeakBatteryPack : AControllable
 {
     [SerializeField] bool fillBattery;
-    [SerializeField] protected float maxCharge;
+    //[SerializeField] protected float maxCharge;
 
     // Update is called once per frame
     private void FixedUpdate() {
