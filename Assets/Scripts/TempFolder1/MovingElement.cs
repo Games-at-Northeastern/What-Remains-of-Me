@@ -47,8 +47,8 @@ public class MovingElement : MonoBehaviour
     [SerializeField] private bool _isMovingRight = true;
 
     [Header("On Activated/Deactivated")]
-    [SerializeField] UnityEvent[] _activatedActions;
-    [SerializeField] UnityEvent[] _deactivatedActions;
+    [SerializeField] UnityEvent _activatedActions;
+    [SerializeField] UnityEvent _deactivatedActions;
 
     private void Awake() => rb = GetComponent<Rigidbody2D>();
 
@@ -204,8 +204,7 @@ public class MovingElement : MonoBehaviour
     public void Activate()
     {
         _shouldMove = true;
-        foreach (UnityEvent activateEvent in _activatedActions)
-            activateEvent.Invoke();
+        _activatedActions?.Invoke();
     }
 
     /// <summary>
@@ -216,8 +215,7 @@ public class MovingElement : MonoBehaviour
         _shouldMove = false;
         rb.velocity = Vector2.zero;
 
-        foreach (UnityEvent deactivateEvent in _deactivatedActions)
-            deactivateEvent.Invoke();
+         _deactivatedActions?.Invoke();
     }
 
     // TODO: These setters (excluding setTrack and setDir) are remnants of old code. For future developers, find a way
