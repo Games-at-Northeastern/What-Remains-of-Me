@@ -1,5 +1,6 @@
 using Levels.Objects.Platform;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// A custom component that moves the gameobject it's on along a given path.
@@ -44,6 +45,10 @@ public class MovingElement : MonoBehaviour
     [Header("Loop Info")]
     [SerializeField] private LoopType _loopType = LoopType.Wrap;
     [SerializeField] private bool _isMovingRight = true;
+
+    [Header("On Activated/Deactivated")]
+    [SerializeField] UnityEvent[] _activatedActions;
+    [SerializeField] UnityEvent[] _deactivatedActions;
 
     private void Awake() => rb = GetComponent<Rigidbody2D>();
 
@@ -196,7 +201,12 @@ public class MovingElement : MonoBehaviour
     /// <summary>
     /// Enables the element's ability to move.
     /// </summary>
-    public void Activate() => _shouldMove = true;
+    public void Activate()
+    {
+        _shouldMove = true;
+        foreach (UnityEvent activateEvent in _activatedActions)
+            activateEvent.Invoke();
+    }
 
     /// <summary>
     /// Deactivates the element by stopping the movement immediately.
@@ -205,6 +215,9 @@ public class MovingElement : MonoBehaviour
     {
         _shouldMove = false;
         rb.velocity = Vector2.zero;
+
+        foreach (UnityEvent deactivateEvent in _deactivatedActions)
+            deactivateEvent.Invoke();
     }
 
     // TODO: These setters (excluding setTrack and setDir) are remnants of old code. For future developers, find a way

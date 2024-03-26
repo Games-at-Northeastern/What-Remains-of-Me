@@ -38,6 +38,8 @@ public class SoundController : MonoBehaviour
 
     public List<Sound> sounds; //The list of all sounds/songs used in this level, scene etc. There should only be 1 sound of each name.
 
+    public List<SoundPlayer3D> sounds3D; //The list of all 3D Sound Players.
+
     public LayeredSound[] layeredSounds; //The list of all the layered sounds/songs for this context. Composed of several sounds. 
 
     private List<string> loopingSounds; //All the sounds that are looping in given context (bg music or sfx etc...)
@@ -214,6 +216,9 @@ public class SoundController : MonoBehaviour
             }
         }
     }
+
+    //Add SoundPlayer3D to list of SoundPlayer3Ds
+    public void Add3DSound(SoundPlayer3D soundPlayer3D) => sounds3D.Add(soundPlayer3D);
 
     //Pause given sound by name.
     public void PauseSound(string name)
