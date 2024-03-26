@@ -63,6 +63,7 @@ public class CheckpointManager : MonoBehaviour
     {
         respawnable.transform.position = mostRecentPoint.getRespawnPosition();
         mostRecentPoint.RespawnStart();
+        SoundController.instance.PlaySound("Player_Respawn");
     }
 
     /// <summary>
