@@ -4,19 +4,7 @@ using UnityEngine;
 
 public class RechargeLeakBatteryPack : Outlet
 {
-    ControlSchemes CS;
-    [SerializeField] AControllable controlled;
-    [SerializeField] List<AControllable> controlledSecondaries;
-    [SerializeField] float energyTransferSpeed;
     [SerializeField] bool charge;
-    
-
-    public Collider2D grappleOverrideRange;
-
-    private string plugInSound = "Plug_In";
-    private string givingChargeSound = "Giving_Charge";
-    private string takingChargeSound = "Taking_Charge";
-
     private bool playerConnected = false;
 
     private void Awake()
@@ -41,24 +29,6 @@ public class RechargeLeakBatteryPack : Outlet
                 controlled.LoseEnergy(energyTransferSpeed * Time.deltaTime);
             }
         }
-    }
-
-    /// <summary>
-    /// Makes this outlet function as if the player is connected to it.
-    /// </summary>
-    public void Connect()
-    {
-        base.Connect();
-        playerConnected = true;
-    }
-
-    /// <summary>
-    /// Stops this outlet from functioning as if the player is connected to it.
-    /// </summary>
-    public void Disconnect()
-    {
-        base.Disconnect();
-        playerConnected = false;
     }
 
     /// <summary>
@@ -147,26 +117,5 @@ public class RechargeLeakBatteryPack : Outlet
             // SFX
             SoundController.instance.PlaySound(takingChargeSound);
         }
-    }
-
-    // Get the maximum charge of the controlled object
-    public float GetMaxCharge()
-    {
-        float maxCharge = base.GetMaxCharge();
-        return maxCharge;
-    }
-
-    // Get the energy level of the controlled object
-    public float GetEnergy()
-    {
-        float energy = base.GetEnergy();
-        return energy;
-    }
-
-    // Get the virus level of the controlled object
-    public float GetVirus()
-    {
-        float virus = base.GetVirus();
-        return virus;
     }
 }

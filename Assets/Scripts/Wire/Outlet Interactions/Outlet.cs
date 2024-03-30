@@ -9,16 +9,16 @@ using UnityEngine;
 public class Outlet : MonoBehaviour
 {
 
-    ControlSchemes CS;
-    [SerializeField] AControllable controlled;
-    [SerializeField] List<AControllable> controlledSecondaries;
-    [SerializeField] float energyTransferSpeed;
+    protected ControlSchemes CS;
+    [SerializeField] protected AControllable controlled;
+    [SerializeField] protected List<AControllable> controlledSecondaries;
+    [SerializeField] protected float energyTransferSpeed;
 
     public Collider2D grappleOverrideRange;
 
-    private string plugInSound = "Plug_In";
-    private string givingChargeSound = "Giving_Charge";
-    private string takingChargeSound = "Taking_Charge";
+    protected string plugInSound = "Plug_In";
+    protected string givingChargeSound = "Giving_Charge";
+    protected string takingChargeSound = "Taking_Charge";
 
     private void Awake()
     {
