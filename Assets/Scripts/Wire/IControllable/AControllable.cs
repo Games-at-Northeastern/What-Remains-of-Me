@@ -75,11 +75,23 @@ public abstract class AControllable : MonoBehaviour, IControllable
     }
 
     /// <summary>
-    /// This controllable gains the given amount of virus and takes it from the player health.
+    /// This controllable gains the given amount of energy without taking any from the player health.
     /// <param name="amount"> float amount of virus for this controllable to gain </param>
     /// </summary>
-    public void GainVirus(float amount)
+    public void CreateEnergy(float amount, float virusRatio)
     {
+        if (amount <= 0 || totalEnergy >= maxCharge)
+        {
+            return;
+        }
+
+        amount = Mathf.Min(amount, maxCharge - totalEnergy);
+
+        cleanEnergy += amount * (1f - virusRatio);
+        virus += amount * virusRatio;
+
+        VirusChange(virus / totalEnergy);
+        EnergyChange(totalEnergy);
         // in theory this function should be removed, as under this model, it no longer serves a purpose
     }
 
@@ -113,12 +125,25 @@ public abstract class AControllable : MonoBehaviour, IControllable
     }
 
     /// <summary>
-    /// This controllable loses the given amount of virus and gives it to the player health.
+    /// This controllable loses the given amount of energy without giving it to the player.
     /// <param name="amount"> float amount of virus for this controllable to lose </param>
     /// </summary>
-    public void LoseVirus(float amount)
+    public void LeakEnergy(float amount)
     {
-        // in theory this function should be removed, as under this model, it no longer serves a purpose
+        if (amount <= 0 || totalEnergy <= 0)
+        {
+            return;
+        }
+
+        amount = Mathf.Min(amount, totalEnergy);
+
+        float virusProportion = virus / totalEnergy;
+
+        cleanEnergy -= amount * (1f - virusProportion);
+        virus -= amount * virusProportion;
+
+        VirusChange(virus / totalEnergy);
+        EnergyChange(totalEnergy);
     }
 
     /// <summary>

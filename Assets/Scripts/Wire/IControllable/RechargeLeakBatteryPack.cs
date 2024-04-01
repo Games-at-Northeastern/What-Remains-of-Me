@@ -15,20 +15,30 @@ public class RechargeLeakBatteryPack : Outlet
         CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); SoundController.instance.StopSound(givingChargeSound); } };
         CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); } };
 
-        CS.Player.GiveVirus.performed += _ => { if (controlled != null) { StartCoroutine("GiveVirus"); } };
-        CS.Player.TakeVirus.performed += _ => { if (controlled != null) { StartCoroutine("TakeVirus"); } };
-        CS.Player.GiveVirus.canceled += _ => { if (controlled != null) { StopCoroutine("GiveVirus"); SoundController.instance.StopSound(givingChargeSound); } };
-        CS.Player.TakeVirus.canceled += _ => { if (controlled != null) { StopCoroutine("TakeVirus"); SoundController.instance.StopSound(takingChargeSound); } };
-    }
+     }
 
     private void FixedUpdate() {
         if (!playerConnected) {
             if(charge) {
-                controlled.GainEnergy(energyTransferSpeed * Time.deltaTime);
+                controlled.CreateEnergy(energyTransferSpeed * Time.deltaTime/3, 0.0f);
             } else {
-                controlled.LoseEnergy(energyTransferSpeed * Time.deltaTime);
+                controlled.LeakEnergy(energyTransferSpeed * Time.deltaTime/3);
             }
         }
+    }
+
+    public override void Connect()
+    {
+        CS.Enable();
+        SoundController.instance.PlaySound(plugInSound);
+        playerConnected = true;
+    }
+
+    public override void Disconnect()
+    {
+        playerConnected = false;
+        CS.Disable();
+        StopAllCoroutines();
     }
 
     /// <summary>
@@ -54,28 +64,6 @@ public class RechargeLeakBatteryPack : Outlet
     }
 
     /// <summary>
-    /// Gives virus to the controlled object until this coroutine is called to end.
-    /// </summary>
-    IEnumerator GiveVirus()
-    {
-        while (true)
-        {
-            controlled.GainVirus(energyTransferSpeed * Time.deltaTime);
-            foreach (AControllable cSec in controlledSecondaries)
-            {
-                if (cSec != null)
-                {
-                    cSec.GainVirus(energyTransferSpeed * Time.deltaTime);
-                }
-            }
-            yield return new WaitForEndOfFrame();
-
-            // SFX
-            SoundController.instance.PlaySound(givingChargeSound);
-        }
-    }
-
-    /// <summary>
     /// Takes energy from the controlled object until this coroutine is called to end.
     /// </summary>
     IEnumerator TakeEnergy()
@@ -88,28 +76,6 @@ public class RechargeLeakBatteryPack : Outlet
                 if (cSec != null)
                 {
                     cSec.LoseEnergy(energyTransferSpeed * Time.deltaTime);
-                }
-            }
-            yield return new WaitForEndOfFrame();
-
-            // SFX
-            SoundController.instance.PlaySound(takingChargeSound);
-        }
-    }
-
-    /// <summary>
-    /// Takes virus from the controlled object until this coroutine is called to end.
-    /// </summary>
-    IEnumerator TakeVirus()
-    {
-        while (true)
-        {
-            controlled.LoseVirus(energyTransferSpeed * Time.deltaTime);
-            foreach (AControllable cSec in controlledSecondaries)
-            {
-                if (cSec != null)
-                {
-                    cSec.LoseVirus(energyTransferSpeed * Time.deltaTime);
                 }
             }
             yield return new WaitForEndOfFrame();
