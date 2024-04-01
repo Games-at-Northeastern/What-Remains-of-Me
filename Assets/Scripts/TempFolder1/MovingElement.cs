@@ -41,6 +41,7 @@ public class MovingElement : MonoBehaviour
     [SerializeField] protected float _randomSpeedModifier = 0f;
     [SerializeField] protected float _maxSpeedModifier = 3;
     [SerializeField] protected float _speedModifier = 1f;
+    [SerializeField] protected float _lerpSpeed = 0.25f;
 
     [Header("Loop Info")]
     [SerializeField] private LoopType _loopType = LoopType.Wrap;
@@ -119,13 +120,15 @@ public class MovingElement : MonoBehaviour
                     transform.position = _runtimePoints[0].position;
                 }
                 UpdateDestinationAndDirection();
+                //reset velocity on changing target
+                rb.velocity = Vector2.zero;
             }
 
             if (!_completed) // if the track isn't already completed...
             {
                 _previousDistance = GetDistanceToPoint(_destinationIndex);
 
-                rb.velocity = _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection;
+                rb.velocity = Vector2.Lerp(rb.velocity, _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection, Time.deltaTime * _lerpSpeed);
 
                 // add tracking speeds from other related bodies
                 foreach (Rigidbody2D body in _relativeBodies)
