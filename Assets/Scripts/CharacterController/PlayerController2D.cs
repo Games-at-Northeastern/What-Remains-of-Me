@@ -289,6 +289,10 @@ namespace PlayerController
 
         protected virtual void HandleVertical()
         {
+            if (TouchingCeiling())
+            {
+                jump.CancelMove();
+            }
             if (!jump.IsMoveComplete())
             {
                 jump.ContinueMove();
