@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6801492477888477864}
   - component: {fileID: 6801492477888477865}
   - component: {fileID: 7182333160013304755}
+  - component: {fileID: 2201836448606567159}
+  - component: {fileID: 3561723825450836707}
   m_Layer: 8
   m_Name: Chargeable Outlet
   m_TagString: Outlet
@@ -26,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6801492477888477866}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.12, y: -0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -209,6 +211,45 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2201836448606567159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801492477888477866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca38855ab7c671540862ababac4a5c78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cleanEnergy: 50
+  maxCharge: 50
+  virus: 0
+  playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
+  OnVirusChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3561723825450836707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801492477888477866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 450e42504ba14ae4da9cf045b5d0de2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controlled: {fileID: 2201836448606567159}
+  controlledSecondaries: []
+  energyTransferSpeed: 20
+  grappleOverrideRange: {fileID: 0}
+  charge: 1
 --- !u!1001 &2980429293012979191
 PrefabInstance:
   m_ObjectHideFlags: 0
