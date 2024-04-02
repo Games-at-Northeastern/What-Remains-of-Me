@@ -5,6 +5,7 @@ using UnityEngine;
 public class RechargeLeakBatteryPack : Outlet
 {
     [SerializeField] bool charge;
+    [SerializeField] float virusRatio;
     private bool playerConnected = false;
 
     private void Awake()
@@ -20,7 +21,7 @@ public class RechargeLeakBatteryPack : Outlet
     private void FixedUpdate() {
         if (!playerConnected) {
             if(charge) {
-                controlled.CreateEnergy(energyTransferSpeed * Time.deltaTime/3, 0.0f);
+                controlled.CreateEnergy(energyTransferSpeed * Time.deltaTime/3, virusRatio);
             } else {
                 controlled.LeakEnergy(energyTransferSpeed * Time.deltaTime/3);
             }
