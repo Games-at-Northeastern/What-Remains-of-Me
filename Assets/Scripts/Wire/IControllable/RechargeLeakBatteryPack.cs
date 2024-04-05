@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class RechargeLeakBatteryPack : Outlet
 {
@@ -28,7 +29,7 @@ public class RechargeLeakBatteryPack : Outlet
             if (charge)
             {
                 controlled.CreateEnergy(energyTransferSpeed * Time.deltaTime/3, virusRatio);
-                if (controlled.GetPercentFull() < 1)
+                if (controlled.GetPercentFull() < .98f)
                 {
                     effects.PlayEffect();
                 }
