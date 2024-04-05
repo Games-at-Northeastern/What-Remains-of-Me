@@ -38,11 +38,11 @@ namespace CharacterController
         /// <param name="wireGeneralMaxDistance"></param>
         public Swing(WireThrower WT, CharacterController2D character, float fallGravity,float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float PlayerSwayAccel, float maxWireLength)
         {
-            this.PlayerSwayAcceleration = PlayerSwayAccel;
+            this.PlayerSwayAcceleration = PlayerSwayAccel * 1.3f;
             this.maxWireLength = maxWireLength;
             this.SwingBounceDecayMultiplier = WireSwingBounceDecayMultiplier;
-            this.MaxAngularVelocity = WireSwingMaxAngularVelocity;
-            this.WireSwingNaturalAccelMultiplier = WireSwingNaturalAccelMultiplier;
+            this.MaxAngularVelocity = WireSwingMaxAngularVelocity * 1.3f;
+            this.WireSwingNaturalAccelMultiplier = WireSwingNaturalAccelMultiplier * 1.3f;
             this.fallGravity = fallGravity;
             this.WT = WT;
             this.WireSwingDecayMultiplier = WireSwingDecayMultiplier;
