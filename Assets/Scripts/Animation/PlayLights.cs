@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class PlayLights : Effects
 {
-    [SerializeField] Light[] lights;
-    public override void PlayEffect() 
+    [SerializeField] Light2D[] lights;
+    public override void PlayEffect()
     {
-        foreach (Light light in lights) 
+        foreach (Light2D light in lights)
         {
             light.enabled = true;
         }
@@ -16,7 +17,7 @@ public class PlayLights : Effects
 
     public override void CancelEffect()
     {
-        foreach (Light light in lights)
+        foreach (Light2D light in lights)
         {
             light.enabled = false;
         }
