@@ -8,6 +8,9 @@ public class RechargeLeakBatteryPack : Outlet
     [SerializeField] float virusRatio;
     private bool playerConnected = false;
 
+    [SerializeField] Effects effects;
+
+
     private void Awake()
     {
         CS = new ControlSchemes();
@@ -16,14 +19,35 @@ public class RechargeLeakBatteryPack : Outlet
         CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); SoundController.instance.StopSound(givingChargeSound); } };
         CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); } };
 
-     }
+    }
 
-    private void FixedUpdate() {
-        if (!playerConnected) {
-            if(charge) {
+    private void FixedUpdate()
+    {
+        if (!playerConnected)
+        {
+            if (charge)
+            {
                 controlled.CreateEnergy(energyTransferSpeed * Time.deltaTime/3, virusRatio);
-            } else {
+                if (controlled.GetPercentFull() < 1)
+                {
+                    effects.PlayEffect();
+                }
+                else
+                {
+                    effects.CancelEffect();
+                }
+            }
+            else
+            {
                 controlled.LeakEnergy(energyTransferSpeed * Time.deltaTime/3);
+                if (controlled.GetPercentFull() > 0)
+                {
+                    effects.PlayEffect();
+                }
+                else
+                {
+                    effects.CancelEffect();
+                }
             }
         }
     }
