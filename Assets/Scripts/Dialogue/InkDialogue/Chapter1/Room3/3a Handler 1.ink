@@ -10,6 +10,6 @@ For now, you must keep in mind the transmissions you make with other infected so
 ~canDetectVirus = true
 Thankfully because you are equipped with the latest Fabio V2.0 Antivirus you are able to detect it. #portrait:default #speaker:The Handler
 The virus will show up as purple particles on your energy meter.
-If you are full of energy while infected, you will lose all control of your body.
-Please be mindful when making connections to other sources, because some of them may contain viruses, and will contaminate your power. Good Luck.
+If your energy becomes 100% corrupted, you will lose all control of your body.
+Please be mindful when making connections to other sources, because some of them may contain virus, and will contaminate your power. Good Luck.
 ->DONE
