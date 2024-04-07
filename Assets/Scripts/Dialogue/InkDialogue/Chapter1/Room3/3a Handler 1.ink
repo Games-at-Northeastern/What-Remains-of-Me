@@ -3,13 +3,13 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===main===
 Hello Atlas, it’s me again.#layout:left #portrait:default #speaker:The Handler
-You need to remove the virus on you immediately before you go outraged.
-The lab is now infected by the unknown virus. The world is influenced by this virus as well.
-Luckily, you got the chance to save yourself and the world.
-But now, you have been slightly infected since you have made transmissions with other infected sources.
+You need to keep an eye on the infected energy you take in,
+The part of the lab you are in now is infected by the virus. The world at large has been struggling against this virus as well.
+Luckily, you have what it takes to save yourself and the world from the virus.
+For now, you must keep in mind the transmissions you make with other infected sources.
 ~canDetectVirus = true
-Thankfully because you are equipped with the latest Fabio V2.0 Antivirus you should be able to detect it. #portrait:default #speaker:The Handler
-It will show up as purple virus particles on your energy meter.
+Thankfully because you are equipped with the latest Fabio V2.0 Antivirus you are able to detect it. #portrait:default #speaker:The Handler
+The virus will show up as purple particles on your energy meter.
 If you are full of energy while infected, you will lose all control of your body.
 Please be mindful when making connections to other sources, because some of them may contain viruses, and will contaminate your power. Good Luck.
 ->DONE
