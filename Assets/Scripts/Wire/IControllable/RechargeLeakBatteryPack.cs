@@ -24,8 +24,8 @@ public class RechargeLeakBatteryPack : Outlet
 
     private void FixedUpdate()
     {
-        if (!playerConnected)
-        {
+        // if (!playerConnected)
+        // {
             if (charge)
             {
                 controlled.CreateEnergy(energyTransferSpeed * Time.deltaTime/3, virusRatio);
@@ -50,7 +50,7 @@ public class RechargeLeakBatteryPack : Outlet
                     effects.CancelEffect();
                 }
             }
-        }
+        // }
     }
 
     public override void Connect()
