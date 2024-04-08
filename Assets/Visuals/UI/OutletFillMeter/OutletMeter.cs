@@ -133,7 +133,6 @@ public class OutletMeter : MonoBehaviour
     // Coroutine for updating the meter visuals
     private IEnumerator UpdateVisuals()
     {
-        // Debug.Log("Starting outletmeter coroutine");
         coroutineRunning = true;
         while (true)
         {
@@ -152,8 +151,8 @@ public class OutletMeter : MonoBehaviour
             currentVirus = Mathf.Lerp(currentVirus, targetVirus, visualFillSpeed * Time.deltaTime);
             currentClean = Mathf.Lerp(currentClean, targetClean, visualFillSpeed * Time.deltaTime);
 
-            VirusState = Mathf.FloorToInt((currentVirus / 12.5f) * 2);
-            CleanState = Mathf.FloorToInt((currentClean / 12.5f) * 2);
+            VirusState = Mathf.FloorToInt((currentVirus / 6.25f));
+            CleanState = Mathf.FloorToInt((currentClean / 6.25f));
 
             // Adjust meter states if the current values are close to zero
             if (currentVirus > 0.05f && VirusState == 0)
@@ -163,6 +162,14 @@ public class OutletMeter : MonoBehaviour
             if (currentClean > 0.05f && CleanState == 0)
             {
                 CleanState = 1;
+            }
+            if (currentVirus > 15.95f && VirusState == 15)
+            {
+                VirusState = 16;
+            }
+            if (currentClean > 15.95f && CleanState == 15)
+            {
+                CleanState = 16;
             }
 
             virusMeter.sprite = virusSprites[_virusState];
