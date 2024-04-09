@@ -40,9 +40,9 @@ public class SpikeTeleport : MonoBehaviour
     public void PerformDeath(GameObject target)
     {
         objectToTeleport = target;
-        // Rigidbody2D targetRb = target.GetComponent<Rigidbody2D>();
-        // targetRb.isKinematic = true;
-        // targetRb.constraints = RigidbodyConstraints2D.FreezeAll;
+        Rigidbody2D targetRb = target.GetComponent<Rigidbody2D>();
+        targetRb.isKinematic = true;
+        targetRb.constraints = RigidbodyConstraints2D.FreezeAll;
         deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
         deathParticles.Clear();
         deathParticles.Play();
@@ -54,7 +54,7 @@ public class SpikeTeleport : MonoBehaviour
         sfx.Died();
 
         Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
-        // StartCoroutine(UnFreezePlayer(targetRb));
+        StartCoroutine(UnFreezePlayer(targetRb));
     }
 
     private void TeleportPlayer()
@@ -83,6 +83,7 @@ public class SpikeTeleport : MonoBehaviour
         yield return new WaitForSeconds(deathParticles.main.duration);
         targetRb.isKinematic = false;
         targetRb.constraints = RigidbodyConstraints2D.None;
+        targetRb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 }
 
