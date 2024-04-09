@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PlayerController;
+using UnityEngine.UIElements;
 
 // why is this just for spikes? TODO, abstract this.
 public class SpikeTeleport : MonoBehaviour
@@ -39,6 +40,9 @@ public class SpikeTeleport : MonoBehaviour
     public void PerformDeath(GameObject target)
     {
         objectToTeleport = target;
+        // Rigidbody2D targetRb = target.GetComponent<Rigidbody2D>();
+        // targetRb.isKinematic = true;
+        // targetRb.constraints = RigidbodyConstraints2D.FreezeAll;
         deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
         deathParticles.Clear();
         deathParticles.Play();
@@ -50,6 +54,7 @@ public class SpikeTeleport : MonoBehaviour
         sfx.Died();
 
         Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
+        // StartCoroutine(UnFreezePlayer(targetRb));
     }
 
     private void TeleportPlayer()
@@ -62,6 +67,7 @@ public class SpikeTeleport : MonoBehaviour
         {
 
             objectToTeleport.transform.position = teleportLocation.position;
+
         }
 
         objectToTeleport.GetComponentInChildren<SpriteRenderer>().enabled = true;
@@ -70,6 +76,13 @@ public class SpikeTeleport : MonoBehaviour
         objectToTeleport.SetActive(true);
         LevelManager.PlayerReset();
         InkDialogueVariables.deathCount++;
+    }
+
+    IEnumerator UnFreezePlayer(Rigidbody2D targetRb)
+    {
+        yield return new WaitForSeconds(deathParticles.main.duration);
+        targetRb.isKinematic = false;
+        targetRb.constraints = RigidbodyConstraints2D.None;
     }
 }
 
