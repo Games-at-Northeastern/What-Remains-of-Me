@@ -163,13 +163,10 @@ public class OutletMeter : MonoBehaviour
             {
                 CleanState = 1;
             }
-            if (currentVirus > 15.95f && VirusState == 15)
+            //check if the current energy + virus energy is more than 95% of max energy. If it is, max it out.
+            if (currentClean + currentVirus + 1 >= outlet.GetMaxCharge())
             {
-                VirusState = 16;
-            }
-            if (currentClean > 15.95f && CleanState == 15)
-            {
-                CleanState = 16;
+                CleanState += 1;
             }
 
             virusMeter.sprite = virusSprites[_virusState];
