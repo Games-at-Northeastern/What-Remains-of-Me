@@ -157,7 +157,8 @@ namespace PlayerController
         /// </summary>
         private void SwitchState()
         {
-            if (GetNewState() == currentState)
+            PlayerState newState = GetNewState();
+            if (newState == currentState)
             {
                 return;
             }
@@ -167,7 +168,7 @@ namespace PlayerController
                 {
                     swing.CancelMove();
                 }
-                currentState = GetNewState();
+                currentState = newState;
             }
             switch (currentState)
             {
@@ -200,7 +201,7 @@ namespace PlayerController
             }
             else
             {
-                if (wire.IsConnected() && jumpCanceled && !WireShouldFoldIn())
+                if (wire.IsConnected() && jumpCanceled)
                 {
                     return PlayerState.Swinging;
                 }
@@ -371,18 +372,6 @@ namespace PlayerController
             timeSinceJumpWasTriggered = 0;
         }
         #endregion Jump
-
-        #region Wire
-
-        private bool WireShouldFoldIn()
-        {
-            if (!wire.IsConnected())
-                return false;
-            Vector2 distanceToPlug = new Vector2((wire.ConnectedOutlet.transform.position - transform.position).x, (wire.ConnectedOutlet.transform.position - transform.position).y);
-            return Vector2.Angle(_speed, distanceToPlug) < 45;
-
-        }
-        #endregion
 
         #region Collision
 
