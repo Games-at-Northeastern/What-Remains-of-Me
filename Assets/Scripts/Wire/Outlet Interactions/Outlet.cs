@@ -10,7 +10,7 @@ public class Outlet : MonoBehaviour
 {
 
     protected ControlSchemes CS;
-    [SerializeField] protected AControllable controlled;
+    [SerializeField] public AControllable controlled;
     [SerializeField] protected List<AControllable> controlledSecondaries;
     [SerializeField] protected float energyTransferSpeed;
 

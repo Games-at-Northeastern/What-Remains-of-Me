@@ -55,7 +55,9 @@ public abstract class AControllable : MonoBehaviour, IControllable
         {
             return;
         }
+        float totalEnergyBefore = totalEnergy;
 
+        // this is the cause of the outlet's never filling up to full
         amount = Mathf.Min(amount, maxCharge - totalEnergy);
         amount = Mathf.Min(amount, playerInfo.battery - 1f);
 
@@ -68,7 +70,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         virus += amount * virusProportion;
 
         VirusChange(virus / totalEnergy);
-        EnergyChange(totalEnergy);
+        EnergyChange(totalEnergy - totalEnergyBefore);
 
         //Debug.Log("battery: " + cleanEnergy + " clean energy units, " + virus + " virus units.");
         //Debug.Log("player: " + (playerInfo.battery - playerInfo.virus) + " clean energy units, " + playerInfo.virus + " virus units");
@@ -105,6 +107,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         {
             return;
         }
+        float totalEnergyBefore = totalEnergy;
 
         amount = Mathf.Min(amount, totalEnergy);
         amount = Mathf.Min(amount, playerInfo.maxBattery - playerInfo.battery);
@@ -118,7 +121,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         virus -= amount * virusProportion;
 
         VirusChange(virus / totalEnergy);
-        EnergyChange(totalEnergy);
+        EnergyChange(totalEnergy - totalEnergyBefore);
 
         //Debug.Log("battery: " + cleanEnergy + " clean energy units, " + virus + " virus units.");
         //Debug.Log("player: " + (playerInfo.battery - playerInfo.virus) + " clean energy units, " + playerInfo.virus + " virus units");
