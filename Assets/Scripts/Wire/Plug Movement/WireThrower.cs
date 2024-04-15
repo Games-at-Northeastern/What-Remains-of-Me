@@ -6,6 +6,7 @@ using UnityEngine.Rendering.Universal;
 using CharacterController;
 using System;
 using PlayerController;
+using System.Collections;
 /// <summary>
 /// The main script for handling wire controls. Spawns/Fires, despawns, and
 /// connects the wire. Also controls bullet time while the wire is being aimed.
@@ -692,17 +693,34 @@ public class WireThrower : MonoBehaviour
 
     void showEnergyFlow(float newEnergy)
     {
+        ParticleSystem energySparksCopy = Instantiate(energySparks);
+        energySparksCopy.gameObject.SetActive(true);
+        energySparksCopy.Play();
         Debug.Log("showing energy flow");
-        float step = flowSpeed * Time.deltaTime;
         if (newEnergy > 0 )
         {
-            energySparks.transform.position = Vector3.MoveTowards(energySparks.transform.position, ConnectedOutlet.transform.position, step);
+            energySparksCopy.transform.position = _plugMovementSettings.transform.position;
+            StartCoroutine(MoveEnergySparks(ConnectedOutlet.transform.position, energySparksCopy));
             //away from player
         }
         else
         {
-            energySparks.transform.position = Vector3.MoveTowards(energySparks.transform.position, this.transform.position, step);
+            energySparksCopy.transform.position = ConnectedOutlet.transform.position;
+            StartCoroutine(MoveEnergySparks(_plugMovementSettings.transform.position, energySparksCopy));
         }
+    }
+
+    IEnumerator MoveEnergySparks(Vector3 endPosition, ParticleSystem energySparksCopy)
+    {
+        while(energySparksCopy.transform.position != endPosition)
+        {
+            float step = flowSpeed * Time.deltaTime;
+            energySparksCopy.transform.position = Vector3.MoveTowards(energySparksCopy.transform.position, endPosition, step);
+            yield return null;
+        }
+        energySparksCopy.gameObject.SetActive(false);
+        energySparksCopy.Stop();
+        Destroy(energySparksCopy);
     }
 
     /// <summary>

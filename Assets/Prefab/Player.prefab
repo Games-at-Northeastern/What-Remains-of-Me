@@ -1444,6 +1444,7 @@ MonoBehaviour:
   _distanceJoint: {fileID: 2435755663234522621}
   reticle: {fileID: 2476191629135710749}
   energySparks: {fileID: 6827189443635245958}
+  flowSpeed: 5
   onConnect:
     m_PersistentCalls:
       m_Calls: []
@@ -1552,6 +1553,34 @@ PrefabInstance:
     m_TransformParent: {fileID: 6860228394538578389}
     m_Modifications:
     - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
+      propertyPath: ShapeModule.angle
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
       propertyPath: InitialModule.startColor.minColor.b
       value: 0.019954205
       objectReference: {fileID: 0}
@@ -1562,6 +1591,10 @@ PrefabInstance:
     - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
       propertyPath: InitialModule.startColor.minColor.r
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 992158203481983236, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
+      propertyPath: EmissionModule.rateOverTime.minScalar
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 992158203481983239, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
       propertyPath: m_RootOrder
@@ -1613,7 +1646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 992158203481983243, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
