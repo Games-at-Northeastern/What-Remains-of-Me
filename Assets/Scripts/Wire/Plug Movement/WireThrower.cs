@@ -27,6 +27,11 @@ public class WireThrower : MonoBehaviour
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private DistanceJoint2D _distanceJoint;
     [SerializeField] private GameObject reticle;
+    [SerializeField] private ParticleSystem energySparks;
+    [SerializeField] private float flowSpeed = 1.0f;
+    private Vector2[] playerToOutletPoints = new Vector2[5];
+    public AControllable ConnectedOutletsControllable {get; private set;}
+    private float virusFromOutlet;
     
     // Accessible Fields
     public Outlet ConnectedOutlet { get; private set; } // If null, disconnected. Otherwise, connected.
@@ -55,6 +60,9 @@ public class WireThrower : MonoBehaviour
     private List<GameObject> outletsInOverrideRange;
 
     private LevelManager levelManager;
+    private Color green = new Color(0.0f, 1.0f, 0.0f);
+    private Color purple = new Color(0.5f, 0.0f, 0.5f);
+    private bool movingFromPlayer = true;
     #endregion
 
     #region StartUp
@@ -632,9 +640,6 @@ public class WireThrower : MonoBehaviour
 
     }
 
-
-
-
     /// <summary>
     /// Register the plug as connected to the given GameObject.
     /// </summary>
@@ -649,6 +654,9 @@ public class WireThrower : MonoBehaviour
         OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
         outletMeter?.StartVisuals();
         outletMeter?.ConnectPlug();
+        ConnectedOutletsControllable = ConnectedOutlet.controlled;
+        ConnectedOutletsControllable.OnVirusChange.AddListener(setSparkColor);
+        ConnectedOutletsControllable.OnEnergyChange.AddListener(showEnergyFlow);
     }
 
     /// <summary>
@@ -661,8 +669,33 @@ public class WireThrower : MonoBehaviour
         UpdateMeter(lastReticleLock);
         onDisconnect.Invoke();
         _distanceJoint.enabled = false;
+        ConnectedOutletsControllable.OnVirusChange.RemoveListener(setSparkColor);
+        ConnectedOutletsControllable.OnEnergyChange.RemoveListener(showEnergyFlow);
+        ConnectedOutletsControllable = null;
         ConnectedOutlet.Disconnect();
         ConnectedOutlet = null;
+    }
+
+    void setSparkColor(float newVirusPercentage)
+    {
+        var mainModule = energySparks.main;
+        Color lerpedColor = Color.Lerp(green, purple, newVirusPercentage);
+        mainModule.startColor = lerpedColor;
+    }
+
+    void showEnergyFlow(float newEnergy)
+    {
+        Debug.Log("showing energy flow");
+        float step = flowSpeed * Time.deltaTime;
+        if (newEnergy > 0 )
+        {
+            energySparks.transform.position = Vector3.MoveTowards(energySparks.transform.position, ConnectedOutlet.transform.position, step);
+            //away from player
+        }
+        else
+        {
+            energySparks.transform.position = Vector3.MoveTowards(energySparks.transform.position, this.transform.position, step);
+        }
     }
 
     /// <summary>
@@ -673,8 +706,6 @@ public class WireThrower : MonoBehaviour
         if (_activePlug != null)
             Destroy(_activePlug);
     }
-
-
 
     /// <summary>
     /// Disconnects and immediately destroys the plug
