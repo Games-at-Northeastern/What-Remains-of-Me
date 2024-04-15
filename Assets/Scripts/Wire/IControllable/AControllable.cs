@@ -93,8 +93,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         virus += amount * virusRatio;
 
         VirusChange(virus / totalEnergy);
-        EnergyChange(totalEnergy);
-        // in theory this function should be removed, as under this model, it no longer serves a purpose
+        //EnergyChange(totalEnergy);
     }
 
     /// <summary>
@@ -146,7 +145,7 @@ public abstract class AControllable : MonoBehaviour, IControllable
         virus -= amount * virusProportion;
 
         VirusChange(virus / totalEnergy);
-        EnergyChange(totalEnergy);
+        //EnergyChange(totalEnergy);
     }
 
     /// <summary>
