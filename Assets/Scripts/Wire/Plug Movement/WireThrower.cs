@@ -655,8 +655,12 @@ public class WireThrower : MonoBehaviour
         outletMeter?.StartVisuals();
         outletMeter?.ConnectPlug();
         ConnectedOutletsControllable = ConnectedOutlet.controlled;
-        ConnectedOutletsControllable.OnVirusChange.AddListener(setSparkColor);
-        ConnectedOutletsControllable.OnEnergyChange.AddListener(showEnergyFlow);
+        if(ConnectedOutletsControllable != null)
+        {
+            ConnectedOutletsControllable.OnVirusChange.AddListener(setSparkColor);
+            ConnectedOutletsControllable.OnEnergyChange.AddListener(showEnergyFlow);
+        }
+        
     }
 
     /// <summary>
@@ -669,9 +673,12 @@ public class WireThrower : MonoBehaviour
         UpdateMeter(lastReticleLock);
         onDisconnect.Invoke();
         _distanceJoint.enabled = false;
-        ConnectedOutletsControllable.OnVirusChange.RemoveListener(setSparkColor);
-        ConnectedOutletsControllable.OnEnergyChange.RemoveListener(showEnergyFlow);
-        ConnectedOutletsControllable = null;
+        if (ConnectedOutletsControllable != null)
+        {
+            ConnectedOutletsControllable.OnVirusChange.RemoveListener(setSparkColor);
+            ConnectedOutletsControllable.OnEnergyChange.RemoveListener(showEnergyFlow);
+            ConnectedOutletsControllable = null;
+        }
         ConnectedOutlet.Disconnect();
         ConnectedOutlet = null;
     }
