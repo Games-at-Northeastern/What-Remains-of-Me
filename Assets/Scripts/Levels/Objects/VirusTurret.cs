@@ -37,7 +37,7 @@ public class VirusTurret : MonoBehaviour
 
     public AudioSource audioSource;
 
-    private bool activateVisual = true;
+    private bool activateVisual = false;
 
     private void Start()
     {
