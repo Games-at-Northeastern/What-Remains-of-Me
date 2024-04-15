@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class VirusTurret : MonoBehaviour
 {
+
     [SerializeField] private Transform rotatingPointTransform;
 
 
@@ -19,6 +20,7 @@ public class VirusTurret : MonoBehaviour
 
     [SerializeField] private Transform shootingPoint;
     [SerializeField] private LayerMask laserCollidesWith;
+
 
 
     public bool turnedOn;
@@ -33,6 +35,7 @@ public class VirusTurret : MonoBehaviour
     [SerializeField] private float delayBetweenShots = 2f;
     [SerializeField] private float maxLaserDistance = 20;
 
+    public AudioSource audioSource;
 
     private bool activateVisual = true;
 
@@ -40,7 +43,6 @@ public class VirusTurret : MonoBehaviour
     {
         turnedOn = true;
         lineRenderer.textureMode = LineTextureMode.Tile;
-
         StartCoroutine(ShootLaserCycle());
     }
 
@@ -107,10 +109,17 @@ public class VirusTurret : MonoBehaviour
         
     }
 
-
     private void SetVirusBeamActive(bool isActive)
     {
         activateVisual = isActive;
         lineRenderer.gameObject.SetActive(isActive);
+        if (isActive)
+        {
+            audioSource.Play();
+        }
+        else
+        {
+            audioSource.Stop();
+        }
     }
 }
