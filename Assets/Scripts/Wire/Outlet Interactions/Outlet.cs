@@ -13,6 +13,7 @@ public class Outlet : MonoBehaviour
     [SerializeField] protected AControllable controlled;
     [SerializeField] protected List<AControllable> controlledSecondaries;
     [SerializeField] protected float energyTransferSpeed;
+    [SerializeField] protected ParticleSystem sparksParticles;
 
     public Collider2D grappleOverrideRange;
 
@@ -71,6 +72,7 @@ public class Outlet : MonoBehaviour
 
             // SFX
             SoundController.instance.PlaySound(givingChargeSound);
+            sparksParticles.Play();
         }
     }
 
@@ -93,6 +95,7 @@ public class Outlet : MonoBehaviour
 
             // SFX
             SoundController.instance.PlaySound(takingChargeSound);
+            sparksParticles.Play();
         }
     }
 
