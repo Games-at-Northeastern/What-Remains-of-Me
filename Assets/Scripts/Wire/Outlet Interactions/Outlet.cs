@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Represents an outlet that allows the player, once connected, to give or take
@@ -13,7 +14,8 @@ public class Outlet : MonoBehaviour
     [SerializeField] public AControllable controlled;
     [SerializeField] protected List<AControllable> controlledSecondaries;
     [SerializeField] protected float energyTransferSpeed;
-    [SerializeField] protected ParticleSystem sparksParticles;
+    [SerializeField] protected Light2D outletLight;
+    [SerializeField] protected float lerpSpeed, connectedGoal, chargingGoal;
 
     public Collider2D grappleOverrideRange;
 
@@ -21,14 +23,16 @@ public class Outlet : MonoBehaviour
     protected string givingChargeSound = "Giving_Charge";
     protected string takingChargeSound = "Taking_Charge";
 
+    float goalIntensity = 0f;
+
     private void Awake()
     {
         // TODO : This should be moved into one of the player scripts
         CS = new ControlSchemes();
-        CS.Player.GiveEnergy.performed += _ => { if (controlled != null) { StartCoroutine("GiveEnergy"); } };
-        CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); } };
-        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); SoundController.instance.StopSound(givingChargeSound); } };
-        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); } };
+        CS.Player.GiveEnergy.performed += _ => { if (controlled != null) { StartCoroutine("GiveEnergy"); goalIntensity = chargingGoal; } };
+        CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); goalIntensity = chargingGoal; } };
+        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); SoundController.instance.StopSound(givingChargeSound); goalIntensity = connectedGoal; } };
+        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); goalIntensity = connectedGoal; } };
 
         //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
     }
@@ -40,6 +44,8 @@ public class Outlet : MonoBehaviour
     {
         CS.Enable();
         SoundController.instance.PlaySound(plugInSound);
+        goalIntensity = connectedGoal;
+        StartCoroutine(ControlLight());
         //src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
         //soundController.PlaySound("Plug_In");
     }
@@ -51,8 +57,30 @@ public class Outlet : MonoBehaviour
     {
         CS.Disable();
         StopAllCoroutines();
+        StartCoroutine(FadeOutLight());
     }
 
+    //Lerps the light to the goal
+    IEnumerator ControlLight()
+    {
+        while (true)
+        {
+            outletLight.intensity = Mathf.Lerp(outletLight.intensity, goalIntensity, Time.deltaTime * lerpSpeed);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+    }
+
+    //Fades out the light
+    IEnumerator FadeOutLight()
+    {
+        while (outletLight.intensity > 0.1f)
+        {
+            outletLight.intensity = Mathf.Lerp(outletLight.intensity, 0f, Time.deltaTime * lerpSpeed);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        outletLight.intensity = 0f;
+    }
     /// <summary>
     /// Gives energy to the controlled object until this coroutine is called to end.
     /// </summary>
@@ -72,7 +100,6 @@ public class Outlet : MonoBehaviour
 
             // SFX
             SoundController.instance.PlaySound(givingChargeSound);
-            //sparksParticles.Play();
         }
     }
 
@@ -95,7 +122,6 @@ public class Outlet : MonoBehaviour
 
             // SFX
             SoundController.instance.PlaySound(takingChargeSound);
-            //sparksParticles.Play();
         }
     }
 
