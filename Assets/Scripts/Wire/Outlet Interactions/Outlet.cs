@@ -72,7 +72,7 @@ public class Outlet : MonoBehaviour
 
             // SFX
             SoundController.instance.PlaySound(givingChargeSound);
-            sparksParticles.Play();
+            //sparksParticles.Play();
         }
     }
 
@@ -95,7 +95,7 @@ public class Outlet : MonoBehaviour
 
             // SFX
             SoundController.instance.PlaySound(takingChargeSound);
-            sparksParticles.Play();
+            //sparksParticles.Play();
         }
     }
 
