@@ -63,7 +63,7 @@ public class WireThrower : MonoBehaviour
     private LevelManager levelManager;
     private Color green = new Color(0.0f, 1.0f, 0.0f);
     private Color purple = new Color(0.5f, 0.0f, 0.5f);
-    private bool particleSystemPlaying = false;
+    private float timeSinceParticlePlaying = 1.0f;
     #endregion
 
     #region StartUp
@@ -693,14 +693,16 @@ public class WireThrower : MonoBehaviour
 
     void showEnergyFlow(float newEnergy)
     {
-        if (particleSystemPlaying) return;
-        particleSystemPlaying = true;
+        if (timeSinceParticlePlaying < 1.0f) {
+            timeSinceParticlePlaying += Time.deltaTime;
+            return;
+        }
+        timeSinceParticlePlaying = 0.0f;
         ParticleSystem energySparksCopy = Instantiate(energySparks);
         if (newEnergy > 0 )
         {
             energySparksCopy.transform.position = _lineRenderer.GetPosition(0);
             StartCoroutine(MoveEnergySparks(energySparksCopy, false));
-            //away from player
         }
         else
         {
@@ -736,7 +738,6 @@ public class WireThrower : MonoBehaviour
         energySparksCopy.gameObject.SetActive(false);
         energySparksCopy.Stop();
         Destroy(energySparksCopy);
-        particleSystemPlaying = false;
     }
 
     /// <summary>
