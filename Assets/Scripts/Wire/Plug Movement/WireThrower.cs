@@ -690,8 +690,6 @@ public class WireThrower : MonoBehaviour
         Color lerpedColor = Color.Lerp(green, purple, newVirusPercentage);
         mainModule.startColor = lerpedColor;
     }
-    // line renderer(0) is the player
-    // line renderer(1) is the outlet
 
     void showEnergyFlow(float newEnergy)
     {
@@ -721,6 +719,7 @@ public class WireThrower : MonoBehaviour
 
         while (distanceSoFar < totalDistance)
         {
+            if (!WireExists()) break;
             distanceSoFar += flowSpeed * totalDistance/10000;
             if (towardsPlayer)
             {
