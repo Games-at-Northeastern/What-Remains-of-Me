@@ -690,34 +690,48 @@ public class WireThrower : MonoBehaviour
         Color lerpedColor = Color.Lerp(green, purple, newVirusPercentage);
         mainModule.startColor = lerpedColor;
     }
+    // line renderer(0) is the player
+    // line renderer(1) is the outlet
 
     void showEnergyFlow(float newEnergy)
     {
         if (particleSystemPlaying) return;
         particleSystemPlaying = true;
         ParticleSystem energySparksCopy = Instantiate(energySparks);
-        energySparksCopy.gameObject.SetActive(true);
-        energySparksCopy.Play();
-        Debug.Log("showing energy flow");
         if (newEnergy > 0 )
         {
-            energySparksCopy.transform.position = _plugMovementSettings.transform.position;
-            StartCoroutine(MoveEnergySparks(ConnectedOutlet.transform.position, energySparksCopy));
+            energySparksCopy.transform.position = _lineRenderer.GetPosition(0);
+            StartCoroutine(MoveEnergySparks(energySparksCopy, false));
             //away from player
         }
         else
         {
-            energySparksCopy.transform.position = ConnectedOutlet.transform.position;
-            StartCoroutine(MoveEnergySparks(_plugMovementSettings.transform.position, energySparksCopy));
+            energySparksCopy.transform.position =  _lineRenderer.GetPosition(1);
+            StartCoroutine(MoveEnergySparks(energySparksCopy, true));
         }
     }
 
-    IEnumerator MoveEnergySparks(Vector3 endPosition, ParticleSystem energySparksCopy)
+    IEnumerator MoveEnergySparks(ParticleSystem energySparksCopy, bool towardsPlayer)
     {
-        while(energySparksCopy.transform.position != endPosition)
+        energySparksCopy.gameObject.SetActive(true);
+        energySparksCopy.Play();
+        Vector3 direction;
+        float totalDistance = (_lineRenderer.GetPosition(0) - _lineRenderer.GetPosition(1)).magnitude;
+        float distanceSoFar = 0f;
+
+        while (distanceSoFar < totalDistance)
         {
-            float step = flowSpeed * Time.deltaTime;
-            energySparksCopy.transform.position = Vector3.MoveTowards(energySparksCopy.transform.position, endPosition, step);
+            distanceSoFar += flowSpeed * totalDistance/10000;
+            if (towardsPlayer)
+            {
+                direction = _lineRenderer.GetPosition(0) - _lineRenderer.GetPosition(1);
+                energySparksCopy.transform.position = _lineRenderer.GetPosition(1) + direction * distanceSoFar/totalDistance;
+            }
+            else
+            {
+                direction = _lineRenderer.GetPosition(1) - _lineRenderer.GetPosition(0);
+                energySparksCopy.transform.position = _lineRenderer.GetPosition(0) + direction * distanceSoFar/totalDistance;
+            }
             yield return null;
         }
         energySparksCopy.gameObject.SetActive(false);
