@@ -14,7 +14,7 @@ public class Outlet : MonoBehaviour
     [SerializeField] public AControllable controlled;
     [SerializeField] protected List<AControllable> controlledSecondaries;
     [SerializeField] protected float energyTransferSpeed;
-    [SerializeField] protected Light2D outletLight;
+    [SerializeField] protected List<Light2D> outletLights;
     [SerializeField] protected float lerpSpeed, connectedGoal, chargingGoal;
 
     public Collider2D grappleOverrideRange;
@@ -65,7 +65,8 @@ public class Outlet : MonoBehaviour
     {
         while (true)
         {
-            outletLight.intensity = Mathf.Lerp(outletLight.intensity, goalIntensity, Time.deltaTime * lerpSpeed);
+            foreach (Light2D outletLight in outletLights)
+                outletLight.intensity = Mathf.Lerp(outletLight.intensity, goalIntensity, Time.deltaTime * lerpSpeed);
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
@@ -73,13 +74,15 @@ public class Outlet : MonoBehaviour
     //Fades out the light
     IEnumerator FadeOutLight()
     {
-        while (outletLight.intensity > 0.1f)
+        while (outletLights[0].intensity > 0.1f)
         {
-            outletLight.intensity = Mathf.Lerp(outletLight.intensity, 0f, Time.deltaTime * lerpSpeed);
+            foreach (Light2D outletLight in outletLights)
+                outletLight.intensity = Mathf.Lerp(outletLight.intensity, 0f, Time.deltaTime * lerpSpeed);
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        outletLight.intensity = 0f;
+        foreach (Light2D outletLight in outletLights)
+            outletLight.intensity = 0f;
     }
     /// <summary>
     /// Gives energy to the controlled object until this coroutine is called to end.
