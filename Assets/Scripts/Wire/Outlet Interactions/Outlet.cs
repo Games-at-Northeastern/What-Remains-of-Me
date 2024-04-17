@@ -23,9 +23,9 @@ public class Outlet : MonoBehaviour
     protected string givingChargeSound = "Giving_Charge";
     protected string takingChargeSound = "Taking_Charge";
 
-    float goalIntensity = 0f;
+    protected float goalIntensity = 0f;
 
-    private void Awake()
+    protected void Awake()
     {
         // TODO : This should be moved into one of the player scripts
         CS = new ControlSchemes();
@@ -61,7 +61,7 @@ public class Outlet : MonoBehaviour
     }
 
     //Lerps the light to the goal
-    IEnumerator ControlLight()
+    protected IEnumerator ControlLight()
     {
         while (true)
         {
@@ -72,7 +72,7 @@ public class Outlet : MonoBehaviour
     }
 
     //Fades out the light
-    IEnumerator FadeOutLight()
+    protected IEnumerator FadeOutLight()
     {
         while (outletLights[0].intensity > 0.1f)
         {

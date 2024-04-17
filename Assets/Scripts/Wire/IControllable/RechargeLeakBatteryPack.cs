@@ -11,17 +11,6 @@ public class RechargeLeakBatteryPack : Outlet
 
     [SerializeField] Effects effects;
 
-
-    private void Awake()
-    {
-        CS = new ControlSchemes();
-        CS.Player.GiveEnergy.performed += _ => { if (controlled != null) { StartCoroutine("GiveEnergy"); } };
-        CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); } };
-        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); SoundController.instance.StopSound(givingChargeSound); } };
-        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); } };
-
-    }
-
     private void FixedUpdate()
     {
         // if (!playerConnected)
@@ -58,6 +47,8 @@ public class RechargeLeakBatteryPack : Outlet
         CS.Enable();
         SoundController.instance.PlaySound(plugInSound);
         playerConnected = true;
+        goalIntensity = connectedGoal;
+        StartCoroutine(ControlLight());
     }
 
     public override void Disconnect()
@@ -65,6 +56,7 @@ public class RechargeLeakBatteryPack : Outlet
         playerConnected = false;
         CS.Disable();
         StopAllCoroutines();
+        StartCoroutine(FadeOutLight());
     }
 
     /// <summary>
