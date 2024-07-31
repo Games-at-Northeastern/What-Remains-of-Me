@@ -10,9 +10,9 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 }
 
 ===firstInteraction===
-%&.:.. ...H-ello?... &%3.:; Atlas! You’re operational! #layout:right #portrait:Handler #speaker:The Handler
+%&.:.. ...H-ello?... &%3.:; Atlas! You're operational! #layout:right #portrait:Handler #speaker:The Handler
 
-You seem to be intact. That’s good. Try moving around while I run a few tests on my %:%:&
+You seem to be intact. That's good. Try moving around while I run a few tests on my %:%:&
 
 ~levelStart = false
 
@@ -25,7 +25,7 @@ Everything looks good! Now listen here, the lab is overrun with %;.:-%% #layout:
 I don't have much time to explain the gravity of the situation, but I need your help.
 
 Their leader uploaded themselves to the our defense system at the lab's lobby
-Now we’re /:;%-%.. inside the lab with no escape!
+Now we're /:;%-%.. inside the lab with no escape!
 
 I /:;&%-- you to reclaim this lab. ;:%.,: fate of humanity *%&.;-. on you.
 ->END
