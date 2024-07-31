@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
@@ -11,13 +12,22 @@ public class InkDialogueManager : MonoBehaviour
     [Header("Params")]
     [SerializeField] private float typingSpeed = 0.04f;
     [SerializeField] private float dialogueDelayTime = 100f;
-    [SerializeField] private float exitDialogueTime = 1.0f;
-    
+    [SerializeField] private float exitDialogueTime = 0.2f;
+
     [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialoguePanel;
-    [SerializeField] private TextMeshProUGUI dialogueText;
+    [SerializeField] private GameObject dialoguePanelGENERAL;
     [SerializeField] private TextMeshProUGUI displayNameText;
+    [SerializeField] private TextMeshProUGUI dialogueText;
+
+    [SerializeField] private GameObject dialoguePanelRIGHT;
     [SerializeField] private Animator portraitAnimator;
+
+    [SerializeField] private GameObject dialoguePanelTOP;
+
+    [Header("Horizontal Dialogue Images")]
+    [SerializeField] private Image imageLEFT;
+    [SerializeField] private Image imageMIDDLE;
+    [SerializeField] private Image imageRIGHT;
 
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
@@ -51,6 +61,10 @@ public class InkDialogueManager : MonoBehaviour
     private ControlSchemes _cs;
     private bool canSkip = false;
     private bool submitSkip = false;
+    private GameObject dialoguePanel;
+
+    private Vector3 leftImagePosn;
+    private Vector3 rightImagePosn;
 
     [HideInInspector]
     public bool isTutorialDialogue = false;
@@ -76,13 +90,21 @@ public class InkDialogueManager : MonoBehaviour
         _cs = new ControlSchemes();
         _cs.Enable();
         dialogueIsPlaying = false;
-        dialoguePanel.SetActive(false);
+        dialoguePanelRIGHT.SetActive(false);
+        dialoguePanelTOP.SetActive(false);
         stopMovement = true;
         dialogueEnded = false;
 
-        layoutAnimator = dialoguePanel.GetComponent<Animator>();
+        layoutAnimator = dialoguePanelGENERAL.GetComponent<Animator>();
 
-        // get all of the choices text 
+        dialoguePanel = dialoguePanelRIGHT;
+        dialogueText.text = "";
+        displayNameText.text = "";
+
+        leftImagePosn = imageLEFT.transform.position;
+        rightImagePosn = imageRIGHT.transform.position;
+
+        // get all of the choices text
         choicesText = new TextMeshProUGUI[choices.Length];
         int index = 0;
         foreach (GameObject choice in choices)
@@ -123,6 +145,8 @@ public class InkDialogueManager : MonoBehaviour
 
     public void EnterDialogueMode(TextAsset inkJSON)
     {
+        Debug.Log("entered EnterDialogueMode");
+
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
@@ -131,9 +155,10 @@ public class InkDialogueManager : MonoBehaviour
         dialogueVariables.updateInkVarsThatChangeInGame(currentStory);
 
         // resets to defaults (makes sure that ink tags don't carry over between npcs)
-        displayNameText.text = "???";
-        portraitAnimator.Play("default");
-        layoutAnimator.Play("right");
+        // displayNameText.text = "???";
+        // dialogueText.text = "...";
+        // portraitAnimator.Play("default");
+        // layoutAnimator.Play("right");
 
         ContinueStory();
 
@@ -154,14 +179,15 @@ public class InkDialogueManager : MonoBehaviour
 
     private IEnumerator ExitDialogueMode()
     {
-        if (isTutorialDialogue)
-        {
-            yield return new WaitForSeconds(exitDialogueTime); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
-        }
-        else
-        {
-            yield return new WaitForSeconds(0f); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
-        }
+        // if (isTutorialDialogue)
+        // {
+        //     yield return new WaitForSeconds(exitDialogueTime); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+        // }
+        // else
+        // {
+        //     yield return new WaitForSeconds(0f); // waits a moment to exit dialogue to ensure nothing happens if dialogue key is bound to something else like jump
+        // }
+        yield return new WaitForSeconds(0);
 
         dialogueVariables.StopListening(currentStory);
 
@@ -169,6 +195,7 @@ public class InkDialogueManager : MonoBehaviour
         dialogueEnded = true;
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
+        displayNameText.text = "";
 
         //turns off the X constraint on the player's rigidbody when dialogue has stopped
         if (stopMovement)
@@ -177,7 +204,7 @@ public class InkDialogueManager : MonoBehaviour
             playerRB.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         }
         //btw if you ever want to adjust this, know that RigidbodyContraints2D are something called a "Bitmap" so they can't be set normally
-        // https://answers.unity.com/questions/1104653/im-trying-to-freeze-both-positionx-and-rotation-in.html 
+        // https://answers.unity.com/questions/1104653/im-trying-to-freeze-both-positionx-and-rotation-in.html
         // The constraints property is a Bitmask. Simply setting it to a single option only sets that option. You need to use the | (bitwise OR) operator to merge them together before setting it i.e.
         // constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezepositionX;
 }
@@ -193,6 +220,12 @@ if (currentStory.canContinue)
     }
     // set text for the current dialogue line
     displayLineCoroutine = StartCoroutine(DisplayLine(currentStory.Continue()));
+
+    // manipulate image size and position to be more dynamic
+    int scaling = dialogueText.text.Length;
+    imageLEFT.transform.position = leftImagePosn - new Vector3 (scaling * 6, 0, 0);
+    imageRIGHT.transform.position = rightImagePosn + new Vector3 (scaling * 6, 0, 0);
+    imageMIDDLE.rectTransform.sizeDelta = new Vector2(scaling*7 + 40, 72);
 
     // handles current tags
     HandleTags(currentStory.currentTags);
@@ -235,14 +268,14 @@ foreach (char letter in line.ToCharArray())
 
 // display choices, if any, for this dialogue line
 DisplayChoices();
-
-if (canSkip)
-{
-    StartCoroutine(ContinueWithDelay());
-} else if (autoTurnPage)
+if (autoTurnPage)
 {
     yield return new WaitForSeconds(waitBeforePageTurn);
 }
+else if (canSkip)
+       {
+           StartCoroutine(ContinueWithDelay());
+       }
 
 canContinueToNextLine = true;
 canSkip = false;
@@ -250,7 +283,7 @@ canSkip = false;
 
 private IEnumerator CanSkip()
 {
-canSkip = false; 
+canSkip = false;
 yield return new WaitForSeconds(0.05f);
 canSkip = true;
 }
@@ -265,8 +298,8 @@ foreach (GameObject choicebutton in choices)
 
 private void HandleTags(List<string> currentTags)
 {
-// loop through current tags
-foreach(string tag in currentTags)
+        // loop through current tags
+        foreach (string tag in currentTags)
 {
     string[] splitTag = tag.Split(':');
     if (splitTag.Length != 2)
@@ -288,14 +321,36 @@ foreach(string tag in currentTags)
             Debug.Log("Potrait = " + tagValue);
             break;
         case LAYOUT_TAG:
-            layoutAnimator.Play(tagValue);
             Debug.Log("Layout = " + tagValue);
+            SetLayout(tagValue);
             break;
         default:
             Debug.LogWarning("Tag came in but isn't being handled" + tag);
             break;
     }
 }
+}
+
+private void SetLayout(string tag)
+{
+    layoutAnimator.Play(tag);
+    dialoguePanel.SetActive(false);
+
+    switch (tag)
+    {
+        case "right":
+            Debug.Log("Setting right layout...");
+            dialoguePanel = dialoguePanelRIGHT;
+            break;
+        case "top":
+            Debug.Log("Setting top layout...");
+            dialoguePanel = dialoguePanelTOP;
+            break;
+        default:
+            Debug.LogWarning("Layout tag came in but isn't being handled" + tag);
+            break;
+    }
+    dialoguePanel.SetActive(true);
 }
 
 private void DisplayChoices()

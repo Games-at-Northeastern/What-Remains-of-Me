@@ -1,1 +1,94 @@
-{"inkVersion":21,"root":[[{"->":"MNPC4AL"},"#","^Medium-infected level NPC; when Atlas infected level is LOW","/#",["done",{"#f":5,"#n":"g-0"}],null],"done",{"MNPC4AL":[["^Virus detected. Trying to clean the virus immediately…","\n",["ev",{"^->":"MNPC4AL.0.2.$r1"},{"temp=":"$r"},"str",{"->":".^.s"},[{"#n":"$r1"}],"/str","/ev",{"*":".^.^.c-0","flg":18},{"s":["^sound of the parts running*",{"->":"$r","var":true},null]}],{"c-0":["ev",{"^->":"MNPC4AL.0.c-0.$r2"},"/ev",{"temp=":"$r"},{"->":".^.^.2.s"},[{"#n":"$r2"}],"\n","done",{"#f":5}]}],{"#f":1}],"#f":1}],"listDefs":{}}
+{
+  "inkVersion": 21,
+  "root": [
+    [
+      {
+        "->": "MNPC4AL"
+      },
+      "#",
+      "^Medium-infected level NPC; when Atlas infected level is LOW",
+      "/#",
+      [
+        "done",
+        {
+          "#f": 5,
+          "#n": "g-0"
+        }
+      ],
+      null
+    ],
+    "done",
+    {
+      "MNPC4AL": [
+        [
+          "^Virus detected. Trying to clean the virus immediately…",
+          "\n",
+          [
+            "ev",
+            {
+              "^->": "MNPC4AL.0.2.$r1"
+            },
+            {
+              "temp=": "$r"
+            },
+            "str",
+            {
+              "->": ".^.s"
+            },
+            [
+              {
+                "#n": "$r1"
+              }
+            ],
+            "/str",
+            "/ev",
+            {
+              "*": ".^.^.c-0",
+              "flg": 18
+            },
+            {
+              "s": [
+                "^sound of the parts running*",
+                {
+                  "->": "$r",
+                  "var": true
+                },
+                null
+              ]
+            }
+          ],
+          {
+            "c-0": [
+              "ev",
+              {
+                "^->": "MNPC4AL.0.c-0.$r2"
+              },
+              "/ev",
+              {
+                "temp=": "$r"
+              },
+              {
+                "->": ".^.^.2.s"
+              },
+              [
+                {
+                  "#n": "$r2"
+                }
+              ],
+              "\n",
+              "done",
+              {
+                "#f": 5
+              }
+            ]
+          }
+        ],
+        {
+          "#f": 1
+        }
+      ],
+      "#f": 1
+    }
+  ],
+  "listDefs": {}
+}

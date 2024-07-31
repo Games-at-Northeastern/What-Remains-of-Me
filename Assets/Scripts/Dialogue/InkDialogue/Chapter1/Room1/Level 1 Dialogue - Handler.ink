@@ -10,9 +10,9 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 }
 
 ===firstInteraction===
-%:;&::%:;%:& ...H-ello?...%:;&::%:;%:& Atlas! You’re operational! #layout:left #portrait:Handler #speaker:The Handler
+%&.:.. ...H-ello?... &%3.:; Atlas! You’re operational! #layout:right #portrait:Handler #speaker:The Handler
 
-You seem to be intact. That’s good. Try moving around while I run a few tests on my %:;&::%:;%:&
+You seem to be intact. That’s good. Try moving around while I run a few tests on my %:%:&
 
 ~levelStart = false
 
@@ -20,13 +20,14 @@ You seem to be intact. That’s good. Try moving around while I run a few tests 
 
 
 === doneMoving ===
-Everything looks good! Now listen here, the lab is overrun with %:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler
+Everything looks good! Now listen here, the lab is overrun with %;.:-%% #layout:right #portrait:Handler #speaker:The Handler
 
 I don't have much time to explain the gravity of the situation, but I need your help.
 
-Their leader %:;&::%:;%:& uploaded themselves to the lab’s defense system, and now we’re locked out of all our own equipment!
+Their leader uploaded themselves to the our defense system at the lab's lobby
+Now we’re :;%-%.. inside the lab with no escape!
 
-I %:;&::%:;%:& you to reclaim this lab. %:;&::%:;%:& fate of humanity %:;&::%:;%:& on you.
+I :;&%#- you to reclaim this lab. ;:7#%.,: fate of humanity *%&.;-. on you.
 ->END
 
-//%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler
+//%:;&::%:;%:& #layout:right #portrait:Handler #speaker:The Handler
