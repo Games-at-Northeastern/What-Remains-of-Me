@@ -8,7 +8,8 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 #layout:top
-NOTICE:: Holo System Message Pending  .  .  . #portrait:isp #speaker:I.S.P.
+NOTICE:: Holo System Message Pending #portrait:isp #speaker:I.S.P.
+.    .    .
 
 PROCEDURE:: Move next to hologram with '...' icon,
 then, press <F> actuator to begin message. 
