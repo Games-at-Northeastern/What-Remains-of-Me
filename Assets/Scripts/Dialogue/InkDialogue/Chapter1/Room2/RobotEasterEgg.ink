@@ -12,7 +12,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===withoutVoiceModule===
-w... Y did U l-l33v3 m33? #layout:left #portrait:isp #speaker:???
+w... Y did U l-l33v3 m33? #layout:left #portrait:atlas291 #speaker:???
 Wh-wh-u-u-u-......w0t did I d-d-oo r-r..ong…?
 
 EVENT: UNIT TERMINATED #layout:left #portrait:isp #speaker:I.S.P.
