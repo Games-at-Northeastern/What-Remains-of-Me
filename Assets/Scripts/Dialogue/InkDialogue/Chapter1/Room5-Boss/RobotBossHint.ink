@@ -12,7 +12,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===withoutVoiceModule===
-Too Damaged. #layout:left #portrait:isp #speaker:???
+Too Damaged. #layout:left #portrait:atlas1012 #speaker:???
 Atlas \#1012 tried to Deactivate the Jones A.I. #layout:left #portrait:isp #speaker:Atlas \#1012
 He has power reserves... perhaps if I/We overloaded him with Virus...
 But... too damaged...
