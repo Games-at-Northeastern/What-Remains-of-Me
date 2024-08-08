@@ -1,7 +1,7 @@
 -> main
 
 ===main===
-What… What happened? Was I… infected..? #layout:left #portrait:isp #speaker:Robot
+What… What happened? Was I… infected..? #layout:left #portrait:atlas291 #speaker:Robot
 That… can’t be! I wasn’t doing anything wrong..!
 Wait! Wh-Who are you?! How long have you been standing there?!
 …
