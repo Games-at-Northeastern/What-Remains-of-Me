@@ -2,7 +2,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 -> main
 
 ===main===
-Hello Atlas, it’s me again.#layout:left #portrait:default #speaker:The Handler
+Hello Atlas, it's me again.#layout:left #portrait:default #speaker:The Handler
 You need to keep an eye on the infected energy you take in.
 The part of the lab you are in now is infected by the virus. The world at large has been struggling against this virus as well.
 Luckily, you have what it takes to save yourself and the world from the virus.
