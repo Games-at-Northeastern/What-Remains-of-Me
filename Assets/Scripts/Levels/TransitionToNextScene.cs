@@ -14,6 +14,7 @@ public class TransitionToNextScene : MonoBehaviour
             // loads the scene that is the scene after the current scene in the build index.
             // this will cause an error when you get to the last scene in the build index,
             // unless the last scene in the build index never calls this script
+            Debug.Log("current scene: " + SceneManager.GetActiveScene().buildIndex);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
