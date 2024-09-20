@@ -32,7 +32,6 @@ public class LevelManager : MonoBehaviour
     /// Event to trigger player respawn after obstacle collision. This should respawn the player at the nearest checkpoint.
     /// </summary>
     public static void PlayerReset() => OnPlayerReset?.Invoke();
-
     /// <summary>
     /// Event to trigger full player death event. This should respawn the player at the beginning of the level.
     /// </summary>
