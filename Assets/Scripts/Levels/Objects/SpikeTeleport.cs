@@ -52,7 +52,7 @@ public class SpikeTeleport : MonoBehaviour
 
         //play the player death sound using PlayerSFX
         sfx.Died();
-
+        
         Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
         StartCoroutine(UnFreezePlayer(targetRb));
     }
