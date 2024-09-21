@@ -464,6 +464,7 @@ namespace PlayerController
             _rb.velocity = Vector2.zero;
             currentState = PlayerState.Aerial;
             ExternalVelocity = Vector2.zero;
+            _speed = Vector2.zero;
         }
         /// <summary>
         /// Resets the player to their original position. For debugging only.
@@ -474,6 +475,7 @@ namespace PlayerController
             _rb.velocity = Vector2.zero;
             ExternalVelocity = Vector2.zero;
             currentState = PlayerState.Aerial;
+            _speed = Vector2.zero;
         }
 
         #endregion
