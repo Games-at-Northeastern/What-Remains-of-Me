@@ -367,6 +367,9 @@ namespace PlayerController
         }
         protected virtual void TriggerJump()
         {
+            if (ExternalVelocity.y < 0) {
+                ExternalVelocity.y = 0;
+            }
             jump.StartMove();
             jumpCanceled = false;
             timeSinceJumpWasTriggered = 0;
