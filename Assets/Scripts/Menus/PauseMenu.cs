@@ -71,6 +71,7 @@ public class PauseMenu : MonoBehaviour
         Resume();
         SceneManager.LoadScene("MainMenu");
     }
+
     /// <summary>
     /// Opens the quit confirmation menu
     /// </summary>
@@ -91,7 +92,11 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void SettingsMenu()
     {
-        throw new System.NotImplementedException("Settings menu not implemented yet");
+        Resume();
+        SceneManager.LoadScene("SettingsMenu");
+        
+        /// previous code
+        /// throw new System.NotImplementedException("Settings menu not implemented yet");
     }
 
     /// <summary>
