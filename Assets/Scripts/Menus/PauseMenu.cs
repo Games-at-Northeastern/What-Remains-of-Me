@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-/// <summary> 
+/// <summary>
 /// This class provides the functionalities needed for the pause menu.
 /// </summary>
+
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject pausePanel;
+    public GameObject settingsPanel;
     public GameObject confirmQuitMenu;
 
     /// <summary>
@@ -33,17 +35,24 @@ public class PauseMenu : MonoBehaviour
             }
             else
             {
-                Resume();
+                if (settingsPanel.activeInHierarchy){
+                    ExitSettingsMenu();
+                }
+                else
+                {
+                    Resume();
+                }
             }
         }
     }
     private void Start()
     {
         pausePanel.SetActive(false);
+        settingsPanel.SetActive(false);
     }
 
     /// <summary>
-    /// Pauses the game by opening the pause menu and stopping the game time. 
+    /// Pauses the game by opening the pause menu and stopping the game time.
     /// </summary>
     public void Pause()
     {
@@ -52,8 +61,8 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = true;
     }
 
-    /// <summary> 
-    /// Resumes the game by closing the pause menu and starting the game time. 
+    /// <summary>
+    /// Resumes the game by closing the pause menu and starting the game time.
     /// </summary>
     public void Resume()
     {
@@ -86,17 +95,24 @@ public class PauseMenu : MonoBehaviour
     {
         Resume();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
     }
     /// <summary>
-    /// Opens up the settings menu where a variety of setting could be adjusted.
+    /// Opens up the settings menu where a variety of settings could be adjusted.
     /// </summary>
     public void SettingsMenu()
     {
-        Resume();
-        SceneManager.LoadScene("SettingsMenu");
-        
-        /// previous code
-        /// throw new System.NotImplementedException("Settings menu not implemented yet");
+        pausePanel.SetActive(false);
+        settingsPanel.SetActive(true);
+    }
+
+    /// <summary>
+    /// Closes the settings panel, reopens the pause panel.
+    /// </summary>
+    public void ExitSettingsMenu()
+    {
+        pausePanel.SetActive(true);
+        settingsPanel.SetActive(false);
     }
 
     /// <summary>
@@ -107,4 +123,5 @@ public class PauseMenu : MonoBehaviour
         Debug.Log("Quitting Game");
         Application.Quit();
     }
+
 }
