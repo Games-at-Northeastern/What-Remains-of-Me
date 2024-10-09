@@ -22,12 +22,10 @@ namespace CharacterController
             this.jumpType = jumpType;
             this.timeToReachApex = -initialVelocity / risingGravity;
         }
-        public void CancelMove()
-        {
+        public void CancelMove() =>
             // empty for now but i think it can be useful in regards to jumpBuffers
             // though i may want that in the character controller itself
             jumpCanceled = true;
-        }
 
         public AnimationType GetAnimationState() => AnimationType.JUMP_RISING;
         /// <summary>
@@ -54,12 +52,12 @@ namespace CharacterController
             }
         }
         /// <summary>
-        /// decreases the vertical velocity by gravity;
+        /// decreases gravity while the player holds down space;
         /// </summary>
         public void ContinueMove()
         {
             timePassed += Time.fixedDeltaTime;
-            character.Speed = new Vector2(character.Speed.x, character.Speed.y - risingGravity * Time.fixedDeltaTime);
+            character.Speed = new Vector2(character.Speed.x, character.Speed.y - (risingGravity * Time.fixedDeltaTime));
         }
     }
     /// <summary>
