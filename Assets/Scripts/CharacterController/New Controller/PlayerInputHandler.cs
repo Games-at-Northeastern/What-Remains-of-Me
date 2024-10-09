@@ -47,11 +47,6 @@ namespace PlayerController
 
         public void Jump(InputAction.CallbackContext context)
         {
-            if (isLocked)
-            {
-                return;
-            }
-
             jumpPressed = jumpPressed || context.started;
             if (context.started)
             {
@@ -62,11 +57,6 @@ namespace PlayerController
 
         public void Move(InputAction.CallbackContext context)
         {
-            if (isLocked)
-            {
-                return;
-            }
-
             moveInput = context.ReadValue<Vector2>();
             if (context.canceled || Mathf.Abs(moveInput.x) < deadZone)
             {
@@ -80,18 +70,10 @@ namespace PlayerController
 
         public void Dash(InputAction.CallbackContext context)
         {
-            if (isLocked)
-            {
-                return;
-            }
             dashPressed = dashPressed || context.started;
         }
         public void Wire(InputAction.CallbackContext context)
         {
-            if (isLocked)
-            {
-                return;
-            }
             wireThrown = wireThrown || context.started;
         }
     }

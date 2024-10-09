@@ -93,7 +93,7 @@ namespace CharacterController
                 inBounceMode = false;
             }
 
-            float inputPower = horizontalInput * Mathf.Clamp(Mathf.Abs(Mathf.Sin(angle)), 0, 1);
+            float inputPower = 0;
 
             // if the player is actively colliding against something, only consider the manual input to prevent infinite force buildup
             if (inBounceMode)
@@ -102,6 +102,7 @@ namespace CharacterController
             }
             else
             {
+                inputPower = horizontalInput * Mathf.Clamp(Mathf.Abs(Mathf.Sin(angle)), 0, 1);
                 angularAccel = (-Mathf.Cos(angle) * WireSwingNaturalAccelMultiplier) + (inputPower * PlayerSwayAcceleration);
             }
             // Add decay if accel and vel are in different directions
