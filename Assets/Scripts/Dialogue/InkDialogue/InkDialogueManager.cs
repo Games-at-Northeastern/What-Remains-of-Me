@@ -13,16 +13,23 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private float typingSpeed = 0.04f;
     [SerializeField] private float dialogueDelayTime = 100f;
     [SerializeField] private float exitDialogueTime = 1.0f;
-    
+
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanelRight;
-    [SerializeField] private GameObject dialoguePanelTop; 
+    [SerializeField] private GameObject dialoguePanelTop;
     [SerializeField] private TextMeshProUGUI dialogueTextRight;
     [SerializeField] private TextMeshProUGUI dialogueTextTop;
     [SerializeField] private TextMeshProUGUI displayNameTextRight;
     [SerializeField] private TextMeshProUGUI displayNameTextTop;
     [SerializeField] private Animator portraitAnimatorRight;
     [SerializeField] private Animator portraitAnimatorTop;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip dialogueTypingSoundClip;
+    [SerializeField] private float minPitch = 0.5f;
+    [SerializeField] private float maxPitch = 3f;
+    [Range(-3, 3)]
+    private static AudioSource audioSource;
 
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
@@ -73,10 +80,16 @@ public class InkDialogueManager : MonoBehaviour
         instance = this;
 
         dialogueVariables = new InkDialogueVariables(globalsJSON);
+
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     public static InkDialogueManager GetInstance()
     {
+        if (instance == null)
+        {
+            instance = new InkDialogueManager();
+        }
         return instance;
     }
 
@@ -249,6 +262,8 @@ foreach (char letter in line.ToCharArray())
         break;
     }
     dialogueText.maxVisibleCharacters++;
+            audioSource.pitch = Random.Range(minPitch, maxPitch);
+            audioSource.PlayOneShot(dialogueTypingSoundClip);
     yield return new WaitForSeconds(typingSpeed);
 }
 
