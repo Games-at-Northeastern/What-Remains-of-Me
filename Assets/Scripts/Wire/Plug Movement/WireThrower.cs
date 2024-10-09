@@ -284,6 +284,11 @@ public class WireThrower : MonoBehaviour
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
         PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
         pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
+        
+        // Play SFX for shooting plug
+        src.clip = shootWire;
+        src.Play();
+        
         pme.onTerminateRequest.AddListener(() => DestroyPlug());
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
