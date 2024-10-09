@@ -21,6 +21,7 @@ public class AnimationCutscene : MonoBehaviour
         private bool doCutscene;
     private bool moveCamera;
     [SerializeField] float waitTime = 1; // the amount of time to wait between moving the camera and starting the animation. Set to zero if you aren't moving the camera.
+
     // Start is called before the first frame update
     void Start()
     {

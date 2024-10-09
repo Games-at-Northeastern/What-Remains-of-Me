@@ -113,7 +113,7 @@ public class MovingElement : MonoBehaviour
             // catches *just after* we pass the point, in case a fixed-update loop doesn't manage to catch the first in time.
             // The 2nd case is theoretically never needed as physics always occurs in fixed-update, but if the accuracy is small
             // enough, the distance might never be smaller than it.
-            if (dist <= _locationAccuracy || dist > _previousDistance) // if we are close enough to point OR if we've passed the target point...
+            if (dist <= _locationAccuracy || dist > _previousDistance + 0.005) // if we are close enough to point OR if we've passed the target point...
             {
                 //Debug.Log("Fired for the following reason: " + (dist > _previousDistance ? $"distance ({dist}) is greater than previous ({_previousDistance})" : "within accuracy"));
                 if (_runtimePoints.Length == 1) {

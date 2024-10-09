@@ -27,7 +27,7 @@ namespace CharacterController
         {
             var speed = character.Speed;
             speed.y = Kinematics.VelocityTarget(character.Speed.y, slideGravity, Mathf.Sign(slideGravity) * maxWallSlideSpeed, Time.fixedDeltaTime);
-            character.Speed = (speed);
+            character.Speed = speed;
         }
         public AnimationType GetAnimationState() => AnimationType.WALL_SLIDE;
         /// <summary>
