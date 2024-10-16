@@ -25,7 +25,7 @@ public class OutletMeter : MonoBehaviour
     [SerializeField] private SpriteRenderer cleanMeter;
 
     [SerializeField] private float visualFillSpeed = 30;
-    [SerializeField] private float endLimits = 0.05f;
+    [SerializeField] private float endLimits = 0.2f;
 
     // the value represented by a full outlet with no limiters,
     // no outlet should store a max charge higher than this
@@ -45,7 +45,7 @@ public class OutletMeter : MonoBehaviour
     private float maxCharge;
 
     private bool plugConnected;
-    private bool coroutineRunning = false;
+    private bool updatingVisuals = false;
     private bool powered = false;
 
     private int _limiterState = 0;
@@ -87,6 +87,54 @@ public class OutletMeter : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if (updatingVisuals)
+        {
+            GetValues();
+            
+            if (!powered)
+            {
+                targetVirus = 0;
+                targetClean = 0;
+            }
+            else
+            {
+                targetVirus = actualVirus;
+                targetClean = actualClean;
+            }
+
+            
+
+            //currentVirus = Mathf.Lerp(currentVirus, targetVirus, visualFillSpeed * Time.deltaTime);
+            //currentClean = Mathf.Lerp(currentClean, targetClean, visualFillSpeed * Time.deltaTime);
+
+            currentVirus = Mathf.MoveTowards(currentVirus, targetVirus, visualFillSpeed * Time.deltaTime);
+            currentClean = Mathf.MoveTowards(currentClean, targetClean, visualFillSpeed * Time.deltaTime);
+
+            Debug.Log(currentClean);
+
+            VirusState = calculateEnergyState(currentVirus);
+            CleanState = calculateEnergyState(currentClean);
+
+            Debug.Log(_cleanState);
+
+            virusMeter.sprite = virusSprites[_virusState];
+            cleanMeter.sprite = cleanSprites[Mathf.Min(_cleanState + _virusState, cleanSprites.Length - 1)];
+
+            // Check if both energy and virus levels are low and not powered, then stop the coroutine
+            if (currentClean < endLimits && currentVirus < endLimits && !powered)
+            {
+                virusMeter.sprite = virusSprites[0];
+                cleanMeter.sprite = cleanSprites[0];
+                currentVirus = 0;
+                currentClean = 0;
+                updatingVisuals = false;
+                StopAllCoroutines();
+            }
+        }
+    }
+
     // Get the initial values from the associated Outlet object
     public void GetValues()
     {
@@ -109,9 +157,9 @@ public class OutletMeter : MonoBehaviour
         {
             powered = true;
             isDisplayed = true;
-            if (coroutineRunning || plugConnected)
+            if (updatingVisuals || plugConnected)
             { return; }
-            StartCoroutine(UpdateVisuals());
+            updatingVisuals = true;
         }
     }
 
@@ -141,53 +189,9 @@ public class OutletMeter : MonoBehaviour
         powered = false;
     }
 
-    // Coroutine for updating the meter visuals
-    private IEnumerator UpdateVisuals()
-    {
-        coroutineRunning = true;
-        while (true)
-        {
-            GetValues();
-            if (!powered)
-            {
-                targetVirus = 0;
-                targetClean = 0;
-            }
-            else
-            {
-                targetVirus = actualVirus;
-                targetClean = actualClean;
-            }
-
-            //currentVirus = Mathf.Lerp(currentVirus, targetVirus, visualFillSpeed * Time.deltaTime);
-            //currentClean = Mathf.Lerp(currentClean, targetClean, visualFillSpeed * Time.deltaTime);
-
-            currentVirus = Mathf.MoveTowards(currentVirus, targetVirus, visualFillSpeed * Time.deltaTime);
-            currentClean = Mathf.MoveTowards(currentClean, targetClean, visualFillSpeed * Time.deltaTime);
-
-            VirusState = calculateEnergyState(currentVirus);
-            CleanState = calculateEnergyState(currentClean);
-
-            virusMeter.sprite = virusSprites[_virusState];
-            cleanMeter.sprite = cleanSprites[Mathf.Min(_cleanState + _virusState, cleanSprites.Length - 1)];
-
-            // Check if both energy and virus levels are low and not powered, then stop the coroutine
-            if (currentClean < endLimits && currentVirus < endLimits && !powered)
-            {
-                virusMeter.sprite = virusSprites[0];
-                cleanMeter.sprite = cleanSprites[0];
-                currentVirus = 0;
-                currentClean = 0;
-                coroutineRunning = false;
-                StopAllCoroutines();
-            }
-
-            yield return null;
-        }
-    }
-
     private int calculateEnergyState(float current)
     {
+        Debug.Log(current < endLimits);
         if (current < endLimits)
         {
             return 0;

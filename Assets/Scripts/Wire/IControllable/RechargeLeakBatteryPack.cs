@@ -22,7 +22,7 @@ public class RechargeLeakBatteryPack : Outlet
 
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         // if (!playerConnected)
         // {
