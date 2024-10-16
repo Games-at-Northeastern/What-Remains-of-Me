@@ -248,8 +248,14 @@ MonoBehaviour:
   controlled: {fileID: 2201836448606567159}
   controlledSecondaries: []
   energyTransferSpeed: 20
+  outletLights: []
+  lerpSpeed: 0
+  connectedGoal: 0
+  chargingGoal: 0
   grappleOverrideRange: {fileID: 0}
   charge: 1
+  virusRatio: 0
+  effects: {fileID: 0}
 --- !u!1001 &2980429293012979191
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -328,10 +334,6 @@ PrefabInstance:
     - target: {fileID: 5170075248149157214, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}
       propertyPath: m_Name
       value: OutletMeter
-      objectReference: {fileID: 0}
-    - target: {fileID: 5170075248149157215, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}
-      propertyPath: visualFillSpeed
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5170075248503458148, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}
       propertyPath: m_SortingLayer
