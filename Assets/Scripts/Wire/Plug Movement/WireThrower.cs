@@ -547,6 +547,10 @@ public class WireThrower : MonoBehaviour
             }
         }
         _lastRecordedPosition = transform.position;
+
+        // Start the visuals of the new locked reticle's outlet meter (if any)
+        OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+        outletMeter?.StartVisuals();
     }
 
     /// <summary>
@@ -566,9 +570,6 @@ public class WireThrower : MonoBehaviour
 
         // Get the OutletMeter component from the new locked reticle (if any)
         outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
-
-        // Start the visuals of the new locked reticle's outlet meter (if any)
-        outletMeter?.StartVisuals();
     }
 
     #endregion

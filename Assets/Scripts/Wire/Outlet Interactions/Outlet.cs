@@ -141,9 +141,9 @@ public class Outlet : MonoBehaviour
                     maxCharge += cSec.GetMaxCharge(); 
                 }
             }
-            return maxCharge + controlled.GetMaxCharge();
+            maxCharge += controlled.GetMaxCharge();
         }
-        return 0f;
+        return maxCharge;
     }
 
     // Get the energy level of the controlled object
