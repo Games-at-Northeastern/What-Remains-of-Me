@@ -24,7 +24,7 @@ public class OutletMeter : MonoBehaviour
     [SerializeField] private SpriteRenderer virusMeter;
     [SerializeField] private SpriteRenderer cleanMeter;
 
-    [SerializeField] private float visualFillSpeed = 1;
+    [SerializeField] private float visualFillSpeed = 30;
     [SerializeField] private float endLimits = 0.05f;
 
     // the value represented by a full outlet with no limiters,

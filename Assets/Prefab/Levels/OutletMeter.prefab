@@ -387,9 +387,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3576e1a3be5524e9db4c2c4ff315e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Limiter: 0
-  Virus: 0
-  Clean: 0
   limiterSprites:
   - {fileID: 698217085, guid: d112babe050a71046bade6730cfa710f, type: 3}
   - {fileID: -543686007, guid: d112babe050a71046bade6730cfa710f, type: 3}
@@ -440,6 +437,9 @@ MonoBehaviour:
   limiterMeter: {fileID: 5170075248503458148}
   virusMeter: {fileID: 5170075248541758597}
   cleanMeter: {fileID: 5170075248091648093}
+  visualFillSpeed: 30
+  endLimits: 0.05
+  visualsAlwaysDisplayed: 0
 --- !u!225 &5170075248149157213
 CanvasGroup:
   m_ObjectHideFlags: 0
