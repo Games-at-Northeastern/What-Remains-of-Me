@@ -7,6 +7,9 @@ public class LookAheadCamera : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera virtualCam;
     private CinemachineFramingTransposer transposer;
+    [SerializeField] private PlayerController.PlayerController2D player;
+
+    private Vector3 currentLookAhead;
 
     private float maxLookAheadDistance = 3.5f; //max distance the camera can look ahead.
     private float lookAheadSpeed = 2f; //speed of camera movement.
@@ -16,6 +19,7 @@ public class LookAheadCamera : MonoBehaviour
     {
         //get the framing transposer component from the virtual camera
         transposer = virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>();
+        currentLookAhead = transposer.m_TrackedObjectOffset;
         thisCamera = Camera.main;
     }
 
@@ -35,6 +39,12 @@ public class LookAheadCamera : MonoBehaviour
         offset = Vector3.ClampMagnitude(offset, maxLookAheadDistance);
 
         //smoothly adjust the camera offset
-        transposer.m_TrackedObjectOffset = Vector3.Lerp(transposer.m_TrackedObjectOffset, offset, lookAheadSpeed * Time.deltaTime);
+        currentLookAhead = Vector3.Lerp(currentLookAhead, offset, lookAheadSpeed * Time.deltaTime);
+
+        //invert offset if player is facing left
+        transposer.m_TrackedObjectOffset = new Vector3(
+            currentLookAhead.x * ((player.LeftOrRight == CharacterController.Facing.left) ? -1 : 1),
+            currentLookAhead.y,
+            currentLookAhead.z);
     }
 }
