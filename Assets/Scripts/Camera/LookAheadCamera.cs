@@ -38,4 +38,3 @@ public class LookAheadCamera : MonoBehaviour
         transposer.m_TrackedObjectOffset = Vector3.Lerp(transposer.m_TrackedObjectOffset, offset, lookAheadSpeed * Time.deltaTime);
     }
 }
-x
