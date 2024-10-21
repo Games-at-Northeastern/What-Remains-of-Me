@@ -112,12 +112,8 @@ public class OutletMeter : MonoBehaviour
             currentVirus = Mathf.MoveTowards(currentVirus, targetVirus, visualFillSpeed * Time.deltaTime);
             currentClean = Mathf.MoveTowards(currentClean, targetClean, visualFillSpeed * Time.deltaTime);
 
-            Debug.Log(currentClean);
-
             VirusState = calculateEnergyState(currentVirus);
             CleanState = calculateEnergyState(currentClean);
-
-            Debug.Log(_cleanState);
 
             virusMeter.sprite = virusSprites[_virusState];
             cleanMeter.sprite = cleanSprites[Mathf.Min(_cleanState + _virusState, cleanSprites.Length - 1)];
@@ -191,7 +187,6 @@ public class OutletMeter : MonoBehaviour
 
     private int calculateEnergyState(float current)
     {
-        Debug.Log(current < endLimits);
         if (current < endLimits)
         {
             return 0;
