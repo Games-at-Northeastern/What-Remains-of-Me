@@ -40,7 +40,7 @@ namespace CharacterController
         {
 
             Vector2 speed = character.Speed;
-            Vector2 b4 = speed;
+            Vector2 initialSpeed = speed;
             if (Mathf.Abs(speed.x) > Mathf.Abs(maxRunSpeed * xInput))
             {
                 //decelerating
@@ -50,7 +50,7 @@ namespace CharacterController
             {
                 speed.x = Kinematics.VelocityTowards(speed.x, acceleration, xInput * maxRunSpeed, Time.fixedDeltaTime);
             }
-            //Debug.Log("before speed: " + b4 + "AfterSpeed: " + speed);
+            //Debug.Log("before speed: " + initialSpeed + "AfterSpeed: " + speed);
             character.Speed = speed;
         }
         public AnimationType GetAnimationState() => throw new System.NotImplementedException();
