@@ -15233,7 +15233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 3.275
+      value: 2.54
       objectReference: {fileID: 0}
     - target: {fileID: 5507190965753065182, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_BiasX
@@ -15255,7 +15255,12 @@ PrefabInstance:
       propertyPath: m_TrackedObjectOffset.y
       value: -2.69007
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 5528148736629256998, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1028354831}
+    m_RemovedComponents:
+    - {fileID: 5528148736629256998, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
 --- !u!1 &1483660559
 GameObject:
@@ -15483,6 +15488,8 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!61 &1508278261
 BoxCollider2D:
@@ -43892,6 +43899,8 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!61 &1775548171
 BoxCollider2D:
