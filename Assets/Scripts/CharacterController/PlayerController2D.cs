@@ -29,7 +29,7 @@ namespace PlayerController
     {
         // Issue: public fields should not exist, and should instead be accessed using an External Getter
         public Vector2 ExternalVelocity; // Vector which external objects (moving platforms, for the most part), modify to change the player's speed
-        private Vector2 speed_ = Vector2.zero; // speed controlled by actions and inputs native to the player (Basic Ground Movement, Jumping, Swinging, Sliding, etc.)
+        private Vector2 _speed = Vector2.zero; // speed controlled by actions and inputs native to the player (Basic Ground Movement, Jumping, Swinging, Sliding, etc.)
         [Header("General")]
         [SerializeField] private PlayerState startState = PlayerState.Aerial; // initial player movement state
         public enum PlayerState
@@ -97,7 +97,7 @@ namespace PlayerController
         #endregion
 
         #region External Getters
-        public Vector2 Speed { get => speed_; set => speed_ = value; }
+        public Vector2 Speed { get => _speed; set => _speed = value; }
 
         public Vector2 Velocity => rb.velocity;
 
@@ -178,7 +178,7 @@ namespace PlayerController
                     }
                     break;
             }
-            rb.velocity = speed_ + ExternalVelocity;
+            rb.velocity = _speed + ExternalVelocity;
             HandleExternalVelocityDecay();
         }
 
@@ -191,7 +191,7 @@ namespace PlayerController
             if (ExternalVelocity.y < 0 && !grounded)
             {
 
-                speed_.y = Mathf.Clamp(rb.velocity.y, stats_.terminalVelocity, 0);
+                _speed.y = Mathf.Clamp(rb.velocity.y, stats_.terminalVelocity, 0);
                 ExternalVelocity.y = 0;
             }
         }
@@ -272,6 +272,7 @@ namespace PlayerController
             bool lastGroundedState = grounded;
             grounded = TouchingGround();
 
+
             if (!lastGroundedState && grounded) // Landed
             {
                 timeSinceLanded = 0;
@@ -333,6 +334,8 @@ namespace PlayerController
 
         #region Grounded and Aerial
 
+        
+
         /// <summary>
         /// Handles _speed.y when the player is grounded
         /// </summary>
@@ -340,7 +343,7 @@ namespace PlayerController
         {
             if (fLanded) // On landing, sets _speed.y to a small negative value and resets ExternalVelocity
             {
-                speed_.y = -1 * Time.fixedDeltaTime;
+                _speed.y = -1 * Time.fixedDeltaTime;
                 if (ExternalVelocity.y > 0)
                 {
                     ExternalVelocity.y = 0;
@@ -349,11 +352,28 @@ namespace PlayerController
         }
 
         /// <summary>
+        /// A helper function that uses _speed.x to stop horizontal player momentum in the direction of the wall the player is touching.
+        /// </summary>
+        private void IfTouchingWallThenStopMomentum()
+        {
+            if (TouchingLeftWall() && _speed.x < 0)
+            {
+                _speed.x = 0;
+            }
+            if (TouchingRightWall() && _speed.x > 0)
+            {
+                _speed.x = 0;
+            }
+        }
+
+        /// <summary>
         /// Handles horizontal movement when the player is grounded
         /// </summary>
         protected virtual void HandleGroundHorizontal()
         {
+            IfTouchingWallThenStopMomentum();
             groundMovement.UpdateDirection(inputs.GetMoveInput().x);
+            
             groundMovement.ContinueMove();
         }
 
@@ -362,6 +382,7 @@ namespace PlayerController
         /// </summary>
         protected virtual void HandleAirHorizontal()
         {
+            IfTouchingWallThenStopMomentum();
             airMovement.UpdateDirection(inputs.GetMoveInput().x);
             airMovement.ContinueMove();
         }
@@ -399,7 +420,7 @@ namespace PlayerController
                     }
                 }
 
-                speed_.y = Mathf.Max(stats_.terminalVelocity, Speed.y + gravityDelta);
+                _speed.y = Mathf.Max(stats_.terminalVelocity, Speed.y + gravityDelta);
             }
         }
         #endregion
@@ -465,9 +486,14 @@ namespace PlayerController
         /// <returns></returns>
         public bool TouchingLeftWall()
         {
+            
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
             List<RaycastHit2D> hits = new List<RaycastHit2D>();
             Physics2D.BoxCast(origin + new Vector2(-stats_.leftOffset, 0), new Vector2(0.01f, stats_.sideBounds.y), 0, Vector2.left, filter, hits, stats_.sideBounds.x - 0.01f);
+            if (HitSolidObject(hits))
+            {
+                print("Touching Left wall");
+            }
             return HitSolidObject(hits);
         }
 
@@ -480,6 +506,10 @@ namespace PlayerController
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
             List<RaycastHit2D> hits = new List<RaycastHit2D>();
             Physics2D.BoxCast(origin + new Vector2(stats_.rightOffset, 0), new Vector2(0.01f, stats_.sideBounds.y), 0, Vector2.right, filter, hits, stats_.sideBounds.x - 0.01f);
+            if (HitSolidObject(hits))
+            {
+                print("Touching Right wall");
+            }
             return HitSolidObject(hits);
         }
 
@@ -552,7 +582,7 @@ namespace PlayerController
             rb.velocity = Vector2.zero;
             currentState = PlayerState.Aerial;
             ExternalVelocity = Vector2.zero;
-            speed_ = Vector2.zero;
+            _speed = Vector2.zero;
         }
         /// <summary>
         /// Resets the player to their original position. For debugging only.
@@ -563,7 +593,7 @@ namespace PlayerController
             rb.velocity = Vector2.zero;
             ExternalVelocity = Vector2.zero;
             currentState = PlayerState.Aerial;
-            speed_ = Vector2.zero;
+            _speed = Vector2.zero;
         }
 
         #endregion
@@ -591,7 +621,7 @@ namespace PlayerController
             switch (currentState)
             {
                 case PlayerState.Grounded:
-                    if (speed_.x != 0)
+                    if (_speed.x != 0)
                     {
                         return AnimationType.RUN;
                     }
@@ -601,7 +631,7 @@ namespace PlayerController
                     }
                     break;
                 case PlayerState.Aerial:
-                    if (speed_.y > 0)
+                    if (_speed.y > 0)
                     {
                         return AnimationType.JUMP_RISING;
                     }
