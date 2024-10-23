@@ -21,6 +21,12 @@ public class ControllableDoor : AControllable
         get => shouldDisappear;
         set
         {
+            shouldDisappear = value;
+            if (boxCollider == null)
+            {
+                maskObject.SetActive(false);
+                return;
+            }
             if (!value)
             {
                 boxCollider.size = renderer.size;
@@ -51,14 +57,7 @@ public class ControllableDoor : AControllable
         boxCollider.size = renderer.size;
         defaultOffset = boxCollider.offset;
 
-        if (shouldDisappear)
-        {
-            maskObject.SetActive(true);
-        }
-        else
-        {
-            maskObject.SetActive(false);
-        }
+        ShouldDisappear = shouldDisappear;
     }
 
     private float lastFull;

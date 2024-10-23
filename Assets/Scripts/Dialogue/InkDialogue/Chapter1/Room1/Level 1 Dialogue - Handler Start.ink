@@ -7,4 +7,6 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 You seem to be intact. That’s good. Try moving around while I run a few tests on my %:;&::%:;%:&
 
+You can use this lab's testing chamber to recalibrate and ensure you're still operational.
+
 -> END
