@@ -7,18 +7,17 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===firstInteraction===
-MESSAGE:: Activation Initialization Instructions  #portrait:isp #speaker:I.S.P.
-SENDER:: Internal Security Protocol A.I.
+SENDER:: Internal Security Protocol A.I. #portrait:isp #speaker:I.S.P.
 RECIEVER:: Atlas class Robot \#1297
-PROCEDURE:: Use <A> and <D> actuators to move left and right.
-...
-MESSAGE:: Speak to your Handler for situation briefing.
-...
-MESSAGE:: Obey your Handler.
+
+:: Obey your Handler.
+
+:: Use <A> and <D> actuators to move left and right.
+
+PROCEDURE:: Find your handler.
+
 
 ->DONE
-
-
 
 ->END
 
