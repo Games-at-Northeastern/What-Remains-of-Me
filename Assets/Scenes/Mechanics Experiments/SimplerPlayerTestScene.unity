@@ -1591,6 +1591,7 @@ GameObject:
   - component: {fileID: 1167821252}
   - component: {fileID: 1167821251}
   - component: {fileID: 1167821250}
+  - component: {fileID: 1167821253}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1664,6 +1665,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1167821253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167821249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1001 &1200355395
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1896,8 +1930,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326b23119f03c4f4f89803f2ad16c3f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerSounds: {fileID: 11400000, guid: 1a58408fb5a4dc94685578494c771d77, type: 2}
-  _playerAudioSource: {fileID: 5992477196181777245}
 --- !u!4 &2784658832817446790
 Transform:
   m_ObjectHideFlags: 0
@@ -2284,6 +2316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b05a674dca26347eb9494113e6493348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  warning: {fileID: 0}
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
   OnHealthChanged:
     m_PersistentCalls:
@@ -2347,12 +2380,29 @@ MonoBehaviour:
   _lineRenderer: {fileID: 3578605741166595775}
   _distanceJoint: {fileID: 8948377471953483215}
   reticle: {fileID: 9205282950931178031}
+  energySparks: {fileID: 0}
+  flowSpeed: 1
   onConnect:
     m_PersistentCalls:
       m_Calls: []
   onDisconnect:
     m_PersistentCalls:
       m_Calls: []
+  pc: {fileID: 0}
+  contactFilter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
   DirectionAffectsPriority: 1
 --- !u!114 &3893594056444541580
 MonoBehaviour:
@@ -2937,19 +2987,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83dfc1d866f4ce54f9aa00ad217def1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: 587debca046dd6748879c19fe3fb34ed, type: 2}
+  ExternalVelocity: {x: 0, y: 0}
+  startState: 1
+  stats_: {fileID: 0}
   wire: {fileID: 3578605742671356662}
   col: {fileID: 5145177997353209574}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  ceilingBounds: {x: 0.69, y: 0.12}
-  ceilingOffset: 0.55
-  sideBounds: {x: 0.06, y: 1.23}
-  leftOffset: 0.36
-  rightOffset: 0.36
-  groundBounds: {x: 0.64, y: 0.33}
-  groundOffset: 0.41
+  inputs: {fileID: 0}
 --- !u!114 &8948377471953483217
 MonoBehaviour:
   m_ObjectHideFlags: 0
