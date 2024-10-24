@@ -23,6 +23,7 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI displayNameTextTop;
     [SerializeField] private Animator portraitAnimatorRight;
     [SerializeField] private Animator portraitAnimatorTop;
+    [SerializeField] private Animator handlerAnimator;
 
     [Header("Audio")]
     [SerializeField] private AudioClip dialogueTypingSoundClip;
@@ -328,6 +329,11 @@ foreach(string tag in currentTags)
         } else {
             displayNameTextTop.text = tagValue;
             Debug.Log("Speaker = " + tagValue);
+        }
+        if (tagValue == "Jones A.I." && handlerAnimator != null) {
+            handlerAnimator.Play("JonesTakeOver");
+        } else if (tagValue == "Handler" && handlerAnimator != null) {
+            handlerAnimator.Play("JonesUnTakeOver");
         }
             break;
         case PORTRAIT_TAG:
