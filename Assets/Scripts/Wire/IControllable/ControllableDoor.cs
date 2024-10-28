@@ -22,40 +22,74 @@ public class ControllableDoor : AControllable
         set
         {
             shouldDisappear = value;
-            if (boxCollider == null)
+            maskObject.SetActive(value);
+            if (!boxCollider || !doorRenderer)
             {
-                maskObject.SetActive(false);
                 return;
+            }
+
+            RecalcMaskLoc();
+
+            if (value)
+            {
+                InvertMask = invertMask;
             }
             if (!value)
             {
-                boxCollider.size = renderer.size;
+                doorRenderer.maskInteraction = SpriteMaskInteraction.None;
+                boxCollider.size = doorRenderer.size;
                 boxCollider.offset = defaultOffset;
-                maskObject.SetActive(false);
                 return;
             }
-            maskObject.SetActive(true);
         }
     }
 
     [SerializeField] private GameObject maskObject;
-    private BoxCollider2D boxCollider;
+
+    [Tooltip("Sets object to be fully visible at 100% energy, rather than at 0% energy. Enable when making a door which opens as energy is drained, rather than as energy is inputted. ")]
+    [SerializeField] private bool invertMask;
+
+    public bool InvertMask
+    {
+        get => invertMask;
+        set
+        {
+            invertMask = value;
+
+            if (shouldDisappear && doorRenderer)
+            {
+                RecalcMaskLoc();
+                if (!invertMask)
+                {
+                    doorRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                }
+                else
+                {
+                    doorRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                }
+            }
+        }
+    }
+
+    private BoxCollider2D boxCollider = null;
     private Vector2 defaultOffset;
-    private SpriteRenderer renderer;
+    private SpriteRenderer doorRenderer = null;
 
     [Header("Position In Editor: Zero Energy")]
-    [SerializeField] Vector2 posChangeForMaxEnergy;
+    [SerializeField] private Vector2 posChangeForMaxEnergy;
 
     private void Awake()
     {
         initPos = transform.position;
-        lastFull = this.GetPercentFull();
+        lastFull = -1;
 
         boxCollider = GetComponent<BoxCollider2D>();
-        renderer = GetComponent<SpriteRenderer>();
+        doorRenderer = GetComponent<SpriteRenderer>();
 
-        boxCollider.size = renderer.size;
+        boxCollider.size = doorRenderer.size;
         defaultOffset = boxCollider.offset;
+
+        maskObject.transform.localScale = doorRenderer.size;
 
         ShouldDisappear = shouldDisappear;
     }
@@ -77,17 +111,124 @@ public class ControllableDoor : AControllable
             if (shouldDisappear)
             {
                 maskObject.SetActive(true);
-                boxCollider.size = new Vector2(renderer.size.x, renderer.size.y * (1 - percentFull));
-                boxCollider.offset = defaultOffset + new Vector2(0, renderer.size.y * -(percentFull / 2));
+                // boxCollider.size = new Vector2(doorRenderer.size.x, doorRenderer.size.y * (1 - percentFull));
+                //boxCollider.offset = defaultOffset + new Vector2(0, doorRenderer.size.y * -(percentFull / 2));
+                CalcColliderSize();
             }
         }
 
         lastFull = percentFull;
     }
 
+    private void CalcColliderSize()
+    {
+        SpriteMask maskRend = maskObject.GetComponent<SpriteMask>();
+
+        if (posChangeForMaxEnergy.y != 0)
+        {
+            float lowBound = 0;
+            float highBound = 0;
+            float shiftSign = 0;
+
+            if (posChangeForMaxEnergy.y * (invertMask ? -1 : 1) < 0)
+            {
+                lowBound = doorRenderer.bounds.center.y - doorRenderer.bounds.extents.y;
+                highBound = maskRend.bounds.center.y + maskRend.bounds.extents.y;
+                shiftSign = 1;
+            }
+
+            if (posChangeForMaxEnergy.y * (invertMask ? -1 : 1) > 0)
+            {
+                lowBound = maskRend.bounds.center.y - maskRend.bounds.extents.y;
+                highBound = doorRenderer.bounds.center.y + doorRenderer.bounds.extents.y;
+                shiftSign = -1;
+            }
+
+            if (lowBound >= highBound)
+            {
+                boxCollider.size = doorRenderer.size;
+                boxCollider.offset = defaultOffset;
+                return;
+            }
+            else
+            {
+                float dist = highBound - lowBound;
+                float percentDec = dist / doorRenderer.bounds.size.y;
+                boxCollider.size = new Vector2(doorRenderer.size.x, doorRenderer.size.y * (1 - percentDec));
+                boxCollider.offset = new Vector2(0, doorRenderer.size.y * (shiftSign * percentDec / 2));
+                return;
+            }
+        }
+
+        if (posChangeForMaxEnergy.x != 0)
+        {
+            float lowBound = 0;
+            float highBound = 0;
+            float shiftSign = 0;
+
+            if (posChangeForMaxEnergy.x * (invertMask ? -1 : 1) < 0)
+            {
+                lowBound = doorRenderer.bounds.center.x - doorRenderer.bounds.extents.x;
+                highBound = maskRend.bounds.center.x + maskRend.bounds.extents.x;
+                shiftSign = 1;
+            }
+
+            if (posChangeForMaxEnergy.x * (invertMask ? -1 : 1) > 0)
+            {
+                lowBound = maskRend.bounds.center.x - maskRend.bounds.extents.x;
+                highBound = doorRenderer.bounds.center.x + doorRenderer.bounds.extents.x;
+                shiftSign = -1;
+            }
+
+            if (lowBound >= highBound)
+            {
+                boxCollider.size = doorRenderer.size;
+                boxCollider.offset = defaultOffset;
+                return;
+            }
+            else
+            {
+                float dist = highBound - lowBound;
+                float percentDec = dist / doorRenderer.bounds.size.x;
+                boxCollider.size = new Vector2(doorRenderer.size.x * (1 - percentDec), doorRenderer.size.y);
+                boxCollider.offset = new Vector2(doorRenderer.size.x * (shiftSign * percentDec / 2), 0);
+                return;
+            }
+        }
+    }
+
+    private void RecalcMaskLoc()
+    {
+        if (invertMask)
+        {
+            maskObject.transform.position = initPos;
+            return;
+        }
+        float maskOffX = Mathf.Abs(posChangeForMaxEnergy.x);
+        float maskOffSign = Mathf.Sign(posChangeForMaxEnergy.x);
+        if (maskOffX > 0)
+        {
+            maskOffX = Mathf.Max(posChangeForMaxEnergy.x, doorRenderer.size.x);
+        }
+        maskOffX *= maskOffSign;
+
+        float maskOffY = Mathf.Abs(posChangeForMaxEnergy.y);
+        maskOffSign = Mathf.Sign(posChangeForMaxEnergy.y);
+        if (maskOffY > 0)
+        {
+            maskOffY = Mathf.Max(posChangeForMaxEnergy.y, doorRenderer.size.y);
+        }
+        maskOffY *= maskOffSign;
+
+        maskObject.transform.position = initPos + new Vector2(maskOffX, maskOffY);
+    }
 
 #if UNITY_EDITOR
-    // switches disappear functionality when value is changed in editor
-    private void OnValidate() => ShouldDisappear = shouldDisappear;
+    // switches disappear and invertmask functionality when value is changed in editor
+    private void OnValidate()
+    {
+        ShouldDisappear = shouldDisappear;
+        InvertMask = invertMask;
+    }
 #endif
 }

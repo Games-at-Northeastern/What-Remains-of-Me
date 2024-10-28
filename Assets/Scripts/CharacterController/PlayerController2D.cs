@@ -394,6 +394,7 @@ namespace PlayerController
         {
             if (TouchingCeiling())
             {
+                Speed = new Vector2(Speed.x, 0);
                 CancelJump();
             }
             if ((!inputs.IsJumpHeld() && !jumpCanceled) || (!jumpCanceled
