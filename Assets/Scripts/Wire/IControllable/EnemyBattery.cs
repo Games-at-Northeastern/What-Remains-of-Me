@@ -15,7 +15,11 @@ public class EnemyBattery : AControllable
     /// </summary>
     private void Update()
     {
-        if ((cleanEnergy + virus) / maxCharge != 0 && (cleanEnergy + virus) / maxCharge != 1)
+        float cleanEnergy = GetClean();
+        float virus = GetVirus();
+        float maxCharge = GetEnergyMax();
+
+        if ((cleanEnergy + virus) / maxCharge is not 0 and not 1)
         {
             // Debug.Log("Energy: " + energy / maxEnergy);
         }

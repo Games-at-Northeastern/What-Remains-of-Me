@@ -34,7 +34,7 @@ public class StallingControllableDoor : AControllable
     /// </summary>
     void Update()
     {
-        float? virusPercent = GetVirusPercent();
+        float? virusPercent = GetPercentVirus();
         //Debug.Log("virus percent: " + virusPercent);
         if (virusPercent != null) {
             if (virusPercent < doVirusEffectAt) {

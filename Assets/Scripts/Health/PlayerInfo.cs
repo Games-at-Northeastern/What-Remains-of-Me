@@ -35,11 +35,26 @@ public class PlayerInfo : ScriptableObject
             _maxBattery = value;
         }
     }
+
+    public float clean
+    {
+        get => batteryPercentage.Value * maxBattery * (1 - virusPercentage.Value);
+        set
+        {
+            if (value < 0)
+            {
+                float v = virus;
+                float total = Mathf.Clamp(v + value, 0, maxBattery);
+                battery = total;
+            }
+        }
+    }
+
     [HideInInspector] public IReactiveProperty<float> virusPercentage;
     public float virus
     {
         get => virusPercentage.Value * maxVirus;
-        set => virusPercentage.Value = (value / maxVirus);
+        set => virusPercentage.Value = value / maxVirus;
     }
     public float maxVirus = 100;
     [SerializeField] private float initialMaxBattery;

@@ -30,14 +30,14 @@ public class CutsceneDoorScript : MonoBehaviour
 
     private void ProcessUpdate(float _)
     {
-        Debug.Log(npc.GetVirus() + " virus " + npc.GetEnergy() + " energy " + npc.GetVirusPercent() + " percent");
+        Debug.Log(npc.GetVirus() + " virus " + npc.GetEnergy() + " energy " + npc.GetPercentVirus() + " percent");
 
         if (npc.GetEnergy() <= 0.5f || npc.GetVirus() >= 50f)
         {
             KillNPC();
             OpenDoor();
         }
-        else if (npc.GetVirusPercent() <= 0.4f)
+        else if (npc.GetPercentVirus() <= 0.4f)
         {
             OpenDoor();
         }
@@ -50,5 +50,9 @@ public class CutsceneDoorScript : MonoBehaviour
         toDisable.Invoke(false);
     }
 
-    private void OpenDoor() => door.GainEnergy(50);
+    private void OpenDoor()
+    {
+        door.overrideEnergy = true;
+        door.overridePercentFull = 1;
+    }
 }

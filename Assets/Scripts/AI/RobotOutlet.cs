@@ -65,7 +65,7 @@ public class RobotOutlet : AControllable
         // behavior should change depending on virus
 
         // update sprite based on current virus/clean energy level
-        if (cleanEnergy > 1 || virus > 1)
+        if (GetClean() > 1 || GetVirus() > 1)
         {
             spriteRenderer.sprite = chargedRobot;
         }
@@ -77,11 +77,11 @@ public class RobotOutlet : AControllable
         // Update ink script for enemy to say
         if (playerInfo.virus <= 50) // atlas has low virus level
         {
-            if (virus < 50) // enemy has low virus level
+            if (GetVirus() < 50) // enemy has low virus level
             {
                 currentInkJSONScript = atlasLowEnemyLowVirusScript;
             }
-            else if (virus >= 50 && virus < 80) // enemy has medium virus level
+            else if (GetVirus() is >= 50 and < 80) // enemy has medium virus level
             {
                 currentInkJSONScript = atlasLowEnemyMediumVirusScript;
             }
@@ -93,11 +93,11 @@ public class RobotOutlet : AControllable
         }
         else // atlas has high virus level
         {
-            if (virus < 50)
+            if (GetVirus() < 50)
             {
                 currentInkJSONScript = atlasHighEnemyLowVirusScript;
             }
-            else if (virus >= 50 && virus < 80) // enemy has medium virus level
+            else if (GetVirus() is >= 50 and < 80) // enemy has medium virus level
             {
                 currentInkJSONScript = atlasHighEnemyMediumVirusScript;
             }

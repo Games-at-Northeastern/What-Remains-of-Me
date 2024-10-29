@@ -20,7 +20,7 @@ public class NPCOutlet : AControllable
     // Update is called once per frame
     void Update()
     {
-        if(virus > virusLevelUpdate) {
+        if(GetVirus() > virusLevelUpdate) {
             dialogueTrigger.inkJSON = infectedScript;
         } else {
             dialogueTrigger.inkJSON = cleanScript;

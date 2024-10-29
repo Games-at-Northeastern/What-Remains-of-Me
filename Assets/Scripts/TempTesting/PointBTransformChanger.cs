@@ -21,7 +21,7 @@ public class PointBTransformChanger : MonoBehaviour
 
     public void ChangeTransform(MovingElementController mec)
     {
-        if (mec.GetVirusPercent() > .7)
+        if (mec.GetPercentVirus() > .7)
         {
             if (!changed)
             {

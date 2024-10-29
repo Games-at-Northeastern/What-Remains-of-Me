@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
@@ -9,45 +11,31 @@ using UnityEngine.Rendering.Universal;
 /// </summary>
 public class Outlet : MonoBehaviour
 {
-
-    protected ControlSchemes CS;
-    [SerializeField] public AControllable controlled;
-    [SerializeField] protected List<AControllable> controlledSecondaries;
+    [SerializeField] protected float maxEnergy;
+    [SerializeField] protected float clean;
+    [SerializeField] protected float virus;
     [SerializeField] protected float energyTransferSpeed;
-    [SerializeField] protected List<Light2D> outletLights;
-    [SerializeField] protected float lerpSpeed, connectedGoal, chargingGoal;
-
     public Collider2D grappleOverrideRange;
 
-    protected string plugInSound = "Plug_In";
-    protected string givingChargeSound = "Giving_Charge";
-    protected string takingChargeSound = "Taking_Charge";
+    [Header("Outlet Lights")]
+    [SerializeField] protected List<Light2D> outletLights;
+    [SerializeField] protected float intensityLerpSpeed, connectedIntensity, chargingIntensity;
 
-    float goalIntensity = 0f;
+    [Header("Audio")]
+    [SerializeField] protected string plugInSound = "Plug_In";
+    [SerializeField] protected string givingChargeSound = "Giving_Charge";
+    [SerializeField] protected string takingChargeSound = "Taking_Charge";
 
-    private void Awake()
-    {
-        // TODO : This should be moved into one of the player scripts
-        CS = new ControlSchemes();
-        CS.Player.GiveEnergy.performed += _ => { if (controlled != null) { StartCoroutine("GiveEnergy"); goalIntensity = chargingGoal; } };
-        CS.Player.TakeEnergy.performed += _ => { if (controlled != null) { StartCoroutine("TakeEnergy"); goalIntensity = chargingGoal; } };
-        CS.Player.GiveEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("GiveEnergy"); SoundController.instance.StopSound(givingChargeSound); goalIntensity = connectedGoal; } };
-        CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); goalIntensity = connectedGoal; } };
-
-        //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
-    }
+    private float goalIntensity = 0f;
 
     /// <summary>
     /// Makes this outlet function as if the player is connected to it.
     /// </summary>
     public virtual void Connect()
     {
-        CS.Enable();
         SoundController.instance.PlaySound(plugInSound);
-        goalIntensity = connectedGoal;
+        goalIntensity = connectedIntensity;
         StartCoroutine(ControlLight());
-        //src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
-        //soundController.PlaySound("Plug_In");
     }
 
     /// <summary>
@@ -55,131 +43,136 @@ public class Outlet : MonoBehaviour
     /// </summary>
     public virtual void Disconnect()
     {
-        CS.Disable();
         StopAllCoroutines();
         StartCoroutine(FadeOutLight());
     }
 
+    // Event to be triggered whenever the virus amount changes,
+    // sending the current percentage of energy that is virus as a value between 0 and 1
+    [NonSerialized]
+    public UnityEvent<float> OnVirusChange;
+    public void VirusChange(float virusPercentage) => OnVirusChange?.Invoke(virusPercentage);
+
+    [NonSerialized]
+    public UnityEvent<float> OnEnergyChange;
+    public void EnergyChange(float totalEnergyAmount) => OnEnergyChange?.Invoke(totalEnergyAmount);
+
+    #region lights
+
     //Lerps the light to the goal
-    IEnumerator ControlLight()
+    private IEnumerator ControlLight()
     {
         while (true)
         {
             foreach (Light2D outletLight in outletLights)
-                outletLight.intensity = Mathf.Lerp(outletLight.intensity, goalIntensity, Time.deltaTime * lerpSpeed);
+            {
+                outletLight.intensity = Mathf.Lerp(outletLight.intensity, goalIntensity, Time.deltaTime * intensityLerpSpeed);
+            }
+
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
 
     //Fades out the light
-    IEnumerator FadeOutLight()
+    private IEnumerator FadeOutLight()
     {
         while (outletLights[0].intensity > 0.1f)
         {
             foreach (Light2D outletLight in outletLights)
-                outletLight.intensity = Mathf.Lerp(outletLight.intensity, 0f, Time.deltaTime * lerpSpeed);
+            {
+                outletLight.intensity = Mathf.Lerp(outletLight.intensity, 0f, Time.deltaTime * intensityLerpSpeed);
+            }
+
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
         foreach (Light2D outletLight in outletLights)
+        {
             outletLight.intensity = 0f;
-    }
-    /// <summary>
-    /// Gives energy to the controlled object until this coroutine is called to end.
-    /// </summary>
-    IEnumerator GiveEnergy()
-    {
-        while (true)
-        {
-            controlled.GainEnergy(energyTransferSpeed * Time.deltaTime);
-            foreach(AControllable cSec in controlledSecondaries)
-            {
-                if (cSec != null)
-                {
-                    cSec.GainEnergy(energyTransferSpeed * Time.deltaTime);
-                }
-            }
-            yield return new WaitForEndOfFrame();
-
-            // SFX
-            SoundController.instance.PlaySound(givingChargeSound);
         }
     }
 
-    /// <summary>
-    /// Takes energy from the controlled object until this coroutine is called to end.
-    /// </summary>
-    IEnumerator TakeEnergy()
-    {
-        while (true)
-        {
-            controlled.LoseEnergy(energyTransferSpeed * Time.deltaTime);
-            foreach (AControllable cSec in controlledSecondaries)
-            {
-                if (cSec != null)
-                {
-                    cSec.LoseEnergy(energyTransferSpeed * Time.deltaTime);
-                }
-            }
-            yield return new WaitForEndOfFrame();
+    #endregion
 
-            // SFX
-            SoundController.instance.PlaySound(takingChargeSound);
-        }
+    // accepts the max amount of clean and virus energy the caller is willing to give to the outlet,
+    // adds some amount of clean and virus energy to this outlet
+    // returns the amount of clean and virus energy drained from the caller
+    public Vector2 GiveEnergy(float maxClean, float maxVirus)
+    {
+        StoreEnergyVals();
+
+        float totalMax = maxClean + maxVirus;
+        totalMax = Mathf.Min(totalMax, maxEnergy - GetEnergy());
+        float givenEnergy = Mathf.Min(totalMax, Time.deltaTime * energyTransferSpeed);
+
+        float givenClean = (maxClean / totalMax) * givenEnergy;
+        float givenVirus = (maxVirus / totalMax) * givenEnergy;
+
+        clean += givenClean;
+        virus += givenVirus;
+
+        CheckEnergyVals();
+
+        return new Vector2(givenClean, givenVirus);
     }
 
-    // Get the maximum charge of the controlled object
-    public float GetMaxCharge()
+    // accepts the max amount of energy the energy reciever is willing to accept from the outlet,
+    // removes some amount of clean and virus energy from this outlet
+    // returns how much clean and virus energy the energy reciever should recieve
+    public Vector2 TakeEnergy(float maxRecieverCanTake)
     {
-        float maxCharge = 0f;
-        if (controlled != null)
-        {
-            foreach (AControllable cSec in controlledSecondaries)
-            {
-                if (cSec != null)
-                {
-                    maxCharge += cSec.GetMaxCharge(); 
-                }
-            }
-            maxCharge += controlled.GetMaxCharge();
-        }
-        return maxCharge;
+        StoreEnergyVals();
+
+        float takenEnergy = Mathf.Min(maxRecieverCanTake, Time.deltaTime * energyTransferSpeed);
+
+        float takenClean = (clean / GetEnergy()) * takenEnergy;
+        float takenVirus = (virus / GetEnergy()) * takenEnergy;
+
+        clean -= takenClean;
+        virus -= takenVirus;
+
+        CheckEnergyVals();
+
+        return new Vector2(takenClean, takenVirus);
     }
 
     // Get the energy level of the controlled object
-    public float GetEnergy()
+    public float GetEnergy() => clean + virus;
+
+    public float GetClean() => clean;
+
+    public float GetVirus() => virus;
+
+    public float GetMaxEnergy() => maxEnergy;
+
+    public float GetPercentFull() => GetEnergy() / maxEnergy;
+
+    public float GetPercentVirus() => GetVirus() / maxEnergy;
+
+    // private methods for checking changes in energy
+
+    private float previousEnergy = 0;
+    private float previousVirus = 0;
+    private float previousVirusPercent = 0;
+
+    private void StoreEnergyVals()
     {
-        float energy = 0f;
-        if (controlled != null)
-        {
-            foreach (AControllable cSec in controlledSecondaries)
-            {
-                if (cSec != null)
-                {
-                    energy += cSec.GetEnergy();
-                }
-            }
-            return energy + controlled.GetEnergy();
-        }
-        return 0f;
+        previousEnergy = GetEnergy();
+        previousVirus = GetVirus();
+        previousVirusPercent = GetPercentVirus();
     }
 
-    // Get the virus level of the controlled object
-    public float GetVirus()
+    private void CheckEnergyVals()
     {
-        float virus = 0f;
-        if (controlled != null)
+        if (previousEnergy != GetEnergy())
         {
-            foreach (AControllable cSec in controlledSecondaries)
-            {
-                if (cSec != null)
-                {
-                    virus += cSec.GetVirus();
-                }
-            }
-            return virus + controlled.GetVirus();
+            EnergyChange(GetEnergy());
         }
-        return 0f;
+
+        if (previousVirus != GetVirus() || previousVirusPercent != GetPercentVirus())
+        {
+            VirusChange(GetVirus());
+        }
     }
 }
 

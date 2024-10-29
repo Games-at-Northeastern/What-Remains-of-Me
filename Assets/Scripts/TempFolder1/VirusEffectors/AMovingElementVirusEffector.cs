@@ -30,7 +30,7 @@ namespace Levels.Objects.Platform
 
             _elementController.OnVirusChange.AddListener(UpdateVirusPercentageAndApply);
 
-            float? startPercent = _elementController.GetVirusPercent();
+            float? startPercent = _elementController.GetPercentVirus();
             if (startPercent.HasValue) {
                 UpdateVirusPercentageAndApply(startPercent.Value);
             }

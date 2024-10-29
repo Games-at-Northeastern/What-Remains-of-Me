@@ -661,12 +661,8 @@ public class WireThrower : MonoBehaviour
         OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
         outletMeter?.StartVisuals();
         outletMeter?.ConnectPlug();
-        ConnectedOutletsControllable = ConnectedOutlet.controlled;
-        if(ConnectedOutletsControllable != null)
-        {
-            ConnectedOutletsControllable.OnVirusChange.AddListener(setSparkColor);
-            ConnectedOutletsControllable.OnEnergyChange.AddListener(showEnergyFlow);
-        }
+        ConnectedOutlet.OnVirusChange.AddListener(setSparkColor);
+        ConnectedOutlet.OnEnergyChange.AddListener(showEnergyFlow);
         
     }
 
@@ -680,12 +676,8 @@ public class WireThrower : MonoBehaviour
         UpdateMeter(lastReticleLock);
         onDisconnect.Invoke();
         _distanceJoint.enabled = false;
-        if (ConnectedOutletsControllable != null)
-        {
-            ConnectedOutletsControllable.OnVirusChange.RemoveListener(setSparkColor);
-            ConnectedOutletsControllable.OnEnergyChange.RemoveListener(showEnergyFlow);
-            ConnectedOutletsControllable = null;
-        }
+        ConnectedOutlet.OnVirusChange.RemoveListener(setSparkColor);
+        ConnectedOutlet.OnEnergyChange.RemoveListener(showEnergyFlow);
         ConnectedOutlet.Disconnect();
         ConnectedOutlet = null;
     }

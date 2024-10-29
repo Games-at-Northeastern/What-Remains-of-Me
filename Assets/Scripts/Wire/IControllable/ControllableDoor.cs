@@ -44,6 +44,11 @@ public class ControllableDoor : AControllable
         }
     }
 
+    [System.NonSerialized]
+    public bool overrideEnergy = false;
+    [System.NonSerialized]
+    public float overridePercentFull = 0;
+
     [SerializeField] private GameObject maskObject;
 
     [Tooltip("Sets object to be fully visible at 100% energy, rather than at 0% energy. Enable when making a door which opens as energy is drained, rather than as energy is inputted. ")]
@@ -99,9 +104,15 @@ public class ControllableDoor : AControllable
     /// <summary>
     /// Updates the door's position based on the amount of energy supplied to it.
     /// </summary>
-    void Update()
+    private new void Update()
     {
+        base.Update();
         float percentFull = this.GetPercentFull();
+
+        if (overrideEnergy)
+        {
+            percentFull = overridePercentFull;
+        }
 
         if (!Mathf.Approximately(lastFull, percentFull))
         {
@@ -227,8 +238,29 @@ public class ControllableDoor : AControllable
     // switches disappear and invertmask functionality when value is changed in editor
     private void OnValidate()
     {
+        base.OnValidate();
         ShouldDisappear = shouldDisappear;
         InvertMask = invertMask;
+    }
+
+    [CustomEditor(typeof(ControllableDoor))]
+    public class ControllableDoorEditor : AControllable_Editor
+    {
+        private void OnEnable()
+        {
+            base.OnEnable();
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            DrawPropertiesExcluding(serializedObject, this.propertiesInBaseClass);
+
+            base.OnInspectorGUI();
+
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 #endif
 }

@@ -21,6 +21,9 @@ public class Valve : AControllable
     // Update is called once per frame
     void Update()
     {
+        float cleanEnergy = GetClean();
+        float virus = GetVirus();
+        float maxCharge = GetEnergyMax();
 
         if ((cleanEnergy + virus) == maxCharge && !_activated)
         {

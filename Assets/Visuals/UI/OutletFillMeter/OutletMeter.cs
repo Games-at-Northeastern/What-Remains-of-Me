@@ -78,7 +78,7 @@ public class OutletMeter : MonoBehaviour
 
         numEnergyTicks = cleanSprites.Length;
 
-        maxCharge = outlet.GetMaxCharge();
+        maxCharge = outlet.GetMaxEnergy();
         GetValues();
 
         if (visualsAlwaysDisplayed)

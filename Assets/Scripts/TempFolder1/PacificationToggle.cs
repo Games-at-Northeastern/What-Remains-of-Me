@@ -23,5 +23,5 @@ public class PacificationToggle : AListenerToggle
 
     // The gameobject is "pacified" when the energy enters below a certain value.
     // The event fires when state changes. It fires with a value of true when pacified.
-    protected override bool IsToggleActive() => (_percentageBased ? _observed.GetVirusPercent() : _observed.GetVirus()) <= _pacifiedWhenBelow;
+    protected override bool IsToggleActive() => (_percentageBased ? _observed.GetPercentVirus() : _observed.GetVirus()) <= _pacifiedWhenBelow;
 }

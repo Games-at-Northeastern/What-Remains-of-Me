@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,189 +10,308 @@ using UnityEngine.Events;
 /// such as a general implementation of the GainEnergy() and LoseEnergy()
 /// methods, and a representation of energy.
 /// </summary>
-public abstract class AControllable : MonoBehaviour, IControllable
+public abstract class AControllable : MonoBehaviour
 {
-    [SerializeField] protected float cleanEnergy;
-    [SerializeField] protected float maxCharge;
-    [SerializeField] protected float virus;
-
-    protected float totalEnergy => cleanEnergy + virus;
-
     public PlayerInfo playerInfo;
-
-    // Gets the clean energy contained within this controllable
-    public float GetEnergy()
-    {
-        return cleanEnergy;
-    }
-
-    // Gets the energy cap of this controllable
-    public float GetMaxCharge()
-    {
-        return maxCharge;
-    }
-
-    // Gets the number of units of virus contained within this controllable
-    public float GetVirus()
-    {
-        return virus;
-    }
 
     // Event to be triggered whenever the virus amount changes,
     // sending the current percentage of energy that is virus as a value between 0 and 1
-    public UnityEvent<float> OnVirusChange;
+    [NonSerialized] public UnityEvent<float> OnVirusChange;
     public void VirusChange(float virusPercentage) => OnVirusChange?.Invoke(virusPercentage);
 
-    public UnityEvent<float> OnEnergyChange;
+    [NonSerialized] public UnityEvent<float> OnEnergyChange;
     public void EnergyChange(float totalEnergyAmount) => OnEnergyChange?.Invoke(totalEnergyAmount);
 
-    /// <summary>
-    /// This controllable gains the given amount of energy and takes it from the player health.
-    /// <param name="amount"> float amount of energy for this controllable to gain </param>
-    /// </summary>
-    public void GainEnergy(float amount)
+    [SerializeField] protected List<Outlet> outlets;
+
+    public enum OutletCombinationType
     {
-        if (amount <= 0 || totalEnergy >= maxCharge || playerInfo.battery <= 1f)
+        Arithmetic,
+        Highest,
+        Lowest
+    }
+
+    public enum ArithComboOperation
+    {
+        Add,
+        Subtract,
+        None
+
+    }
+
+    [Serializable]
+    public class OutletArithmeticCombination
+    {
+        public ArithComboOperation energyOperation = ArithComboOperation.Add;
+        public ArithComboOperation maxOperation = ArithComboOperation.Add;
+    }
+
+    [SerializeField] protected OutletCombinationType outletCombinationType;
+    [SerializeField] protected List<OutletArithmeticCombination> outletArithmeticCombinations;
+
+    protected void Start() => StoreEnergyVals();
+
+    protected void Update()
+    {
+        if (CheckEnergyVals())
         {
-            return;
+            StoreEnergyVals();
         }
-        float totalEnergyBefore = totalEnergy;
-
-        // this is the cause of the outlet's never filling up to full
-        amount = Mathf.Min(amount, maxCharge - totalEnergy);
-        amount = Mathf.Min(amount, playerInfo.battery - 1f);
-
-        float virusProportion = playerInfo.virus / playerInfo.battery;
-
-        playerInfo.battery -= amount;
-        playerInfo.virus -= amount * virusProportion;
-
-        cleanEnergy += amount * (1f - virusProportion);
-        virus += amount * virusProportion;
-
-        VirusChange(virus / totalEnergy);
-        EnergyChange(totalEnergy - totalEnergyBefore);
-
-        //Debug.Log("battery: " + cleanEnergy + " clean energy units, " + virus + " virus units.");
-        //Debug.Log("player: " + (playerInfo.battery - playerInfo.virus) + " clean energy units, " + playerInfo.virus + " virus units");
     }
 
-    /// <summary>
-    /// This controllable gains the given amount of energy without taking any from the player health.
-    /// <param name="amount"> float amount of virus for this controllable to gain </param>
-    /// </summary>
-    public void CreateEnergy(float amount, float virusRatio)
+    // returns the total energy supplied by outlets
+    public float GetEnergy() => GetEnergyQuantity("total");
+
+    // returns the total clean energy supplied by outlets
+    public float GetClean() => GetEnergyQuantity("clean");
+
+    // returns the total virus energy supplied by outlets
+    public float GetVirus() => GetEnergyQuantity("virus");
+
+    // returns the percentage of energy supplied by the outlets out of the total possible energy supplied by the outlets
+    public float GetPercentFull() => Mathf.Clamp(GetEnergyQuantity("total") / GetEnergyMax(), 0, 1);
+
+    // returns what percent of energy in the outlet is clean
+    public float? GetPercentClean()
     {
-        if (amount <= 0 || totalEnergy >= maxCharge)
+        float total = GetEnergyQuantity("total");
+        if (total == 0)
         {
-            return;
-        }
-
-        amount = Mathf.Min(amount, maxCharge - totalEnergy);
-
-        cleanEnergy += amount * (1f - virusRatio);
-        virus += amount * virusRatio;
-
-        VirusChange(virus / totalEnergy);
-        //EnergyChange(totalEnergy);
-    }
-
-    /// <summary>
-    /// This controllable loses the given amount of energy and gives it to the player health.
-    /// <param name="amount"> float amount of energy for this controllable to lose </param>
-    /// </summary>
-    public void LoseEnergy(float amount)
-    {
-        if (amount <= 0 || totalEnergy <= 0 || playerInfo.battery >= playerInfo.maxBattery)
-        {
-            return;
-        }
-        float totalEnergyBefore = totalEnergy;
-
-        amount = Mathf.Min(amount, totalEnergy);
-        amount = Mathf.Min(amount, playerInfo.maxBattery - playerInfo.battery);
-
-        float virusProportion = virus / totalEnergy;
-
-        playerInfo.battery += amount;
-        playerInfo.virus += amount * virusProportion;
-
-        cleanEnergy -= amount * (1f - virusProportion);
-        virus -= amount * virusProportion;
-
-        VirusChange(virus / totalEnergy);
-        EnergyChange(totalEnergy - totalEnergyBefore);
-
-        //Debug.Log("battery: " + cleanEnergy + " clean energy units, " + virus + " virus units.");
-        //Debug.Log("player: " + (playerInfo.battery - playerInfo.virus) + " clean energy units, " + playerInfo.virus + " virus units");
-    }
-
-    /// <summary>
-    /// This controllable loses the given amount of energy without giving it to the player.
-    /// <param name="amount"> float amount of virus for this controllable to lose </param>
-    /// </summary>
-    public void LeakEnergy(float amount)
-    {
-        if (amount <= 0 || totalEnergy <= 0)
-        {
-            return;
-        }
-
-        amount = Mathf.Min(amount, totalEnergy);
-
-        float virusProportion = virus / totalEnergy;
-
-        cleanEnergy -= amount * (1f - virusProportion);
-        virus -= amount * virusProportion;
-
-        VirusChange(virus / totalEnergy);
-        //EnergyChange(totalEnergy);
-    }
-
-    /// <summary>
-    /// Returns the percentage of total energy out of max energy that this AControllable has.
-    /// </summary>
-    public float GetPercentFull()
-    {
-        return totalEnergy / maxCharge;
-    }
-
-    /// <summary>
-    /// Returns the percentage of total energy in this AControllable which is infected by virus.
-    /// </summary>
-    public float? GetVirusPercent()
-    {
-        if (totalEnergy == 0f) {
             return null;
         }
-        return virus / totalEnergy;
+
+        return Mathf.Clamp(GetEnergyQuantity("clean") / total, 0, 1);
+    }
+
+    // returns what percent of energy in the outlet is virus
+    public float? GetPercentVirus()
+    {
+        float total = GetEnergyQuantity("total");
+        if (total == 0)
+        {
+            return null;
+        }
+
+        return Mathf.Clamp(GetEnergyQuantity("virus") / total, 0, 1);
     }
 
     /// <summary>
-    /// Can the controllable lose the given amount of energy?
-    /// <param name="amount"> float to compare to player energy </param>
+    /// Returns the total energy of some type this controllable has supplied by outlets
     /// </summary>
-    bool canLoseEnergy(float amount)
+    private float GetEnergyQuantity(string energyType)
     {
-        return totalEnergy >= amount;
-    }
+        Func<Outlet, float> eGetter = (outlet) => 0;
 
+        switch (energyType)
+        {
+            case "clean":
+                eGetter = (outlet) => outlet.GetClean();
+                break;
+            case "virus":
+                eGetter = (outlet) => outlet.GetVirus();
+                break;
+            case "total":
+                eGetter = (outlet) => outlet.GetEnergy();
+                break;
+            default:
+                return 0;
+        }
 
-    /// <summary>
-    /// Can the player gain the given amount of energy?
-    /// <param name="amount"> float to use as difference from max energy </param>
-    /// </summary>
-    bool canGainEnergy(float amount)
-    {
-        return totalEnergy + amount <= maxCharge;
-    }
+        if (outlets.Count == 0)
+        {
+            return 0;
+        }
 
-    //Debug Control
-    /*
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            Debug.Log("player virus percentage: " + (playerInfo.virus / playerInfo.battery));
+        if (outlets.Count == 1)
+        {
+            return eGetter.Invoke(outlets[0]);
+        }
+
+        switch (outletCombinationType)
+        {
+            case OutletCombinationType.Arithmetic:
+                float energy = 0;
+                for (int i = 0; i < outlets.Count; i++)
+                {
+                    float outVal = eGetter(outlets[i]);
+                    energy += GetArithmeticChange(outVal, outletArithmeticCombinations[i].energyOperation);
+                }
+                return energy;
+            case OutletCombinationType.Highest:
+                float highEnergy = 0;
+                for (int i = 0; i < outlets.Count; i++)
+                {
+                    float energ = eGetter(outlets[i]);
+                    if (energ > highEnergy)
+                    {
+                        highEnergy = energ;
+                    }
+                }
+                return highEnergy;
+            case OutletCombinationType.Lowest:
+                float lowEnergy = float.MaxValue;
+                bool changed = false;
+                for (int i = 0; i < outlets.Count; i++)
+                {
+                    float energ = eGetter(outlets[i]);
+                    if (energ < lowEnergy)
+                    {
+                        lowEnergy = energ;
+                        changed = true;
+                    }
+                }
+                return lowEnergy * (changed ? 1 : 0);
+            default:
+                return 0;
         }
     }
-    */
+
+    public float GetEnergyMax()
+    {
+        if (outlets.Count == 0)
+        {
+            return 0;
+        }
+
+        if (outlets.Count == 1)
+        {
+            return outlets[0].GetMaxEnergy();
+        }
+
+        switch (outletCombinationType)
+        {
+            case OutletCombinationType.Arithmetic:
+                float energyMax = 0;
+                for (int i = 0; i < outlets.Count; i++)
+                {
+                    energyMax += GetArithmeticChange(outlets[i].GetMaxEnergy(), outletArithmeticCombinations[i].maxOperation);
+                }
+                return energyMax;
+            case OutletCombinationType.Lowest:
+            case OutletCombinationType.Highest:
+                float highMax = 0;
+                for (int i = 0; i < outlets.Count; i++)
+                {
+                    float energ = outlets[i].GetMaxEnergy();
+                    if (energ > highMax)
+                    {
+                        highMax = energ;
+                    }
+                }
+                return highMax;
+            default:
+                return 0;
+        }
+    }
+
+
+    private float GetArithmeticChange(float val, ArithComboOperation combo) => combo switch
+    {
+        ArithComboOperation.Add => val,
+        ArithComboOperation.Subtract => -val,
+        ArithComboOperation.None => 0,
+        _ => 0,
+    };
+
+    public int GetNumOutlets() => outlets.Count;
+
+    // private methods for checking changes in energy
+
+    private float previousEnergy = 0;
+    private float previousVirus = 0;
+    private float? previousVirusPercent = 0;
+
+    private void StoreEnergyVals()
+    {
+        previousEnergy = GetEnergy();
+        previousVirus = GetVirus();
+        previousVirusPercent = GetPercentVirus();
+    }
+
+    private bool CheckEnergyVals()
+    {
+        bool res = false;
+
+        if (previousEnergy != GetEnergy())
+        {
+            EnergyChange(GetEnergy());
+            res = true;
+        }
+
+        if (previousVirus != GetVirus() || previousVirusPercent != GetPercentVirus())
+        {
+            VirusChange(GetVirus());
+            res = true;
+        }
+
+        return res;
+    }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(AControllable), false)]
+    public class AControllable_Editor : Editor
+    {
+        private bool baseFoldout = false;
+
+        private SerializedProperty outletsProp;
+        private SerializedProperty outletCombinationTypeProp;
+        private SerializedProperty outletArithmeticCombinationsProp;
+        private SerializedProperty playerInfoProp;
+
+        protected string[] propertiesInBaseClass = new string[] { "outlets", "outletCombinationType", "outletArithmeticCombinations", "playerInfo"};
+
+        protected void OnEnable()
+        {
+            outletsProp = serializedObject.FindProperty(propertiesInBaseClass[0]);
+            outletCombinationTypeProp = serializedObject.FindProperty(propertiesInBaseClass[1]);
+            outletArithmeticCombinationsProp = serializedObject.FindProperty(propertiesInBaseClass[2]);
+            playerInfoProp = serializedObject.FindProperty(propertiesInBaseClass[3]);
+        }
+        public override void OnInspectorGUI()
+        {
+            //serializedObject.Update();
+
+            AControllable controllable = target as AControllable;
+
+            EditorGUILayout.Space();
+
+            baseFoldout = EditorGUILayout.Foldout(baseFoldout, "AControllable Settings");
+
+            if (baseFoldout)
+            {
+
+                EditorGUILayout.PropertyField(playerInfoProp);
+
+                EditorGUILayout.PropertyField(outletsProp);
+
+                if (controllable.outlets.Count > 1)
+                {
+                    EditorGUILayout.PropertyField(outletCombinationTypeProp);
+
+                    if (controllable.outletCombinationType == OutletCombinationType.Arithmetic)
+                    {
+                        EditorGUILayout.PropertyField(outletArithmeticCombinationsProp);
+                    }
+                }
+            }
+
+            //serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    protected void OnValidate()
+    {
+        if (outlets.Count > 1 && outletCombinationType == OutletCombinationType.Arithmetic)
+        {
+            while (outletArithmeticCombinations.Count > outlets.Count)
+            {
+                outletArithmeticCombinations.RemoveAt(outletArithmeticCombinations.Count + (1 * -1));
+            }
+            while (outletArithmeticCombinations.Count < outlets.Count)
+            {
+                outletArithmeticCombinations.Add(new OutletArithmeticCombination());
+            }
+        }
+    }
+#endif
 }
