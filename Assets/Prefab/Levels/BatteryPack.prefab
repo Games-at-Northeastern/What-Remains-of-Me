@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5944958018626728825}
   - component: {fileID: 5944958018626728824}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BatteryPack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,6 +92,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5944958018626728825}
     m_Modifications:
+    - target: {fileID: 6801492477888477864, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6801492477888477864, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6801492477888477864, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1099278911
+      objectReference: {fileID: 0}
     - target: {fileID: 6801492477888477866, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
       propertyPath: m_Name
       value: Outlet
@@ -144,6 +156,54 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7990318868034579601, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318868034579601, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1099278911
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318868049004253, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318868049004253, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1099278911
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318868653122349, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318868653122349, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1099278911
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869602360746, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869602360746, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1099278911
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869743109267, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869743109267, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1099278911
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869781412210, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869781412210, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1099278911
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
 --- !u!4 &928720701408984995 stripped
@@ -169,8 +229,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cleanEnergy: 0
-  maxCharge: 50
-  virus: 0
+  maxCharge: 100
+  virus: 25
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
   OnVirusChange:
     m_PersistentCalls:
