@@ -14,10 +14,17 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
     [Header("How much virus the player should start with between 0 and 1")]
     [SerializeField] private float PlayerVirusStartingValue = 0f;
 
+    //Keeps track if this is the games first start. We will probably have to remove this once going to a save/load system.
+    public static bool firstStart = true;
 
     void Start()
     {
-        ResetHealth();
+        if (firstStart)
+        {
+            ResetHealth();
+            firstStart = false;
+        }
+        
 
         // Register the reset health event to occur when the player dies
         LevelManager.OnPlayerDeath.AddListener(ResetHealth);

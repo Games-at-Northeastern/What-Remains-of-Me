@@ -115,11 +115,11 @@ public class HiddenAreaTM : MonoBehaviour
         return false;
     }
 
-    public Texture2D stripOutline(Texture2D sp, int numOutlineColors)
+   /* public Texture2D stripOutline(Texture2D sp, int numOutlineColors)
     {
         List<Color> seenColors = new List<Color>();
-        for (int y = 0, x = 0; x < )
-    }
+        
+    }*/
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
