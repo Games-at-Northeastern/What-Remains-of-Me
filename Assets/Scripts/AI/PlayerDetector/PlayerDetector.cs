@@ -43,6 +43,7 @@ public class PlayerDetector : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("triggered");
+
         RaycastHit2D hit = Physics2D.Raycast(detectCone.transform.position, new Vector2(other.transform.position.x,other.transform.position.y), detectDistance);
         if (hit.collider!=null)
         {
@@ -68,6 +69,7 @@ public class PlayerDetector : MonoBehaviour
             new Vector2(1, 0), // right
             new Vector2(0, 1), // left
         };
+
         float totalAngle = detectConeAngle;
         float halfAngle = totalAngle * .5f;
         float compAngle = 90f - halfAngle;
@@ -81,6 +83,3 @@ public class PlayerDetector : MonoBehaviour
         pc.points = vertices;
     }
 }
-
-
-
