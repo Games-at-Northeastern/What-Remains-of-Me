@@ -248,8 +248,14 @@ MonoBehaviour:
   controlled: {fileID: 2201836448606567159}
   controlledSecondaries: []
   energyTransferSpeed: 20
+  outletLights: []
+  lerpSpeed: 0
+  connectedGoal: 0
+  chargingGoal: 0
   grappleOverrideRange: {fileID: 0}
   charge: 1
+  virusRatio: 0
+  effects: {fileID: 0}
 --- !u!1001 &2980429293012979191
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -257,6 +263,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6801492477888477871}
     m_Modifications:
+    - target: {fileID: 5170075247413472986, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1f151a165ab75df4492c72db3f624b6e, type: 3}
     - target: {fileID: 5170075247603900774, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}
       propertyPath: m_SortingLayer
       value: 4
