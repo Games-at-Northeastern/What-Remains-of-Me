@@ -395,8 +395,6 @@ public class HiddenAreaTM : MonoBehaviour
 
             if (tile is RuleTile)
             {
-                Debug.Log(offset);
-                Debug.Log(tile);
                 res.Add(check);
             }
         }
