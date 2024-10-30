@@ -42,6 +42,16 @@ Tilemap:
   m_GameObject: {fileID: 1180890877207405692}
   m_Enabled: 1
   m_Tiles:
+  - first: {x: 0, y: -8, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 49
+      m_TileSpriteIndex: 48
+      m_TileMatrixIndex: 2
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 2
   - first: {x: 5, y: -4, z: 0}
     second:
       serializedVersion: 2
@@ -632,6 +642,8 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: adee43e9f98d5784baa21025196f47fe, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: c45755c3711120847a2c9509f3c249ed, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 926934f887b39f14cb54669d8965c966, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 1
     m_Data: {fileID: -499627414, guid: cb5bc4c01de8a954e9f72e4b3af3bf87, type: 3}
@@ -729,7 +741,7 @@ Tilemap:
     m_Data: {fileID: 21300000, guid: 482c0c81992c61849a693bf91c600fc2, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 21300000, guid: 3e6e133de92cc514593caec53e272d29, type: 3}
-  - m_RefCount: 1
+  - m_RefCount: 2
     m_Data: {fileID: -852412918, guid: 838d7f2131a54b24b845f0f57ecbb689, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 0
@@ -768,7 +780,7 @@ Tilemap:
       e31: 0
       e32: 0
       e33: 0
-  - m_RefCount: 49
+  - m_RefCount: 50
     m_Data:
       e00: 1
       e01: 0
@@ -787,15 +799,15 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 49
+  - m_RefCount: 50
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 0
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -11, y: -4, z: 0}
-  m_Size: {x: 22, y: 6, z: 1}
+  m_Origin: {x: -11, y: -8, z: 0}
+  m_Size: {x: 22, y: 10, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -909,7 +921,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &3822621773342887333
+--- !u!114 &5617959158738432132
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
