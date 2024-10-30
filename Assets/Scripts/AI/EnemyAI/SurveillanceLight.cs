@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -26,7 +24,7 @@ public class SurveillanceLight : MonoBehaviour
     /// <param name="collision">Collision opject to be passed in</param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.CompareTag("Player"))
         {
             isColliding = true;
         }
@@ -38,7 +36,7 @@ public class SurveillanceLight : MonoBehaviour
     /// <param name="collision">Collision object to be passed in</param>
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (!collision.CompareTag("Player"))
         {
             isColliding = false;
         }
