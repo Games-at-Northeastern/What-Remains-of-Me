@@ -491,10 +491,6 @@ namespace PlayerController
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
             List<RaycastHit2D> hits = new List<RaycastHit2D>();
             Physics2D.BoxCast(origin + new Vector2(-stats_.leftOffset, 0), new Vector2(0.01f, stats_.sideBounds.y), 0, Vector2.left, filter, hits, stats_.sideBounds.x - 0.01f);
-            if (HitSolidObject(hits))
-            {
-                print("Touching Left wall");
-            }
             return HitSolidObject(hits);
         }
 
@@ -507,10 +503,6 @@ namespace PlayerController
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
             List<RaycastHit2D> hits = new List<RaycastHit2D>();
             Physics2D.BoxCast(origin + new Vector2(stats_.rightOffset, 0), new Vector2(0.01f, stats_.sideBounds.y), 0, Vector2.right, filter, hits, stats_.sideBounds.x - 0.01f);
-            if (HitSolidObject(hits))
-            {
-                print("Touching Right wall");
-            }
             return HitSolidObject(hits);
         }
 
