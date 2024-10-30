@@ -9,6 +9,7 @@ public class RADLaser : MonoBehaviour
 {
     [SerializeField, Tooltip("Draws the laser in the direction of this target.")]
     private Transform _laserTarget;
+    private Vector2 _targetOriginPosition; // the position of target before start the game
     [SerializeField]
     private SpikeTeleport _deathTeleporter; // TODO, why do I have to use the SpikeTeleport.cs? Please refactor.
 
@@ -49,13 +50,21 @@ public class RADLaser : MonoBehaviour
 
     private void Awake()
     {
+        _targetOriginPosition = _laserTarget.position;
+
         _renderer = GetComponent<LineRenderer>();
         Recalculate();
+
     }
 
     private void Update()
     {
         _didCastHit = DoRaycast(out _data);
+
+        if  (!_didCastHit)
+        {
+           _laserTarget.position = _targetOriginPosition;
+        }
 
         if (_needsRecalculation)
         {
@@ -78,6 +87,7 @@ public class RADLaser : MonoBehaviour
         if (_drawToTarget)
         {
             targetPos = _laserTarget.position;
+
         }
         // draw laser in direction of target point until we hit something
         else if (needsRealLaserDistance && _didCastHit)
@@ -85,6 +95,8 @@ public class RADLaser : MonoBehaviour
             targetPos = _data.point;
             // we don't need to reassign _realLaserDistance to dist(position, data point) here because the death ray itself
             // is already stopped by the collider.
+
+            _laserTarget.position = _data.point;
         }
         // draw laser in direction of target for a certain distance.
         else
