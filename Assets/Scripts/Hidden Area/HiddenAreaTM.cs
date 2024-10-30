@@ -130,6 +130,9 @@ public class HiddenAreaTM : MonoBehaviour
         fadeMap = fadeMapObj.GetComponent<Tilemap>();
         fadeRenderer = fadeMapObj.GetComponent<TilemapRenderer>();
 
+        hiddenTM.enabled = true;
+        hiddenTMRender.enabled = true;
+
         for (int i = 0; i < detailMaps.Count; i++)
         {
             detailMaps[i].fadeObj = Instantiate(fadeMap.gameObject, transform);
