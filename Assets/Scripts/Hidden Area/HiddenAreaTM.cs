@@ -1,39 +1,14 @@
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
+using UtilityData;
 
-public class HiddenAreaTM : MonoBehaviour
+public class HiddenAreaTM : MonoBehaviour, IPreprocessBuildWithReport
 {
-    [SerializeField] private Tilemap hiddenTM;
-    [SerializeField] private TilemapRenderer hiddenTMRender;
-    [SerializeField] private Tilemap groundTM;
-
-    [System.Serializable]
-    public class DetailAdd
-    {
-        [SerializeField] public Tilemap detailMap;
-        [SerializeField] public Tilemap addedDetails;
-
-        [System.NonSerialized] public List<TileData> tileHold;
-        [System.NonSerialized] public Tilemap fadeMap;
-        [System.NonSerialized] public GameObject fadeObj;
-        [System.NonSerialized] public TilemapRenderer fadeRend;
-    }
-
-    [SerializeField] private List<DetailAdd> detailMaps;
-
-    [SerializeField] private List<Color> outlineColors;
-    [SerializeField] private Tile defaultTile;
-
-    [SerializeField] private GameObject fadeMapPrefab;
-
-    private Tilemap fadeMap;
-    private TilemapRenderer fadeRenderer;
-
-    [SerializeField] private float fadeSpeed;
-
-    public struct TileData
+    public class TileData
     {
         public Vector3Int pos;
         public TileBase tile;
@@ -44,282 +19,612 @@ public class HiddenAreaTM : MonoBehaviour
         }
     }
 
-    private List<TileData> tileHold;
-
-    private HashSet<Vector3Int> ruleTileOverrides;
-
-    private struct TileColorData
+    [System.Serializable]
+    private class DetailAdd
     {
-        public Vector3Int pos;
-        public Color color;
-        public TileColorData(Vector3Int pos, Color color)
+        [SerializeField] public TilemapData detailMap;
+        [SerializeField] public TilemapData addedDetails;
+    }
+
+    [System.Serializable]
+    private class TilemapData
+    {
+        private Tilemap tilemap;
+        public Tilemap TMap
         {
-            this.pos = pos;
-            this.color = color;
+            get
+            {
+                if (!tilemap)
+                {
+                    tilemap = tilemapObject.GetComponent<Tilemap>();
+                }
+                return tilemap;
+            }
+            set => tilemap = value;
+        }
+        private TilemapRenderer renderer;
+        public TilemapRenderer Renderer
+        {
+            get
+            {
+                if (!renderer)
+                {
+                    renderer = tilemapObject.GetComponent<TilemapRenderer>();
+                }
+                return renderer;
+            }
+            set => renderer = value;
+        }
+
+        [SerializeField] private GameObject tilemapObject;
+
+        public static TilemapData Construct(GameObject mapObjectPrefab)
+        {
+            TilemapData newData = new TilemapData();
+
+            GameObject tilemapObject = Instantiate(mapObjectPrefab);
+
+            newData.tilemapObject = tilemapObject;
+            newData.tilemap = newData.tilemapObject.GetComponent<Tilemap>();
+            newData.renderer = newData.tilemapObject.GetComponent<TilemapRenderer>();
+
+            return newData;
+        }
+
+        public void Enable() => SetEnabled(true);
+        public void Disable() => SetEnabled(false);
+
+        public void SetEnabled(bool enabled)
+        {
+            TMap.enabled = enabled;
+            Renderer.enabled = enabled;
         }
     }
 
-    private List<TileColorData> tileColorStorage;
+    [SerializeField] private List<Color> outlineLayers;
+    [SerializeField] private List<DetailAdd> detailMaps;
+    [SerializeField] private float fadeSpeed;
+    [SerializeField] private float enterMapDistance;
+
+    [Header("References")]
+    [SerializeField] private TilemapData groundMap;
+    [SerializeField] private TilemapData hiddenMap;
+    [SerializeField] private Tile defaultTile;
+    [SerializeField] private CompositeCollider2D cc2d;
 
     private bool triggered = false;
     private bool faded = false;
 
-    private static readonly Vector3Int[] NeighbourPositions =
-    {
-        Vector3Int.up,
-        Vector3Int.right,
-        Vector3Int.down,
-        Vector3Int.left,
-        //Vector3Int.up + Vector3Int.right,
-        //Vector3Int.up + Vector3Int.left,
-        //Vector3Int.down + Vector3Int.right,
-        //Vector3Int.down + Vector3Int.left
-    };
-    private static readonly Vector3Int[] NeighbourPositionsDiagonals =
-    {
-        Vector3Int.up,
-        Vector3Int.right,
-        Vector3Int.down,
-        Vector3Int.left,
-        Vector3Int.up + Vector3Int.right,
-        Vector3Int.up + Vector3Int.left,
-        Vector3Int.down + Vector3Int.right,
-        Vector3Int.down + Vector3Int.left
-    };
+    public int callbackOrder => throw new System.NotImplementedException();
 
-    private static readonly Vector3Int[] NeighbourDiagonals =
+    private class SpriteTree : BaseSpriteTree
     {
-        Vector3Int.up + Vector3Int.right,
-        Vector3Int.up + Vector3Int.left,
-        Vector3Int.down + Vector3Int.right,
-        Vector3Int.down + Vector3Int.left
-    };
+        private readonly Texture2D tex;
+
+        private readonly Rect rect;
+
+        private float ppu;
+
+        public Sprite BakedSprite { get; set; }
+        public Tile BakedTile { get; set; }
+
+        public SpriteTree(Texture2D tex, float ppu, Rect rect) : base()
+        {
+            this.tex = tex;
+            this.ppu = ppu;
+            this.rect = rect;
+
+            BakedSprite = null;
+            BakedTile = null;
+        }
+
+        public void BakeSprite(Vector3 anchor)
+        {
+            BakedSprite = Sprite.Create(
+                tex,
+                rect,
+                anchor,
+                ppu);
+
+            BakedSprite.name = GetHashCode().ToString();
+        }
+
+        public void BakeTile(Vector3 anchor, Tile tile)
+        {
+            BakeSprite(anchor);
+
+            BakedTile = Instantiate(tile);
+            BakedTile.colliderType = Tile.ColliderType.Sprite;
+            BakedTile.sprite = BakedSprite;
+            BakedTile.name = "SpriteTile" + GetHashCode().ToString();
+        }
+
+        public override SpriteTree Add((Sprite sprite, Matrix4x4 matrix) spriteData, Color tint, Texture2D newTex = null)
+        {
+            if (Overlays.ContainsKey((spriteData.sprite, spriteData.matrix)))
+            {
+                return Overlays[spriteData];
+            }
+
+            if (newTex is null)
+            {
+                newTex = BakeTexture(spriteData.sprite, spriteData.matrix, tint);
+            }
+
+            Texture2D oldTex = CloneTexture(tex);
+            OverlayTexture(oldTex, newTex);
+
+            SpriteTree newTree = new SpriteTree(oldTex, ppu, rect);
+
+            Overlays.Add(spriteData, newTree);
+            return Overlays[spriteData];
+        }
+
+        private Texture2D CloneTexture(Texture2D tex)
+        {
+            Texture2D result = new Texture2D(tex.width, tex.height)
+            {
+                filterMode = tex.filterMode
+            };
+            result.SetPixels32(tex.GetPixels32());
+            result.Apply();
+            return result;
+        }
+
+        private void OverlayTexture(Texture2D baseTex, Texture2D addedTex)
+        {
+            Color[] basePixels = baseTex.GetPixels();
+            Color[] addedPixels = addedTex.GetPixels();
+
+            Color[] resultPixels = new Color[basePixels.Length];
+
+            int baseCenterX = Mathf.FloorToInt(baseTex.width / 2);
+            int baseCenterY = Mathf.FloorToInt(baseTex.height / 2);
+
+            int addedCenterX = Mathf.FloorToInt(addedTex.width / 2);
+            int addedCenterY = Mathf.FloorToInt(addedTex.height / 2);
+
+            for (int i = 0; i < basePixels.Length; i++)
+            {
+                int x = i % baseTex.width;
+                int y = i / baseTex.width;
+
+                int xOffFromCenter = x - baseCenterX;
+                int yOffFromCenter = y - baseCenterY;
+
+                int xOnAdded = addedCenterX + xOffFromCenter;
+                int yOnAdded = addedCenterY + yOffFromCenter;
+
+                if (xOnAdded < 0 || xOnAdded >= addedTex.width ||
+                    yOnAdded < 0 || yOnAdded >= addedTex.height)
+                {
+                    resultPixels[i] = new Color(basePixels[i].r, basePixels[i].g, basePixels[i].b, basePixels[i].a);
+                    continue;
+                }
+
+                int aI = xOnAdded + (yOnAdded * addedTex.width);
+
+                float frontA = addedPixels[aI].a;
+                float backA = basePixels[i].a;
+
+                float resultA = frontA + (backA * (1 - frontA));
+
+                float resultR = ((addedPixels[aI].r * frontA) + (basePixels[i].r * (backA * (1 - frontA)))) / resultA;
+                float resultG = ((addedPixels[aI].g * frontA) + (basePixels[i].g * (backA * (1 - frontA)))) / resultA;
+                float resultB = ((addedPixels[aI].b * frontA) + (basePixels[i].b * (backA * (1 - frontA)))) / resultA;
+
+                resultPixels[i] = new Color(resultR, resultG, resultB, resultA);
+            }
+
+            baseTex.SetPixels(0, 0, baseTex.width, baseTex.height, resultPixels);
+            baseTex.Apply();
+        }
+    }
+    private class BaseSpriteTree
+    {
+        public class SpriteTreeComparer : IEqualityComparer<(Sprite sprite, Matrix4x4 matrix)>
+        {
+            public bool Equals((Sprite sprite, Matrix4x4 matrix) x, (Sprite sprite, Matrix4x4 matrix) y) => GetHashCode(x) == GetHashCode(y);
+
+            public int GetHashCode((Sprite sprite, Matrix4x4 matrix) obj) => AppendInts(obj.sprite.GetHashCode(), GetMtxHash(obj.matrix));
+
+            private int GetMtxHash(Matrix4x4 matrix) => int.Parse(UseMtx(matrix, new Vector3(1, 2, 0)) + UseMtx(matrix, new Vector3(-3, 2, 0)) + UseMtx(matrix, new Vector3(3, -4, 0)));
+
+            private string UseMtx(Matrix4x4 matrix, Vector3 pos)
+            {
+                Vector3 transformPos = matrix.MultiplyPoint(pos);
+                Vector3Int floored = Vector3Int.FloorToInt(transformPos);
+                return MapToPositive(floored.x).ToString() + "0" + MapToPositive(floored.y).ToString();
+            }
+
+            private int MapToPositive(int num)
+            {
+                if (num < 0)
+                {
+                    return num * -2;
+                }
+                return 1 + ((num - 1) * 2);
+            }
+
+            private int AppendInts(int a, int b)
+            {
+                int digitsB = Mathf.FloorToInt(Mathf.Log10(b)) + 1;
+                return (a * 10 * digitsB) + b;
+            }
+        }
+
+        public Dictionary<(Sprite, Matrix4x4), SpriteTree> Overlays { get; set; }
+
+        public BaseSpriteTree() => Overlays = new Dictionary<(Sprite, Matrix4x4), SpriteTree>(new SpriteTreeComparer());
+
+        public SpriteTree Add(Tilemap fromTM, Vector3Int position)
+        {
+            (Sprite sprite, Matrix4x4 matrix) spriteData = (fromTM.GetSprite(position), fromTM.GetTransformMatrix(position));
+            return Add(spriteData, fromTM.color * fromTM.GetColor(position));
+        }
+
+        public virtual SpriteTree Add((Sprite sprite, Matrix4x4 matrix) spriteData, Color tint, Texture2D newTex = null)
+        {
+            if (Overlays.ContainsKey((spriteData.sprite, spriteData.matrix)))
+            {
+                return Overlays[spriteData];
+            }
+
+            if (newTex is null)
+            {
+                newTex = BakeTexture(spriteData.sprite, spriteData.matrix, tint);
+            }
+
+            SpriteTree newTree = new SpriteTree(newTex, spriteData.sprite.pixelsPerUnit, new Rect(0, 0, spriteData.sprite.rect.width, spriteData.sprite.rect.height));
+
+            Overlays.Add(spriteData, newTree);
+            return Overlays[spriteData];
+        }
+
+        public SpriteTree Add(Tilemap fromTM, Vector3Int position, List<Vector3Int> blankOffsets, List<Color> outlineColors, Color tint)
+        {
+            Texture2D tex = CopyTileTexture(fromTM, position, tint);
+            StripTextureOutline(tex, blankOffsets, outlineColors);
+            Sprite oldSprite = fromTM.GetSprite(position);
+            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, oldSprite.rect.width, oldSprite.rect.height), oldSprite.pivot, oldSprite.pixelsPerUnit);
+
+            return Add((sprite, fromTM.GetTransformMatrix(position)), tint, tex);
+        }
+
+        protected Texture2D BakeTexture(Sprite sprite, Matrix4x4 matrix, Color tint)
+        {
+            Texture2D spriteTex = GetSlicedSpriteTexture(sprite);
+
+            TintTexture(spriteTex, tint);
+
+            if (matrix == Matrix4x4.identity)
+            {
+                return spriteTex;
+            }
+            ApplyMatrixToTexture(spriteTex, matrix);
+            return spriteTex;
+        }
+
+        protected void TintTexture(Texture2D tex, Color tint)
+        {
+            Color[] pixels = tex.GetPixels();
+
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                pixels[i] = pixels[i] * tint;
+            }
+
+            tex.SetPixels(pixels);
+            tex.Apply();
+        }
+
+        protected void ApplyMatrixToTexture(Texture2D tex, Matrix4x4 matrix)
+        {
+            Color[] pixels = tex.GetPixels();
+            Color[] newPixels = new Color[pixels.Length];
+
+            Vector3 centerOffset = new Vector3(
+                (tex.width - 1) / 2f,
+                (tex.height - 1) / 2f,
+                0);
+
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                int x = i % tex.width;
+                int y = i / tex.width;
+
+                Vector3 transposedPointFloat = matrix.MultiplyPoint3x4(
+                        new Vector3(x - centerOffset.x, y - centerOffset.y, 0));
+                Vector3Int transposedPoint = Vector3Int.RoundToInt(transposedPointFloat + centerOffset);
+
+
+                newPixels[transposedPoint.x + (transposedPoint.y * tex.width)] =
+                    pixels[i];
+            }
+
+            tex.SetPixels(newPixels);
+            tex.Apply();
+        }
+
+        protected Texture2D GetSlicedSpriteTexture(Sprite sprite)
+        {
+            Rect rect = sprite.rect;
+            Texture2D slicedTex = new Texture2D((int)rect.width, (int)rect.height)
+            {
+                filterMode = sprite.texture.filterMode
+            };
+
+            slicedTex.SetPixels(0, 0, (int)rect.width, (int)rect.height, sprite.texture.GetPixels((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height));
+            slicedTex.Apply();
+
+            return slicedTex;
+        }
+
+        protected Texture2D CopyTileTexture(Tilemap tm, Vector3Int position, Color tint) => BakeTexture(tm.GetSprite(position), tm.GetTransformMatrix(position), tint);
+
+        protected void StripTextureOutline(Texture2D sprite, List<Vector3Int> blankOffsets, List<Color> outlineColors)
+        {
+            Color[] pixels = sprite.GetPixels();
+            foreach (Color color in outlineColors)
+            {
+                for (int x = 0; x < sprite.width; x++)
+                {
+                    for (int y = 0; y < sprite.height; y++)
+                    {
+                        if (!CheckForBlankSpaceSprite(x, y, sprite, blankOffsets))
+                        {
+                            continue;
+                        }
+
+                        if (ColorEqualApprox(pixels[x + (y * sprite.width)], color))
+                        {
+                            pixels[x + (y * sprite.width)] = new Color(1, 1, 1, 0);
+                        }
+                    }
+                }
+                sprite.SetPixels(pixels);
+            }
+            sprite.Apply();
+        }
+
+        protected bool ColorEqualApprox(Color a, Color b)
+        {
+            var res = true;
+
+            res &= Mathf.Abs(a.r - b.r) < (2f / 255f);
+            res &= Mathf.Abs(a.g - b.g) < (2f / 255f);
+            res &= Mathf.Abs(a.b - b.b) < (2f / 255f);
+            res &= Mathf.Abs(a.a - b.a) < (2f / 255f);
+
+            return res;
+        }
+
+        protected bool CheckForBlankSpaceSprite(int x, int y, Texture2D tex, List<Vector3Int> blankOffsets)
+        {
+            foreach (Vector3Int blankOffset in blankOffsets)
+            {
+                int checkX = x + blankOffset.x;
+                int checkY = y + blankOffset.y;
+
+                if (checkX < 0 || checkX >= tex.width)
+                {
+                    return true;
+                }
+
+                if (checkY < 0 || checkY >= tex.height)
+                {
+                    return true;
+                }
+
+                if (tex.GetPixel(checkX, checkY).a == 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+    private class TileSpriteStorage
+    {
+        private Dictionary<Vector3Int, SpriteTree> positionToSpriteTree;
+        private BaseSpriteTree spriteTree;
+
+        private Vector3 anchor;
+
+        public TileSpriteStorage(Tilemap tm)
+        {
+            anchor = tm.tileAnchor;
+            positionToSpriteTree = new Dictionary<Vector3Int, SpriteTree>();
+            spriteTree = new BaseSpriteTree();
+        }
+
+        public void AddSprite(Tilemap fromTM, Vector3Int position)
+        {
+            if (!positionToSpriteTree.ContainsKey(position))
+            {
+                positionToSpriteTree[position] = spriteTree.Add(fromTM, position);
+                return;
+            }
+
+            positionToSpriteTree[position] = positionToSpriteTree[position].Add(fromTM, position);
+        }
+
+        public void AddSpriteWithOutline(Tilemap fromTM, Vector3Int position, List<Vector3Int> blankOffsets, List<Color> outlineColors)
+        {
+            Color tint = fromTM.GetColor(position) * fromTM.color;
+
+            if (!positionToSpriteTree.ContainsKey(position))
+            {
+                positionToSpriteTree[position] = spriteTree.Add(fromTM, position, blankOffsets, outlineColors, tint);
+                return;
+            }
+
+            positionToSpriteTree[position] = positionToSpriteTree[position].Add(fromTM, position, blankOffsets, outlineColors, tint);
+        }
+
+         public Dictionary<Vector3Int, Tile> BakeTiles(Tile defaultTile)
+        {
+            var positionToSprite = new Dictionary<Vector3Int, Tile>();
+
+            foreach (Vector3Int position in positionToSpriteTree.Keys)
+            {
+                if (positionToSpriteTree[position].BakedTile is null)
+                {
+                    positionToSpriteTree[position].BakeTile(anchor, defaultTile);
+                }
+                positionToSprite[position] = positionToSpriteTree[position].BakedTile;
+            }
+
+            return positionToSprite;
+        }
+    }
 
     private void Update()
     {
-        if (fadeMap.color.a < 0.001f && !faded)
+        if (hiddenMap.TMap.color.a < 0.001f && !faded)
         {
             faded = true;
-            fadeMap.enabled = false;
-            fadeRenderer.enabled = false;
-            
-            for (int i = 0; i < detailMaps.Count; i++)
-            {
-                detailMaps[i].fadeMap.enabled = false;
-                detailMaps[i].fadeRend.enabled = false;
-            }
+            hiddenMap.Disable();
         }
         if (triggered && !faded)
         {
-            fadeMap.color = new Color(fadeMap.color.r, fadeMap.color.g, fadeMap.color.b, Mathf.Max(0, fadeMap.color.a - fadeSpeed * Time.deltaTime));
-
-            for (int i = 0; i < detailMaps.Count; i++)
-            {
-                detailMaps[i].fadeMap.color = new Color(
-                    detailMaps[i].fadeMap.color.r,
-                    detailMaps[i].fadeMap.color.g,
-                    detailMaps[i].fadeMap.color.b,
-                    fadeMap.color.a);
-            }
+            hiddenMap.TMap.color = new Color(
+                hiddenMap.TMap.color.r,
+                hiddenMap.TMap.color.g, hiddenMap.TMap.color.b,
+                Mathf.Max(0, hiddenMap.TMap.color.a - (fadeSpeed * Time.deltaTime)));
         }
     }
 
     private void Start()
     {
-        GameObject fadeMapObj = Instantiate(fadeMapPrefab, transform);
-        fadeMap = fadeMapObj.GetComponent<Tilemap>();
-        fadeRenderer = fadeMapObj.GetComponent<TilemapRenderer>();
+        //DateTime.UtcNow.Millisecond
 
-        hiddenTM.enabled = true;
-        hiddenTMRender.enabled = true;
+        // enable maps
 
-        for (int i = 0; i < detailMaps.Count; i++)
+        hiddenMap.Enable();
+
+        foreach (DetailAdd detailAdd in detailMaps)
         {
-            detailMaps[i].fadeObj = Instantiate(fadeMap.gameObject, transform);
-            detailMaps[i].fadeMap = detailMaps[i].fadeObj.GetComponent<Tilemap>();
-            detailMaps[i].fadeRend = detailMaps[i].fadeObj.GetComponent<TilemapRenderer>();
-            detailMaps[i].fadeRend.sortingOrder += detailMaps.Count - i;
-
-            detailMaps[i].fadeMap.enabled = false;
-            detailMaps[i].fadeRend.enabled = false;
-
-            detailMaps[i].tileHold = new List<TileData>();
-
-            foreach (Vector3Int pos in detailMaps[i].addedDetails.cellBounds.allPositionsWithin)
-            {
-                TileBase tile = detailMaps[i].addedDetails.GetTile(pos);
-                if (tile)
-                {
-                    detailMaps[i].tileHold.Add(new TileData(pos, detailMaps[i].detailMap.GetTile(pos)));
-                    detailMaps[i].detailMap.SetTile(pos, tile);
-                }
-            }
-
-            detailMaps[i].detailMap.RefreshAllTiles();
-            detailMaps[i].addedDetails.enabled = false;
-            detailMaps[i].addedDetails.gameObject.GetComponent<TilemapRenderer>().enabled = false;
+            detailAdd.addedDetails.Enable();
         }
 
-        for (int i = 0; i < detailMaps.Count; i++)
+        // grab edge positions
+        // send outline tiles from ground to hidden
+
+        Vector3IntSet hideMapPositions = SendBorderUp(groundMap.TMap, hiddenMap.TMap, out var edgePositions);
+
+        // send second outline layer to hidden
+        SendBorderUp(groundMap.TMap, hiddenMap.TMap);
+
+        hiddenMap.TMap.RefreshAllTiles();
+
+        // Handle sprite tile creation
+
+        var spriteData = new TileSpriteStorage(hiddenMap.TMap);
+
+        foreach (Vector3Int position in hideMapPositions)
         {
-            foreach (TileData td in detailMaps[i].tileHold)
+            if (edgePositions.TryGetValue(position, out var blankOffsets))
             {
-                Vector3Int pos = td.pos;
-                detailMaps[i].fadeMap.SetTile(pos, detailMaps[i].detailMap.GetTile(pos));
-                detailMaps[i].fadeMap.SetTransformMatrix(pos, detailMaps[i].detailMap.GetTransformMatrix(pos));
+                spriteData.AddSpriteWithOutline(hiddenMap.TMap, position, blankOffsets, outlineLayers);
+                continue;
             }
-            detailMaps[i].fadeMap.RefreshAllTiles();
+
+            spriteData.AddSprite(hiddenMap.TMap, position);
         }
 
-        fadeMap.enabled = false;
-        fadeRenderer.enabled = false;
-        tileHold = new List<TileData>();
-        tileColorStorage = new List<TileColorData>();
-
-        List<Vector3Int> seenTiles = new List<Vector3Int>();
-        ruleTileOverrides = new HashSet<Vector3Int>();
-
-        foreach (Vector3Int pos in hiddenTM.cellBounds.allPositionsWithin)
+        for (int i = detailMaps.Count - 1; i > -1; i--)
         {
-            TileBase tile = hiddenTM.GetTile(pos);
+            Vector3IntSet detailPositions = SendBorderUp(detailMaps[i].detailMap.TMap, detailMaps[i].addedDetails.TMap);
 
-            if (tile)
+            SendBorderUp(detailMaps[i].detailMap.TMap, detailMaps[i].addedDetails.TMap);
+
+            foreach (Vector3Int position in detailPositions)
             {
-                seenTiles.Add(pos);
-
-                tileHold.Add(new TileData(pos, groundTM.GetTile(pos)));
-
-                groundTM.SetTile(pos, tile);
+                spriteData.AddSprite(detailMaps[i].addedDetails.TMap, position);
             }
         }
 
-        List<Vector3Int> replacePositions = new List<Vector3Int>();
-        List<Tile> replaceTiles = new List<Tile>();
+        Dictionary<Vector3Int, Tile> positionToTile = spriteData.BakeTiles(defaultTile);
 
-        foreach (Vector3Int pos in seenTiles)
+        // replace tiles with sprite tiles
+
+        hiddenMap.TMap.ClearAllTiles();
+
+        foreach (Vector3Int position in positionToTile.Keys)
         {
-            if (CheckForBlankSpace(pos, hiddenTM, groundTM))
-            {
-                Tile outTile = CreateImageTile(pos, groundTM, true);
-                //outTile.color = new Color(1, 1, 1, 1);
-                outTile.name = "edgeTile" + pos.x + " " + pos.y;
-                outTile.colliderType = Tile.ColliderType.None;
-
-                replacePositions.Add(pos);
-                replaceTiles.Add(outTile);
-
-                foreach (Vector3Int rulePos in GetRuleTileSpaces(pos, groundTM))
-                {
-                    ruleTileOverrides.Add(rulePos);
-                }
-            };
+            hiddenMap.TMap.SetTile(position, positionToTile[position]);
         }
 
-        foreach (Vector3Int pos in seenTiles)
+        // hide added detail maps
+
+        foreach (DetailAdd detailAdd in detailMaps)
         {
-            hiddenTM.SetTile(pos, null);
+            detailAdd.addedDetails.Disable();
         }
-
-        foreach (Vector3Int pos in ruleTileOverrides)
-        {
-            if (!replacePositions.Contains(pos))
-            {
-                Tile outTile = CreateImageTile(pos, groundTM, false);
-                //outTile.color = new Color(1, 1, 1, 1);
-                outTile.name = "ruleFillTile" + pos.x + " " + pos.y;
-                outTile.colliderType = Tile.ColliderType.None;
-
-                hiddenTM.SetTile(pos, outTile);
-                hiddenTM.SetTransformMatrix(pos, groundTM.GetTransformMatrix(pos));
-
-                fadeMap.SetTile(pos, outTile);
-                fadeMap.SetTransformMatrix(pos, groundTM.GetTransformMatrix(pos));
-            }
-
-            tileColorStorage.Add(new TileColorData(pos, groundTM.GetColor(pos)));
-            groundTM.SetColor(pos, new Color(1, 1, 1, 0));
-        }
-
-        hiddenTM.RefreshAllTiles();
-
-        List<Matrix4x4> transforms = new List<Matrix4x4>();
-
-        for (int i = 0; i < replacePositions.Count; i++)
-        {
-            transforms.Add(groundTM.GetTransformMatrix(replacePositions[i]));
-        }
-
-        for (int i = 0; i < replacePositions.Count; i++)
-        {
-            groundTM.SetTile(replacePositions[i], replaceTiles[i]);
-            groundTM.SetTransformMatrix(replacePositions[i], transforms[i]);
-            groundTM.RefreshTile(replacePositions[i]);
-        }
-
-        foreach (Vector3Int pos in seenTiles)
-        {
-            if (!fadeMap.HasTile(pos))
-            {
-                fadeMap.SetTile(pos, CreateImageTile(pos, groundTM, false));
-                fadeMap.SetTransformMatrix(pos, groundTM.GetTransformMatrix(pos));
-            }
-        }
-
-        HashSet<Vector3Int> fadeOuterTiles = new HashSet<Vector3Int>();
-
-        foreach (Vector3Int pos in ruleTileOverrides)
-        {
-            List<Vector3Int> potentialOuterTiles = GetRuleTileSpaces(pos, groundTM);
-            foreach (Vector3Int potentialOuterPos in potentialOuterTiles)
-            {
-                if (!fadeMap.HasTile(potentialOuterPos))
-                {
-                    fadeOuterTiles.Add(potentialOuterPos);
-                }
-            }
-        }
-        foreach (Vector3Int pos in seenTiles)
-        {
-            List<Vector3Int> potentialOuterTiles = GetRuleTileSpaces(pos, groundTM);
-            foreach (Vector3Int potentialOuterPos in potentialOuterTiles)
-            {
-                if (!fadeMap.HasTile(potentialOuterPos))
-                {
-                    fadeOuterTiles.Add(potentialOuterPos);
-                }
-            }
-        }
-
-        foreach(Vector3Int outerTilePos in fadeOuterTiles)
-        {
-            fadeMap.SetTile(outerTilePos, CreateImageTile(outerTilePos, groundTM, false));
-            fadeMap.SetTransformMatrix(outerTilePos, groundTM.GetTransformMatrix(outerTilePos));
-        }
-
-        fadeMap.RefreshAllTiles();
-
-        //hiddenTM.enabled = false;
-        //hiddenTMRender.enabled = false;
     }
 
-    public bool CheckForBlankSpace(Vector3Int pos, Tilemap tm1, Tilemap tm2)
+    public Vector3IntSet SendBorderUp(Tilemap fromMap, Tilemap toMap) => DoSendBorderUp(fromMap, toMap, TMPositions.ClassifyTiles(toMap, true));
+    public Vector3IntSet SendBorderUp(Tilemap fromMap, Tilemap toMap, out Dictionary<Vector3Int, List<Vector3Int>> edges)
     {
-        foreach (Vector3Int offset in NeighbourPositions)
+        var toMapData = TMPositions.ClassifyTiles(toMap, true);
+
+        edges = new Dictionary<Vector3Int, List<Vector3Int>>();
+
+        foreach (Vector3Int position in toMapData.TilePositions)
         {
-            if (!tm1.HasTile(pos + offset) && !tm2.HasTile(pos + offset))
+            if (IsEdgeOfArea(position, toMap, fromMap, out var blankOffsets))
             {
-                return true;
+                edges.Add(position, blankOffsets);
             }
         }
 
-        foreach (Vector3Int offset in NeighbourDiagonals)
+        return DoSendBorderUp(fromMap, toMap, toMapData);
+    }
+
+    public Vector3IntSet DoSendBorderUp(Tilemap fromMap, Tilemap toMap, TMPositions.ClassifyResult toMapData)
+    {
+        var usedPositions = new Vector3IntSet(toMapData.TilePositions);
+
+        foreach (Vector3Int position in toMapData.BorderPositions)
+        {
+            if (!fromMap.HasTile(position))
+            {
+                continue;
+            }
+
+            toMap.SetTile(position, fromMap.GetTile(position));
+            usedPositions.Add(position);
+        }
+
+        return usedPositions;
+    }
+
+    // If hiddenTM tile is a connecting space to outside the hidden area, returns
+    // the offset to the blank tile position next to the given pos
+    // Otherwise, returns (0, 0, 0)
+    public bool IsEdgeOfArea(Vector3Int pos, Tilemap hiddenTM, Tilemap groundTM, out List<Vector3Int> edgeOffsets)
+    {
+        bool isEdge = false;
+        edgeOffsets = new List<Vector3Int>();
+        foreach (Vector3Int offset in UData.NeighbourAdjacents())
+        {
+            if (!hiddenTM.HasTile(pos + offset) && !groundTM.HasTile(pos + offset))
+            {
+                edgeOffsets.Add(offset);
+                isEdge = true;
+            }
+        }
+
+        foreach (Vector3Int offset in UData.NeighbourDiagonals())
         {
             Vector3Int dPos = pos + offset;
 
-            if (!tm1.HasTile(dPos) && !tm2.HasTile(dPos))
+            if (!hiddenTM.HasTile(dPos) && !groundTM.HasTile(dPos))
             {
                 int hiddenAdjCount = 0;
-                foreach(Vector3Int off2 in NeighbourPositions)
+                foreach(Vector3Int off2 in UData.NeighbourAdjacents())
                 {
                     if (hiddenTM.HasTile(dPos + off2))
                     {
@@ -328,68 +633,19 @@ public class HiddenAreaTM : MonoBehaviour
                 }
                 if (hiddenAdjCount > 1)
                 {
-                    return true;
+                    edgeOffsets.Add(dPos);
+                    isEdge = true;
                 }
             }
         }
 
-        return false;
-    }
-
-    public Texture2D stripOutline(Texture2D sp)
-    {
-        Texture2D res = Instantiate(sp);
-        for (int x = 0; x < sp.width; x++)
-        {
-            for (int y = 0; y < sp.height; y++)
-            {
-                if (!CheckForBlankSpaceSprite(x, y, sp))
-                {
-                    continue;
-                }
-
-                if (outlineColors.Contains(sp.GetPixel(x, y)))
-                {
-                    res.SetPixel(x, y, new Color(1, 1, 1, 0));
-                }
-            }
-        }
-
-        res.Apply();
-
-        return res;
-    }
-
-    public bool CheckForBlankSpaceSprite(int x, int y, Texture2D tex)
-    {
-        foreach (Vector3Int offset in NeighbourPositions)
-        {
-            int xpos = x + offset.x;
-            int ypos = y + offset.y;
-
-            if (xpos < 0 || xpos >= tex.width)
-            {
-                return true;
-            }
-
-            if (ypos < 0 || ypos >= tex.height)
-            {
-                return true;
-            }
-
-            if (tex.GetPixel(x, y).a == 0)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return isEdge;
     }
 
     public List<Vector3Int> GetRuleTileSpaces(Vector3Int pos, Tilemap tm)
     {
         List<Vector3Int> res = new List<Vector3Int>();
-        foreach (Vector3Int offset in NeighbourPositionsDiagonals)
+        foreach (Vector3Int offset in UData.NeighbourAdjacentDiagonals())
         {
             Vector3Int check = pos + offset;
 
@@ -405,83 +661,20 @@ public class HiddenAreaTM : MonoBehaviour
         return res;
     }
 
-    public Texture2D GetSlicedSpriteTexture(Sprite sprite)
-    {
-        Rect rect = sprite.rect;
-        Texture2D slicedTex = new Texture2D((int)rect.width, (int)rect.height);
-        slicedTex.filterMode = sprite.texture.filterMode;
-
-        slicedTex.SetPixels(0, 0, (int)rect.width, (int)rect.height, sprite.texture.GetPixels((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height));
-        slicedTex.Apply();
-
-        return slicedTex;
-    }
-
-    public Tile CreateImageTile(Vector3Int pos, Tilemap tm, bool removeOutline)
-    {
-        Sprite curSp = tm.GetSprite(pos);
-        Texture2D sliced = GetSlicedSpriteTexture(curSp);
-        Texture2D resTex;
-        /*if (removeOutline)
-        {
-            resTex = stripOutline(sliced);
-        } else
-        {
-            resTex = sliced;
-        }*/
-
-        if (removeOutline)
-        {
-            sliced = stripOutline(sliced);
-        }
-
-        Sprite resSp = Sprite.Create(
-            sliced,
-            new Rect(0, 0, sliced.width, sliced.height),
-            tm.tileAnchor,
-            curSp.pixelsPerUnit);
-
-        Tile res = Instantiate(defaultTile);
-
-        res.sprite = resSp;
-
-        return res;
-    }
-
-
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player") && !triggered)
         {
-            triggered = true;
-
-            foreach (TileData td in tileHold)
+            if (Physics2D.Distance(cc2d, collision).distance < -1 * enterMapDistance)
             {
-                groundTM.SetTile(td.pos, td.tile);
+                TriggerArea();
+                cc2d.enabled = false;
+                GetComponent<TilemapCollider2D>().enabled = false;
             }
-
-            foreach (TileColorData cd in tileColorStorage)
-            {
-                groundTM.SetColor(cd.pos, new Color(cd.color.r, cd.color.g, cd.color.b, cd.color.a));
-            }
-
-            for (int i = 0; i < detailMaps.Count; i++)
-            {
-                foreach (TileData td in detailMaps[i].tileHold)
-                {
-                    detailMaps[i].detailMap.SetTile(td.pos, td.tile);
-                }
-
-                detailMaps[i].fadeMap.enabled = true;
-                detailMaps[i].fadeRend.enabled = true;
-            }
-
-            hiddenTM.enabled = false;
-            hiddenTMRender.enabled = false;
-
-            fadeMap.enabled = true;
-            fadeRenderer.enabled = true;
         }
     }
 
+    public void TriggerArea() => triggered = true;
+
+    public void OnPreprocessBuild(BuildReport report) => throw new System.NotImplementedException();
 }
