@@ -22,6 +22,8 @@ public class RADLaser : MonoBehaviour
     // TODO: this needs to regenerate the mesh every frame. Granted, it's a super simple mesh, but it's a mesh generation every frame regardless.
     // Rework this so that regeneration is performed ONLY WHEN the properties of the laser should change. E.g. if a laser is obstructed by a door,
     // regenerate the laser once the door is open/closed.
+    [SerializeField, Tooltip("Is the laser rotating?")]
+    private bool _rotating = false;
 
     [Space(15)]
 
@@ -61,7 +63,7 @@ public class RADLaser : MonoBehaviour
     {
         _didCastHit = DoRaycast(out _data);
 
-        if  (!_didCastHit)
+        if  (!_didCastHit && !_rotating)
         {
            _laserTarget.position = _targetOriginPosition;
         }
@@ -87,7 +89,6 @@ public class RADLaser : MonoBehaviour
         if (_drawToTarget)
         {
             targetPos = _laserTarget.position;
-
         }
         // draw laser in direction of target point until we hit something
         else if (needsRealLaserDistance && _didCastHit)

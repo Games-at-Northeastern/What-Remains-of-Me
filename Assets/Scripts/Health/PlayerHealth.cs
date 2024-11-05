@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Keeps track of, and handles changes in, the player's health (battery).
 /// </summary>
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IDataPersistence
 {
     [SerializeField] private GameObject warning;
     public PlayerInfo playerInfo;
@@ -22,9 +22,6 @@ public class PlayerHealth : MonoBehaviour
      * @throw error     if PlayerHealth already exists
      *
      */
-    private void Awake()
-    {
-    }
 
     private void Start()
     {
@@ -253,5 +250,18 @@ public class PlayerHealth : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         InkDialogueVariables.deathCount++;
+    }
+
+    public void LoadData(GameData data)
+    {
+        playerInfo.batteryPercentage.Value = data.batteryPercentage;
+        playerInfo.virusPercentage.Value = data.virusPercentage;
+
+    }
+    public void SaveData(ref GameData data)
+    {
+        data.batteryPercentage = playerInfo.batteryPercentage.Value;
+        data.virusPercentage = playerInfo.virusPercentage.Value;
+
     }
 }
