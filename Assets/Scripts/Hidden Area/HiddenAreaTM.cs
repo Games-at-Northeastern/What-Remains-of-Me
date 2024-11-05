@@ -1,12 +1,12 @@
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEditor.Build;
-using UnityEditor.Build.Reporting;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
 using UtilityData;
 
-public class HiddenAreaTM : MonoBehaviour, IPreprocessBuildWithReport
+public class HiddenAreaTM : MonoBehaviour
 {
     public class TileData
     {
@@ -26,76 +26,21 @@ public class HiddenAreaTM : MonoBehaviour, IPreprocessBuildWithReport
         [SerializeField] public TilemapData addedDetails;
     }
 
-    [System.Serializable]
-    private class TilemapData
-    {
-        private Tilemap tilemap;
-        public Tilemap TMap
-        {
-            get
-            {
-                if (!tilemap)
-                {
-                    tilemap = tilemapObject.GetComponent<Tilemap>();
-                }
-                return tilemap;
-            }
-            set => tilemap = value;
-        }
-        private TilemapRenderer renderer;
-        public TilemapRenderer Renderer
-        {
-            get
-            {
-                if (!renderer)
-                {
-                    renderer = tilemapObject.GetComponent<TilemapRenderer>();
-                }
-                return renderer;
-            }
-            set => renderer = value;
-        }
-
-        [SerializeField] private GameObject tilemapObject;
-
-        public static TilemapData Construct(GameObject mapObjectPrefab)
-        {
-            TilemapData newData = new TilemapData();
-
-            GameObject tilemapObject = Instantiate(mapObjectPrefab);
-
-            newData.tilemapObject = tilemapObject;
-            newData.tilemap = newData.tilemapObject.GetComponent<Tilemap>();
-            newData.renderer = newData.tilemapObject.GetComponent<TilemapRenderer>();
-
-            return newData;
-        }
-
-        public void Enable() => SetEnabled(true);
-        public void Disable() => SetEnabled(false);
-
-        public void SetEnabled(bool enabled)
-        {
-            TMap.enabled = enabled;
-            Renderer.enabled = enabled;
-        }
-    }
-
     [SerializeField] private List<Color> outlineLayers;
     [SerializeField] private List<DetailAdd> detailMaps;
     [SerializeField] private float fadeSpeed;
     [SerializeField] private float enterMapDistance;
-
-    [Header("References")]
+    [SerializeField] private bool triggerOnContact;
     [SerializeField] private TilemapData groundMap;
+
+    // references
+
     [SerializeField] private TilemapData hiddenMap;
     [SerializeField] private Tile defaultTile;
     [SerializeField] private CompositeCollider2D cc2d;
 
     private bool triggered = false;
     private bool faded = false;
-
-    public int callbackOrder => throw new System.NotImplementedException();
 
     private class SpriteTree : BaseSpriteTree
     {
@@ -482,25 +427,28 @@ public class HiddenAreaTM : MonoBehaviour, IPreprocessBuildWithReport
 
     private void Update()
     {
-        if (hiddenMap.TMap.color.a < 0.001f && !faded)
-        {
-            faded = true;
-            hiddenMap.Disable();
-        }
         if (triggered && !faded)
         {
             hiddenMap.TMap.color = new Color(
                 hiddenMap.TMap.color.r,
                 hiddenMap.TMap.color.g, hiddenMap.TMap.color.b,
                 Mathf.Max(0, hiddenMap.TMap.color.a - (fadeSpeed * Time.deltaTime)));
+
+            if (hiddenMap.TMap.color.a < 0.001f)
+            {
+                faded = true;
+                hiddenMap.Disable();
+            }
         }
     }
 
     private void Start()
     {
-        //DateTime.UtcNow.Millisecond
-
-        // enable maps
+        if (!triggerOnContact)
+        {
+            GetComponent<CompositeCollider2D>().enabled = false;
+            GetComponent<TilemapCollider2D>().enabled = false;
+        }
 
         hiddenMap.Enable();
 
@@ -669,12 +617,156 @@ public class HiddenAreaTM : MonoBehaviour, IPreprocessBuildWithReport
             {
                 TriggerArea();
                 cc2d.enabled = false;
+                GetComponent<CompositeCollider2D>().enabled = false;
                 GetComponent<TilemapCollider2D>().enabled = false;
             }
         }
     }
 
     public void TriggerArea() => triggered = true;
-
-    public void OnPreprocessBuild(BuildReport report) => throw new System.NotImplementedException();
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(HiddenAreaTM))]
+public class HiddenAreaTMEditor : Editor
+{
+    private SerializedProperty outlineLayersProp;
+    private SerializedProperty detailMapsProp;
+    private SerializedProperty fadeSpeedProp;
+    private SerializedProperty enterMapDistanceProp;
+    private SerializedProperty triggerOnContactProp;
+    private SerializedProperty groundMapProp;
+    private SerializedProperty hiddenMapProp;
+    private SerializedProperty defaultTileProp;
+    private SerializedProperty cc2dProp;
+
+    private bool showSettings = true;
+    private bool showReferences = false;
+
+    public void Awake()
+    {
+        outlineLayersProp = serializedObject.FindProperty("outlineLayers");
+        detailMapsProp = serializedObject.FindProperty("detailMaps");
+        fadeSpeedProp = serializedObject.FindProperty("fadeSpeed");
+        enterMapDistanceProp = serializedObject.FindProperty("enterMapDistance");
+        triggerOnContactProp = serializedObject.FindProperty("triggerOnContact");
+        groundMapProp = serializedObject.FindProperty("groundMap");
+
+        hiddenMapProp = serializedObject.FindProperty("hiddenMap");
+        defaultTileProp = serializedObject.FindProperty("defaultTile");
+        cc2dProp = serializedObject.FindProperty("cc2d");
+    }
+
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+
+        showSettings = EditorGUILayout.Foldout(showSettings, "Settings");
+
+        if (showSettings)
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
+            EditorGUILayout.PropertyField(fadeSpeedProp);
+            EditorGUILayout.PropertyField(triggerOnContactProp);
+            if (triggerOnContactProp.boolValue)
+            {
+                EditorGUILayout.PropertyField(enterMapDistanceProp);
+            }
+
+            EditorGUILayout.PropertyField(outlineLayersProp);
+            EditorGUILayout.PropertyField(detailMapsProp);
+
+            EditorGUILayout.PropertyField(groundMapProp);
+
+            EditorGUILayout.EndVertical();
+        }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        showReferences = EditorGUILayout.Foldout(showReferences, "References");
+
+        if (showReferences)
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
+            EditorGUILayout.PropertyField(hiddenMapProp);
+            EditorGUILayout.PropertyField(defaultTileProp);
+            EditorGUILayout.PropertyField(cc2dProp);
+
+            EditorGUILayout.EndVertical();
+        }
+
+        serializedObject.ApplyModifiedProperties();
+    }
+}
+#endif
+
+[System.Serializable]
+public class TilemapData
+{
+    private Tilemap tilemap;
+    public Tilemap TMap
+    {
+        get
+        {
+            if (!tilemap)
+            {
+                tilemap = tilemapObject.GetComponent<Tilemap>();
+            }
+            return tilemap;
+        }
+        set => tilemap = value;
+    }
+    private TilemapRenderer renderer;
+    public TilemapRenderer Renderer
+    {
+        get
+        {
+            if (!renderer)
+            {
+                renderer = tilemapObject.GetComponent<TilemapRenderer>();
+            }
+            return renderer;
+        }
+        set => renderer = value;
+    }
+
+    [SerializeField] private GameObject tilemapObject;
+
+    public static TilemapData Construct(GameObject mapObjectPrefab)
+    {
+        TilemapData newData = new TilemapData();
+
+        GameObject tilemapObject = Object.Instantiate(mapObjectPrefab);
+
+        newData.tilemapObject = tilemapObject;
+        newData.tilemap = newData.tilemapObject.GetComponent<Tilemap>();
+        newData.renderer = newData.tilemapObject.GetComponent<TilemapRenderer>();
+
+        return newData;
+    }
+
+    public void Enable() => SetEnabled(true);
+    public void Disable() => SetEnabled(false);
+
+    public void SetEnabled(bool enabled)
+    {
+        TMap.enabled = enabled;
+        Renderer.enabled = enabled;
+    }
+}
+
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(TilemapData))]
+public class TilemapDataDrawer : PropertyDrawer
+{
+
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        label.text = property.displayName;
+        EditorGUI.PropertyField(position, property.FindPropertyRelative("tilemapObject"), label);
+    }
+}
+#endif

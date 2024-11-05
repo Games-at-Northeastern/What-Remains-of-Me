@@ -63,8 +63,6 @@ namespace PlayerController
 
         private PlayerSFX playerSFX;
 
-        
-
         [SerializeField] private PlayerInputHandler inputs; /* query this class to recieve player inputs, if locked, inputs will return false for all trigger inputs and 0s for movement input
                                                              * It is PlayerController2d's (this file's) responsiblity to lock and unlock the PlayerInputHandler */
 
@@ -157,12 +155,13 @@ namespace PlayerController
             {
                 case PlayerState.Grounded:
                     HandleGroundHorizontal();
-                    HandleGroundedJump();
                     HandleVerticalGrounded();
+                    JumpIfShould();
                     break;
                 case PlayerState.Aerial:
                     HandleAirHorizontal();
                     HandleVerticalAerial();
+                    JumpIfShould();
                     break;
                 case PlayerState.Swinging:
                     if (JumpBuffered)
@@ -270,7 +269,7 @@ namespace PlayerController
             ResetFlags();
 
             bool lastGroundedState = grounded;
-            grounded = TouchingGround();
+            grounded = TouchingGround() && _speed.y <= 0.1f;
 
 
             if (!lastGroundedState && grounded) // Landed
@@ -334,8 +333,6 @@ namespace PlayerController
 
         #region Grounded and Aerial
 
-        
-
         /// <summary>
         /// Handles _speed.y when the player is grounded
         /// </summary>
@@ -373,7 +370,7 @@ namespace PlayerController
         {
             IfTouchingWallThenStopMomentum();
             groundMovement.UpdateDirection(inputs.GetMoveInput().x);
-            
+
             groundMovement.ContinueMove();
         }
 
@@ -407,7 +404,7 @@ namespace PlayerController
                 jump.ContinueMove();
             }
 
-            if (!grounded /*(timeSinceLeftGround > _stats.coyoteTime)*/) // apply gravity (uncomment the coyote time section if you dont want the player to fall while they can still coyote jump)
+            if (!grounded /*&& timeSinceLeftGround > stats_.coyoteTime*/) // apply gravity (uncomment the coyote time section if you dont want the player to fall while they can still coyote jump)
             {
                 float gravityDelta = stats_.fallGravity * Time.deltaTime;
                 if(ExternalVelocity.y > 0)
@@ -437,8 +434,7 @@ namespace PlayerController
         protected virtual bool ShouldTriggerJump() => CanCoyoteJump() || CanGroundedJump();
         // if the player can "coyote jump", meaning they can trigger a jump during a small set time period after they leave the ground without jumping
         protected virtual bool CanCoyoteJump() => (timeSinceLeftGround < stats_.coyoteTime)
-                && JumpBuffered && jumpCanceled; // Checks JumpCanceled to stop situation where player triggers a grounded and coyote jump by spamming
-        // declares that a jump input was used without actually triggering a jump
+                && JumpBuffered;
         protected virtual void DeclareJumpInputUsed() => timeSinceJumpWasTriggered = 0;
 
         protected virtual void PlayLandingNoise()
@@ -451,7 +447,7 @@ namespace PlayerController
 
         protected virtual bool CanGroundedJump() => grounded && JumpBuffered;
 
-        protected virtual void HandleGroundedJump()
+        protected virtual void JumpIfShould()
         {
             if (fLanded && !jumpCanceled)
             {
