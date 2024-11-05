@@ -4,46 +4,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class GenericInteractiveScript : MonoBehaviour
+public abstract class GenericInteractiveScript : MonoBehaviour
 {
 
-    private bool playerInRange = false;
+    private Interaction interaction;
+    protected bool playerInRange = false;
 
-    public bool interactOnKeyPress = false;
-    public bool interactOnCollision = false;
     private ControlSchemes _cs;
     private BoxCollider2D _collider;
     // Start is called before the first frame update
     void Start()
     {
+        Init();
+    }
+    protected virtual void Init()
+    {
         Debug.Log("starting to interact");
+        interaction = GetComponent<Interaction>();
         _collider = GetComponent<BoxCollider2D>();
         _cs = new ControlSchemes();
         _cs.Enable();
     }
 
-
     // Update is called once per frame
     void Update()
     {
-        if (interactOnCollision)
+        if (playerInRange)
         {
-            if (playerInRange)
-            {
-                Interact();
-                playerInRange = false;
-            }
-        }
-
-        else if (interactOnKeyPress)
-        {
-            if (playerInRange && _cs.Player.Dialogue.WasPressedThisFrame())
-            {
-                Debug.Log("Interacted with F");
-                //Interact();
-            }
+            AttemptInteract();
         }
     }
+
+    protected abstract void AttemptInteract();
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -61,8 +53,9 @@ public class GenericInteractiveScript : MonoBehaviour
         }
     }
 
-    private void Interact()
+    protected void Interact()
     {
+        interaction.Execute();
         Debug.Log("We are interacting rn.");
     }
 

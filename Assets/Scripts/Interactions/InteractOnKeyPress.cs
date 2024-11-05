@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class I : MonoBehaviour
+public class InteractOnKeyPress : GenericInteractiveScript
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void AttemptInteract()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        playerInRange = false;
     }
 }
