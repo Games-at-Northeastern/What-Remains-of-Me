@@ -10,7 +10,7 @@ public abstract class GenericInteractiveScript : MonoBehaviour
     private Interaction interaction;
     protected bool playerInRange = false;
 
-    private ControlSchemes _cs;
+    protected ControlSchemes _cs;
     private BoxCollider2D _collider;
     // Start is called before the first frame update
     void Start()
