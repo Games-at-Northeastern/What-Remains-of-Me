@@ -10,7 +10,7 @@ public class JonesOutlet : AControllable
     [SerializeField] private Sprite openDoorSprite2;
     [SerializeField] private Collider2D doorCollider2;
     [SerializeField] private Animator doorAnimator2;
-    
+
     [SerializeField] private SpriteRenderer door3;
     [SerializeField] private Sprite openDoorSprite3;
     [SerializeField] private Collider2D doorCollider3;
@@ -21,15 +21,15 @@ public class JonesOutlet : AControllable
     [SerializeField] private ParticleSystem explosionParticles;
     private void Update()
     {
-        slider.value = GetVirus() / 100f;
+        // slider.value = GetVirus() / 100f;
 
-        if (GetVirus() >= 80f)
+        if (GetVirus() >= 90f)
         {
-	        door2.sprite = openDoorSprite2;
+            door2.sprite = openDoorSprite2;
             doorAnimator2.enabled = false;
             doorCollider2.enabled = false;
 
-	        door3.sprite = openDoorSprite3;
+            door3.sprite = openDoorSprite3;
             doorAnimator3.enabled = false;
             doorCollider3.enabled = false;
         }
