@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor;
-using UnityEditor.UIElements;
-using UnityEngine.UIElements;
 using UtilityData;
 
 public class HiddenAreaTM : MonoBehaviour
@@ -37,7 +35,7 @@ public class HiddenAreaTM : MonoBehaviour
 
     [SerializeField] private TilemapData hiddenMap;
     [SerializeField] private Tile defaultTile;
-    [SerializeField] private CompositeCollider2D cc2d;
+    private CompositeCollider2D cc2d;
 
     private bool triggered = false;
     private bool faded = false;
@@ -425,7 +423,7 @@ public class HiddenAreaTM : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (triggered && !faded)
         {
@@ -437,7 +435,7 @@ public class HiddenAreaTM : MonoBehaviour
             if (hiddenMap.TMap.color.a < 0.001f)
             {
                 faded = true;
-                hiddenMap.Disable();
+                hiddenMap.Destroy();
             }
         }
     }
@@ -449,6 +447,8 @@ public class HiddenAreaTM : MonoBehaviour
             GetComponent<CompositeCollider2D>().enabled = false;
             GetComponent<TilemapCollider2D>().enabled = false;
         }
+
+        cc2d = GetComponent<CompositeCollider2D>();
 
         hiddenMap.Enable();
 
@@ -492,6 +492,8 @@ public class HiddenAreaTM : MonoBehaviour
             {
                 spriteData.AddSprite(detailMaps[i].addedDetails.TMap, position);
             }
+
+            detailMaps[i].addedDetails.Destroy();
         }
 
         Dictionary<Vector3Int, Tile> positionToTile = spriteData.BakeTiles(defaultTile);
@@ -617,7 +619,6 @@ public class HiddenAreaTM : MonoBehaviour
             {
                 TriggerArea();
                 cc2d.enabled = false;
-                GetComponent<CompositeCollider2D>().enabled = false;
                 GetComponent<TilemapCollider2D>().enabled = false;
             }
         }
@@ -638,7 +639,6 @@ public class HiddenAreaTMEditor : Editor
     private SerializedProperty groundMapProp;
     private SerializedProperty hiddenMapProp;
     private SerializedProperty defaultTileProp;
-    private SerializedProperty cc2dProp;
 
     private bool showSettings = true;
     private bool showReferences = false;
@@ -654,12 +654,14 @@ public class HiddenAreaTMEditor : Editor
 
         hiddenMapProp = serializedObject.FindProperty("hiddenMap");
         defaultTileProp = serializedObject.FindProperty("defaultTile");
-        cc2dProp = serializedObject.FindProperty("cc2d");
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+
+        using (new EditorGUI.DisabledScope(true))
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((MonoBehaviour)target), GetType(), false);
 
         showSettings = EditorGUILayout.Foldout(showSettings, "Settings");
 
@@ -693,7 +695,6 @@ public class HiddenAreaTMEditor : Editor
 
             EditorGUILayout.PropertyField(hiddenMapProp);
             EditorGUILayout.PropertyField(defaultTileProp);
-            EditorGUILayout.PropertyField(cc2dProp);
 
             EditorGUILayout.EndVertical();
         }
@@ -748,6 +749,13 @@ public class TilemapData
         return newData;
     }
 
+    public TilemapData()
+    {
+        tilemap = null;
+        renderer = null;
+        tilemapObject = null;
+    }
+
     public void Enable() => SetEnabled(true);
     public void Disable() => SetEnabled(false);
 
@@ -756,13 +764,14 @@ public class TilemapData
         TMap.enabled = enabled;
         Renderer.enabled = enabled;
     }
+
+    public void Destroy() => Object.Destroy(tilemapObject);
 }
 
 #if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(TilemapData))]
 public class TilemapDataDrawer : PropertyDrawer
 {
-
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         label.text = property.displayName;
