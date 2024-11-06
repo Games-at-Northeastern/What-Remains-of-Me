@@ -13,8 +13,9 @@ using UnityEngine;
 public class GameData
 {
     
-    public float batteryPercentage;  //The percent of clean energy the player was at during the save.
-    public float virusPercentage;    //The percent of virus energy the player was at during the save.
+    public float batteryPercentage;     //The percent of clean energy the player was at during the save.
+    public float virusPercentage;       //The percent of virus energy the player was at during the save.
+    public Vector3 playerPosition;      //The saved position of the player.
 
 
     /**
@@ -25,5 +26,6 @@ public class GameData
     {
         this.batteryPercentage = 1f;
         this.virusPercentage = 0f;
+        playerPosition = Vector3.zero;
     }
 }
