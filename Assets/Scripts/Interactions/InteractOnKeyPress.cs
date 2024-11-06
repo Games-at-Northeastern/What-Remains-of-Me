@@ -6,6 +6,7 @@ public class InteractOnKeyPress : GenericInteractiveScript
 {
     protected override void AttemptInteract()
     {
+
         if (_cs.Player.Dialogue.WasPressedThisFrame())
         {
             Interact();
