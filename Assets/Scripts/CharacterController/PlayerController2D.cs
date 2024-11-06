@@ -25,7 +25,7 @@ namespace PlayerController
      * - ControllerCore should instead signal to features using flags. For example, instead of ControllerCore cancelling a Jump directly when it determines that the player landed on the ground,
      * - it enables the fLanded flag, which signals HandleGroundedJump() to cancel any previous jump
      */
-    public class PlayerController2D : MonoBehaviour, CharacterController2D
+    public class PlayerController2D : MonoBehaviour, CharacterController2D, IDataPersistence
     {
         // Issue: public fields should not exist, and should instead be accessed using an External Getter
         public Vector2 ExternalVelocity; // Vector which external objects (moving platforms, for the most part), modify to change the player's speed
@@ -650,8 +650,18 @@ namespace PlayerController
             GizmosPlus.BoxCast(origin + new Vector2(0, stats_.ceilingOffset), new Vector2(stats_.ceilingBounds.x, 0.01f), 0, Vector2.up, stats_.ceilingBounds.y - 0.01f, ~stats_.IgnoreLayers);
             GizmosPlus.BoxCast(origin + new Vector2(0, -stats_.groundOffset), new Vector2(stats_.groundBounds.x, 0.01f), 0, Vector2.down, 0.05f, ~stats_.IgnoreLayers);
         }
-#endif
 
+#endif
+        public void LoadData(GameData data)
+        {
+            _speed = Vector2.zero;
+            transform.position = data.playerPosition;
+
+        }
+        public void SaveData(ref GameData data)
+        {
+            data.playerPosition = transform.position;
+        }
     }
 
 }

@@ -5,31 +5,38 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.Playables;
 using UnityEditor;
+using UnityEngine.UIElements;
 
 /// <summary>
 ///A singleton class(only place one per scene) that keeps track of save and load data.
 /// </summary>
 
-//If needed, Based on https://www.youtube.com/watch?v=aUi9aijvpgs&ab_channel=ShapedbyRainStudios.
+//If a refrence or deeper explination is needed this was based on https://www.youtube.com/watch?v=aUi9aijvpgs&ab_channel=ShapedbyRainStudios.
 public class DataPersistenceManager : MonoBehaviour
 {
+
+    [SerializeField]
+    [Tooltip("Where the save data will be saved to")]
+    private string fileName;
 
     private GameData gameData; //Keeps track of the save/load game data. Things like virus, energy and other important things to load.
      
     private List<IDataPersistence> dataPersistenceObjects; //A list of objects that have the IDataPersistence. Anything with IDataPersistence has data that needs to be saved or loaded.
 
+    private FileDataHandler fileDataHandler;
+
     public static DataPersistenceManager instance { get; private set; }
 
     private void Awake()
     {
-        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
-        if(instance != null)
+        this.dataPersistenceObjects = FindAllDataPersistenceObjects(); //When the player opens the game, find all the DataPersistenceObjects so we can begin a save/load
+        if (instance != null)
         {
             Debug.LogError("Save/Load: Found More than one DataPersistenceManager in the current scene. This may cause errors with saving and loading data.");
         }
 
         instance = this;
-        NewGame();
+        fileDataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
     }
 
     /// <summary>
@@ -47,7 +54,7 @@ public class DataPersistenceManager : MonoBehaviour
 
 
         //Load save data from file using the data handler 
-
+        this.gameData = fileDataHandler.Load();
 
         //if no data can be loaded, init the new game
         
@@ -76,14 +83,15 @@ public class DataPersistenceManager : MonoBehaviour
             NewGame();
         }
 
-        //TODO: Pass the data to other scripts so they can update it
+        //Pass the data to other scripts so they can update it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
             dataPersistenceObj.SaveData(ref gameData);
         }
-        
 
-        //TODO: save that file using the data handler
+
+        //save that file using the data handler
+        fileDataHandler.Save(gameData);
 
     }
     /// <summary>
