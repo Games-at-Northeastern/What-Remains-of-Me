@@ -775,7 +775,7 @@ public class TilemapDataDrawer : PropertyDrawer
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         label.text = property.displayName;
-        EditorGUI.PropertyField(position, property.FindPropertyRelative("tilemapObject"), label);
+        EditorGUI.ObjectField(position, property.FindPropertyRelative("tilemapObject"), typeof(GameObject), label);
     }
 }
 #endif
