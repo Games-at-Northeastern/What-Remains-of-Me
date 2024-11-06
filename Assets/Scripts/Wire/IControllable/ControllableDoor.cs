@@ -22,7 +22,10 @@ public class ControllableDoor : AControllable
         set
         {
             shouldDisappear = value;
-            maskObject.SetActive(value);
+            if (!(maskObject is null))
+            {
+                maskObject.SetActive(value);
+            }
             if (!boxCollider || !doorRenderer)
             {
                 return;
