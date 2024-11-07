@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 6054455063116321671}
   - component: {fileID: 6054455063116321669}
   - component: {fileID: 2769574616702592717}
-  - component: {fileID: 1974297605359160198}
   - component: {fileID: 3886550081417274219}
   - component: {fileID: 7833827727432441535}
+  - component: {fileID: 7383004146246128612}
   m_Layer: 0
   m_Name: Hide Area Tilemap
   m_TagString: Untagged
@@ -140,48 +140,48 @@ Tilemap:
       e33: 0
   - m_RefCount: 0
     m_Data:
-      e00: 0
+      e00: -4.024862e+34
       e01: 0
-      e02: 0
-      e03: -1.0512887e-33
-      e10: 0
+      e02: -4.7500076
+      e03: -4.7500076
+      e10: 5.6e-43
       e11: 0
-      e12: 0
-      e13: 3.46e-43
-      e20: 0
-      e21: 0
-      e22: 0
-      e23: 0
-      e30: 0
+      e12: 5.6e-43
+      e13: 5.6e-43
+      e20: -6.52558e-11
+      e21: 1e-45
+      e22: 9.65529e-19
+      e23: -1.1120265e-19
+      e30: 4.5904e-41
       e31: 0
-      e32: 0
-      e33: 0
+      e32: 5.62e-43
+      e33: 5.65e-43
   - m_RefCount: 0
     m_Data:
-      e00: 1.6335836e-31
+      e00: -4.024862e+34
       e01: 0
-      e02: 2.0401127e+10
-      e03: 2.0401127e+10
-      e10: 1.024e-42
+      e02: -4.7500076
+      e03: -4.7500076
+      e10: 5.6e-43
       e11: 0
-      e12: 1.024e-42
-      e13: 1.024e-42
-      e20: 3.9381816e+28
+      e12: 5.6e-43
+      e13: 5.6e-43
+      e20: -6.52558e-11
       e21: 1e-45
-      e22: -8.348893e-18
-      e23: 2.8328455e-29
-      e30: 4.5905e-41
+      e22: 5.560854e-18
+      e23: -1.1120265e-19
+      e30: 4.5904e-41
       e31: 0
-      e32: 1.024e-42
-      e33: 1.029e-42
+      e32: 5.62e-43
+      e33: 5.65e-43
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: 4.6773e-41, g: 4.6773e-41, b: 4.6773e-41, a: 4.6773e-41}
+    m_Data: {r: 1.45755e-40, g: 1.45755e-40, b: 1.45755e-40, a: 1.45755e-40}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -21, y: -1, z: 0}
-  m_Size: {x: 187, y: 16, z: 1}
+  m_Origin: {x: -21, y: -21, z: 0}
+  m_Size: {x: 187, y: 36, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -224,7 +224,6 @@ MonoBehaviour:
   hiddenMap:
     tilemapObject: {fileID: 6054455063116321722}
   defaultTile: {fileID: 11400000, guid: 01cd59cd087385c459a1749b7813cea0, type: 2}
-  cc2d: {fileID: 1974297605359160198}
 --- !u!50 &2769574616702592717
 Rigidbody2D:
   serializedVersion: 4
@@ -246,56 +245,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!66 &1974297605359160198
-CompositeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6054455063116321722}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_GeometryType: 1
-  m_GenerationType: 0
-  m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 0}
-    m_ColliderPaths:
-    - - X: -80000000
-        Y: -179375008
-      - X: -80000000
-        Y: -150624992
-      - X: -80625000
-        Y: -150000000
-      - X: -179375008
-        Y: -150000000
-      - X: -180000000
-        Y: -150624992
-      - X: -180000000
-        Y: -179375008
-      - X: -179375008
-        Y: -180000000
-      - X: -80625000
-        Y: -180000000
-  - m_Collider: {fileID: 3886550081417274219}
-    m_ColliderPaths: []
-  m_CompositePaths:
-    m_Paths:
-    - - {x: -8.0625105, y: -18}
-      - {x: -8, y: -17.93749}
-      - {x: -8.000008, y: -15.062491}
-      - {x: -8.0625105, y: -15}
-      - {x: -17.93751, y: -15.000009}
-      - {x: -18, y: -15.0625105}
-      - {x: -17.999992, y: -17.93751}
-      - {x: -17.93749, y: -18}
-  m_VertexDistance: 0.0005
-  m_OffsetDistance: 0.4
 --- !u!19719996 &3886550081417274219
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -361,3 +310,27 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
+--- !u!66 &7383004146246128612
+CompositeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6054455063116321722}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_GeometryType: 1
+  m_GenerationType: 1
+  m_EdgeRadius: 0
+  m_ColliderPaths:
+  - m_Collider: {fileID: 3886550081417274219}
+    m_ColliderPaths: []
+  m_CompositePaths:
+    m_Paths: []
+  m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.43
