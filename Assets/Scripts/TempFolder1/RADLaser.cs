@@ -132,6 +132,10 @@ public class RADLaser : MonoBehaviour
         {
             _deathTeleporter.PerformDeath(player.gameObject);
             _lockout = true;
+<<<<<<< Updated upstream
+=======
+            sfx.DiedtoLaser();
+>>>>>>> Stashed changes
 
             Invoke(nameof(LockoutCooldownInvocation), _lockoutTime);
         }
