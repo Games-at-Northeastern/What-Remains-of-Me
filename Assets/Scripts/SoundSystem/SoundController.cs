@@ -84,6 +84,7 @@ public class SoundController : MonoBehaviour
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Swing"));
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Damaged"));
 					sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Die"));
+                    sounds.Add(Resources.Load<Sound>("SFXObjects/Laser_Death_Sound"));
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Player_Checkpoint"));
                     sounds.Add(Resources.Load<Sound>("SFXObjects/Player_JumpLand"));
                     break;

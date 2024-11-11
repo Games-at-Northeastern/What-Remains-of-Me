@@ -50,6 +50,10 @@ public class RADLaser : MonoBehaviour
     private RaycastHit2D _data;
     private bool _didCastHit; // equivalent to _data.point != Vector2.zero
 
+    //these two are used to get the script for the player's sound effects
+    private GameObject sfx_holder;
+    private PlayerSFX sfx;
+
     private void Awake()
     {
         _targetOriginPosition = _laserTarget.position;
@@ -132,6 +136,8 @@ public class RADLaser : MonoBehaviour
         {
             _deathTeleporter.PerformDeath(player.gameObject);
             _lockout = true;
+
+            SoundController.instance.PlaySound("Laser_Death_Sound");
 
             Invoke(nameof(LockoutCooldownInvocation), _lockoutTime);
         }
