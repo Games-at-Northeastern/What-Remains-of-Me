@@ -13,9 +13,10 @@ public class DoorManager : MonoBehaviour
 
     void Update()
     {
+
     }
 
-    public void ColliderSwitch()
+    public void ColliderOff()
     {
         if (activate == false)
         {
@@ -24,7 +25,7 @@ public class DoorManager : MonoBehaviour
         else
             return;
     }
-    public void ColliderClose()
+    public void ColliderOn()
     {
 
         GetComponent<BoxCollider2D>().enabled = true;

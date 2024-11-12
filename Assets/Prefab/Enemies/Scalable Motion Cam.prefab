@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6742226168140241467}
   - component: {fileID: 6742226168140241476}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cone Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6742226168140241477}
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: -0.7071068}
-  m_LocalPosition: {x: 0.13650155, y: 0.2577597, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.70710653, w: -0.7071071}
+  m_LocalPosition: {x: 0.13650131, y: 0.035758972, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6934764570264102406}
-  m_RootOrder: 0
+  m_Father: {fileID: 7396373194870297310}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 270}
 --- !u!114 &6742226168140241476
 MonoBehaviour:
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.329
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.105170965, a: 1}
   m_Intensity: 1.4
   m_LightVolumeIntensity: 0.2
   m_LightVolumeIntensityEnabled: 1
@@ -98,9 +98,9 @@ MonoBehaviour:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 0
-  m_PointLightOuterAngle: 41.32795
+  m_PointLightOuterAngle: 127.326485
   m_PointLightInnerRadius: 8.41
-  m_PointLightOuterRadius: 10.34
+  m_PointLightOuterRadius: 8.41
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -121,9 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6934764570264102406}
   - component: {fileID: 6934764570264102407}
-  - component: {fileID: 6934764570264102404}
-  - component: {fileID: 6934764570264102405}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,15 +135,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6934764570264102400}
-  m_LocalRotation: {x: -0, y: -0, z: 0.00000046193594, w: 1}
-  m_LocalPosition: {x: 0, y: -0.222, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.70710677}
+  m_LocalPosition: {x: -0.1, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6742226168140241467}
+  m_Children: []
   m_Father: {fileID: 7396373194870297310}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!212 &6934764570264102407
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -198,49 +195,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6934764570264102404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6934764570264102400}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c0268c3d40b4c74091539002489aca2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectCone: {fileID: 6742226168140241476}
---- !u!60 &6934764570264102405
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6934764570264102400}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.24, y: 0.21}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.875, y: 1.59375}
-    newSize: {x: 0.875, y: 1.59375}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.3125, y: 0.515625}
-      - {x: -0.34375, y: 0.359375}
-      - {x: -0.34375, y: -0.328125}
-      - {x: 0.4375, y: -0.328125}
-      - {x: 0.4375, y: 0.515625}
 --- !u!1 &8517895787014241163
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,7 +204,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7396373194870297310}
-  m_Layer: 0
+  - component: {fileID: 1448286883890868817}
+  - component: {fileID: 4784789101840556284}
+  m_Layer: 2
   m_Name: Scalable Motion Cam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -270,6 +226,57 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6934764570264102406}
+  - {fileID: 6742226168140241467}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1448286883890868817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8517895787014241163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c0268c3d40b4c74091539002489aca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectedObject: {fileID: 0}
+  detectedCollider: {fileID: 0}
+  isTracking: 0
+  what: {fileID: 0}
+  detectCone: {fileID: 6742226168140241476}
+  detectDistance: 1.23
+  currentPos: {x: 0, y: 0, z: 0}
+  activator: {fileID: 0}
+--- !u!60 &4784789101840556284
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8517895787014241163}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 1}
+      - {x: -0.95105654, y: 0.30901697}
+      - {x: -0.5877852, y: -0.80901706}
+      - {x: 0.58778536, y: -0.80901694}
+      - {x: 0.9510565, y: 0.30901712}
