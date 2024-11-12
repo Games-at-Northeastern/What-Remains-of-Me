@@ -9,7 +9,9 @@ public class RADLaser : MonoBehaviour
 {
     [SerializeField, Tooltip("Draws the laser in the direction of this target.")]
     private Transform _laserTarget;
-    private Vector2 _targetOriginPosition; // the position of target before start the game
+
+    // make a copy of target position and parent it under laser
+    private Transform _targetOriginPosition; // the position of target before start the game
     [SerializeField]
     private SpikeTeleport _deathTeleporter; // TODO, why do I have to use the SpikeTeleport.cs? Please refactor.
 
@@ -56,7 +58,16 @@ public class RADLaser : MonoBehaviour
 
     private void Awake()
     {
-        _targetOriginPosition = _laserTarget.position;
+        // make a copy of the target position
+        _targetOriginPosition = Instantiate(_laserTarget, _laserTarget.position, _laserTarget.rotation);
+
+        // Set the instantiated Transform as a child of this GameObject
+        _targetOriginPosition.SetParent(transform);
+
+        foreach (Transform child in _targetOriginPosition)
+        {
+            Destroy(child.gameObject);
+        }
 
         _renderer = GetComponent<LineRenderer>();
         Recalculate();
@@ -67,10 +78,9 @@ public class RADLaser : MonoBehaviour
     {
         _didCastHit = DoRaycast(out _data);
 
-        if  (!_didCastHit && !_rotating)
-        {
-           _laserTarget.position = _targetOriginPosition;
-        }
+        // if didn't hit anything, reset to the default position
+        if (!_didCastHit)
+        { _laserTarget.position = _targetOriginPosition.position; }
 
         if (_needsRecalculation)
         {
@@ -82,7 +92,7 @@ public class RADLaser : MonoBehaviour
 
     private void Recalculate()
     {
-        _dir = (_laserTarget.position - transform.position).normalized;
+        _dir = (_targetOriginPosition.position - transform.position).normalized;
         Vector3 targetPos;
 
         bool needsRealLaserDistance = _laserDistance <= 0;
@@ -95,9 +105,11 @@ public class RADLaser : MonoBehaviour
             targetPos = _laserTarget.position;
         }
         // draw laser in direction of target point until we hit something
+        //else if (needsRealLaserDistance && _didCastHit)
         else if (needsRealLaserDistance && _didCastHit)
         {
             targetPos = _data.point;
+
             // we don't need to reassign _realLaserDistance to dist(position, data point) here because the death ray itself
             // is already stopped by the collider.
 
