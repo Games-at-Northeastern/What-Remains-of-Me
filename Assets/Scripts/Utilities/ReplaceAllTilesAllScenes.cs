@@ -48,7 +48,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
             string path = AssetDatabase.GetAssetPath(rt);
             string directory = Path.GetDirectoryName(path);
-            string name = Path.GetFileNameWithoutExtension(path) + "_deprecated" + Path.GetExtension(path);
+            string name = Path.GetFileNameWithoutExtension(path) + "_deprecated";
 
             AssetDatabase.RenameAsset(path, Path.Join(directory, name));
 
@@ -158,6 +158,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
     private void ReplaceInObject(Dictionary<TileBase, TileBase> dict, object obj)
     {
+        Debug.Log(obj == null);
         PropertyInfo[] tileBaseProps = obj.GetType().GetProperties();
         tileBaseProps = tileBaseProps.Where(prop => prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase))).ToArray();
 
