@@ -56,6 +56,8 @@ public class RADLaser : MonoBehaviour
     private GameObject sfx_holder;
     private PlayerSFX sfx;
 
+    [SerializeField] private float resetSpeed = 5f;
+
     private void Awake()
     {
         // make a copy of the target position
@@ -83,7 +85,9 @@ public class RADLaser : MonoBehaviour
         if (!_didCastHit)
         {
             Debug.Log(111111);
-             _laserTarget.position = _targetOriginPosition.position;
+            //_laserTarget.position = _targetOriginPosition.position;
+            _laserTarget.position = Vector3.Lerp(_laserTarget.position, _targetOriginPosition.position, resetSpeed * Time.deltaTime);
+
 
             // todo: when not collides, should check for next nearest collision point
         }
