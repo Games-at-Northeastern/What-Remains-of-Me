@@ -213,6 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756a9fc0fe0fa244695ed5fbbc75b3d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  removeOutline: 1
   outlineLayers:
   - {r: 0, g: 0, b: 0, a: 1}
   detailMaps: []
@@ -224,6 +225,7 @@ MonoBehaviour:
   hiddenMap:
     tilemapObject: {fileID: 6054455063116321722}
   defaultTile: {fileID: 11400000, guid: 01cd59cd087385c459a1749b7813cea0, type: 2}
+  initOnStart: 1
 --- !u!50 &2769574616702592717
 Rigidbody2D:
   serializedVersion: 4
@@ -325,7 +327,7 @@ CompositeCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_GeometryType: 1
-  m_GenerationType: 1
+  m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
   - m_Collider: {fileID: 3886550081417274219}

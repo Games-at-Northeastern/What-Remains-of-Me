@@ -32,18 +32,23 @@ public class SpikeTeleport : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            PerformDeath(other.gameObject);
+            StartCoroutine(PerformDeath(other.gameObject));
         }
     }
 
     // exposed so that killing things is just more convenient
-    public void PerformDeath(GameObject target)
+    public IEnumerator PerformDeath(GameObject target)
+    {
+        yield return PerformDeath(target, new Vector3(0, 0, 0));
+    }
+
+    public IEnumerator PerformDeath(GameObject target, Vector3 particleOffset)
     {
         objectToTeleport = target;
         Rigidbody2D targetRb = target.GetComponent<Rigidbody2D>();
         targetRb.isKinematic = true;
         targetRb.constraints = RigidbodyConstraints2D.FreezeAll;
-        deathParticles.gameObject.transform.position = objectToTeleport.transform.position;
+        deathParticles.gameObject.transform.position = objectToTeleport.transform.position + particleOffset;
         deathParticles.Clear();
         deathParticles.Play();
         objectToTeleport.GetComponentInChildren<SpriteRenderer>().enabled = false;
@@ -54,7 +59,7 @@ public class SpikeTeleport : MonoBehaviour
         sfx.Died();
 
         Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
-        StartCoroutine(UnFreezePlayer(targetRb));
+        yield return StartCoroutine(UnFreezePlayer(targetRb));
     }
 
     private void TeleportPlayer()

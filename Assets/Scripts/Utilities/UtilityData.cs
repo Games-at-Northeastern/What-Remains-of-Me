@@ -39,7 +39,7 @@ namespace UtilityData
     #endregion
     public class Vector3IntSet : HashSet<Vector3Int>
     {
-        private class V3IComparer : IEqualityComparer<Vector3Int>
+        public class V3IComparer : IEqualityComparer<Vector3Int>
         {
             public bool Equals(Vector3Int a, Vector3Int b) => GetHashCode(a) == GetHashCode(b);
 
