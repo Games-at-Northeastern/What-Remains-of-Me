@@ -24,52 +24,36 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
     public void ApplyRuleToConnectedProject()
     {
-        //List<SceneAsset> replaceScenes = GetScenes();
         List<RuleTile> tilesToSwap = GetRuleTiles();
 
         var swapMap = new Dictionary<RuleTile, ConnectedRuleTile>();
 
         foreach (RuleTile rt in tilesToSwap)
         {
+            if (rt is ConnectedRuleTile)
+            {
+                Debug.Log(rt.name + "isrt");
+                continue;
+            }
+
             ConnectedRuleTile crt = CreateConnected(rt);
-            EditorUtility.CopySerialized(crt, rt);
+
+
+            string path = AssetDatabase.GetAssetPath(rt);
+            AssetDatabase.CreateAsset(crt, path);
         }
 
-        //foreach(SceneAsset scene in replaceScenes)
-        //{
-        //    
-        //}
+        AssetDatabase.Refresh();
     }
 
     private ConnectedRuleTile CreateConnected(RuleTile rt)
     {
-        Debug.Log(rt.name);
-        string path = AssetDatabase.GetAssetPath(rt);
-        Debug.Log(path);
-        string directory = Path.GetDirectoryName(path);
+        ConnectedRuleTile crt = CreateInstance(typeof(ConnectedRuleTile)) as ConnectedRuleTile;
 
-        string connectedName = Path.GetFileNameWithoutExtension(path) + "_Connected" + Path.GetExtension(path);
-        string connectedPath = Path.Join(directory, connectedName);
-
-        string guid = AssetDatabase.AssetPathToGUID(connectedPath, AssetPathToGUIDOptions.OnlyExistingAssets);
-
-        if (!string.IsNullOrEmpty(guid))
-        {
-            throw new System.Exception("Connected copy of " + path + "already exists");
-        }
-
-        ConnectedRuleTile crt = new ConnectedRuleTile();
-
-        foreach (var prop in rt.GetType().GetProperties())
-        {
-            PropertyInfo pInfo = crt.GetType().GetProperty(prop.Name);
-            if (pInfo.CanWrite)
-            {
-                pInfo.SetValue(crt, prop.GetValue(rt, null), null);
-            }
-        }
-
-        AssetDatabase.CreateAsset(crt, connectedPath);
+        crt.m_DefaultSprite = rt.m_DefaultSprite;
+        crt.m_DefaultGameObject = rt.m_DefaultGameObject;
+        crt.m_DefaultColliderType = rt.m_DefaultColliderType;
+        crt.m_TilingRules = rt.m_TilingRules;
 
         return crt;
     }
