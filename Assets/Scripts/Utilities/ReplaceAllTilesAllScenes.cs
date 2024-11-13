@@ -168,6 +168,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         {
             foreach (PropertyInfo prop in tileBaseProps)
             {
+                Debug.Log(prop.Name);
                 if (prop.CanWrite == false || prop.CanRead == false)
                 {
                     continue;
@@ -176,6 +177,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
                 {
                     TileBase current = prop.GetValue(obj) as TileBase;
 
+                    Debug.Log("checking");
                     if (current == null)
                     {
                         Debug.Log("SDASDASDSAD");
@@ -185,6 +187,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
                     {
                         if (current == find && (prop.PropertyType == replace.GetType() || replace.GetType().IsSubclassOf(prop.PropertyType)))
                         {
+                            Debug.Log("replacing");
                             prop.SetValue(obj, replace);
                         }
                     }
@@ -505,11 +508,11 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         bool findReplace = GUILayout.Button(areYouSureFR ? "Are you sure?" : "Run Find/Replace");
         if (findReplace)
         {
-            if (areYouSureFR)
+            areYouSureFR = !areYouSureFR;
+            if (!areYouSureFR)
             {
                 FindReplace();
             }
-            areYouSureFR = !areYouSureFR;
         }
 
         EditorGUILayout.Space();
@@ -523,11 +526,11 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         bool convert = GUILayout.Button(areYouSureConvert ? "Are you sure?" : "Run Rule Tile Convert");
         if (convert)
         {
-            if (areYouSureConvert)
+            areYouSureConvert = !areYouSureConvert;
+            if (!areYouSureConvert)
             {
                 ApplyRuleToConnectedProject();
             }
-            areYouSureConvert = !areYouSureConvert;
         }
 
         serializedObject.ApplyModifiedProperties();
