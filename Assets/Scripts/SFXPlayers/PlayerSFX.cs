@@ -79,4 +79,12 @@ public class PlayerSFX : MonoBehaviour
         //soundController.PlaySound("Player_Die");
     }
 
+    /// <summary>
+    /// Plays the laser death sound audio clip at the player's location
+    /// <summary>
+    public void DiedtoLaser()
+    {
+        SoundController.instance.PlaySound("Laser_Death_Sound");
+    }
+
 }
