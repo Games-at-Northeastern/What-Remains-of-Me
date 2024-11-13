@@ -30,8 +30,6 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
     public void ApplyRuleToConnectedProject()
     {
-        Undo.SetCurrentGroupName("Convert to Connected Tiles");
-
         List<RuleTile> tilesToSwap = GetRuleTiles();
 
         var swapMap = new Dictionary<TileBase, TileBase>();
@@ -51,6 +49,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
             string name = Path.GetFileNameWithoutExtension(path) + "_deprecated" + Path.GetExtension(path);
 
             AssetDatabase.RenameAsset(path, Path.Join(directory, name));
+            
             AssetDatabase.CreateAsset(crt, path);
 
             swapMap.Add(rt, crt);
@@ -61,6 +60,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         // edit tilemaps in scenes
 
+        useAllScenes = true;
         var scenesToSwap = GetScenes();
 
         var initialScene = EditorSceneManager.GetActiveScene().path;
@@ -98,6 +98,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         // edit tilemaps in prefabs
 
+        useAllPrefabs = true;
         var prefabsToSwap = GetPrefabs();
 
         foreach (GameObject gameObject in prefabsToSwap)
