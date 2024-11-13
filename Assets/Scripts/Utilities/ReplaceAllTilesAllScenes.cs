@@ -200,6 +200,9 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
             ReplaceTiles(find, replace, tilemaps);
         }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     #endregion
@@ -365,7 +368,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         EditorGUILayout.PropertyField(ruleTilesProp, new GUIContent("Rule Tiles", "Rule Tiles to convert, if empty, converts all non converted rule tiles in Assets"));
 
-        bool convert = GUILayout.Button(areYouSureFR ? "Are you sure?" : "Run Rule Tile Convert");
+        bool convert = GUILayout.Button(areYouSureConvert ? "Are you sure?" : "Run Rule Tile Convert");
         if (convert)
         {
             if (areYouSureConvert)
