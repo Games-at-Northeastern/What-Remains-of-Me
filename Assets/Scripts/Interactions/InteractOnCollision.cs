@@ -7,6 +7,6 @@ public class InteractOnCollision : GenericInteractiveScript
     protected override void AttemptInteract()
     {
         Interact();
-        playerInRange = false;
+        objectInRange = false;
     }
 }

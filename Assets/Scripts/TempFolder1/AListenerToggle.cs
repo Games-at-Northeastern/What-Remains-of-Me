@@ -18,13 +18,19 @@ public abstract class AListenerToggle : AEventToggle
     [SerializeField] protected AControllable _observed;
     [SerializeField] private ListenType _controllableListenerType;
 
-    private bool _isToggleActive;
-    private bool _wasToggleActive;
+    protected bool _isToggleActive;
+    protected bool _wasToggleActive;
 
     protected abstract bool IsToggleActive();
 
-    private void Awake()
+    protected virtual void Awake()
     {
+        // Immediately check and update the state when the object is enabled
+        // This allows us to create objects that are functional when the scene starts and can be deactivated later
+        _isToggleActive = IsToggleActive();
+        _wasToggleActive = _isToggleActive; 
+        FireEvent(_isToggleActive); 
+
         switch (_controllableListenerType)
         {
             case ListenType.Energy:
@@ -40,7 +46,7 @@ public abstract class AListenerToggle : AEventToggle
         }
     }
 
-    private void ProcessChange(float _)
+    protected virtual void ProcessChange(float _)
     {
         _isToggleActive = IsToggleActive(); // should we be active?
 

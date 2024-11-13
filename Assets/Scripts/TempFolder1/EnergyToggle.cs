@@ -10,4 +10,5 @@ public class EnergyToggle : AListenerToggle
     private float _percentActivation = 1f;
 
     protected override bool IsToggleActive() => _observed.GetPercentFull() >= _percentActivation;
+
 }

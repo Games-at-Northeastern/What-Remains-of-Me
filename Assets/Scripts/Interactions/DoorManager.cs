@@ -13,21 +13,21 @@ public class DoorManager : MonoBehaviour
 
     void Update()
     {
+        if (activate == true)
+        {
+            GetComponent<BoxCollider2D>().enabled = true;
+        }
 
     }
 
     public void ColliderOff()
     {
-        if (activate == false)
-        {
-            GetComponent<BoxCollider2D>().enabled = false;
-        }
-        else
-            return;
+        GetComponent<BoxCollider2D>().enabled = false;
+        activate = false;
     }
     public void ColliderOn()
     {
-
         GetComponent<BoxCollider2D>().enabled = true;
+        activate = true;
     }
 }
