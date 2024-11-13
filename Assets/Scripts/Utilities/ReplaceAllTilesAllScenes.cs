@@ -162,29 +162,106 @@ public class ReplaceAllTilesAllScenes : EditorWindow
     private void ReplaceInObject(Dictionary<TileBase, TileBase> dict, object obj)
     {
         PropertyInfo[] tileBaseProps = obj.GetType().GetProperties();
-        tileBaseProps = tileBaseProps.Where(prop => prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase))).ToArray();
+        //tileBaseProps = tileBaseProps.Where(prop => prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase))).ToArray();
 
-        foreach(PropertyInfo prop in tileBaseProps)
+        try
         {
-            if (prop.CanWrite == false || prop.CanRead == false)
+            foreach (PropertyInfo prop in tileBaseProps)
             {
-                continue;
-            }
-
-            TileBase current = prop.GetValue(obj) as TileBase;
-
-            if (current == null)
-            {
-                Debug.Log("SDASDASDSAD");
-            }
-
-            foreach ((TileBase find, TileBase replace) in dict)
-            {
-                if (current == find)
+                if (prop.CanWrite == false || prop.CanRead == false)
                 {
-                    prop.SetValue(obj, replace);
+                    continue;
+                }
+                if (prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase)))
+                {
+                    TileBase current = prop.GetValue(obj) as TileBase;
+
+                    if (current == null)
+                    {
+                        Debug.Log("SDASDASDSAD");
+                    }
+
+                    foreach ((TileBase find, TileBase replace) in dict)
+                    {
+                        if (current == find && (prop.PropertyType == replace.GetType() || replace.GetType().IsSubclassOf(prop.PropertyType));
+                        {
+                            prop.SetValue(obj, replace);
+                        }
+                    }
+                }
+                else if (prop.PropertyType.IsAssignableFrom(typeof(IList<TileBase>)))
+                {
+                    IList<TileBase> list = prop.GetValue(obj) as IList<TileBase>;
+
+                    foreach ((TileBase find, TileBase replace) in dict)
+                    {
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            if (list[i] == find)
+                            {
+                                list[i] = replace;
+                            }
+                        }
+                    }
+
+                    prop.SetValue(obj, list);
+                }
+                else if (prop.PropertyType.IsAssignableFrom(typeof(IList<RuleTile>)))
+                {
+                    IList<RuleTile> list = prop.GetValue(obj) as IList<RuleTile>;
+
+                    foreach ((TileBase find, TileBase replace) in dict)
+                    {
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            if (list[i] == find)
+                            {
+                                list[i] = replace as RuleTile;
+                            }
+                        }
+                    }
+
+                    prop.SetValue(obj, list);
+                }
+                else if (prop.PropertyType.IsAssignableFrom(typeof(ICollection<TileBase>)))
+                {
+                    ICollection<TileBase> list = prop.GetValue(obj) as ICollection<TileBase>;
+
+                    foreach ((TileBase find, TileBase replace) in dict)
+                    {
+                        while (list.Contains(find))
+                        {
+                            list.Remove(find);
+                            list.Add(replace);
+                        }
+                    }
+
+                    prop.SetValue(obj, list);
+                }
+                else if (prop.PropertyType.GetInterface("IEnumerable") != null)
+                {
+                    IEnumerable<object> objs = (IEnumerable<object>)prop.GetValue(obj);
+
+                    foreach (object nested in objs)
+                    {
+                        ReplaceInObject(dict, nested);
+                    }
+
+                    prop.SetValue(obj, objs);
+                }
+                else if (!prop.PropertyType.IsValueType)
+                {
+                    object property = prop.GetValue(obj) as object;
+
+                    ReplaceInObject(dict, property);
+
+                    prop.SetValue(obj, property);
                 }
             }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
         }
     }
 
