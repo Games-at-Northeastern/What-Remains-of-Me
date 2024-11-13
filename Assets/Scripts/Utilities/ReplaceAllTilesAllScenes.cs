@@ -129,7 +129,6 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         foreach (ScriptableObject so in soToSwap)
         {
-            Debug.Log(so.name);
             ReplaceInObject(swapMap, so);
         }
 
@@ -168,16 +167,16 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         {
             foreach (PropertyInfo prop in tileBaseProps)
             {
-                Debug.Log(prop.Name);
                 if (prop.CanWrite == false || prop.CanRead == false)
                 {
                     continue;
                 }
                 if (prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase)))
                 {
+                    Debug.Log(obj + " " + prop.Name);
+
                     TileBase current = prop.GetValue(obj) as TileBase;
 
-                    Debug.Log("checking");
                     if (current == null)
                     {
                         Debug.Log("SDASDASDSAD");
