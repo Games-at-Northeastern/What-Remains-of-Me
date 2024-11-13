@@ -191,7 +191,6 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         foreach (GameObject gameObject in prefabsToSwap)
         {
-            Debug.Log(gameObject.name);
             List<Tilemap> tilemaps = new List<Tilemap>();
 
             ReplaceAllTiles.AppendTilemaps(gameObject.transform, tilemaps);
