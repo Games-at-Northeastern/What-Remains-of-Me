@@ -158,7 +158,8 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
     private void ReplaceInObject(Dictionary<TileBase, TileBase> dict, object obj)
     {
-        PropertyInfo[] tileBaseProps = obj.GetType().GetProperties().Where(prop => prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase))).ToArray();
+        PropertyInfo[] tileBaseProps = obj.GetType().GetProperties();
+        tileBaseProps = tileBaseProps.Where(prop => prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase))).ToArray();
 
         foreach(PropertyInfo prop in tileBaseProps)
         {
