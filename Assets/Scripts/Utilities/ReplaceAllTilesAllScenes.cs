@@ -1,9 +1,10 @@
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
+using System;
 using System.IO;
-using System.Reflection;
 
 public class ReplaceAllTilesAllScenes : EditorWindow
 {
@@ -40,10 +41,57 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
 
             string path = AssetDatabase.GetAssetPath(rt);
-            AssetDatabase.CreateAsset(crt, path);
+            string directory = Path.GetDirectoryName(path);
+            string name = Path.GetFileNameWithoutExtension(path) + "_Connected" + Path.GetExtension(path);
+
+            AssetDatabase.CreateAsset(crt, Path.Join(directory, name));
+
+            swapMap.Add(rt, crt);
         }
 
         AssetDatabase.Refresh();
+
+        var scenesToSwap = GetScenes();
+
+        var initialScene = EditorSceneManager.GetActiveScene();
+
+        EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+        foreach(SceneAsset sceneAsset in scenesToSwap)
+        {
+            UnityEngine.SceneManagement.Scene scene;
+            try
+            {
+                scene = EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(sceneAsset));
+            }
+            catch (Exception e)
+            {
+                scene = EditorSceneManager.GetActiveScene();
+                Debug.Log(e.Message);
+            }
+
+            Grid[] grids = Array.ConvertAll(FindObjectsOfType(typeof(Grid)), obj => (Grid)obj);
+
+            foreach(Grid grid in grids)
+            {
+                GameObject gridObj = grid.gameObject;
+
+                ReplaceAllTiles rat = gridObj.AddComponent<ReplaceAllTiles>();
+
+                foreach ((var rt, var crt) in swapMap)
+                {
+                    rat.Find = rt;
+                    rat.Replace = crt;
+
+                    rat.ReplaceTiles();
+                }
+
+                DestroyImmediate(rat);
+            }
+
+            EditorSceneManager.SaveScene(scene);
+        }
+
+        EditorSceneManager.OpenScene(initialScene.path);
     }
 
     private ConnectedRuleTile CreateConnected(RuleTile rt)
@@ -81,7 +129,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         return GetAllAssetsOfType<SceneAsset>("Scene");
     }
 
-    private List<T> GetAllAssetsOfType<T>(string searchType) where T : Object
+    private List<T> GetAllAssetsOfType<T>(string searchType) where T : UnityEngine.Object
     {
         string[] guids = AssetDatabase.FindAssets("t:" + searchType, new string[] { "Assets" });
 
