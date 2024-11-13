@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using System;
 using System.IO;
+using System.Reflection;
+using System.Linq;
 
 public class ReplaceAllTilesAllScenes : EditorWindow
 {
@@ -58,7 +60,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        // edit tilemaps in scenes
+        // edit scenes
 
         var scenesToSwap = GetAllAssetsOfType<SceneAsset>("Scene");
 
@@ -90,12 +92,22 @@ public class ReplaceAllTilesAllScenes : EditorWindow
                 ReplaceTiles(swapMap, tilemaps);
             }
 
+            foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
+            {
+                if (gameObject.transform.parent != null)
+                {
+                    continue;
+                }
+
+                ReplaceInGameObjectProperties(swapMap, gameObject);
+            }
+
             EditorSceneManager.SaveScene(scene);
         }
 
         EditorSceneManager.OpenScene(initialScene);
 
-        // edit tilemaps in prefabs
+        // edit prefabs
 
         var prefabsToSwap = GetAllAssetsOfType<GameObject>("GameObject");
 
@@ -107,6 +119,18 @@ public class ReplaceAllTilesAllScenes : EditorWindow
             ReplaceAllTiles.AppendTilemaps(gameObject.transform, tilemaps);
 
             ReplaceTiles(swapMap, tilemaps);
+
+            ReplaceInGameObjectProperties(swapMap, gameObject);
+        }
+
+        // edit scriptable objects
+
+        var soToSwap = GetAllAssetsOfType<ScriptableObject>("ScriptableObject");
+
+        foreach (ScriptableObject so in soToSwap)
+        {
+            Debug.Log(so.name);
+            ReplaceInObject(swapMap, so);
         }
 
         foreach (RuleTile oldTile in swapMap.Keys)
@@ -117,6 +141,47 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+    }
+
+    private void ReplaceInGameObjectProperties(Dictionary<TileBase, TileBase> dict, GameObject obj)
+    {
+        foreach (Component componet in obj.GetComponents(typeof(Component)))
+        {
+            ReplaceInObject(dict, componet);
+        }
+
+        foreach (Transform child in obj.transform)
+        {
+            ReplaceInGameObjectProperties(dict, child.gameObject);
+        }
+    }
+
+    private void ReplaceInObject(Dictionary<TileBase, TileBase> dict, object obj)
+    {
+        PropertyInfo[] tileBaseProps = obj.GetType().GetProperties().Where(prop => prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase))).ToArray();
+
+        foreach(PropertyInfo prop in tileBaseProps)
+        {
+            if (prop.CanWrite == false || prop.CanRead == false)
+            {
+                continue;
+            }
+
+            TileBase current = prop.GetValue(obj) as TileBase;
+
+            if (current == null)
+            {
+                Debug.Log("SDASDASDSAD");
+            }
+
+            foreach ((TileBase find, TileBase replace) in dict)
+            {
+                if (current == find)
+                {
+                    prop.SetValue(obj, replace);
+                }
+            }
+        }
     }
 
     private ConnectedRuleTile CreateConnected(RuleTile rt)
