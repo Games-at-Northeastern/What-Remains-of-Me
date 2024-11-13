@@ -53,7 +53,7 @@ public class ReplaceAllTiles : MonoBehaviour
         }
     }
 
-    private void AppendTilemaps(Transform transform, List<Tilemap> tilemaps)
+    public static void AppendTilemaps(Transform transform, List<Tilemap> tilemaps)
     {
         var tilemap = transform.gameObject.GetComponent<Tilemap>();
 

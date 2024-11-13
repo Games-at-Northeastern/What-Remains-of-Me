@@ -33,7 +33,6 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         {
             if (rt is ConnectedRuleTile)
             {
-                Debug.Log(rt.name + "isrt");
                 continue;
             }
 
@@ -42,18 +41,20 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
             string path = AssetDatabase.GetAssetPath(rt);
             string directory = Path.GetDirectoryName(path);
-            string name = Path.GetFileNameWithoutExtension(path) + "_Connected" + Path.GetExtension(path);
+            string name = Path.GetFileNameWithoutExtension(path) + "_deprecated" + Path.GetExtension(path);
 
-            AssetDatabase.CreateAsset(crt, Path.Join(directory, name));
+            AssetDatabase.RenameAsset(path, Path.Join(directory, name));
+            AssetDatabase.CreateAsset(crt, path);
 
             swapMap.Add(rt, crt);
         }
 
+        AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
         var scenesToSwap = GetScenes();
 
-        var initialScene = EditorSceneManager.GetActiveScene();
+        var initialScene = EditorSceneManager.GetActiveScene().path;
 
         EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
         foreach(SceneAsset sceneAsset in scenesToSwap)
@@ -75,23 +76,50 @@ public class ReplaceAllTilesAllScenes : EditorWindow
             {
                 GameObject gridObj = grid.gameObject;
 
-                ReplaceAllTiles rat = gridObj.AddComponent<ReplaceAllTiles>();
+                List<Tilemap> tilemaps = new List<Tilemap>();
+                ReplaceAllTiles.AppendTilemaps(gridObj.transform, tilemaps);
 
-                foreach ((var rt, var crt) in swapMap)
-                {
-                    rat.Find = rt;
-                    rat.Replace = crt;
-
-                    rat.ReplaceTiles();
-                }
-
-                DestroyImmediate(rat);
+                ReplaceTiles(swapMap, tilemaps);
             }
 
             EditorSceneManager.SaveScene(scene);
         }
 
-        EditorSceneManager.OpenScene(initialScene.path);
+        EditorSceneManager.OpenScene(initialScene);
+
+        foreach (RuleTile oldTile in swapMap.Keys)
+        {
+            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(oldTile));
+            DestroyImmediate(oldTile);
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+    }
+
+    public void ReplaceTiles(Dictionary<RuleTile, ConnectedRuleTile> dict, List<Tilemap> tilemaps)
+    {
+
+        foreach (Tilemap tilemap in tilemaps)
+        {
+            foreach (var position in tilemap.cellBounds.allPositionsWithin)
+            {
+                if (!tilemap.HasTile(position))
+                {
+                    continue;
+                }
+
+                RuleTile tile = tilemap.GetTile(position) as RuleTile;
+
+                if (tile != null)
+                {
+                    if (dict.ContainsKey(tile))
+                    {
+                        tilemap.SetTile(position, dict[tile]);
+                    }
+                }
+            }
+        }
     }
 
     private ConnectedRuleTile CreateConnected(RuleTile rt)
