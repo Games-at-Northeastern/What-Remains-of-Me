@@ -62,7 +62,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         // edit scenes
 
-        /*var scenesToSwap = GetAllAssetsOfType<SceneAsset>("Scene");
+        var scenesToSwap = GetAllAssetsOfType<SceneAsset>("Scene");
 
         var initialScene = EditorSceneManager.GetActiveScene().path;
 
@@ -92,7 +92,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
                 ReplaceTiles(swapMap, tilemaps);
             }
 
-            foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
+            /*foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
             {
                 if (gameObject.transform.parent != null)
                 {
@@ -100,12 +100,12 @@ public class ReplaceAllTilesAllScenes : EditorWindow
                 }
 
                 ReplaceInGameObjectProperties(swapMap, gameObject);
-            }
+            }*/
 
             EditorSceneManager.SaveScene(scene);
         }
 
-        EditorSceneManager.OpenScene(initialScene);*/
+        EditorSceneManager.OpenScene(initialScene);
 
         // edit prefabs
 
@@ -119,24 +119,24 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
             ReplaceTiles(swapMap, tilemaps);
 
-            Debug.Log(gameObject.name + "===================");
-            ReplaceInGameObjectProperties(swapMap, gameObject);
+            //Debug.Log(gameObject.name + "===================");
+            //ReplaceInGameObjectProperties(swapMap, gameObject);
         }
 
         // edit scriptable objects
 
-        var soToSwap = GetAllAssetsOfType<ScriptableObject>("ScriptableObject");
+        /*var soToSwap = GetAllAssetsOfType<ScriptableObject>("ScriptableObject");
 
         foreach (ScriptableObject so in soToSwap)
         {
             ReplaceInObject(swapMap, so);
-        }
+        }*/
 
-        //foreach (RuleTile oldTile in swapMap.Keys)
-        //{
-        //    AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(oldTile));
-        //    DestroyImmediate(oldTile, true);
-        //}
+        foreach (RuleTile oldTile in swapMap.Keys)
+        {
+            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(oldTile));
+            DestroyImmediate(oldTile, true);
+        }
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
