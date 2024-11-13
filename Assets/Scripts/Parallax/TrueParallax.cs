@@ -37,7 +37,6 @@ public class TrueParallax : MonoBehaviour
         }
 
         cam = Camera.main.gameObject;
-
     }
 
     // 
