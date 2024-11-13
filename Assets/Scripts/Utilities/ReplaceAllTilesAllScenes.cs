@@ -49,7 +49,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
             string name = Path.GetFileNameWithoutExtension(path) + "_deprecated" + Path.GetExtension(path);
 
             AssetDatabase.RenameAsset(path, Path.Join(directory, name));
-            
+
             AssetDatabase.CreateAsset(crt, path);
 
             swapMap.Add(rt, crt);
@@ -60,8 +60,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         // edit tilemaps in scenes
 
-        useAllScenes = true;
-        var scenesToSwap = GetScenes();
+        var scenesToSwap = GetAllAssetsOfType<SceneAsset>("Scene");
 
         var initialScene = EditorSceneManager.GetActiveScene().path;
 
@@ -98,8 +97,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         // edit tilemaps in prefabs
 
-        useAllPrefabs = true;
-        var prefabsToSwap = GetPrefabs();
+        var prefabsToSwap = GetAllAssetsOfType<GameObject>("GameObject");
 
         foreach (GameObject gameObject in prefabsToSwap)
         {
@@ -211,7 +209,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
     {
         if (useAllPrefabs)
         {
-            return GetAllAssetsOfType<GameObject>("GameObject");
+            return ExcludeItems(GetAllAssetsOfType<GameObject>("GameObject"), prefabs);
         }
 
         return prefabs;
@@ -221,10 +219,25 @@ public class ReplaceAllTilesAllScenes : EditorWindow
     {
         if (useAllScenes)
         {
-            return GetAllAssetsOfType<SceneAsset>("Scene");
+            return ExcludeItems(GetAllAssetsOfType<SceneAsset>("Scene"), scenes);
         }
 
         return scenes;
+    }
+
+    private List<T> ExcludeItems<T>(List<T> items, List<T> excluded)
+    {
+        List<T> result = new List<T>();
+
+        foreach(T item in items)
+        {
+            if (!excluded.Contains(item))
+            {
+                result.Add(item);
+            }
+        }
+
+        return result;
     }
 
     private List<T> GetAllAssetsOfType<T>(string searchType) where T : UnityEngine.Object
@@ -325,25 +338,16 @@ public class ReplaceAllTilesAllScenes : EditorWindow
     {
         serializedObject.Update();
 
-        EditorGUILayout.LabelField(new GUIContent("Settings", "Specifies where in the project tile replace operations should execute."), EditorStyles.centeredGreyMiniLabel);
+        EditorGUILayout.LabelField(new GUIContent("Find/Replace", "Specifies where in the project tile replace operations should execute. If use all scenes is selected, scenes in the scenes list are excluded from find/replace. If use all scenes is" +
+            " turned off, scenes in the scenes list are find/replaced"), EditorStyles.centeredGreyMiniLabel);
 
         EditorGUILayout.PropertyField(useAllScenesProp);
-        if (!useAllScenes)
-        {
-            EditorGUILayout.PropertyField(scenesProp);
-        }
+        EditorGUILayout.PropertyField(scenesProp);
 
         EditorGUILayout.PropertyField(useAllPrefabsProp);
-        if (!useAllPrefabs)
-        {
-            EditorGUILayout.PropertyField(prefabsProp);
-        }
+        EditorGUILayout.PropertyField(prefabsProp);
 
         EditorGUILayout.Space();
-
-        // draw find / replace vertical
-
-        EditorGUILayout.LabelField("Find/Replace", EditorStyles.centeredGreyMiniLabel);
 
         EditorGUILayout.PropertyField(findProp);
         EditorGUILayout.Space();
