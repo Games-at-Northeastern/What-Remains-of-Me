@@ -263,7 +263,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            //Debug.Log(e);
         }
     }
 
@@ -402,11 +402,6 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         }
 
         List<T> assets = new List<T>();
-
-        foreach (string path in paths)
-        {
-            Debug.Log(path);
-        }
 
         foreach (string path in paths)
         {
