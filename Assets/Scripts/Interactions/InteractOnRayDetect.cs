@@ -4,7 +4,7 @@ using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class PlayerDetector : MonoBehaviour
+public class InteractOnRayDetect : MonoBehaviour
 {
     #region player tracking
     [Header("Player Tracking")]
