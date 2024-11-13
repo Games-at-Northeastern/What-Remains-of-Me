@@ -48,11 +48,11 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
             string path = AssetDatabase.GetAssetPath(rt);
             string directory = Path.GetDirectoryName(path);
-            string name = Path.GetFileNameWithoutExtension(path) + "_deprecated";
+            string name = Path.GetFileNameWithoutExtension(path) + "_connected" + Path.GetExtension(path);
 
-            AssetDatabase.RenameAsset(path, Path.Join(directory, name));
+            //AssetDatabase.RenameAsset(path, Path.Join(directory, name));
 
-            AssetDatabase.CreateAsset(crt, path);
+            AssetDatabase.CreateAsset(crt, Path.Join(directory, name));
 
             swapMap.Add(rt, crt);
         }
@@ -145,9 +145,12 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
     private void ReplaceInGameObjectProperties(Dictionary<TileBase, TileBase> dict, GameObject obj)
     {
-        foreach (Component componet in obj.GetComponents(typeof(Component)))
+        foreach (Component component in obj.GetComponents(typeof(Component)))
         {
-            ReplaceInObject(dict, componet);
+            if (component != null)
+            {
+                ReplaceInObject(dict, component);
+            }
         }
 
         foreach (Transform child in obj.transform)
@@ -158,7 +161,6 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
     private void ReplaceInObject(Dictionary<TileBase, TileBase> dict, object obj)
     {
-        Debug.Log(obj == null);
         PropertyInfo[] tileBaseProps = obj.GetType().GetProperties();
         tileBaseProps = tileBaseProps.Where(prop => prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase))).ToArray();
 
