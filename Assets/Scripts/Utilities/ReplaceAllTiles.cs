@@ -55,11 +55,14 @@ public class ReplaceAllTiles : MonoBehaviour
 
     public static void AppendTilemaps(Transform transform, List<Tilemap> tilemaps)
     {
-        var tilemap = transform.gameObject.GetComponent<Tilemap>();
+        var foundTilemaps = transform.gameObject.GetComponents<Tilemap>();
 
-        if (!(tilemap == null))
+        foreach(Tilemap tilemap in foundTilemaps)
         {
-            tilemaps.Add(tilemap);
+            if (!(tilemap == null))
+            {
+                tilemaps.Add(tilemap);
+            }
         }
 
         foreach (Transform child in transform)

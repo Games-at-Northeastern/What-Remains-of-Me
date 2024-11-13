@@ -15,19 +15,26 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         wnd.titleContent = new GUIContent("ReplaceAllTilesAllScenes");
     }
 
+    [SerializeField] private bool useAllScenes;
     [SerializeField] private List<SceneAsset> scenes;
-    [SerializeField] private List<TileBase> tiles;
-    [SerializeField] private List<RuleTile> ruleTiles;
 
-    [SerializeField] private Tile replace;
+    [SerializeField] private bool useAllPrefabs;
+    [SerializeField] private List<GameObject> prefabs;
+
+    [SerializeField] private ConnectedRuleTile.SerializableTileBaseHashSet find;
+    [SerializeField] private TileBase replace;
+
+    [SerializeField] private List<RuleTile> ruleTiles;
 
     #region Rule to Connected
 
     public void ApplyRuleToConnectedProject()
     {
+        Undo.SetCurrentGroupName("Convert to Connected Tiles");
+
         List<RuleTile> tilesToSwap = GetRuleTiles();
 
-        var swapMap = new Dictionary<RuleTile, ConnectedRuleTile>();
+        var swapMap = new Dictionary<TileBase, TileBase>();
 
         foreach (RuleTile rt in tilesToSwap)
         {
@@ -51,6 +58,8 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+
+        // edit tilemaps in scenes
 
         var scenesToSwap = GetScenes();
 
@@ -87,39 +96,28 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         EditorSceneManager.OpenScene(initialScene);
 
+        // edit tilemaps in prefabs
+
+        var prefabsToSwap = GetPrefabs();
+
+        foreach (GameObject gameObject in prefabsToSwap)
+        {
+            Debug.Log(gameObject.name);
+            List<Tilemap> tilemaps = new List<Tilemap>();
+
+            ReplaceAllTiles.AppendTilemaps(gameObject.transform, tilemaps);
+
+            ReplaceTiles(swapMap, tilemaps);
+        }
+
         foreach (RuleTile oldTile in swapMap.Keys)
         {
             AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(oldTile));
-            DestroyImmediate(oldTile);
+            DestroyImmediate(oldTile, true);
         }
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-    }
-
-    public void ReplaceTiles(Dictionary<RuleTile, ConnectedRuleTile> dict, List<Tilemap> tilemaps)
-    {
-
-        foreach (Tilemap tilemap in tilemaps)
-        {
-            foreach (var position in tilemap.cellBounds.allPositionsWithin)
-            {
-                if (!tilemap.HasTile(position))
-                {
-                    continue;
-                }
-
-                RuleTile tile = tilemap.GetTile(position) as RuleTile;
-
-                if (tile != null)
-                {
-                    if (dict.ContainsKey(tile))
-                    {
-                        tilemap.SetTile(position, dict[tile]);
-                    }
-                }
-            }
-        }
     }
 
     private ConnectedRuleTile CreateConnected(RuleTile rt)
@@ -147,14 +145,82 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
     #endregion
 
-    private List<SceneAsset> GetScenes()
+    #region Find/Replace
+
+    private void FindReplace()
     {
-        if (scenes.Count > 0)
+        // edit tilemaps in scenes
+
+        var scenesToSwap = GetScenes();
+
+        var initialScene = EditorSceneManager.GetActiveScene().path;
+
+        EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+        foreach (SceneAsset sceneAsset in scenesToSwap)
         {
-            return scenes;
+            UnityEngine.SceneManagement.Scene scene;
+            try
+            {
+                scene = EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(sceneAsset));
+            }
+            catch (Exception e)
+            {
+                scene = EditorSceneManager.GetActiveScene();
+                Debug.Log(e.Message);
+            }
+
+            Grid[] grids = Array.ConvertAll(FindObjectsOfType(typeof(Grid)), obj => (Grid)obj);
+
+            foreach (Grid grid in grids)
+            {
+                GameObject gridObj = grid.gameObject;
+
+                List<Tilemap> tilemaps = new List<Tilemap>();
+                ReplaceAllTiles.AppendTilemaps(gridObj.transform, tilemaps);
+
+                ReplaceTiles(find, replace, tilemaps);
+            }
+
+            EditorSceneManager.SaveScene(scene);
         }
 
-        return GetAllAssetsOfType<SceneAsset>("Scene");
+        EditorSceneManager.OpenScene(initialScene);
+
+        // edit tilemaps in prefabs
+
+        var prefabsToSwap = GetPrefabs();
+
+        foreach (GameObject gameObject in prefabsToSwap)
+        {
+            Debug.Log(gameObject.name);
+            List<Tilemap> tilemaps = new List<Tilemap>();
+
+            ReplaceAllTiles.AppendTilemaps(gameObject.transform, tilemaps);
+
+            ReplaceTiles(find, replace, tilemaps);
+        }
+    }
+
+    #endregion
+
+    private List<GameObject> GetPrefabs()
+    {
+        if (useAllPrefabs)
+        {
+            return GetAllAssetsOfType<GameObject>("GameObject");
+        }
+
+        return prefabs;
+    }
+
+    private List<SceneAsset> GetScenes()
+    {
+        if (useAllScenes)
+        {
+            return GetAllAssetsOfType<SceneAsset>("Scene");
+        }
+
+        return scenes;
     }
 
     private List<T> GetAllAssetsOfType<T>(string searchType) where T : UnityEngine.Object
@@ -183,13 +249,131 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         return assets;
     }
 
+    public void ReplaceTiles(Dictionary<TileBase, TileBase> dict, List<Tilemap> tilemaps)
+    {
+
+        foreach (Tilemap tilemap in tilemaps)
+        {
+            foreach (var position in tilemap.cellBounds.allPositionsWithin)
+            {
+                if (!tilemap.HasTile(position))
+                {
+                    continue;
+                }
+
+                TileBase tile = tilemap.GetTile(position);
+
+                if (dict.ContainsKey(tile))
+                {
+                    tilemap.SetTile(position, dict[tile]);
+                }
+            }
+        }
+    }
+
+    public void ReplaceTiles(ConnectedRuleTile.SerializableTileBaseHashSet findTiles, TileBase replaceTile, List<Tilemap> tilemaps)
+    {
+        Dictionary<TileBase, TileBase> swapDict = new Dictionary<TileBase, TileBase>();
+
+        foreach (TileBase key in findTiles)
+        {
+            if (key != null)
+            {
+                swapDict.Add(key, replaceTile);
+            }
+        }
+
+        ReplaceTiles(swapDict, tilemaps);
+    }
+
+    private SerializedObject serializedObject;
+
+    private SerializedProperty scenesProp;
+    private SerializedProperty useAllScenesProp;
+    private SerializedProperty prefabsProp;
+    private SerializedProperty useAllPrefabsProp;
+
+    private SerializedProperty findProp;
+    private SerializedProperty replaceProp;
+
+    private SerializedProperty ruleTilesProp;
+
+    private void OnEnable()
+    {
+        serializedObject = new SerializedObject(this);
+
+        scenesProp = serializedObject.FindProperty("scenes");
+        useAllScenesProp = serializedObject.FindProperty("useAllScenes");
+
+        prefabsProp = serializedObject.FindProperty("prefabs");
+        useAllPrefabsProp = serializedObject.FindProperty("useAllPrefabs");
+
+        findProp = serializedObject.FindProperty("find");
+        replaceProp = serializedObject.FindProperty("replace");
+
+        ruleTilesProp = serializedObject.FindProperty("ruleTiles");
+    }
+
+    private bool areYouSureFR = false;
+    private bool areYouSureConvert = false;
+
     public void OnGUI()
     {
-        bool replaceRules = GUILayout.Button("Convert From Rule to Connected");
+        serializedObject.Update();
 
-        if (replaceRules)
+        EditorGUILayout.LabelField(new GUIContent("Settings", "Specifies where in the project tile replace operations should execute."), EditorStyles.centeredGreyMiniLabel);
+
+        EditorGUILayout.PropertyField(useAllScenesProp);
+        if (!useAllScenes)
         {
-            ApplyRuleToConnectedProject();
+            EditorGUILayout.PropertyField(scenesProp);
         }
+
+        EditorGUILayout.PropertyField(useAllPrefabsProp);
+        if (!useAllPrefabs)
+        {
+            EditorGUILayout.PropertyField(prefabsProp);
+        }
+
+        EditorGUILayout.Space();
+
+        // draw find / replace vertical
+
+        EditorGUILayout.LabelField("Find/Replace", EditorStyles.centeredGreyMiniLabel);
+
+        EditorGUILayout.PropertyField(findProp);
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(replaceProp);
+        EditorGUILayout.Space();
+
+        bool findReplace = GUILayout.Button(areYouSureFR ? "Are you sure?" : "Run Find/Replace");
+        if (findReplace)
+        {
+            if (areYouSureFR)
+            {
+                FindReplace();
+            }
+            areYouSureFR = !areYouSureFR;
+        }
+
+        EditorGUILayout.Space();
+
+        // draw convert vertical
+
+        EditorGUILayout.LabelField("Convert Rule Tiles to Connected Tiles", EditorStyles.centeredGreyMiniLabel);
+
+        EditorGUILayout.PropertyField(ruleTilesProp, new GUIContent("Rule Tiles", "Rule Tiles to convert, if empty, converts all non converted rule tiles in Assets"));
+
+        bool convert = GUILayout.Button(areYouSureFR ? "Are you sure?" : "Run Rule Tile Convert");
+        if (convert)
+        {
+            if (areYouSureConvert)
+            {
+                ApplyRuleToConnectedProject();
+            }
+            areYouSureConvert = !areYouSureConvert;
+        }
+
+        serializedObject.ApplyModifiedProperties();
     }
 }

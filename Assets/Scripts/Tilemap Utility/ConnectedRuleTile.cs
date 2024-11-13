@@ -37,6 +37,7 @@ public class ConnectedRuleTile : RuleTile
     {
         [SerializeField] private List<TileBase> values;
         [System.NonSerialized] private HashSet<TileBase> _hashSet;
+        [SerializeField] private int count = 0;
 
         #region Constructors
 
@@ -98,6 +99,7 @@ public class ConnectedRuleTile : RuleTile
             }*/
 
             OnAfterDeserialize();
+            count = Count;
         }
 
         public void OnAfterDeserialize()
@@ -133,34 +135,62 @@ public class ConnectedRuleTile : RuleTile
         [CustomPropertyDrawer(typeof(SerializableTileBaseHashSet))]
         private class SerializableHashSetPropertyDrawer : PropertyDrawer
         {
+            private bool show = false;
+            public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => 0;
+
             public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
             {
                 var internalListProp = property.FindPropertyRelative("values");
+                var count = property.FindPropertyRelative("count");
 
-                EditorGUILayout.LabelField(label);
+                EditorGUILayout.BeginHorizontal();
+                show = EditorGUILayout.Foldout(show, label);
+                GUILayout.FlexibleSpace();
 
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-
-                bool add = GUILayout.Button("Add");
-                bool remove = GUILayout.Button("Remove");
-
-                for (int i = 0; i < internalListProp.arraySize; i++)
+                EditorGUI.BeginDisabledGroup(true);
+                //string arraySize = internalListProp.arraySize.ToString();
+                string arraySize = count.intValue.ToString();
+                while (arraySize.Length < 13)
                 {
-                    EditorGUILayout.PropertyField(internalListProp.GetArrayElementAtIndex(i));
+                    arraySize += " ";
                 }
+                GUILayout.TextField(arraySize);
+                EditorGUI.EndDisabledGroup();
 
-                if (add)
+                EditorGUILayout.EndHorizontal();
+
+                if (show)
                 {
-                    internalListProp.InsertArrayElementAtIndex(internalListProp.arraySize);
-                    internalListProp.GetArrayElementAtIndex(internalListProp.arraySize - 1).objectReferenceValue = null;
-                }
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-                if (remove && internalListProp.arraySize > 0)
-                {
-                    internalListProp.DeleteArrayElementAtIndex(internalListProp.arraySize - 1);
-                }
+                    bool add = GUILayout.Button("Add");
+                    bool remove = GUILayout.Button("Remove");
 
-                EditorGUILayout.EndVertical();
+                    if (internalListProp.arraySize == 0)
+                    {
+                        EditorGUILayout.LabelField("TileBase Hashset is Empty.", EditorStyles.miniLabel);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < internalListProp.arraySize; i++)
+                        {
+                            EditorGUILayout.PropertyField(internalListProp.GetArrayElementAtIndex(i));
+                        }
+                    }
+
+                    if (add)
+                    {
+                        internalListProp.InsertArrayElementAtIndex(internalListProp.arraySize);
+                        internalListProp.GetArrayElementAtIndex(internalListProp.arraySize - 1).objectReferenceValue = null;
+                    }
+
+                    if (remove && internalListProp.arraySize > 0)
+                    {
+                        internalListProp.DeleteArrayElementAtIndex(internalListProp.arraySize - 1);
+                    }
+
+                    EditorGUILayout.EndVertical();
+                }
             }
         }
 #endif
