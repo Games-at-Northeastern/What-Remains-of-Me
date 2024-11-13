@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[RequireComponent(typeof(SpikeTeleport))]
 public class RustedFloorManager : MonoBehaviour
 {
     private class RustedGroup
     {
         public List<RustedTile> tiles;
 
-        public List<(Vector3 left, Vector3 right)> getOpenings()
+        public List<(Vector3 left, Vector3 right)> GetOpenings()
         {
             List<(Vector3 left, Vector3 right)> res = new List<(Vector3 left, Vector3 right)>();
 
@@ -60,79 +61,137 @@ public class RustedFloorManager : MonoBehaviour
         {
             tiles = new List<RustedTile>();
         }
+
+        public void InitHiddenMaps()
+        {
+            if (tiles.Count < 1)
+            {
+                return;
+            }
+
+            List<Vector3Int> ignoreTiles = new List<Vector3Int>();
+
+            foreach(RustedTile tile in tiles)
+            {
+                ignoreTiles.Add(tile.mapPos);
+            }
+
+            foreach (RustedTile tile in tiles)
+            {
+                tile.HiddenArea.IgnoreTiles = ignoreTiles;
+            }
+
+            RustedTile leftLeftTile = null;
+            RustedTile leftTile = null;
+            RustedTile currentTile = null;
+            RustedTile rightTile = tiles[0];
+            RustedTile rightRightTile = tiles.Count > 1 ? tiles[1] : null;
+
+            int i = 2;
+
+            while (rightTile is not null)
+            {
+                leftLeftTile = leftTile;
+                leftTile = currentTile;
+                currentTile = rightTile;
+                rightTile = rightRightTile;
+                rightRightTile = i < tiles.Count ? tiles[i] : null; 
+                i++;
+
+                currentTile.InitHM(i.ToString(), leftLeftTile, leftTile, rightTile, rightRightTile);
+            }
+        }
     }
 
-    public struct RustedTile
+    public class RustedTile
     {
         public TilemappedObject tmo;
         public Vector3 leftEnd;
         public Vector3 rightEnd;
         Vector3 worldPos;
-        Vector3Int mapPos;
+        public Vector3Int mapPos;
 
         public bool destroyed;
 
-        public RustedTile(Tilemap map, Vector3Int position, Transform parent)
+        public HiddenAreaTM HiddenArea { get; set; }
+
+        public RustedTile(Tilemap map, Vector3Int position, Transform parent, int depth)
         {
-            tmo = TilemappedObject.Generate(parent, map, position, true).GetComponent<TilemappedObject>();
+            tmo = TilemappedObject.Generate(parent, map, position, true, false).GetComponent<TilemappedObject>();
             worldPos = map.CellToWorld(position);
             mapPos = position;
             leftEnd = worldPos + new Vector3(-map.cellBounds.size.x / 2, map.cellBounds.size.y, 0);
             rightEnd = worldPos = new Vector3(map.cellBounds.size.x / 2, map.cellBounds.size.y, 0);
 
             destroyed = false;
+
+            GenHM(depth);
         }
 
-        public void Destroy() => tmo.DestroyTile();
-
-        /*private void UpdateEnds(Tilemap map, Vector3Int position)
+        public void Destroy()
         {
-            Sprite tileSprite = map.GetSprite(position);
+            tmo.DestroyTile();
+            destroyed = true;
+        }
 
-            int rectX = (int)tileSprite.rect.x;
-            int rectY = (int)tileSprite.rect.y;
-            int rectWidth = (int)tileSprite.rect.width;
-            int rectHeight = (int)tileSprite.rect.height;
+        public void GenHM(int depth)
+        {
+            HiddenArea = HiddenAreaTM.CreateDormantHiddenArea(tmo.Map);
+            TilemapData tilemapData = HiddenArea.GetHiddenMap();
+            Tilemap tilemap = tilemapData.TMap;
 
-            Color[] pixels = tileSprite.texture.GetPixels(rectX, rectY, rectWidth, rectHeight);
-
-            int leftEndPix = 0;
-
-            for (int x = 0; x < tileSprite.rect.width; x++)
+            Vector3Int pos = mapPos;
+            for (int i = 0; i < depth; i++)
             {
-                int xOff = x + (int)tileSprite.rect.x;
-                Color col = pixels[x + ((rectHeight - 1) * rectWidth)];
-                if (col.a <= 0.001)
+                pos += Vector3Int.down;
+
+                TileBase tile = tmo.Map.GetTile(pos);
+                tilemap.SetTile(pos, tile);
+                tilemap.SetColor(pos, tmo.Map.GetColor(pos));
+                if (tile is not RuleTile)
                 {
-                    leftEndPix = x;
-                    break;
+                    tilemap.SetTransformMatrix(pos, tmo.Map.GetTransformMatrix(pos));
                 }
+
+                tmo.Map.SetTile(pos, null);
+                tmo.Map.RefreshTile(pos);
+
+                tilemap.RefreshTile(pos);
             }
 
-            tmo.
-        }*/
+            HiddenArea.RemoveOutline = false;
+            HiddenArea.TriggerOnContact = false;
+            HiddenArea.FadeSpeed = 1.5f;
+        }
 
-        private Texture2D GetSlicedSpriteTexture(Sprite sprite)
+        public void InitHM(string name, params RustedTile[] adjacents)
         {
-            Rect rect = sprite.rect;
-            Texture2D slicedTex = new Texture2D((int)rect.width, (int)rect.height)
+            HiddenArea.gameObject.name = name;
+            foreach (RustedTile rt in adjacents)
             {
-                filterMode = sprite.texture.filterMode
-            };
+                if (rt is null)
+                {
+                    continue;
+                }
+                HiddenArea.AdjacentHiddenMaps.Add(rt.HiddenArea);
+            }
 
-            slicedTex.SetPixels(0, 0, (int)rect.width, (int)rect.height, sprite.texture.GetPixels((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height));
-            slicedTex.Apply();
-
-            return slicedTex;
+            HiddenArea.Init();
         }
     }
 
     [SerializeField] private TileBase rustedTileType;
     private List<RustedGroup> rustedGroups;
     [SerializeField] private Tilemap groundMap;
+    [SerializeField] private int depth;
+    [SerializeField] Cinemachine.CinemachineVirtualCamera virtualCamera;
+
+    private SpikeTeleport spikeTeleport;
 
     public void Start()
     {
+        spikeTeleport = GetComponent<SpikeTeleport>();
+
         rustedGroups = new List<RustedGroup>();
         HashSet<Vector3Int> usedPositions = new HashSet<Vector3Int>();
 
@@ -172,11 +231,13 @@ public class RustedFloorManager : MonoBehaviour
 
             for (int i = leftPositions.Count - 1; i > -1; i--)
             {
-                rgroup.tiles.Add(initializeRustedTile(leftPositions[i], rustedIndex, rGroups));
+                rgroup.tiles.Add(InitializeRustedTile(leftPositions[i], rustedIndex, rGroups));
+                usedPositions.Add(leftPositions[i]);
                 rustedIndex++;
             }
 
-            RustedTile rt = initializeRustedTile(position, rustedIndex, rGroups);
+            RustedTile rt = InitializeRustedTile(position, rustedIndex, rGroups);
+            usedPositions.Add(position);
             rgroup.tiles.Add(rt);
 
             rustedIndex++;
@@ -184,26 +245,85 @@ public class RustedFloorManager : MonoBehaviour
             head = position + Vector3Int.right;
             while (groundMap.GetTile(head) == rustedTileType)
             {
-                rgroup.tiles.Add(initializeRustedTile(position, rustedIndex, rGroups));
+                rgroup.tiles.Add(InitializeRustedTile(head, rustedIndex, rGroups));
+                usedPositions.Add(head);
                 head += Vector3Int.right;
                 rustedIndex++;
             }
 
             rGroups++;
 
+            rgroup.InitHiddenMaps();
+
             rustedGroups.Add(rgroup);
         }
     }
 
-    private RustedTile initializeRustedTile(Vector3Int position, int rustedIndex, int rustedGroupIndex)
+    private RustedTile InitializeRustedTile(Vector3Int position, int rustedIndex, int rustedGroupIndex)
     {
-        RustedTile rt = new RustedTile(groundMap, position, transform);
-        rt.tmo.callOnTrigger2D += (Collider2D otherCol) => handleCollidedWith(rustedIndex, rustedGroupIndex);
+        RustedTile rt = new RustedTile(groundMap, position, transform, depth);
+        rt.tmo.callOnTrigger2D += (Collider2D otherCol) => HandleCollidedWith(rustedIndex, rustedGroupIndex, otherCol.gameObject);
         return rt;
     }
 
-    private void handleCollidedWith(int rustedIndex, int rustedGroupIndex)
+    bool dropped = false;
+    bool killed = false;
+
+    private void HandleCollidedWith(int rustedIndex, int rustedGroupIndex, GameObject player)
     {
-        rustedGroups[rustedGroupIndex].tiles[rustedIndex].Destroy();
+        if (!player.CompareTag("Player") || (dropped && killed))
+        {
+            return;
+        }
+
+        if (!dropped)
+        {
+            RustedGroup rg = rustedGroups[rustedGroupIndex];
+
+            if (!rg.tiles[rustedIndex].destroyed)
+            {
+                rg.tiles[rustedIndex].HiddenArea.TriggerArea();
+                rg.tiles[rustedIndex].Destroy();
+                dropped = true;
+            }
+        }
+
+        if (!killed)
+        {
+            StartCoroutine(KillAfterDelay(0.5f, player));
+            killed = true;
+        }
+    }
+
+    private IEnumerator DeathCam(Transform target)
+    {
+        virtualCamera.Follow = null;
+        float lerpSpeed = 0.15f;
+        while (true)
+        {
+            lerpSpeed *= 0.99f;
+            yield return new WaitForFixedUpdate();
+            Vector3 newPos = Vector3.Lerp(virtualCamera.transform.position, target.position, lerpSpeed * Time.fixedDeltaTime);
+            virtualCamera.ForceCameraPosition(newPos, virtualCamera.transform.rotation);
+        }
+    }
+
+    private IEnumerator KillAfterDelay(float delay, GameObject target)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        Coroutine deathCam = StartCoroutine(DeathCam(target.transform));
+
+        yield return new WaitForSeconds(delay - 0.1f);
+
+        yield return spikeTeleport.PerformDeath(target, new Vector3(0, 2));
+
+        StopCoroutine(deathCam);
+        virtualCamera.Follow = target.transform;
+
+        killed = false;
+        dropped = false;
+
+        //virtualCamera.Follow = target.transform;
     }
 }

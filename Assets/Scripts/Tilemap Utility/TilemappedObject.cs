@@ -13,9 +13,11 @@ public class TilemappedObject : MonoBehaviour
 
     private BoxCollider2D c2D;
     private bool isTrigger;
-    private Tilemap map;
+    public Tilemap Map { get; private set; }
     private Vector3Int position;
-    public static GameObject Generate(Transform parent, Tilemap map, Vector3Int position, bool isTrigger)
+
+    private bool destroyWhenTileDeleted;
+    public static GameObject Generate(Transform parent, Tilemap map, Vector3Int position, bool isTrigger, bool destroyWhenTileDeleted)
     {
         if (!map.HasTile(position))
         {
@@ -28,7 +30,7 @@ public class TilemappedObject : MonoBehaviour
         tmo.c2D = result.AddComponent<BoxCollider2D>();
         tmo.c2D.isTrigger = isTrigger;
         tmo.isTrigger = isTrigger;
-        tmo.map = map;
+        tmo.Map = map;
         tmo.position = position;
 
         result.transform.position = map.CellToWorld(position);
@@ -36,17 +38,24 @@ public class TilemappedObject : MonoBehaviour
         tmo.c2D.size = new Vector2(1.05f, 1.05f);
         tmo.c2D.offset = new Vector2(.5f, .5f);
 
+        tmo.destroyWhenTileDeleted = destroyWhenTileDeleted;
+
         return result;
     }
 
     public void FixedUpdate()
     {
-        if (map is null)
+        if (!destroyWhenTileDeleted)
+        {
+            return;
+        }
+
+        if (Map is null)
         {
             Destroy(this);
         }
 
-        if (!map.HasTile(position))
+        if (!Map.HasTile(position))
         {
             Destroy(this);
         }
@@ -54,8 +63,11 @@ public class TilemappedObject : MonoBehaviour
 
     public void DestroyTile()
     {
-        map.SetTile(position, null);
-        Destroy(this);
+        Map.SetTile(position, null);
+        if (destroyWhenTileDeleted)
+        {
+            Destroy(this);
+        }
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
