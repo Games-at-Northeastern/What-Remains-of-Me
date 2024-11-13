@@ -148,6 +148,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         {
             if (component != null)
             {
+                Debug.Log(component.name);
                 ReplaceInObject(dict, component);
             }
         }
