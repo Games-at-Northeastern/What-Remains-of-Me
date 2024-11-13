@@ -119,6 +119,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
             ReplaceTiles(swapMap, tilemaps);
 
+            Debug.Log(gameObject.name + "===================");
             ReplaceInGameObjectProperties(swapMap, gameObject);
         }
 
