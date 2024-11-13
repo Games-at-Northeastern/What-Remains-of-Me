@@ -84,12 +84,8 @@ public class RADLaser : MonoBehaviour
         // if didn't hit anything, reset to the default position
         if (!_didCastHit)
         {
-            Debug.Log(111111);
-            //_laserTarget.position = _targetOriginPosition.position;
             _laserTarget.position = Vector3.Lerp(_laserTarget.position, _targetOriginPosition.position, resetSpeed * Time.deltaTime);
 
-
-            // todo: when not collides, should check for next nearest collision point
         }
         if (_needsRecalculation)
         {
@@ -159,7 +155,8 @@ public class RADLaser : MonoBehaviour
             && _data.collider is not null
             && UtilityFunctions.CompareTagOfHierarchy(_data.collider.transform, _tag, out var player, PlayerHierarchyLayerIndex))
         {
-            _deathTeleporter.PerformDeath(player.gameObject);
+            // _deathTeleporter.PerformDeath(player.gameObject);
+            StartCoroutine(_deathTeleporter.PerformDeath(player.gameObject));
             _lockout = true;
 
             SoundController.instance.PlaySound("Laser_Death_Sound");
