@@ -183,7 +183,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
                     foreach ((TileBase find, TileBase replace) in dict)
                     {
-                        if (current == find && (prop.PropertyType == replace.GetType() || replace.GetType().IsSubclassOf(prop.PropertyType));
+                        if (current == find && (prop.PropertyType == replace.GetType() || replace.GetType().IsSubclassOf(prop.PropertyType)))
                         {
                             prop.SetValue(obj, replace);
                         }
