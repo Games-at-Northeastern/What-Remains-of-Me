@@ -148,7 +148,10 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
     private void FindReplace()
     {
-        // edit tilemaps in scenes
+        if (find.Count <= 0 || replace == null)
+        {
+            return;
+        }
 
         var scenesToSwap = GetScenes();
 
