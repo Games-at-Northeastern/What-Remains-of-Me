@@ -64,6 +64,7 @@ public class RADLaser : MonoBehaviour
         // Set the instantiated Transform as a child of this GameObject
         _targetOriginPosition.SetParent(transform);
 
+        // clear the gameobjects inside the clone
         foreach (Transform child in _targetOriginPosition)
         {
             Destroy(child.gameObject);
@@ -71,17 +72,21 @@ public class RADLaser : MonoBehaviour
 
         _renderer = GetComponent<LineRenderer>();
         Recalculate();
-
     }
 
     private void Update()
     {
         _didCastHit = DoRaycast(out _data);
 
+
         // if didn't hit anything, reset to the default position
         if (!_didCastHit)
-        { _laserTarget.position = _targetOriginPosition.position; }
+        {
+            Debug.Log(111111);
+             _laserTarget.position = _targetOriginPosition.position;
 
+            // todo: when not collides, should check for next nearest collision point
+        }
         if (_needsRecalculation)
         {
             Recalculate();
@@ -92,7 +97,9 @@ public class RADLaser : MonoBehaviour
 
     private void Recalculate()
     {
+        // direction for the later raycast
         _dir = (_targetOriginPosition.position - transform.position).normalized;
+        // end point of the laser
         Vector3 targetPos;
 
         bool needsRealLaserDistance = _laserDistance <= 0;
@@ -105,7 +112,6 @@ public class RADLaser : MonoBehaviour
             targetPos = _laserTarget.position;
         }
         // draw laser in direction of target point until we hit something
-        //else if (needsRealLaserDistance && _didCastHit)
         else if (needsRealLaserDistance && _didCastHit)
         {
             targetPos = _data.point;
@@ -113,6 +119,8 @@ public class RADLaser : MonoBehaviour
             // we don't need to reassign _realLaserDistance to dist(position, data point) here because the death ray itself
             // is already stopped by the collider.
 
+            // update the position of 'target' object
+            // serve for visually purpose, update the end particle position
             _laserTarget.position = _data.point;
         }
         // draw laser in direction of target for a certain distance.
@@ -122,7 +130,7 @@ public class RADLaser : MonoBehaviour
         }
 
         _points = new Vector3[] { transform.position, targetPos };
-
+        // render the laser
         _renderer.SetPositions(_points);
     }
 
@@ -130,7 +138,8 @@ public class RADLaser : MonoBehaviour
     {
         data = Physics2D.Raycast(transform.position, _dir, _realLaserDistance, _mask);
 
-        return data.point != Vector2.zero;
+        //return data.point != Vector2.zero;
+        return data.collider != null;
     }
 
     // TODO: There appears to be a bug if atlas dies while transferring energy: the death effect plays twice. It's obvious to see in the
