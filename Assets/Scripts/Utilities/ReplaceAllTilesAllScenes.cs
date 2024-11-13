@@ -62,7 +62,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
 
         // edit scenes
 
-        var scenesToSwap = GetAllAssetsOfType<SceneAsset>("Scene");
+        /*var scenesToSwap = GetAllAssetsOfType<SceneAsset>("Scene");
 
         var initialScene = EditorSceneManager.GetActiveScene().path;
 
@@ -105,7 +105,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
             EditorSceneManager.SaveScene(scene);
         }
 
-        EditorSceneManager.OpenScene(initialScene);
+        EditorSceneManager.OpenScene(initialScene);*/
 
         // edit prefabs
 
@@ -133,11 +133,11 @@ public class ReplaceAllTilesAllScenes : EditorWindow
             ReplaceInObject(swapMap, so);
         }
 
-        foreach (RuleTile oldTile in swapMap.Keys)
-        {
-            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(oldTile));
-            DestroyImmediate(oldTile, true);
-        }
+        //foreach (RuleTile oldTile in swapMap.Keys)
+        //{
+        //    AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(oldTile));
+        //    DestroyImmediate(oldTile, true);
+        //}
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
