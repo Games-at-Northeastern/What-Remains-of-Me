@@ -170,6 +170,7 @@ public class ReplaceAllTilesAllScenes : EditorWindow
                 {
                     continue;
                 }
+                Debug.Log(prop.PropertyType);
                 if (prop.PropertyType == typeof(TileBase) || prop.PropertyType.IsSubclassOf(typeof(TileBase)))
                 {
                     Debug.Log(obj + " " + prop.Name);
