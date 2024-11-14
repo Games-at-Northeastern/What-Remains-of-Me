@@ -1,6 +1,3 @@
-using System.Net.NetworkInformation;
-using Unity.VisualScripting;
-using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -11,7 +8,6 @@ public class InteractOnRayDetect : MonoBehaviour
     [SerializeField] private GameObject detectedObject;
     [SerializeField] private Collider2D detectedCollider;
     [SerializeField] private bool isTracking;
-    [SerializeField] private GameObject what;
     private bool isColliding = false;
     #endregion
 
@@ -30,7 +26,7 @@ public class InteractOnRayDetect : MonoBehaviour
     #region action
     [SerializeField] private GameObject activator;
     #endregion
-    void Start()
+    private void Start()
     {
         isTracking = false;
         detectedObject = null;
@@ -55,7 +51,6 @@ public class InteractOnRayDetect : MonoBehaviour
             if (hits != null && hits.Length > 0)
             {
                 GameObject hit = hits[0].collider.gameObject;
-                what = hit;
                 //Debug.Log("hitting " + hit);
                 Debug.DrawLine(detectCone.transform.position, other.transform.position, Color.blue);
                 float rayDistance = Vector2.Distance(detectCone.transform.position, hit.transform.position);
@@ -68,14 +63,13 @@ public class InteractOnRayDetect : MonoBehaviour
                 }
                 else
                 {
-                    activator.GetComponent<Animator>().SetBool("Activate", false);
                     detectCone.color = Color.green;
+                    activator.GetComponent<Animator>().SetBool("Activate", false);
                 }
             }
             //if theere's nothing to hit, not tracking anything
             if (hits == null || hits.Length == 0)
             {
-                what = null;
                 activator.GetComponent<Animator>().SetBool("Activate", false);
                 detectCone.color = Color.green;
                 return;
@@ -95,7 +89,7 @@ public class InteractOnRayDetect : MonoBehaviour
         detectConeAngle = detectCone.pointLightOuterAngle;
         detectDistance = detectCone.pointLightOuterRadius;
         //sets the origin and center point
-        Vector2 origin = new Vector2(0,0);
+        Vector2 origin = new Vector2(0, 0);
         Vector2 centerPoint = new Vector2(0, detectDistance);
         //creates a vector array to build the polygon colilder
         Vector2[] vertices = new Vector2[]
@@ -110,9 +104,9 @@ public class InteractOnRayDetect : MonoBehaviour
         float compAngle = 90f - halfAngle;
         float halfRad = halfAngle * Mathf.Deg2Rad;
         //find the length of the right side's line through finding its vector
-        float rightHypotenuse = detectDistance/Mathf.Cos(halfRad);
+        float rightHypotenuse = detectDistance / Mathf.Cos(halfRad);
         //find the height of the right half of the polygon triangle
-        float rightOpposite = rightHypotenuse*Mathf.Sin(halfRad);
+        float rightOpposite = rightHypotenuse * Mathf.Sin(halfRad);
         Vector2 rightVert = new Vector2(detectDistance, rightOpposite);
         Vector2 leftVert = new Vector2(detectDistance, -rightOpposite);
         vertices[1] = rightVert;
