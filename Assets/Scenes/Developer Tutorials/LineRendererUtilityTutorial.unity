@@ -412,6 +412,9 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
+  invertMask: 0
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!61 &96265535
 BoxCollider2D:
@@ -1363,12 +1366,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2841183245f9143d0b54423542623cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutletSounds: {fileID: 11400000, guid: 49073f7be34c27b4593c3f13d17ca2c3, type: 2}
-  src: {fileID: 219983781}
-  giving: {fileID: 8300000, guid: 98178cfa1fc651b488561930413d0661, type: 3}
-  taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
   controlled: {fileID: 516834527}
+  controlledSecondaries: []
   energyTransferSpeed: 20
+  outletLights: []
+  lerpSpeed: 0
+  connectedGoal: 0
+  chargingGoal: 0
+  grappleOverrideRange: {fileID: 0}
 --- !u!61 &219983783
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2862,6 +2867,9 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
+  invertMask: 0
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!61 &516834528
 BoxCollider2D:
@@ -3100,12 +3108,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2841183245f9143d0b54423542623cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutletSounds: {fileID: 11400000, guid: 49073f7be34c27b4593c3f13d17ca2c3, type: 2}
-  src: {fileID: 525047207}
-  giving: {fileID: 8300000, guid: 98178cfa1fc651b488561930413d0661, type: 3}
-  taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
   controlled: {fileID: 1871078767}
+  controlledSecondaries: []
   energyTransferSpeed: 20
+  outletLights: []
+  lerpSpeed: 0
+  connectedGoal: 0
+  chargingGoal: 0
+  grappleOverrideRange: {fileID: 0}
 --- !u!61 &525047209
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4051,6 +4061,9 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
+  invertMask: 0
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!61 &617571240
 BoxCollider2D:
@@ -4291,6 +4304,8 @@ MonoBehaviour:
   virusMeter: {fileID: 648689664}
   cleanMeter: {fileID: 1879874061}
   visualFillSpeed: 2
+  endLimits: 0.2
+  visualsAlwaysDisplayed: 0
 --- !u!1 &626013942
 GameObject:
   m_ObjectHideFlags: 0
@@ -5468,12 +5483,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2841183245f9143d0b54423542623cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutletSounds: {fileID: 11400000, guid: 49073f7be34c27b4593c3f13d17ca2c3, type: 2}
-  src: {fileID: 751977886}
-  giving: {fileID: 8300000, guid: 98178cfa1fc651b488561930413d0661, type: 3}
-  taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
   controlled: {fileID: 617571239}
+  controlledSecondaries: []
   energyTransferSpeed: 20
+  outletLights: []
+  lerpSpeed: 0
+  connectedGoal: 0
+  chargingGoal: 0
+  grappleOverrideRange: {fileID: 0}
 --- !u!61 &751977888
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6452,8 +6469,15 @@ MonoBehaviour:
   _randomSpeedModifier: 0
   _maxSpeedModifier: 3
   _speedModifier: 1
+  _lerpSpeed: 0.25
   _loopType: 1
   _isMovingRight: 1
+  _activatedActions:
+    m_PersistentCalls:
+      m_Calls: []
+  _deactivatedActions:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!50 &926835057
 Rigidbody2D:
   serializedVersion: 4
@@ -7460,6 +7484,9 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
+  invertMask: 0
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!61 &1096568720
 BoxCollider2D:
@@ -9005,6 +9032,8 @@ MonoBehaviour:
   virusMeter: {fileID: 1242831459}
   cleanMeter: {fileID: 727045074}
   visualFillSpeed: 2
+  endLimits: 0.2
+  visualsAlwaysDisplayed: 0
 --- !u!1 &1315211295
 GameObject:
   m_ObjectHideFlags: 0
@@ -16523,8 +16552,15 @@ MonoBehaviour:
   _randomSpeedModifier: 0
   _maxSpeedModifier: 3
   _speedModifier: 1
+  _lerpSpeed: 0.25
   _loopType: 1
   _isMovingRight: 1
+  _activatedActions:
+    m_PersistentCalls:
+      m_Calls: []
+  _deactivatedActions:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!50 &1771034830
 Rigidbody2D:
   serializedVersion: 4
@@ -17212,6 +17248,9 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
+  invertMask: 0
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!61 &1871078768
 BoxCollider2D:
@@ -17848,6 +17887,9 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
+  invertMask: 0
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!61 &1962210788
 BoxCollider2D:
@@ -18714,6 +18756,8 @@ MonoBehaviour:
   virusMeter: {fileID: 1646609201}
   cleanMeter: {fileID: 244570925}
   visualFillSpeed: 2
+  endLimits: 0.2
+  visualsAlwaysDisplayed: 0
 --- !u!1 &2109066939
 GameObject:
   m_ObjectHideFlags: 0
@@ -18885,6 +18929,9 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
+  invertMask: 0
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!61 &2131721341
 BoxCollider2D:
@@ -19648,6 +19695,8 @@ MonoBehaviour:
   virusMeter: {fileID: 144727089576061596}
   cleanMeter: {fileID: 144727089656532548}
   visualFillSpeed: 2
+  endLimits: 0.2
+  visualsAlwaysDisplayed: 0
 --- !u!1 &144727089703553863
 GameObject:
   m_ObjectHideFlags: 0
@@ -19730,7 +19779,7 @@ SpriteRenderer:
   m_Size: {x: 2, y: 0.28125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &899509102747049291
@@ -19814,7 +19863,7 @@ SpriteRenderer:
   m_Size: {x: 2, y: 0.28125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &899509103020225675
@@ -20104,6 +20153,9 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
+  invertMask: 0
   posChangeForMaxEnergy: {x: 0, y: 3}
 --- !u!1 &2856624225895345180
 GameObject:
@@ -20135,12 +20187,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2841183245f9143d0b54423542623cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutletSounds: {fileID: 11400000, guid: 49073f7be34c27b4593c3f13d17ca2c3, type: 2}
-  src: {fileID: 1102741840701898845}
-  giving: {fileID: 8300000, guid: 98178cfa1fc651b488561930413d0661, type: 3}
-  taking: {fileID: 8300000, guid: 0389a384a7430aa43aeca74047c392e7, type: 3}
   controlled: {fileID: 2299387916128765977}
+  controlledSecondaries: []
   energyTransferSpeed: 20
+  outletLights: []
+  lerpSpeed: 0
+  connectedGoal: 0
+  chargingGoal: 0
+  grappleOverrideRange: {fileID: 0}
 --- !u!4 &3639679769679620417
 Transform:
   m_ObjectHideFlags: 0
@@ -20676,8 +20730,15 @@ MonoBehaviour:
   _randomSpeedModifier: 0
   _maxSpeedModifier: 3
   _speedModifier: 1
+  _lerpSpeed: 0.25
   _loopType: 0
   _isMovingRight: 1
+  _activatedActions:
+    m_PersistentCalls:
+      m_Calls: []
+  _deactivatedActions:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &7493922748392835519
 Transform:
   m_ObjectHideFlags: 0
