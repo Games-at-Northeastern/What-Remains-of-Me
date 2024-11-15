@@ -6,6 +6,7 @@ using Ink.Runtime;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
 using PlayerController;
+using UnityEngine.Serialization;
 
 public class InkDialogueManager : MonoBehaviour
 {
@@ -24,10 +25,17 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private Animator portraitAnimatorTop;
     [SerializeField] private Animator handlerAnimator;
     [SerializeField] private Animator intercomAnimator;
-    [Header("Audio")] [SerializeField] private AudioClip dialogueTypingSoundClip;
+    [Header("Audio")]
+    [SerializeField] private AudioClip[] dialogueTypingSoundClips;
+    [Range (1, 5)]
+    [SerializeField] private int clipFrequency;
+    [SerializeField] private bool stopAudioSourceBeforeEachClip;
+    [SerializeField] private bool makePredictable;
+    [Range (-3, 3)]
     [SerializeField] private float minPitch = 0.5f;
+    [Range (-3, 3)]
     [SerializeField] private float maxPitch = 3f;
-    [Range(-3, 3)] private static AudioSource audioSource;
+    private static AudioSource audioSource;
 
     [Header("Choices UI")] [SerializeField]
     private GameObject[] choices;
@@ -274,12 +282,9 @@ public class InkDialogueManager : MonoBehaviour
                 break;
             }
 
+            PlayDialogueSound(dialogueText.maxVisibleCharacters, dialogueText.text[dialogueText.maxVisibleCharacters]);
             dialogueText.maxVisibleCharacters++;
-            PlayDialogueSound(1);
-            audioSource.pitch = Random.Range(minPitch, maxPitch);
-            audioSource.PlayOneShot(dialogueTypingSoundClip);
 
-            Debug.Log("playing sound");
             yield return new WaitForSeconds(typingSpeed);
         }
 
@@ -316,12 +321,61 @@ public class InkDialogueManager : MonoBehaviour
         canSkip = true;
     }
 
-    private void PlayDialogueSound(int currentDisplayedCharacterCount)
+    private void PlayDialogueSound(int currentDisplayedCharacterCount, char currentCharacter)
     {
-        if (currentDisplayedCharacterCount % 2 == 0)
+        //play sound based on frequency
+        if (currentDisplayedCharacterCount % clipFrequency != 0)
         {
+            return;
+        }
+
+        //stop last played sound
+        if (stopAudioSourceBeforeEachClip)
+        {
+            audioSource.Stop();
+        }
+
+        AudioClip soundClip = null;
+        int clipIndex = 0;
+
+        if (makePredictable)
+        {
+            //select sound clip
+            int hashCode = currentCharacter.GetHashCode();
+            clipIndex = hashCode % dialogueTypingSoundClips.Length;
+            soundClip = dialogueTypingSoundClips[clipIndex];
+
+            //select pitch
+            int minPitchInt = (int)(minPitch * 100);
+            int maxPitchInt = (int)(maxPitch * 100);
+            int pitchRangeInt = maxPitchInt - minPitchInt;
+
+            //avoid divide by 0
+            if (pitchRangeInt != 0)
+            {
+                int predictablePitchInt = (hashCode % pitchRangeInt) + minPitchInt;
+                float predictablePitch = predictablePitchInt / 100f;
+                audioSource.pitch = predictablePitch;
+            }
+            else
+            {
+                audioSource.pitch = minPitch;
+            }
+
 
         }
+        else
+        {
+            //select sound from list
+            clipIndex = Random.Range(0, dialogueTypingSoundClips.Length);
+            soundClip = dialogueTypingSoundClips[clipIndex];
+            //set pitch
+            audioSource.pitch = Random.Range(minPitch, maxPitch);
+        }
+        //play sound
+        audioSource.PlayOneShot(soundClip);
+
+
     }
     private void HideChoices()
     {
