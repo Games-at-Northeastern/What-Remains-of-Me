@@ -17,7 +17,6 @@ public class DoorManager : MonoBehaviour
         {
             GetComponent<BoxCollider2D>().enabled = true;
         }
-
     }
 
     public void ColliderOff()

@@ -13,9 +13,18 @@ public class ReplaceAllTiles : MonoBehaviour
 
     [SerializeField] private List<Tilemap> maps;
 
+    public TileBase Find { get => find; set => find = value; }
+    public TileBase Replace { get => replace; set => replace = value; }
+    public List<Tilemap> Maps { get => maps; set => maps = value; }
+
     public void ReplaceTiles()
     {
         List<Tilemap> replaceOn;
+
+        if (maps == null)
+        {
+            maps = new List<Tilemap>();
+        }
 
         if (maps.Count > 0)
         {
@@ -44,13 +53,16 @@ public class ReplaceAllTiles : MonoBehaviour
         }
     }
 
-    private void AppendTilemaps(Transform transform, List<Tilemap> tilemaps)
+    public static void AppendTilemaps(Transform transform, List<Tilemap> tilemaps)
     {
-        var tilemap = transform.gameObject.GetComponent<Tilemap>();
+        var foundTilemaps = transform.gameObject.GetComponents<Tilemap>();
 
-        if (!(tilemap == null))
+        foreach(Tilemap tilemap in foundTilemaps)
         {
-            tilemaps.Add(tilemap);
+            if (!(tilemap == null))
+            {
+                tilemaps.Add(tilemap);
+            }
         }
 
         foreach (Transform child in transform)

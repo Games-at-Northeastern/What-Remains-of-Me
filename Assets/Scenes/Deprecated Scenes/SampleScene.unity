@@ -7049,7 +7049,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.1826665, y: 3.41305}
+    oldSize: {x: 102.3125, y: 159.98671}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -7916,11 +7916,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2841183245f9143d0b54423542623cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  src: {fileID: 0}
-  giving: {fileID: 0}
-  taking: {fileID: 0}
   controlled: {fileID: 0}
+  controlledSecondaries: []
   energyTransferSpeed: 20
+  outletLights: []
+  lerpSpeed: 0
+  connectedGoal: 0
+  chargingGoal: 0
+  grappleOverrideRange: {fileID: 0}
 --- !u!61 &1108805943
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8646,7 +8649,7 @@ SpriteRenderer:
   m_Size: {x: 0.7936001, y: 0.7798}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1168817770
@@ -10792,11 +10795,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2841183245f9143d0b54423542623cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  src: {fileID: 0}
-  giving: {fileID: 0}
-  taking: {fileID: 0}
   controlled: {fileID: 0}
+  controlledSecondaries: []
   energyTransferSpeed: 20
+  outletLights: []
+  lerpSpeed: 0
+  connectedGoal: 0
+  chargingGoal: 0
+  grappleOverrideRange: {fileID: 0}
 --- !u!61 &1585631517
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14487,7 +14493,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f021691f3113a654baaa6e63c03219e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundController: {fileID: 0}
 --- !u!1 &1991306819
 GameObject:
   m_ObjectHideFlags: 0
