@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "DialogueAudioInfo", menuName = "ScriptableObjects/DialogueAudioInfoSO", order = 1)]
+
 public class DialogueAudioInfoSO : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+    public string id;
+    public AudioClip[] dialogueTypingSoundClips;
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    [Range(1, 5)]
+    public int clipFrequency;
+    [Range (-3, 3)]
+    public float minPitch = 0.5f;
+    [Range (-3, 3)]
+    public float maxPitch = 3f;
 }
+
