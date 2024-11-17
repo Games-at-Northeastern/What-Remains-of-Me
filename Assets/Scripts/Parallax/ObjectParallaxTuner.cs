@@ -22,8 +22,9 @@ public class ObjectParallaxTuner : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(ObjectParallaxTuner))]
-class ObjectParallaxTunerEditor : Editor
+public class ObjectParallaxTunerEditor : Editor
 {
     private SerializedProperty overrideX;
     private SerializedProperty setX;
@@ -80,3 +81,5 @@ class ObjectParallaxTunerEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+
+#endif

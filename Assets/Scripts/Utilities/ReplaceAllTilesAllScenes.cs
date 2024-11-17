@@ -1,12 +1,13 @@
-using UnityEditor;
-using UnityEditor.SceneManagement;
+#if UNITY_EDITOR
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Linq;
+
+using UnityEditor;
+using UnityEditor.SceneManagement;
 
 public class ReplaceAllTilesAllScenes : EditorWindow
 {
@@ -532,3 +533,12 @@ public class ReplaceAllTilesAllScenes : EditorWindow
         serializedObject.ApplyModifiedProperties();
     }
 }
+
+#else
+
+public class ReplaceAllTilesAllScenes
+{
+    //stub
+}
+
+#endif
