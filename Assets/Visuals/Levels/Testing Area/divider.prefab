@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4992271305537830485}
   - component: {fileID: 4992271305537830486}
+  - component: {fileID: 3040295980691086432}
   m_Layer: 13
   m_Name: divider
   m_TagString: Untagged
@@ -74,13 +75,29 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 28
   m_Sprite: {fileID: 21300000, guid: 595baef295736ef4b93890d0aede5a47, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6861412, g: 0.9490196, b: 0.8154061, a: 0.9843137}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 0.9375064, y: 9.535788}
+  m_Size: {x: 0.9375064, y: 11.071107}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3040295980691086432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4992271305537830484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385a0a16d8b4c1a428c1d9c343e13893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xFactor: 0.1
+  yFactor: 0
+  parallaxX: 1
+  parallaxY: 0

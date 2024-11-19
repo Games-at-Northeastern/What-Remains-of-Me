@@ -25,17 +25,21 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private Animator portraitAnimatorTop;
     [SerializeField] private Animator handlerAnimator;
     [SerializeField] private Animator intercomAnimator;
+
     [Header("Audio")]
-    [SerializeField] private AudioClip[] dialogueTypingSoundClips;
-    [Range (1, 5)]
-    [SerializeField] private int clipFrequency;
-    [SerializeField] private bool stopAudioSourceBeforeEachClip;
-    [SerializeField] private bool makePredictable;
-    [Range (-3, 3)]
-    [SerializeField] private float minPitch = 0.5f;
-    [Range (-3, 3)]
-    [SerializeField] private float maxPitch = 3f;
+
     private static AudioSource audioSource;
+
+    [SerializeField] private bool makePredictable;
+
+    //new Audio
+
+    [SerializeField] private DialogueAudioInfoSO handlerAudioInfo;
+    [SerializeField] private DialogueAudioInfoSO jonesAudioInfo;
+
+    [SerializeField] private DialogueAudioInfoSO[] audioInfos;
+    [SerializeField] private DialogueAudioInfoSO currentAudioInfo;
+    private Dictionary<string, DialogueAudioInfoSO> audioInfoDictionary;
 
     [Header("Choices UI")] [SerializeField]
     private GameObject[] choices;
@@ -88,6 +92,7 @@ public class InkDialogueManager : MonoBehaviour
         dialogueVariables = new InkDialogueVariables(globalsJSON);
 
         audioSource = gameObject.AddComponent<AudioSource>();
+        currentAudioInfo = handlerAudioInfo;
     }
 
     public static InkDialogueManager GetInstance()
@@ -235,11 +240,11 @@ public class InkDialogueManager : MonoBehaviour
                 StopCoroutine(displayLineCoroutine);
             }
 
-            // set text for the current dialogue line
             displayLineCoroutine = StartCoroutine(DisplayLine(currentStory.Continue()));
 
-            // handles current tags
             HandleTags(currentStory.currentTags);
+
+
         }
         else
         {
@@ -285,6 +290,8 @@ public class InkDialogueManager : MonoBehaviour
             PlayDialogueSound(dialogueText.maxVisibleCharacters, dialogueText.text[dialogueText.maxVisibleCharacters]);
             dialogueText.maxVisibleCharacters++;
 
+
+            Debug.Log("playing sound");
             yield return new WaitForSeconds(typingSpeed);
         }
 
@@ -323,34 +330,26 @@ public class InkDialogueManager : MonoBehaviour
 
     private void PlayDialogueSound(int currentDisplayedCharacterCount, char currentCharacter)
     {
-        //play sound based on frequency
-        if (currentDisplayedCharacterCount % clipFrequency != 0)
+        AudioClip[] dialogueTypingSoundClips = currentAudioInfo.dialogueTypingSoundClips;
+        int frequency = currentAudioInfo.clipFrequency;
+        float minPitch = currentAudioInfo.minPitch;
+        float maxPitch = currentAudioInfo.maxPitch;
+
+        if (currentDisplayedCharacterCount % frequency != 0)
         {
             return;
         }
 
-        //stop last played sound
-        if (stopAudioSourceBeforeEachClip)
-        {
-            audioSource.Stop();
-        }
-
         AudioClip soundClip = null;
-        int clipIndex = 0;
-
         if (makePredictable)
         {
-            //select sound clip
             int hashCode = currentCharacter.GetHashCode();
-            clipIndex = hashCode % dialogueTypingSoundClips.Length;
-            soundClip = dialogueTypingSoundClips[clipIndex];
+            int predictableIndex = hashCode % dialogueTypingSoundClips.Length;
+            soundClip = dialogueTypingSoundClips[predictableIndex];
 
-            //select pitch
             int minPitchInt = (int)(minPitch * 100);
             int maxPitchInt = (int)(maxPitch * 100);
             int pitchRangeInt = maxPitchInt - minPitchInt;
-
-            //avoid divide by 0
             if (pitchRangeInt != 0)
             {
                 int predictablePitchInt = (hashCode % pitchRangeInt) + minPitchInt;
@@ -361,21 +360,17 @@ public class InkDialogueManager : MonoBehaviour
             {
                 audioSource.pitch = minPitch;
             }
-
-
         }
         else
         {
-            //select sound from list
-            clipIndex = Random.Range(0, dialogueTypingSoundClips.Length);
-            soundClip = dialogueTypingSoundClips[clipIndex];
-            //set pitch
+            int randomIndex = Random.Range(0, dialogueTypingSoundClips.Length);
+            soundClip = dialogueTypingSoundClips[randomIndex];
+
             audioSource.pitch = Random.Range(minPitch, maxPitch);
         }
-        //play sound
+
+
         audioSource.PlayOneShot(soundClip);
-
-
     }
     private void HideChoices()
     {
@@ -415,12 +410,15 @@ public class InkDialogueManager : MonoBehaviour
                         Debug.Log("Speaker = " + tagValue);
                     }
 
+
                     if (tagValue == "Jones A.I." && handlerAnimator != null)
                     {
+                        currentAudioInfo = jonesAudioInfo;
                         handlerAnimator.Play("JonesTakeOver");
                     }
                     else if (tagValue == "Handler" && handlerAnimator != null)
                     {
+                        currentAudioInfo = handlerAudioInfo;
                         handlerAnimator.Play("JonesUnTakeOver");
                     }
 
