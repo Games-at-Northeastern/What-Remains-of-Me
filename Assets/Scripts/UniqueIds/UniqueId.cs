@@ -33,12 +33,12 @@ using UnityEditor.SceneManagement;
 #endif
 
 [ExecuteInEditMode]
-public class UniqueId : MonoBehaviour
+public class UniqueID : MonoBehaviour
 {
 
     // global lookup of IDs to Components - we can esnure at edit time that no two 
     // components which are loaded at the same time have the same ID. 
-    static Dictionary<string, UniqueId> allGuids = new Dictionary<string, UniqueId>();
+    static Dictionary<string, UniqueID> allGuids = new Dictionary<string, UniqueID>();
 
     public string uniqueId;
 
