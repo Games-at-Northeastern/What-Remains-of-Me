@@ -5,12 +5,9 @@ using UnityEngine;
 public class SetSpeed : Interaction
 {
    public MovingElement movingElement;
-   public float speed = 0f;
 
-   public void execute()
+   public override void Execute()
    {
-       movementElement.setSpeedModifier(speed);
+       movingElement.Activate();
    }
-
-
 }

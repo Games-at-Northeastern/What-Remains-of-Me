@@ -69,6 +69,10 @@ public class MovingElement : MonoBehaviour
         {
             Activate();
         }
+		else
+		{
+            Deactivate();
+    	}
     }
 
     // TODO There are a lot of leftover debug logs bc i think there's still a bug here. It just kinda went away
