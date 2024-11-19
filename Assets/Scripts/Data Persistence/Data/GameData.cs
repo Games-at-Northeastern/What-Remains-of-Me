@@ -17,8 +17,9 @@ public class GameData
     public float virusPercentage;       //The percent of virus energy the player was at during the save.
     public Vector3 playerPosition;      //The saved position of the player.
 
-    public Dictionary<string, float> outletsCleanPower; //Stores the clean power as a percentage float for the outlets in the scene the player saves in.
-    public Dictionary<string, float> outletsVirusPower; // Stores the virus power as a percentage float for the outlets in the scene the player saves in.
+    public SerializableDictionary<string, float> outletCleanEnergy; //Saves all the outlets GUID's and clean energy values as a percent 0-1.0f
+    public SerializableDictionary<string, float> outletVirusEnergy; //Saves all the outlets GUID's and virus energy values as a percent 0-1.0f
+    public SerializableDictionary<string, float> outletMaxEnergy;   //Saves all the outlets GUID's and max energy values as a percent 0-1.0f
 
     /**
      * When a new game is created, all values in the constructor should be read into the game
@@ -29,7 +30,10 @@ public class GameData
         this.batteryPercentage = 1f;
         this.virusPercentage = 0f;
         playerPosition = Vector3.zero;
-        outletsCleanPower = new Dictionary<string, float>();
-        outletsVirusPower = new Dictionary<string, float>();
+        float[] temp = new float[3]; 
+        outletCleanEnergy = new SerializableDictionary<string, float>();
+        outletVirusEnergy = new SerializableDictionary<string, float>();
+        outletMaxEnergy = new SerializableDictionary<string, float>();
+
     }
 }
