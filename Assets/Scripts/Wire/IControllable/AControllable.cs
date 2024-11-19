@@ -208,23 +208,12 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     if (!checkForUniqueIDScript()) {
         return;
     }
-        if(!data.outletCleanEnergy.TryGetValue(uniqueID, out var savedCleanEnergy))
-        {
-            Debug.LogError("outletCleanEnergy for " + gameObject + " could not be obtained");
-            return;
-        }
-        cleanEnergy = savedCleanEnergy;
-
-        if (!data.outletVirusEnergy.TryGetValue(uniqueID, out var savedVirusEnergy)){
-            Debug.LogError("outletVirusEnergy for " + gameObject + " could not be obtained");
-            return;
-        }
-        if (!data.outletMaxEnergy.TryGetValue(uniqueID, out var savedMaxEnergy)){
-            Debug.LogError("outletMaxEnergy for " + gameObject + " could not be obtained");
-            return;
-        }
-
+        bool properlyLoaded = true;
+        data.outletCleanEnergy.TryGetValue(uniqueID, out var savedCleanEnergy);
+        data.outletVirusEnergy.TryGetValue(uniqueID, out var savedVirusEnergy);
+        data.outletMaxEnergy.TryGetValue(uniqueID, out var savedMaxEnergy);
         
+        cleanEnergy = savedCleanEnergy;
         virus = savedVirusEnergy;
         maxCharge = savedMaxEnergy;
 }
