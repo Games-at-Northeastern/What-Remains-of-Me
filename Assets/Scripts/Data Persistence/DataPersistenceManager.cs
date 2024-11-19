@@ -37,7 +37,6 @@ public class DataPersistenceManager : MonoBehaviour
 
         instance = this;
         fileDataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
-        print(Application.persistentDataPath); //uncomment if your trying to figure out where the data gets saved
     }
 
     /// <summary>
