@@ -226,13 +226,38 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
             return;
         }
 
+        //Check for clean outlet energy, if none exists add to dictionary
+        if (data.outletCleanEnergy.ContainsKey(uniqueID))
+        {
+            data.outletCleanEnergy[uniqueID] =  cleanEnergy;
+        }
+        else
+        {
+            data.outletCleanEnergy.Add(uniqueID, cleanEnergy);
+        }
 
-        data.outletCleanEnergy[uniqueID] = cleanEnergy; 
-        data.outletVirusEnergy[uniqueID] = virus;
-        data.outletMaxEnergy[uniqueID] = maxCharge;
+        //check for virus outlet energy, if none exists add to dictionary
+        if (data.outletVirusEnergy.ContainsKey(uniqueID))
+        {
+            data.outletVirusEnergy[uniqueID] = virus;
+        }
+        else
+        {
+            data.outletVirusEnergy.Add(uniqueID, virus);
+        }
+
+        //check for max outlet energy, if none exists add to dictionary
+        if (data.outletMaxEnergy.ContainsKey(uniqueID))
+        {
+            data.outletMaxEnergy[uniqueID] = maxCharge;
+        }
+        else
+        {
+            data.outletMaxEnergy.Add(uniqueID, maxCharge);
+        }
 
 
-        print("This: " + data.outletCleanEnergy[uniqueID]);
+
     }
 
 
