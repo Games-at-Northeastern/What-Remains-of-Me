@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,11 +10,14 @@ using UnityEngine.Events;
 /// such as a general implementation of the GainEnergy() and LoseEnergy()
 /// methods, and a representation of energy.
 /// </summary>
-public abstract class AControllable : MonoBehaviour, IControllable
+public abstract class AControllable : MonoBehaviour, IControllable, IDataPersistence
 {
     [SerializeField] protected float cleanEnergy;
     [SerializeField] protected float maxCharge;
     [SerializeField] protected float virus;
+
+    public string uniqueID;
+
 
     protected float totalEnergy => cleanEnergy + virus;
 
@@ -185,6 +189,88 @@ public abstract class AControllable : MonoBehaviour, IControllable
     {
         return totalEnergy + amount <= maxCharge;
     }
+
+    /// <summary>
+    /// Check if uniqueID has been assigned. If it hasnt, the gameobject is missing the UniqueId.cs script
+    /// </summary>
+    /// <returns>true if uniqueID is not null, false otherwise </returns>
+    private bool checkForUniqueIDScript()
+    {
+        if (uniqueID == null)
+        {
+            Debug.Log(gameObject + " data cannot be saved or loaded from this object because it is missing a UniqueId.cs script");
+            return false;
+        }
+        return true;
+    }
+
+    public void LoadData(GameData data) {
+    if (!checkForUniqueIDScript()) {
+        return;
+    }
+        if(!data.outletCleanEnergy.TryGetValue(uniqueID, out var savedCleanEnergy))
+        {
+            Debug.LogError("outletCleanEnergy for " + gameObject + " could not be obtained");
+            return;
+        }
+        cleanEnergy = savedCleanEnergy;
+
+        if (!data.outletVirusEnergy.TryGetValue(uniqueID, out var savedVirusEnergy)){
+            Debug.LogError("outletVirusEnergy for " + gameObject + " could not be obtained");
+            return;
+        }
+        if (!data.outletMaxEnergy.TryGetValue(uniqueID, out var savedMaxEnergy)){
+            Debug.LogError("outletMaxEnergy for " + gameObject + " could not be obtained");
+            return;
+        }
+
+        
+        virus = savedVirusEnergy;
+        maxCharge = savedMaxEnergy;
+}
+
+
+    public void SaveData(ref GameData data)
+    {
+        if (!checkForUniqueIDScript())
+        {
+            return;
+        }
+
+        //Check for clean outlet energy, if none exists add to dictionary
+        if (data.outletCleanEnergy.ContainsKey(uniqueID))
+        {
+            data.outletCleanEnergy[uniqueID] =  cleanEnergy;
+        }
+        else
+        {
+            data.outletCleanEnergy.Add(uniqueID, cleanEnergy);
+        }
+
+        //check for virus outlet energy, if none exists add to dictionary
+        if (data.outletVirusEnergy.ContainsKey(uniqueID))
+        {
+            data.outletVirusEnergy[uniqueID] = virus;
+        }
+        else
+        {
+            data.outletVirusEnergy.Add(uniqueID, virus);
+        }
+
+        //check for max outlet energy, if none exists add to dictionary
+        if (data.outletMaxEnergy.ContainsKey(uniqueID))
+        {
+            data.outletMaxEnergy[uniqueID] = maxCharge;
+        }
+        else
+        {
+            data.outletMaxEnergy.Add(uniqueID, maxCharge);
+        }
+
+
+
+    }
+
 
     //Debug Control
     /*
