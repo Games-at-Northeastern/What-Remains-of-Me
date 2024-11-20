@@ -5,7 +5,6 @@ using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
 [System.Serializable]
 /// <summary>
 ///Formats the game data into a readable format for the save and load system.
