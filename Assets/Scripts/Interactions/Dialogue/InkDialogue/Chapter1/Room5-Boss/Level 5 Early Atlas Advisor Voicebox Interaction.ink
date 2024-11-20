@@ -3,7 +3,8 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 === main ===
 
-I did it. I defeated Jones with your help!
+{voiceModuleObtained:
 #layout:left #portrait:atlasexcited #speaker:Atlas
-
+I did it. I defeated Jones with your help!
+}
 ->END
