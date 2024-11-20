@@ -66,6 +66,7 @@ public class WireThrower : MonoBehaviour
     [SerializeField] private float mouseInactivityThreshold = 5f; //for mouseinactivity. Initial value is 5 seconds.
     private float inactivityTimer = 0f;
     private Vector3 lastMousePosition;
+    private Outlet lastTargetedOutlet;
     #endregion
 
     #region StartUp
@@ -471,16 +472,34 @@ public class WireThrower : MonoBehaviour
         _lockOnOutlet = null;
         _isLockOn = false;
     }
+
+    // Update target lock and outlet targeting light intensity
     if (closest != null)
     {
         _lockOnOutlet = closest;
         _isLockOn = true;
+
+        // Update last targeted outlet
+        if (lastTargetedOutlet != null && lastTargetedOutlet != closest.GetComponent<Outlet>())
+        {
+            lastTargetedOutlet.SetTargeted(false);
+        }
+
+        lastTargetedOutlet = closest.GetComponent<Outlet>();
+        lastTargetedOutlet.SetTargeted(true);
+
         UpdateMeter(closest);
     }
     else
     {
-        _lockOnOutlet = closest;
-        _isLockOn = true;
+        if (lastTargetedOutlet != null)
+        {
+            lastTargetedOutlet.SetTargeted(false);
+            lastTargetedOutlet = null;
+        }
+
+        _lockOnOutlet = null;
+        _isLockOn = false;
     }
 
     _lastRecordedPosition = transform.position;
