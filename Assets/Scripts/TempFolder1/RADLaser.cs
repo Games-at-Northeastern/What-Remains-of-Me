@@ -64,6 +64,13 @@ public class RADLaser : MonoBehaviour
         _targetOriginPosition = Instantiate(_laserTarget, _laserTarget.position, _laserTarget.rotation);
 
         // Set the instantiated Transform as a child of this GameObject
+
+        /*
+         * Read:
+         * Don't modify the position of the copy manually, 
+         * the copy is used to get where the position of the lazer target should be if we didn't modify the original lazer target.
+         * 
+         */
         _targetOriginPosition.SetParent(transform);
 
         // clear the gameobjects inside the clone
@@ -81,7 +88,7 @@ public class RADLaser : MonoBehaviour
         _didCastHit = DoRaycast(out _data);
 
 
-        // if didn't hit anything, reset to the default position
+        // if didn't hit anything, reset to the default position gradually 
         if (!_didCastHit)
         {
             _laserTarget.position = Vector3.Lerp(_laserTarget.position, _targetOriginPosition.position, resetSpeed * Time.deltaTime);
@@ -130,6 +137,7 @@ public class RADLaser : MonoBehaviour
         }
 
         _points = new Vector3[] { transform.position, targetPos };
+
         // render the laser
         _renderer.SetPositions(_points);
     }
@@ -138,7 +146,6 @@ public class RADLaser : MonoBehaviour
     {
         data = Physics2D.Raycast(transform.position, _dir, _realLaserDistance, _mask);
 
-        //return data.point != Vector2.zero;
         return data.collider != null;
     }
 
@@ -155,7 +162,6 @@ public class RADLaser : MonoBehaviour
             && _data.collider is not null
             && UtilityFunctions.CompareTagOfHierarchy(_data.collider.transform, _tag, out var player, PlayerHierarchyLayerIndex))
         {
-            // _deathTeleporter.PerformDeath(player.gameObject);
             StartCoroutine(_deathTeleporter.PerformDeath(player.gameObject));
             _lockout = true;
 
