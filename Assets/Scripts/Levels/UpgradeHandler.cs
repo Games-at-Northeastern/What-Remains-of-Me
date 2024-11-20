@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class UpgradeHandler : MonoBehaviour
 {
     public static bool DashAllowed { get; private set; }
+    public static bool HasVoiceBox { get; private set; }
 
     void OnEnable()
     {
@@ -29,4 +30,6 @@ public class UpgradeHandler : MonoBehaviour
     {
         DashAllowed = allowed;
     }
+
+    public static void SetVoiceBox(bool box) => HasVoiceBox = box;
 }
