@@ -3,7 +3,9 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 === main ===
 
-So many of my friends were destroyed here
+{voiceModuleObtained:
 #layout:left #portrait:atlaspuzzled #speaker:Atlas
+So many of my friends were destroyed here
+}
 
 ->END
