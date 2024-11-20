@@ -2,16 +2,8 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 ->main
 
 === main ===
-    ->firstInteraction
 
-
-
-===firstInteraction===
-
-I’m glad I didn’t end up like my poor friend here
+It looks like my friend wanted to see what was through this door
 #layout:left #portrait:atlashappy #speaker:Atlas
-
-
-->DONE
 
 ->END
