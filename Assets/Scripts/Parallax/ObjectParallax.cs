@@ -47,8 +47,6 @@ public class ObjectParallax : MonoBehaviour
 
         Vector3 diff = cam.transform.position - initialPos;
 
-        Debug.Log(cam.transform.position);
-
         float newX = doParallaxX ? initialPos.x + (diff.x * doXFactor) : initialPos.x;
         float newY = doParallaxY ? initialPos.y + (diff.y * doYFactor) : initialPos.y;
 

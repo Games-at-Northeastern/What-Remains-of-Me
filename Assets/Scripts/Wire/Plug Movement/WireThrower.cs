@@ -63,6 +63,9 @@ public class WireThrower : MonoBehaviour
     private Color green = new Color(0.0f, 1.0f, 0.0f);
     private Color purple = new Color(0.5f, 0.0f, 0.5f);
     private float timeSinceParticlePlaying = 1.0f;
+    [SerializeField] private float mouseInactivityThreshold = 5f; //for mouseinactivity. Initial value is 5 seconds.
+    private float inactivityTimer = 0f;
+    private Vector3 lastMousePosition;
     #endregion
 
     #region StartUp
@@ -566,10 +569,13 @@ public class WireThrower : MonoBehaviour
         {
             reticle.GetComponent<Light2D>().enabled = false;
         }
+        HandleMouseInactivity();
         HandleLineRendering();
         HandleThrowInputHeld();
         HandleConnectionPhysics();
         _framesHeld += Time.deltaTime;
+
+        
 
         // REMOVED THIS AND REPLACED THIS WITH AUTO TARGETING RETICLE
         //if (Input.GetKeyDown(KeyCode.Q)) { _isLockOn = !_isLockOn; }
@@ -581,6 +587,33 @@ public class WireThrower : MonoBehaviour
 
 
     }
+
+    /// <summary>
+    /// Handle Mouse inactivity when playing (if mouse hasn't moved in a while, reset it to the center of the screen)
+    /// </summary>
+     private void HandleMouseInactivity()
+    {
+        Vector3 mousePos = Input.mousePosition;
+
+        if (mousePos != lastMousePosition)
+        {
+            inactivityTimer = 0f;
+            lastMousePosition = mousePos;
+        }
+        else
+        {
+            inactivityTimer += Time.deltaTime;
+
+            //inactivity exceeds threshold, reset mouse to center
+            if (inactivityTimer >= mouseInactivityThreshold)
+            {
+                Mouse.current.WarpCursorPosition(new Vector2(Screen.width / 2f, Screen.height / 2f));
+                lastMousePosition = Input.mousePosition;
+                inactivityTimer = 0f;
+            }
+        }
+    }
+    
 
     /// <summary>
     /// Register the plug as connected to the given GameObject.

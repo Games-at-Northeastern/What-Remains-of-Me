@@ -12,6 +12,10 @@ using UnityEngine.Events;
 /// </summary>
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField] private int levelVersion = 0;
+    public int LevelVersion { get; set; }
+    // set this on awake, apply according modifications on start
+
     [SerializeField] private GameObject player;
     private string warpDestination;
     private int toWarpID;

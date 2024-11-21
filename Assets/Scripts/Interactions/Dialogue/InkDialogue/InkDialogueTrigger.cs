@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class InkDialogueTrigger : MonoBehaviour
 {
@@ -24,8 +25,6 @@ public class InkDialogueTrigger : MonoBehaviour
 
     private ControlSchemes _cs;
 
-    //I think this is not used...?
-    private bool _playerInRange;
     private bool _firstInteraction;
 
     private void Start()
@@ -45,6 +44,10 @@ public class InkDialogueTrigger : MonoBehaviour
 
     private void OnDisable() => visualCue.SetActive(false);
 
+#pragma warning disable IDE1006 // Naming Styles
+    public UnityEvent OnDialogueEnded;
+#pragma warning restore IDE1006 // Naming Styles
+
     private void Update()
     {
         if (playerInRange && !InkDialogueManager.GetInstance().dialogueIsPlaying && dialogueActive)
@@ -53,6 +56,10 @@ public class InkDialogueTrigger : MonoBehaviour
             // disables dialogue so that the player can't enter the dialogue mode until waitForInteractAvailable seconds
             if (InkDialogueManager.GetInstance().dialogueEnded)
             {
+                if (OnDialogueEnded != null)
+                {
+                    OnDialogueEnded.Invoke();
+                }
                 StartCoroutine(CanInteractAgain());
             }
             else if (_cs.Player.Dialogue.WasReleasedThisFrame() || forceDialogue)
@@ -76,9 +83,9 @@ public class InkDialogueTrigger : MonoBehaviour
 
     private IEnumerator CanInteractAgain()
     {
-        setDialogueActive(false);
+        SetDialogueActive(false);
         yield return new WaitForSeconds(waitForInteractAvailable);
-        setDialogueActive(true);
+        SetDialogueActive(true);
         InkDialogueManager.GetInstance().dialogueEnded = false;
     }
 
@@ -99,7 +106,5 @@ public class InkDialogueTrigger : MonoBehaviour
         }
     }
 
-    public void setDialogueActive(bool status) {
-        dialogueActive = status;
-    }
+    public void SetDialogueActive(bool status) => dialogueActive = status;
 }

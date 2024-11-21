@@ -15,7 +15,7 @@ public class Outlet : MonoBehaviour
     [SerializeField] protected List<AControllable> controlledSecondaries;
     [SerializeField] protected float energyTransferSpeed;
     [SerializeField] protected List<Light2D> outletLights;
-    [SerializeField] protected float lerpSpeed, connectedGoal, chargingGoal;
+    [SerializeField] protected float lerpSpeed, connectedGoal, chargingGoal, targetingGoal;
 
     public Collider2D grappleOverrideRange;
 
@@ -35,6 +35,7 @@ public class Outlet : MonoBehaviour
         CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); goalIntensity = connectedGoal; } };
 
         //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+        controlled.uniqueID = gameObject.GetComponent<UniqueID>().uniqueId;
     }
 
     /// <summary>
@@ -180,6 +181,15 @@ public class Outlet : MonoBehaviour
             return virus + controlled.GetVirus();
         }
         return 0f;
+    }
+    /// <summary>
+    /// Sets the outlet as targeted, increasing the brightness of the lights.
+    /// </summary>
+    public void SetTargeted(bool isTargeted)
+    {
+        goalIntensity = isTargeted ? chargingGoal : connectedGoal;
+        StopAllCoroutines();
+        StartCoroutine(ControlLight());
     }
 }
 
