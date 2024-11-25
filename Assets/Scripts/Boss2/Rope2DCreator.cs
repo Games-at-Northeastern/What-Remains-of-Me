@@ -6,9 +6,10 @@ public class Rope2DCreator : MonoBehaviour
 {
     private LineRenderer lineRenderer;
     private List<RopeSegment> ropeSegments = new List<RopeSegment>();
-    private float ropeSegLen = .8f;
-    private int segmentLength = 16;
-    private float lineWidth = 0.15f;
+    [SerializeField] private float ropeSegLen = .8f;
+    [SerializeField] private int segmentLength = 16;
+    [SerializeField] private float lineWidth = 0.15f;
+    [SerializeField] private Color color;
     [SerializeField] private Transform StartPoint;
     [SerializeField] private Transform EndPoint; // New end point
 
@@ -16,6 +17,8 @@ public class Rope2DCreator : MonoBehaviour
     void Start()
     {
         this.lineRenderer = this.GetComponent<LineRenderer>();
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.SetColors(color,color);
         Vector3 ropeStartPoint = StartPoint.transform.position;
         Vector3 ropeEndPoint = EndPoint.transform.position;
 
@@ -30,6 +33,7 @@ public class Rope2DCreator : MonoBehaviour
     void Update()
     {
         this.DrawRope();
+        lineRenderer.SetColors(color, color);
     }
 
     private void FixedUpdate()
