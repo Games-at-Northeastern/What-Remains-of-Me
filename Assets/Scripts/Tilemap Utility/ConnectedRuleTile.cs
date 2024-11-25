@@ -104,11 +104,6 @@ public class ConnectedRuleTile : RuleTile
 
         public void OnAfterDeserialize()
         {
-            if (values.Count == Count)
-            {
-                return;
-            }
-
             Clear();
 
             for (int i = 0; i < values.Count; i++)

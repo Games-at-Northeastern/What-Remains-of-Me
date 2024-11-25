@@ -12,7 +12,7 @@ public class Chapter1DetectReverse : MonoBehaviour
 
         if (UpgradeHandler.HasVoiceBox)
         {
-            FindObjectOfType<LevelManager>().LevelVersion = 1;
+            FindObjectOfType<LevelManager>().LevelTags.Add(LevelManager.Tags.Chapter1.Level1.VOICE_BOX);
         }
     }
 }
