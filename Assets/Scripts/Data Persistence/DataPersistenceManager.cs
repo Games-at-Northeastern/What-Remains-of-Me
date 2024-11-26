@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine.Playables;
 using UnityEditor;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 ///A singleton class(only place one per scene) that keeps track of save and load data.
@@ -38,6 +39,10 @@ public class DataPersistenceManager : MonoBehaviour
         instance = this;
         fileDataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
     }
+    private void Start()
+    {
+        LoadSceneData();
+    }
 
     /// <summary>
     ///Creates a new game by initializing gameData with its default constructor values.
@@ -47,14 +52,32 @@ public class DataPersistenceManager : MonoBehaviour
         this.gameData = new GameData();
     }
 
+    private void LoadSceneData()
+    {
+        //Load scene data from file using the data handler 
+        this.gameData = fileDataHandler.Load();
+
+        foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+        {
+            dataPersistenceObj.LoadData(gameData);
+        }
+    }
+
     public void LoadGame()
     {
+
         //Retrieve data persistence objects
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
 
 
         //Load save data from file using the data handler 
         this.gameData = fileDataHandler.Load();
+
+        //If we arent in the scene the player saved in during a load, load the scene the player saved in
+        if(gameData.scenePlayerSavedIn != SceneManager.GetActiveScene().buildIndex)
+        {
+            SceneManager.LoadScene(gameData.scenePlayerSavedIn);
+        }
 
         //if no data can be loaded, init the new game
         
@@ -64,12 +87,16 @@ public class DataPersistenceManager : MonoBehaviour
             gameData = new GameData();
             NewGame();
         }
-
-        //Push data onto scripts that need it
-        foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+        else
         {
-            dataPersistenceObj.LoadData(gameData);
+            //Push data onto scripts that need it
+            foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+            {
+                dataPersistenceObj.LoadData(gameData);
+            }
         }
+
+        
     }
 
     public void SaveGame()
@@ -88,8 +115,7 @@ public class DataPersistenceManager : MonoBehaviour
         {
             dataPersistenceObj.SaveData(ref gameData);
         }
-
-
+        gameData.scenePlayerSavedIn = SceneManager.GetActiveScene().buildIndex;
         //save that file using the data handler
         fileDataHandler.Save(gameData);
 
