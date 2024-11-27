@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class SetActiveFromTags : MonoBehaviour
 {
-    [System.Serializable]
+    /*[System.Serializable]
     private class TagActivasion
     {
-        [SerializeField] private LevelManager.TagFlags enabledInVersions;
+        [SerializeField] private LevelManager.TagContainer enabledInVersions;
         [SerializeField] private List<GameObject> objects;
 
-        public LevelManager.TagFlags EnabledInVersions { get => enabledInVersions; set => enabledInVersions = value; }
+        public LevelManager.TagContainer EnabledInVersions { get => enabledInVersions; set => enabledInVersions = value; }
         public List<GameObject> Objects { get => objects; set => objects = value; }
 
         public TagActivasion()
         {
-            enabledInVersions = new LevelManager.TagFlags();
+            enabledInVersions = new LevelManager.TagContainer();
             objects = new List<GameObject>();
         }
     }
@@ -24,7 +24,7 @@ public class SetActiveFromTags : MonoBehaviour
 
     public void Start()
     {
-        LevelManager.TagFlags levelTags = FindObjectOfType<LevelManager>().LevelTags;
+        LevelManager.TagContainer levelTags = FindObjectOfType<LevelManager>().LevelTags;
 
         foreach (TagActivasion requirement in requirements)
         {
@@ -38,5 +38,5 @@ public class SetActiveFromTags : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
-    }
+    }*/
 }

@@ -618,7 +618,6 @@ namespace PlayerController
                     {
                         return AnimationType.IDLE;
                     }
-                    break;
                 case PlayerState.Aerial:
                     if (_speed.y > 0)
                     {
@@ -628,11 +627,11 @@ namespace PlayerController
                     {
                         return AnimationType.JUMP_FALLING;
                     }
-                    break;
                 case PlayerState.OnWall:
                     break;
                 case PlayerState.Swinging:
                     return AnimationType.WIRE_SWING;
+                default:
                     break;
             }
             //Temporary

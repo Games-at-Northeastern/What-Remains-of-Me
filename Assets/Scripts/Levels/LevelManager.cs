@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
@@ -6,6 +5,9 @@ using UnityEditor;
 using System.Reflection;
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 /// <summary>
 /// This class provides the functionalities for the LevelManager singleton,
@@ -13,240 +15,28 @@ using System.Linq;
 /// </summary>
 public class LevelManager : MonoBehaviour
 {
-    #region LevelTags
-#pragma warning disable IDE1006
-    [Serializable]
-    public class TagFlags : ISerializationCallbackReceiver
-    {
-        private readonly BitArray flags;
-        private static readonly int numFlags;
-        public BitArray AsBits() => flags;
 
-        static TagFlags()
-        {
-            if (!Tags.initialized)
-            {
-                Tags.Initialize();
-                numFlags = Tags.currentId;
-            }
-        }
 
-        public TagFlags() => flags = new BitArray(numFlags);
 
-        public bool Has(int flag)
-        {
-            if (flag >= flags.Count)
-            {
-                return false;
-            }
-
-            return flags.Get(flag);
-        }
-        public bool Has(Tags tag) => Has(tag.id);
-
-        public void Set(int flag, bool val)
-        {
-            if (flag >= flags.Count)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            flags.Set(flag, val);
-        }
-        public void Set(Tags tag, bool val) => Set(tag.id, val);
-
-        public void Add(int flag) => Set(flag, true);
-        public void Add(Tags tag) => Set(tag.id, true);
-        public void Remove(int flag) => Set(flag, false);
-        public void Remove(Tags tag) => Set(tag.id, false);
-        public int Count => flags.Count;
-
-        public bool HasFlags(TagFlags otherFlags)
-        {
-            if (Count != otherFlags.Count)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            for (int i = 0; i < Count; i++)
-            {
-                if (otherFlags.Has(i) && !Has(i))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        // Serialization
-        [SerializeField] public bool[] asBools;
-        [SerializeField] public bool changed = false;
-        [SerializeField] private bool startedChanging = false;
-
-        public static TagFlags CurrentChanger { get; private set; }
-
-        public void OnBeforeSerialize()
-        {
-            if (startedChanging)
-            {
-                CurrentChanger = this;
-                startedChanging = false;
-            }
-
-            if (changed && asBools != null)
-            {
-                OnAfterDeserialize();
-                changed = false;
-
-                if (CurrentChanger == this)
-                {
-                    CurrentChanger = null;
-                }
-            }
-
-            asBools = new bool[numFlags];
-            for (var i = 0; i < Count; i++)
-            {
-                asBools[i] = Has(i);
-            }
-        }
-        public void OnAfterDeserialize()
-        {
-            for (var i = 0; i < Count; i++)
-            {
-                Set(i, asBools[i]);
-            }
-        }
-
-#if UNITY_EDITOR
-        [CustomPropertyDrawer(typeof(TagFlags))]
-        public class TagFlagDrawer : PropertyDrawer
-        {
-            private GenericMenu GenerateMenu(SerializedProperty bools)
-            {
-                var menu = new GenericMenu();
-                Tags.addTagsToTagMenu(menu, bools);
-                return menu;
-            }
-
-            public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-            {
-                if (GUI.Button(position, "Select Level Tags"))
-                {
-                    property.FindPropertyRelative("startedChanging").boolValue = true;
-                    var bools = property.FindPropertyRelative("asBools");
-                    GenericMenu menu = GenerateMenu(bools);
-                    menu.ShowAsContext();
-                }
-            }
-        }
-#endif
-    }
-
-    public class Tags
-    {
-        public static int currentId = 0;
-        public int id { get; private set; }
-
-        public static bool initialized = false;
-        public static void Initialize() => Initialize(typeof(Tags));
-
-        private static void Initialize(Type type)
-        {
-            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static).OrderBy(field => field.Name))
-            {
-                if (field.FieldType != typeof(Tags))
-                {
-                    continue;
-                }
-
-                var tag = field.GetValue(null) as Tags;
-                tag.InitializeTag();
-            }
-
-            foreach (var subType in type.GetNestedTypes(BindingFlags.Static | BindingFlags.Public).OrderBy(subType => subType.Name))
-            {
-                Initialize(subType);
-            }
-        }
-
-        private Tags() => id = -1;
-
-        private void InitializeTag()
-        {
-            id = currentId;
-            currentId++;
-        }
-
-        public static class Chapter1
-        {
-            public static Tags SPAWN_LEFT = new();
-            public static Tags SPAWN_RIGHT = new();
-
-            public static class Level1
-            {
-                public static Tags VOICE_BOX = new();
-            }
-        }
-#if UNITY_EDITOR
-        public static void addTagsToTagMenu(GenericMenu menu, SerializedProperty bools) => AddTagsToTagMenu(typeof(Tags), menu, "", bools);
-
-        private class CallbackData
-        {
-            public bool flagValue;
-            public Tags tag;
-
-            public CallbackData(bool flagValue, Tags tag)
-            {
-                this.flagValue = flagValue;
-                this.tag = tag;
-            }
-        }
-
-        private static void SelectionCallback(object dataObj)
-        {
-            var data = dataObj as CallbackData;
-
-            if (TagFlags.CurrentChanger is null)
-            {
-                return;
-            }
-
-            TagFlags.CurrentChanger.asBools[data.tag.id] = data.flagValue;
-            TagFlags.CurrentChanger.changed = true;
-        }
-
-        public static void AddTagsToTagMenu(Type type, GenericMenu menu, string typeDir, SerializedProperty bools)
-        {
-            typeDir += type.Name + "/";
-
-            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
-            {
-                if (field.FieldType != typeof(Tags))
-                {
-                    continue;
-                }
-
-                var tag = field.GetValue(null) as Tags;
-                var on = bools.GetArrayElementAtIndex(tag.id).boolValue;
-
-                menu.AddItem(new GUIContent(typeDir + field.Name), on, SelectionCallback, new CallbackData(!on, tag));
-            }
-
-            foreach (var subType in type.GetNestedTypes(BindingFlags.Static | BindingFlags.Public))
-            {
-                AddTagsToTagMenu(subType, menu, typeDir, bools);
-            }
-        }
-#endif
-    }
-#pragma warning restore IDE1006
-    #endregion
-
-    [SerializeField] private TagFlags levelTags;
-    public TagFlags LevelTags => levelTags;
+   // [SerializeField] private TagContainer canAcceptTags;
+    //public TagContainer LevelTags => canAcceptTags;
     // set this on awake, apply according modifications on start
+
+    //private static TagContainer immediateTags = new();
+    //private static TagContainer consumeTags = new();
+    //private static TagContainer consumeSingleTags = new();
+    //private static TagContainer consumeUniqueTags = new();
+    //private static TagContainer persistentTags = new();
+
+    /*private static TagContainer GetTagList(Tags.SendType sendType) => sendType switch
+    {
+        Tags.SendType.IMMEDIATE => immediateTags,
+        Tags.SendType.CONSUME => consumeTags,
+        Tags.SendType.CONSUME_SINGLE => consumeSingleTags,
+        Tags.SendType.CONSUME_UNIQUE => consumeUniqueTags,
+        Tags.SendType.PERSISTENT => persistentTags,
+        _ => null,
+    };*/
 
     [SerializeField] private GameObject player;
     private string warpDestination;
