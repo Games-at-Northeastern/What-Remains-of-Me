@@ -205,25 +205,29 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
         return true;
     }
 
-    public void LoadData(GameData data)
+    public void LoadPlayerData(PlayerData playerData)
+    {
+        //No player data to load for Acontrollanble
+    }
+    public void LoadLevelData(LevelData levelData)
     {
         if (!checkForUniqueIDScript())
         {
             return;
         }
-        if (!data.outletCleanEnergy.TryGetValue(uniqueID, out var savedCleanEnergy))
+        if (!levelData.outletCleanEnergy.TryGetValue(uniqueID, out var savedCleanEnergy))
         {
             Debug.LogError("outletCleanEnergy for " + gameObject + " could not be obtained");
             return;
         }
         cleanEnergy = savedCleanEnergy;
 
-        if (!data.outletVirusEnergy.TryGetValue(uniqueID, out var savedVirusEnergy))
+        if (!levelData.outletVirusEnergy.TryGetValue(uniqueID, out var savedVirusEnergy))
         {
             Debug.LogError("outletVirusEnergy for " + gameObject + " could not be obtained");
             return;
         }
-        if (!data.outletMaxEnergy.TryGetValue(uniqueID, out var savedMaxEnergy))
+        if (!levelData.outletMaxEnergy.TryGetValue(uniqueID, out var savedMaxEnergy))
         {
             Debug.LogError("outletMaxEnergy for " + gameObject + " could not be obtained");
             return;
@@ -235,7 +239,7 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     }
 
 
-    public void SaveData(ref GameData data)
+    public void SaveData(ref PlayerData playerData, ref LevelData levelData)
     {
         if (!checkForUniqueIDScript())
         {
@@ -243,33 +247,33 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
         }
 
         //Check for clean outlet energy, if none exists add to dictionary
-        if (data.outletCleanEnergy.ContainsKey(uniqueID))
+        if (levelData.outletCleanEnergy.ContainsKey(uniqueID))
         {
-            data.outletCleanEnergy[uniqueID] = cleanEnergy;
+            levelData.outletCleanEnergy[uniqueID] = cleanEnergy;
         }
         else
         {
-            data.outletCleanEnergy.Add(uniqueID, cleanEnergy);
-        }
+            levelData.outletCleanEnergy.Add(uniqueID, cleanEnergy);
+        }   
 
         //check for virus outlet energy, if none exists add to dictionary
-        if (data.outletVirusEnergy.ContainsKey(uniqueID))
+        if (levelData.outletVirusEnergy.ContainsKey(uniqueID))
         {
-            data.outletVirusEnergy[uniqueID] = virus;
+            levelData.outletVirusEnergy[uniqueID] = virus;
         }
         else
         {
-            data.outletVirusEnergy.Add(uniqueID, virus);
+            levelData.outletVirusEnergy.Add(uniqueID, virus);
         }
 
         //check for max outlet energy, if none exists add to dictionary
-        if (data.outletMaxEnergy.ContainsKey(uniqueID))
+        if (levelData.outletMaxEnergy.ContainsKey(uniqueID))
         {
-            data.outletMaxEnergy[uniqueID] = maxCharge;
+            levelData.outletMaxEnergy[uniqueID] = maxCharge;
         }
         else
         {
-            data.outletMaxEnergy.Add(uniqueID, maxCharge);
+            levelData.outletMaxEnergy.Add(uniqueID, maxCharge);
         }
 
 

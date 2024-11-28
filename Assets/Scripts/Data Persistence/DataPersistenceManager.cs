@@ -1,11 +1,7 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Bson;
-using UnityEngine;
 using System.Linq;
-using UnityEngine.Playables;
-using UnityEditor;
-using UnityEngine.UIElements;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -17,16 +13,24 @@ public class DataPersistenceManager : MonoBehaviour
 {
 
     [SerializeField]
-    [Tooltip("Where the save data will be saved to")]
+    [Tooltip("Where the player save data will be saved to")]
     private string fileName;
 
-    private GameData gameData; //Keeps track of the save/load game data. Things like virus, energy and other important things to load.
-     
-    private List<IDataPersistence> dataPersistenceObjects; //A list of objects that have the IDataPersistence. Anything with IDataPersistence has data that needs to be saved or loaded.
+    [SerializeField]
+    [Tooltip("Wether the level should use save data on start to setup the level")]
+    private bool loadSaveDataOnStart = true;
 
-    private FileDataHandler fileDataHandler;
+    private PlayerData playerData;  //Keeps track of the player data from save/load. Things like player virus and player energy are stored in this format.
+    private LevelData levelData;    //Keeps track of the level data from save/load. Things like outlet power and outlet in this format.
 
-    public static DataPersistenceManager instance { get; private set; }
+    private List<IDataPersistence> dataPersistenceObjects;      //A list of objects that have the IDataPersistence. Anything with IDataPersistence has data that needs to be saved or loaded.
+
+    private FileDataHandler<PlayerData> playerFileDataHandler;  //A file handler that will load and save player data to and from a Json format.
+    private FileDataHandler<LevelData> levelFileDataHandler;    //A file handler that will load and save level data to and from a Json format.
+
+    public static bool playerClickedLoad = false;
+
+    public static DataPersistenceManager instance { get; private set; } //A static variable to ensure theres only one DataPersistenceManager in the scene.
 
     private void Awake()
     {
@@ -37,87 +41,121 @@ public class DataPersistenceManager : MonoBehaviour
         }
 
         instance = this;
-        fileDataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        playerData = new PlayerData();
+        levelData = new LevelData();
+        playerFileDataHandler = new FileDataHandler<PlayerData>(Application.persistentDataPath, fileName);
+        levelFileDataHandler = new FileDataHandler<LevelData>(Application.persistentDataPath, "Level_" + SceneManager.GetActiveScene().name);
     }
     private void Start()
     {
-        LoadSceneData();
+        if (loadSaveDataOnStart)
+        {
+            LoadSceneData();
+        }
+        
     }
 
     /// <summary>
-    ///Creates a new game by initializing gameData with its default constructor values.
+    ///Creates a new game by initializing playerData with its default constructor values.
     /// </summary>
-    public void NewGame()
+    public void CheckForDataObjects()
     {
-        this.gameData = new GameData();
+        if(playerData == null)
+        {
+            Debug.Log("Save/Load: No player data found on game load, creating new player data.");
+            playerData = new PlayerData();
+        }if(levelData == null)
+        {
+            Debug.Log("Save/Load: No level data found on game load, creating new level data.");
+            levelData = new LevelData();
+        }
+        else if(levelData.sceneName != SceneManager.GetActiveScene().name)
+        {
+            levelData = new LevelData();
+            levelData.sceneName = SceneManager.GetActiveScene().name;
+        }
+        
     }
 
     private void LoadSceneData()
     {
+        //CheckForDataObjects();
         //Load scene data from file using the data handler 
-        this.gameData = fileDataHandler.Load();
+        this.playerData = playerFileDataHandler.Load();
+        this.levelData = levelFileDataHandler.Load();
+        bool loadPlayerData = (playerData.scenePlayerSavedIn == SceneManager.GetActiveScene().name && playerClickedLoad);
+
+       
+        
 
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
-            dataPersistenceObj.LoadData(gameData);
+            dataPersistenceObj.LoadLevelData(levelData);
+            if (loadPlayerData)
+            {
+                dataPersistenceObj.LoadPlayerData(playerData);
+            }
         }
+        playerClickedLoad = false;
     }
 
     public void LoadGame()
     {
-
+        Debug.Log("Loading Game");
+        playerClickedLoad = true;
+        //CheckForDataObjects();
         //Retrieve data persistence objects
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
 
 
         //Load save data from file using the data handler 
-        this.gameData = fileDataHandler.Load();
+        this.playerData = playerFileDataHandler.Load();
+        this.levelData = levelFileDataHandler.Load();
 
         //If we arent in the scene the player saved in during a load, load the scene the player saved in
-        if(gameData.scenePlayerSavedIn != SceneManager.GetActiveScene().buildIndex)
+        if (playerData.scenePlayerSavedIn != SceneManager.GetActiveScene().name)
         {
-            SceneManager.LoadScene(gameData.scenePlayerSavedIn);
+            
+            SceneManager.LoadScene(playerData.scenePlayerSavedIn);
         }
 
         //if no data can be loaded, init the new game
-        
-        if(this.gameData == null)
+
+        if (this.playerData == null)
         {
             Debug.Log("Save/Load: No data found on game load, starting new game.");
-            gameData = new GameData();
-            NewGame();
+            playerData = new PlayerData();
+            CheckForDataObjects();
         }
         else
         {
             //Push data onto scripts that need it
             foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
             {
-                dataPersistenceObj.LoadData(gameData);
+                dataPersistenceObj.LoadPlayerData(playerData);
+                dataPersistenceObj.LoadLevelData(levelData);
             }
         }
 
-        
+
     }
 
     public void SaveGame()
     {
+        CheckForDataObjects();
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
-        //if no data can be loaded, init the new game
-
-        if (this.gameData == null)
-        {
-            Debug.Log("Save/Load: No data found on game save, starting new game.");
-            NewGame();
-        }
+        
 
         //Pass the data to other scripts so they can update it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
-            dataPersistenceObj.SaveData(ref gameData);
+            dataPersistenceObj.SaveData(ref playerData,ref levelData);
         }
-        gameData.scenePlayerSavedIn = SceneManager.GetActiveScene().buildIndex;
+        playerData.scenePlayerSavedIn = SceneManager.GetActiveScene().name;
+
         //save that file using the data handler
-        fileDataHandler.Save(gameData);
+        playerFileDataHandler.Save(playerData);
+        levelFileDataHandler.Save(levelData);
 
     }
     /// <summary>

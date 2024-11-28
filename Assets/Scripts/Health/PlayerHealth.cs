@@ -252,16 +252,20 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
         InkDialogueVariables.deathCount++;
     }
 
-    public void LoadData(GameData data)
+    public void LoadPlayerData(PlayerData playerData)
     {
-        playerInfo.batteryPercentage.Value = data.batteryPercentage;
-        playerInfo.virusPercentage.Value = data.virusPercentage;
+        playerInfo.batteryPercentage.Value = playerData.batteryPercentage;
+        playerInfo.virusPercentage.Value = playerData.virusPercentage;
 
     }
-    public void SaveData(ref GameData data)
+    public void LoadLevelData(LevelData levelData)
     {
-        data.batteryPercentage = playerInfo.batteryPercentage.Value;
-        data.virusPercentage = playerInfo.virusPercentage.Value;
+        //No level data to load for Player Health
+    }
+    public void SaveData(ref PlayerData playerData, ref LevelData levelData)
+    {
+        playerData.batteryPercentage = playerInfo.batteryPercentage.Value;
+        playerData.virusPercentage = playerInfo.virusPercentage.Value;
 
     }
 }
