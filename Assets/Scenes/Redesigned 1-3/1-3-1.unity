@@ -3405,6 +3405,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1217903909}
     m_Modifications:
+    - target: {fileID: 175031095466711543, guid: fef72169d65024a40aaee4f291ec32e8, type: 3}
+      propertyPath: uniqueId
+      value: 1-3-1_1c367b40-7b8e-4521-9669-c29db90277ec
+      objectReference: {fileID: 0}
     - target: {fileID: 879809146747079150, guid: fef72169d65024a40aaee4f291ec32e8, type: 3}
       propertyPath: m_Name
       value: Door_and_Outlet
@@ -4888,6 +4892,10 @@ PrefabInstance:
     - target: {fileID: 4954450813872953210, guid: c83f3005c705c43abab3a63fc143b7e0, type: 3}
       propertyPath: m_SortingOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5073349224471650945, guid: c83f3005c705c43abab3a63fc143b7e0, type: 3}
+      propertyPath: uniqueId
+      value: 1-3-1_5b77773a-66ad-41ff-b520-5eb03eca810f
       objectReference: {fileID: 0}
     - target: {fileID: 5972110077676226314, guid: c83f3005c705c43abab3a63fc143b7e0, type: 3}
       propertyPath: _points.Array.data[1]
@@ -12869,6 +12877,10 @@ PrefabInstance:
       propertyPath: maxCharge
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: 3491440000326382720, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: uniqueId
+      value: 1-3-1_982310b4-820c-4c76-b651-50a022409f05
+      objectReference: {fileID: 0}
     - target: {fileID: 5885976549290964041, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -15055,6 +15067,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 629291516}
     m_Modifications:
+    - target: {fileID: 1580831367613815357, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: uniqueId
+      value: 1-3-1_7ccfcf7d-a40e-4df7-aa30-ab5aadaa2adb
+      objectReference: {fileID: 0}
     - target: {fileID: 6801492477888477864, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
       propertyPath: m_SortingOrder
       value: 5
@@ -55323,6 +55339,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 629291516}
     m_Modifications:
+    - target: {fileID: 1580831367613815357, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: uniqueId
+      value: 1-3-1_9ac8e6a1-d837-4ae7-97b5-95fdaffd76be
+      objectReference: {fileID: 0}
     - target: {fileID: 6801492477888477864, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
       propertyPath: m_SortingOrder
       value: 5
@@ -63669,6 +63689,7 @@ MonoBehaviour:
   lerpSpeed: 0
   connectedGoal: 0
   chargingGoal: 0
+  targetingGoal: 0
   grappleOverrideRange: {fileID: 0}
 --- !u!4 &1701451820514132847
 Transform:
@@ -64678,7 +64699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813679797165868, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.6356686
+      value: 1.6356685
       objectReference: {fileID: 0}
     - target: {fileID: 3482813679797165868, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -64690,7 +64711,7 @@ PrefabInstance:
       objectReference: {fileID: 1154280040}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.6356686
+      value: 1.6356685
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -64702,7 +64723,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 3.275
+      value: 2.95
       objectReference: {fileID: 0}
     - target: {fileID: 5528148736629256998, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: player
@@ -109034,6 +109055,7 @@ MonoBehaviour:
       m_Calls: []
   _movingElements:
   - {fileID: 7106778582125781062}
+  audioSource: {fileID: 0}
 --- !u!4 &6820331151141258220
 Transform:
   m_ObjectHideFlags: 0
