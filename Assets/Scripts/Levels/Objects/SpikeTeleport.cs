@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayerController;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 // why is this just for spikes? TODO, abstract this.
 public class SpikeTeleport : MonoBehaviour
@@ -13,6 +14,7 @@ public class SpikeTeleport : MonoBehaviour
     private GameObject sfx_holder;
     private PlayerSFX sfx;
 
+    [SerializeField] private bool resetScene;
 
     [SerializeField] private ParticleSystem deathParticles;
 
@@ -59,6 +61,10 @@ public class SpikeTeleport : MonoBehaviour
         sfx.Died();
 
         Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
+        if (resetScene)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
         yield return StartCoroutine(UnFreezePlayer(targetRb));
     }
 
