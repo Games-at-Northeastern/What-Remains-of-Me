@@ -1,16 +1,25 @@
 using System.Collections.Generic;
+using System;
+using System.Linq;
 using UnityEngine;
-
-
 /*
  *A class to work around unity's inability to serialize a dictionary. 
  * Converts dictionary data types into lists which can be converted to json through the JsonUtility class.
  */
-[System.Serializable]
+[Serializable]
 public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
 {
     [SerializeField] protected List<TKey> keys = new List<TKey>();
     [SerializeField] protected List<TValue> values = new List<TValue>();
+
+    public List<TKey> KeyList { get; set; }
+    public List<TValue> ValueList { get; set; }
+
+    public SerializableDictionary()
+    {
+        KeyList = new();
+        ValueList = new();
+    }
 
     public virtual void OnBeforeSerialize()
     {
@@ -37,6 +46,7 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
             this.Add(keys[i], values[i]);
         }
 
+        KeyList = Keys.ToList();
+        ValueList = Values.ToList();
     }
-
 }

@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
-using System;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class LevelTagDictionary : SerializableDictionary<LevelTagSO, int>
@@ -16,8 +16,10 @@ public class LevelTagDictionary : SerializableDictionary<LevelTagSO, int>
     [SerializeField] private int size = 0;
 #pragma warning restore IDE0052 // Remove unread private members
 
-    [SerializeField] private List<LevelTagSO> keysWithNull = new();
-    [SerializeField] private List<int> valuesWithNull = new();
+    [SerializeField] protected List<LevelTagSO> keysWithNull = new();
+    [SerializeField] protected List<int> valuesWithNull = new();
+
+    [SerializeField] protected List<LevelTagSO> tagPool;
 
     public override void OnBeforeSerialize()
     {
@@ -54,6 +56,8 @@ public class LevelTagDictionary : SerializableDictionary<LevelTagSO, int>
             valuesWithNull.Add(values[dictHead]);
         }
 
+        BeforeBaseEndSerialize();
+
         addPair = false;
         removePair = -1;
         setKey = -1;
@@ -76,7 +80,7 @@ public class LevelTagDictionary : SerializableDictionary<LevelTagSO, int>
         {
             addPair = false;
 
-            if (keysWithNull.Count < LevelTags.Tags.Count)
+            if (keysWithNull.Count < tagPool.Count)
             {
                 var newKeyVal = null as LevelTagSO;
 
@@ -93,14 +97,30 @@ public class LevelTagDictionary : SerializableDictionary<LevelTagSO, int>
             setKeyVal = -1;
         }
 
-        /*for (var i = keysWithNull.Count - 1; i >= 0; i--)
+        for (var i = keysWithNull.Count - 1; i > -1; i--)
+        {
+            if (keysWithNull[i] == null)
+            {
+                continue;
+            }
+
+            if (!tagPool.Contains(keysWithNull[i]))
+            {
+                keysWithNull.RemoveAt(i);
+                valuesWithNull.RemoveAt(i);
+            }
+        }
+
+        for (var i = keysWithNull.Count - 1; i >= 0; i--)
         {
             if (valuesWithNull[i] < 1)
             {
                 keysWithNull.RemoveAt(i);
                 valuesWithNull.RemoveAt(i);
             }
-        }*/
+        }
+
+        BeforeBaseDeserialize();
 
         keys.Clear();
         values.Clear();
@@ -118,12 +138,16 @@ public class LevelTagDictionary : SerializableDictionary<LevelTagSO, int>
 
         base.OnAfterDeserialize();
     }
+
+    protected virtual void BeforeBaseEndSerialize() => tagPool = LevelTags.Tags;
+
+    protected virtual void BeforeBaseDeserialize() { }
 }
 
 [CustomPropertyDrawer(typeof(LevelTagDictionary))]
 public class LevelTagDictionaryDrawer : PropertyDrawer
 {
-    private class LTDElement : VisualElement
+    protected class LTDElement : VisualElement
     {
         public SerializedProperty BaseProperty { get; set; }
         public SerializedProperty KeysProp { get; set; }
@@ -135,7 +159,6 @@ public class LevelTagDictionaryDrawer : PropertyDrawer
         public Toggle AddPairBind { get; set; }
         public IntegerField SetKeyBind { get; set; }
         public IntegerField SetKeyValBind { get; set; }
-
         public void RemovePair(int index)
         {
             RemovePairBind.value = index;
@@ -208,17 +231,17 @@ public class LevelTagDictionaryDrawer : PropertyDrawer
         return lTDElement;
     }
 
-    private T FakeElem<T>(SerializedProperty prop, VisualElement holder) where T : VisualElement, IBindable, new()
+    protected T FakeElem<T>(SerializedProperty prop, VisualElement holder) where T : VisualElement, IBindable, new()
     {
         var valueField = new T();
         valueField.BindProperty(prop);
         //valueField.Add(new Label(prop.displayName));
-        valueField.style.visibility = Visibility.Hidden;
+        valueField.style.display = DisplayStyle.None;
         holder.Add(valueField);
         return valueField;
     }
 
-    private void CalculateGUI(LTDElement lTDElement)
+    protected virtual void CalculateGUI(LTDElement lTDElement)
     {
         //lTDElement.Clear();
 
@@ -282,25 +305,54 @@ public class LevelTagDictionaryDrawer : PropertyDrawer
         // define pair Element style
 
         pairElement.style.flexDirection = FlexDirection.Row;
-        pairElement.style.justifyContent = Justify.SpaceBetween;
+        pairElement.style.justifyContent = Justify.FlexStart;
 
         // add key property
 
-        var keyElement = new ObjectField();
+        var keyWithLabel = new VisualElement();
+        keyWithLabel.style.flexDirection = FlexDirection.Row;
+
+        var keyElement = new ObjectField
+        {
+            objectType = typeof(LevelTagSO)
+        };
         keyElement.SetEnabled(false);
         keyElement.BindProperty(key);
 
+        var keyLab = new Label()
+        { text = "Tag " };
+        keyLab.style.paddingTop = 3;
+
+        keyWithLabel.Add(keyLab);
+        keyWithLabel.Add(keyElement);
+
         // add value property
+
+        var valueWithLabel = new VisualElement();
+        valueWithLabel.style.flexDirection = FlexDirection.Row;
 
         var valueElement = new IntegerField();
         valueElement.BindProperty(value);
-        valueElement.style.flexGrow = .3f;
-        valueElement.RegisterCallback<BlurEvent>((evt) => pairElement.Remove(ltdElement));
+        valueElement.style.width = 30;
+
+        var valLab = new Label()
+        { text = "Count " };
+
+        valueWithLabel.Add(valLab);
+        valueWithLabel.Add(valueElement);
+
+        valueElement.RegisterCallback<BlurEvent>((evt) =>
+        {
+            if (valueElement.value < 1)
+            {
+                pairElement.Remove(ltdElement);
+            }
+        });
 
         // add to pair property
 
-        pairElement.Add(keyElement);
-        pairElement.Add(valueElement);
+        pairElement.Add(keyWithLabel);
+        pairElement.Add(valueWithLabel);
 
         return pairElement;
     }
@@ -312,7 +364,7 @@ public class LevelTagDictionaryDrawer : PropertyDrawer
         // define style for wrapped element
 
         wrappedElement.style.flexDirection = FlexDirection.Row;
-        wrappedElement.style.justifyContent = Justify.FlexStart;
+        wrappedElement.style.justifyContent = Justify.SpaceBetween;
 
         // create select button
 
@@ -321,7 +373,7 @@ public class LevelTagDictionaryDrawer : PropertyDrawer
             text = "Select"
         };
 
-        var keyField = pair.ElementAt(0) as ObjectField;
+        var keyField = pair.ElementAt(0).ElementAt(1) as ObjectField;
         selectButton.clicked += () => SelectMenu(keyField, lTDElement);
 
         // create remove button
@@ -335,9 +387,14 @@ public class LevelTagDictionaryDrawer : PropertyDrawer
 
         // add to wrapped
 
+        var wrappedButtons = new VisualElement();
+        wrappedButtons.style.flexDirection = FlexDirection.Row;
+
+        wrappedButtons.Add(selectButton);
+        wrappedButtons.Add(removeButton);
+
         wrappedElement.Add(pair);
-        wrappedElement.Add(selectButton);
-        wrappedElement.Add(removeButton);
+        wrappedElement.Add(wrappedButtons);
 
         return wrappedElement;
     }
@@ -346,7 +403,7 @@ public class LevelTagDictionaryDrawer : PropertyDrawer
     {
         var selectMenu = new GenericMenu();
 
-        var tags = LevelTags.Tags;
+        var tags = lTDElement.BaseProperty.FindPropertyRelative("tagPool");
 
         List<LevelTagSO> usedTags = new();
         var pairs = lTDElement.PairsElement;
@@ -363,9 +420,9 @@ public class LevelTagDictionaryDrawer : PropertyDrawer
             }
         }
 
-        for (var i = 0; i < tags.Count; i++)
+        for (var i = 0; i < tags.arraySize; i++)
         {
-            var tag = tags[i];
+            var tag = tags.GetArrayElementAtIndex(i).objectReferenceValue as LevelTagSO;
 
             if (usedTags.Contains(tag))
             {
@@ -380,5 +437,149 @@ public class LevelTagDictionaryDrawer : PropertyDrawer
         {
             selectMenu.ShowAsContext();
         }
+    }
+}
+
+[System.Serializable]
+public class SceneSpecificLevelTagDictionary : LevelTagDictionary, ISerializationCallbackReceiver
+{
+    public Scene GetScene() => SceneManager.GetSceneByPath(scenePath);
+    [SerializeField] private SceneAsset targetSceneAsset;
+    [SerializeField] private string scenePath;
+
+    // for serialization
+    private readonly Scene invalidScene;
+    private Scene targetScene;
+    private bool changed = true;
+    private SceneAsset prevSceneAsset = null;
+    private bool HasValidScene => targetScene.IsValid();
+    private bool ScenePathValid()
+    {
+        if (scenePath == null)
+        {
+            return false;
+        }
+
+        if (scenePath == "")
+        {
+            return false;
+        }
+
+        return true;
+    }
+    //
+
+    private LevelTagDictionary tagPoolDict;
+
+    public SceneSpecificLevelTagDictionary() : base()
+    {
+        targetScene = invalidScene;
+        tagPool = new();
+        tagPoolDict = new();
+        prevSceneAsset = targetSceneAsset;
+    }
+
+    protected override void BeforeBaseEndSerialize()
+    {
+        if (targetSceneAsset != null && !ScenePathValid())
+        {
+            scenePath = AssetDatabase.GetAssetPath(targetSceneAsset);
+        }
+
+        if (targetSceneAsset == null && ScenePathValid())
+        {
+            targetSceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath);
+            if (targetSceneAsset == null)
+            {
+                scenePath = "";
+            }
+        }
+
+        if (!ScenePathValid())
+        {
+            targetScene = invalidScene;
+        }
+        else
+        {
+            if (changed)
+            {
+                targetScene = GetScene();
+                changed = false;
+            }
+        }
+
+        if (HasValidScene)
+        {
+            tagPoolDict = LevelTags.SceneAcceptTags[targetScene];
+            tagPool = tagPoolDict.KeyList;
+        }
+        else
+        {
+            tagPool.Clear();
+            tagPoolDict.Clear();
+            keysWithNull.Clear();
+            valuesWithNull.Clear();
+            scenePath = "";
+            targetSceneAsset = null;
+        }
+    }
+
+    protected override void BeforeBaseDeserialize()
+    {
+        if (targetSceneAsset != prevSceneAsset)
+        {
+            keysWithNull.Clear();
+            valuesWithNull.Clear();
+            changed = true;
+        }
+        prevSceneAsset = targetSceneAsset;
+
+        for (var i = 0; i < keysWithNull.Count; i++)
+        {
+            var key = keysWithNull[i];
+            if (key == null)
+            {
+                continue;
+            }
+
+            var max = tagPoolDict[key];
+            if (valuesWithNull[i] > max)
+            {
+                valuesWithNull[i] = max;
+            }
+        }
+    }
+}
+
+
+[CustomPropertyDrawer(typeof(SceneSpecificLevelTagDictionary))]
+public class SceneSpecificLevelTagDictionaryDrawer : LevelTagDictionaryDrawer
+{
+    protected override void CalculateGUI(LTDElement lTDElement)
+    {
+        base.CalculateGUI(lTDElement);
+
+        // path fake elem
+
+        //var pathProp = lTDElement.BaseProperty.FindPropertyRelative("scenePath");
+
+        //var pathField = FakeElem<TextField>(pathProp, lTDElement);
+
+        //
+
+        var sceneAssetProp = lTDElement.BaseProperty.FindPropertyRelative("targetSceneAsset");
+
+        var sceneSelect = new ObjectField
+        {
+            objectType = typeof(SceneAsset),
+            allowSceneObjects = false,
+            label = "Scene:"
+        };
+
+        sceneSelect.BindProperty(sceneAssetProp);
+
+        //sceneSelect.RegisterValueChangedCallback((evt) => pathField.value = AssetDatabase.GetAssetPath(evt.newValue));
+
+        lTDElement.Foldout.Insert(0, sceneSelect);
     }
 }

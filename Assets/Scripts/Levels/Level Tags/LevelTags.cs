@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 public static class LevelTags
 {
     private const string TagDataPath = "Assets/Scripts/Levels/Level Tags/tagData.asset";
     private static LevelTagData tagData;
 
+    public static void MarkDirty() => EditorUtility.SetDirty(tagData);
     public static List<LevelTagSO> Tags => TagData.Tags;
     public static SerializableDictionary<Scene, LevelTagDictionary> SceneAcceptTags => TagData.SceneAcceptTags;
     public static LevelTagDictionary GetAcceptTagsByScene(Scene scene)
@@ -58,15 +61,24 @@ public static class LevelTags
             tagData.SceneAcceptTags = new();
 
             AssetDatabase.CreateAsset(tagData, TagDataPath);
+            EditorUtility.SetDirty(tagData);
+            AssetDatabase.SaveAssetIfDirty(tagData);
             AssetDatabase.Refresh();
         }
     }
 }
 
-public class LevelTagData : ScriptableObject
+[CustomEditor(typeof(LevelTagData))]
+public class LevelTagDataEditor : Editor
 {
-    public List<LevelTagSO> Tags;
-    public SerializableDictionary<Scene, LevelTagDictionary> SceneAcceptTags;
+    public override VisualElement CreateInspectorGUI()
+    {
+        var defaultInspector = new VisualElement();
+        InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
+        defaultInspector.SetEnabled(false);
+
+        return defaultInspector;
+    }
 }
 
 [Serializable]
