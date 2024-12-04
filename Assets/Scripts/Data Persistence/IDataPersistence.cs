@@ -8,6 +8,7 @@ using UnityEngine;
  */
 public interface IDataPersistence
 {
-    void LoadData(GameData data);
-    void SaveData(ref GameData data);
+    void LoadPlayerData(PlayerData playerData);
+    void LoadLevelData(LevelData levelData);
+    void SaveData(ref PlayerData playerData, ref LevelData levelData);
 }
