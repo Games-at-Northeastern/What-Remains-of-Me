@@ -60,16 +60,16 @@ public class LevelTagWindow : EditorWindow
         for (var i = toRemove.Count - 1; i >= 0; i--)
         {
             var index = toRemove[i];
-            data.Tags.RemoveAt(index);
+
+            LevelTags.RemoveTag(data.Tags[index]);
+
             count--;
         }
 
         if (add)
         {
-            var newTag = CreateInstance<LevelTagSO>();
+            var newTag = LevelTags.CreateTag();
             newTag.name = "Tag" + count;
-
-            data.Tags.Add(newTag);
         }
 
         toRemove.Clear();
@@ -197,8 +197,6 @@ public class LevelTagWindow : EditorWindow
         levelNull = levelTags == null;
     }
 
-    [SerializeField] private SceneSpecificLevelTagDictionary tempSSLTD = new();
-
     public VisualElement IndividualLevelGUI()
     {
         windowSO ??= new SerializedObject(this);
@@ -209,6 +207,8 @@ public class LevelTagWindow : EditorWindow
 
         var propElement = new PropertyField();
         LoadLevelGUI(propElement);
+
+        propElement.RegisterValueChangeCallback((_) => { LevelTags.MarkDirty(); Debug.Log("sdss"); });
 
         visualElement.Add(propElement);
 
@@ -228,12 +228,6 @@ public class LevelTagWindow : EditorWindow
         });
 
         visualElement.Add(levelChangeBind);
-
-        var temp = windowSO.FindProperty("tempSSLTD");
-
-        var tempF = new PropertyField();
-        tempF.BindProperty(temp);
-        visualElement.Add(tempF);
 
         return visualElement;
     }

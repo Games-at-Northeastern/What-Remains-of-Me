@@ -4,18 +4,24 @@ using UnityEngine;
 
 public class SetActiveFromTags : MonoBehaviour
 {
-    /*[System.Serializable]
+    [System.Serializable]
     private class TagActivasion
     {
-        [SerializeField] private LevelManager.TagContainer enabledInVersions;
+        [SerializeField] private bool active = true;
+        [SerializeField] private bool checkFail = false;
+        public bool CheckFail => checkFail;
+        public bool Active => active;
+        [SerializeField] private bool greaterTrueMatchFalse = true;
+        public bool GreaterTrueMatchFalse => greaterTrueMatchFalse;
+        [SerializeField] private LevelTagDictionary tagCase;
         [SerializeField] private List<GameObject> objects;
 
-        public LevelManager.TagContainer EnabledInVersions { get => enabledInVersions; set => enabledInVersions = value; }
+        public LevelTagDictionary TagCase{ get => tagCase; set => tagCase = value; }
         public List<GameObject> Objects { get => objects; set => objects = value; }
 
         public TagActivasion()
         {
-            enabledInVersions = new LevelManager.TagContainer();
+            //tagCase = new();
             objects = new List<GameObject>();
         }
     }
@@ -24,19 +30,38 @@ public class SetActiveFromTags : MonoBehaviour
 
     public void Start()
     {
-        LevelManager.TagContainer levelTags = FindObjectOfType<LevelManager>().LevelTags;
+        var levelTags = LevelManager.Tags;
 
-        foreach (TagActivasion requirement in requirements)
+        foreach (var requirement in requirements)
         {
-            if (levelTags.HasFlags(requirement.EnabledInVersions))
+            var succeed = true;
+            foreach (var (tag, count) in requirement.TagCase)
             {
-                continue;
+                if (requirement.GreaterTrueMatchFalse)
+                {
+                    if (!levelTags.HasGreaterThanOrEqual(tag, count))
+                    {
+                        succeed = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (!levelTags.HasExact(tag, count))
+                    {
+                        succeed = false;
+                        break;
+                    }
+                }
             }
 
-            foreach (GameObject gameObject in requirement.Objects)
+            if (succeed != requirement.CheckFail)
             {
-                gameObject.SetActive(false);
+                foreach (GameObject gameObject in requirement.Objects)
+                {
+                    gameObject.SetActive(requirement.Active);
+                }
             }
         }
-    }*/
+    }
 }

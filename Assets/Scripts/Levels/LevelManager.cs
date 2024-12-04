@@ -1,13 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
-using UnityEditor;
-using System.Reflection;
-using System;
-using System.Linq;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 
 /// <summary>
 /// This class provides the functionalities for the LevelManager singleton,
@@ -15,18 +9,39 @@ using UnityEditor.UIElements;
 /// </summary>
 public class LevelManager : MonoBehaviour
 {
-
-
-
-   // [SerializeField] private TagContainer canAcceptTags;
-    //public TagContainer LevelTags => canAcceptTags;
-    // set this on awake, apply according modifications on start
-
-    //private static TagContainer immediateTags = new();
+    private static LevelTagDictionary immediateTags = new();
+    private static LevelTagDictionary persistentTags = new();
     //private static TagContainer consumeTags = new();
     //private static TagContainer consumeSingleTags = new();
     //private static TagContainer consumeUniqueTags = new();
     //private static TagContainer persistentTags = new();
+
+    public static void SendTagImmediate(LevelTagSO tag, int count) => SendTags(tag, count, immediateTags);
+    public static void SendTagPersistent(LevelTagSO tag, int count) => SendTags(tag, count, persistentTags);
+
+    private static void SendTags(LevelTagSO tag, int count, LevelTagDictionary reciever)
+    {
+        if (count < 1)
+        {
+            Debug.LogError("attempting to send tag count < 1");
+        }
+
+        if (!LevelTags.TagData.Tags.Contains(tag))
+        {
+            Debug.LogError("Sent tag SO not contained in LevelTags.TagData.Tags. This is likely due to an old tag having been deleted from the tag manager but still being referenced elsewhere");
+        }
+
+        if (reciever.ContainsKey(tag))
+        {
+            reciever[tag] += count;
+            return;
+        }
+
+        reciever.Add(tag, count);
+    }
+
+    //set this on awake, apply according modifications on start
+    public static LevelTagDictionary Tags = new();
 
     /*private static TagContainer GetTagList(Tags.SendType sendType) => sendType switch
     {
@@ -68,6 +83,17 @@ public class LevelManager : MonoBehaviour
         OnPlayerReset.RemoveAllListeners();
         OnPlayerDeath.RemoveAllListeners();
 
+        Tags.Clear();
+        foreach (var (tag, val) in immediateTags)
+        {
+            Tags.Add(tag, val);
+        }
+        immediateTags.Clear();
+
+        foreach (var (tag, val) in persistentTags)
+        {
+            Tags.Add(tag, val);
+        }
     }
     private void Start()
     {

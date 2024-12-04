@@ -21,6 +21,26 @@ public class LevelTagDictionary : SerializableDictionary<LevelTagSO, int>
 
     [SerializeField] protected List<LevelTagSO> tagPool;
 
+    public bool HasGreaterThanOrEqual (LevelTagSO tag, int count)
+    {
+        if (!ContainsKey(tag))
+        {
+            return count <= 0;
+        }
+
+        return this[tag] >= count;
+    }
+
+    public bool HasExact(LevelTagSO tag, int count)
+    {
+        if (!ContainsKey(tag))
+        {
+            return count == 0;
+        }
+
+        return this[tag] == count;
+    }
+
     public override void OnBeforeSerialize()
     {
         base.OnBeforeSerialize();
