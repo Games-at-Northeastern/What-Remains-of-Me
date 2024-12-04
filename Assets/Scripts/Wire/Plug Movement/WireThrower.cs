@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 using CharacterController;
 using System;
 using PlayerController;
@@ -41,6 +42,7 @@ public class WireThrower : MonoBehaviour
     public PlayerController2D pc;
     public ContactFilter2D contactFilter;
 
+    [SerializeField] private Text toggleButtonText;
     [SerializeField] private bool MouseAffectsPriority = true; // To enable Mouse directional targeting system. If unchecked, defaults to directional targeting system
     #endregion
 
@@ -104,6 +106,19 @@ public class WireThrower : MonoBehaviour
     #endregion
 
     #region External Commands
+
+     public void ToggleMouseAffectsPriority()
+    {
+        MouseAffectsPriority = !MouseAffectsPriority;
+
+        if (toggleButtonText != null)
+        {
+            toggleButtonText.text = $"Toggle Mouse Targeting ({(MouseAffectsPriority ? "On" : "Off")})";
+        }
+
+        Debug.Log($"MouseAffectsPriority toggled: {MouseAffectsPriority}");
+    }
+
     public void DisconnectWire()
     {
         HandlePotentialDisconnect();
@@ -303,6 +318,8 @@ public class WireThrower : MonoBehaviour
     /// DirectionAffectsPriority: prioritizes the direction the player is facing if "Direction Affects Priority" is enabled on the WireThrower component
     /// Also prioritizes outlets within override collider range
     /// </summary>
+    /// 
+
  void ChangeOutletTarget()
 {
     Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
