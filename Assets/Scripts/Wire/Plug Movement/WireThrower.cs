@@ -319,213 +319,140 @@ public class WireThrower : MonoBehaviour
     /// Also prioritizes outlets within override collider range
     /// </summary>
     /// 
-
- void ChangeOutletTarget()
-{
-    Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-    mouseWorldPos.z = 0;
-
-    GameObject[] gos = GameObject.FindGameObjectsWithTag("Outlet");
-    GameObject closest = null;
-    float closestDistance = float.MaxValue;
-    bool hasOutletsOnScreen = false;
-
-    bool closestIsOverride = false;
-
-    bool isFacingLeft = cc.LeftOrRight == Facing.left;
-    bool currentIsInFront = false;
-
-    Vector3 position = transform.position;
-
-    if (MouseAffectsPriority) // Default is mouse based priority with override functionality
+    private void ChangeOutletTarget()
     {
-        foreach (GameObject go in gos)
+        Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos.z = 0;
+
+        GameObject[] outlets = GameObject.FindGameObjectsWithTag("Outlet");
+        GameObject closestOutlet = null;
+        float closestDistance = float.MaxValue;
+
+        if (MouseAffectsPriority)
         {
-            // Use the distance from the mouse position instead of the player's position
-            float curDistance = Vector2.Distance(mouseWorldPos, go.transform.position);
+            closestOutlet = GetClosestOutletByMouse(outlets, mouseWorldPos, ref closestDistance);
+        }
+        else
+        {
+            closestOutlet = GetClosestOutletByDirection(outlets, ref closestDistance);
+        }
 
-            if (go.GetComponent<SpriteRenderer>().isVisible)
+        UpdateLockOnState(closestOutlet);
+    }
+
+    private GameObject GetClosestOutletByMouse(GameObject[] outlets, Vector3 mouseWorldPos, ref float closestDistance)
+    {
+        GameObject closest = null;
+        bool closestIsOverride = false;
+
+        foreach (GameObject outlet in outlets)
+        {
+            if (!outlet.GetComponent<SpriteRenderer>().isVisible) continue;
+
+            float currentDistance = Vector2.Distance(mouseWorldPos, outlet.transform.position);
+
+            if (IsOutletOverride(outlet, ref closestIsOverride))
             {
-                hasOutletsOnScreen = true;
-
-                // Handle override functionality for outlets in override range
-                if (!closestIsOverride)
-                {
-                    if (curDistance < closestDistance)
-                    {
-                        closest = go;
-                        closestDistance = curDistance;
-                    }
-
-                    if (go.GetComponent<Outlet>().grappleOverrideRange != null)
-                    {
-                        foreach (GameObject overriddenOutlet in outletsInOverrideRange)
-                        {
-                            if (go == overriddenOutlet)
-                            {
-                                closest = go;
-                                closestDistance = curDistance;
-                                closestIsOverride = true;
-                            }
-                        }
-                    }
-                }
-                else if (closestIsOverride && curDistance < closestDistance)
-                {
-                    foreach (GameObject overriddenOutlet in outletsInOverrideRange)
-                    {
-                        if (go == overriddenOutlet)
-                        {
-                            closest = go;
-                            closestDistance = curDistance;
-                        }
-                    }
-                }
+                UpdateClosestOutlet(ref closest, outlet, currentDistance, ref closestDistance);
+            }
+            else if (!closestIsOverride)
+            {
+                UpdateClosestOutlet(ref closest, outlet, currentDistance, ref closestDistance);
             }
         }
+
+        return closest;
     }
-    else // DirectionAffectsPriority is enabled by default if MouseAffectsPriority is disabled
+
+    private GameObject GetClosestOutletByDirection(GameObject[] outlets, ref float closestDistance)
     {
-        foreach (GameObject go in gos)
+        GameObject closest = null;
+        bool closestIsOverride = false;
+        bool currentIsInFront = false;
+        bool isFacingLeft = cc.LeftOrRight == Facing.left;
+        Vector3 position = transform.position;
+
+        foreach (GameObject outlet in outlets)
         {
-            float curDistance = Vector2.Distance(position, go.transform.position);
+            if (!outlet.GetComponent<SpriteRenderer>().isVisible) continue;
 
-            if (go.GetComponent<SpriteRenderer>().isVisible)
+            float currentDistance = Vector2.Distance(position, outlet.transform.position);
+            bool isInFront = IsOutletInFront(outlet, position, isFacingLeft);
+
+            if (IsOutletOverride(outlet, ref closestIsOverride))
             {
-                hasOutletsOnScreen = true;
-
-                bool isInFront = false;
-                float xdiff = go.transform.position.x - position.x;
-
-                if (xdiff >= 0 && !isFacingLeft) // Outlet is to the right and facing right
-                {
-                    isInFront = true;
-                }
-                else if (xdiff <= 0 && isFacingLeft) // Outlet is to the left and facing left
-                {
-                    isInFront = true;
-                }
-
-                if (!closestIsOverride)
-                {
-                    if (!currentIsInFront)
-                    {
-                        if ((isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f) || (!isInFront && curDistance < closestDistance))
-                        {
-                            closest = go;
-                            closestDistance = curDistance;
-
-                            if (isInFront)
-                            {
-                                currentIsInFront = true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (isInFront && curDistance < closestDistance)
-                        {
-                            closest = go;
-                            closestDistance = curDistance;
-                        }
-                    }
-
-                    if (go.GetComponent<Outlet>().grappleOverrideRange != null)
-                    {
-                        foreach (GameObject overriddenOutlet in outletsInOverrideRange)
-                        {
-                            if (go == overriddenOutlet)
-                            {
-                                closest = go;
-                                closestDistance = curDistance;
-
-                                if (isInFront)
-                                {
-                                    currentIsInFront = true;
-                                }
-
-                                closestIsOverride = true;
-                            }
-                        }
-                    }
-                }
-                else if (closestIsOverride && curDistance < closestDistance)
-                {
-                    foreach (GameObject overriddenOutlet in outletsInOverrideRange)
-                    {
-                        if (go == overriddenOutlet)
-                        {
-                            if (!currentIsInFront)
-                            {
-                                if ((isInFront && curDistance < pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f) || (!isInFront && curDistance < closestDistance))
-                                {
-                                    closest = go;
-                                    closestDistance = curDistance;
-
-                                    if (isInFront)
-                                    {
-                                        currentIsInFront = true;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (isInFront && curDistance < closestDistance)
-                                {
-                                    closest = go;
-                                    closestDistance = curDistance;
-                                }
-                            }
-                        }
-                    }
-                }
+                UpdateClosestOutlet(ref closest, outlet, currentDistance, ref closestDistance);
             }
+            else if (!closestIsOverride && (!currentIsInFront || isInFront))
+            {
+                UpdateClosestOutlet(ref closest, outlet, currentDistance, ref closestDistance);
+                currentIsInFront = isInFront;
+            }
+        }
+
+        return closest;
+    }
+
+    private void UpdateClosestOutlet(ref GameObject closest, GameObject candidate, float currentDistance, ref float closestDistance)
+    {
+        if (currentDistance < closestDistance)
+        {
+            closest = candidate;
+            closestDistance = currentDistance;
         }
     }
 
-    if (!hasOutletsOnScreen)
+    private bool IsOutletOverride(GameObject outlet, ref bool closestIsOverride)
     {
-        _lockOnOutlet = null;
-        _isLockOn = false;
+        if (outletsInOverrideRange.Contains(outlet))
+        {
+            closestIsOverride = true;
+            return true;
+        }
+
+        return false;
     }
-    if (closest != null)
+
+    private bool IsOutletInFront(GameObject outlet, Vector3 position, bool isFacingLeft)
+    {
+        float xDifference = outlet.transform.position.x - position.x;
+        return (xDifference >= 0 && !isFacingLeft) || (xDifference <= 0 && isFacingLeft);
+    }
+
+    private void UpdateLockOnState(GameObject closest)
     {
         _lockOnOutlet = closest;
-        _isLockOn = true;
-        UpdateMeter(closest);
-    }
-    else
-    {
-        _lockOnOutlet = closest;
-        _isLockOn = true;
-    }
+        _isLockOn = closest != null;
+        _lastRecordedPosition = transform.position;
 
-    _lastRecordedPosition = transform.position;
-
-    // Start the visuals of the new locked reticle's outlet meter (if any)
-    OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
-    outletMeter?.StartVisuals();
-}
-
-
-    /// <summary>
-    /// Updates the outlet meter based on the closest GameObject.
-    /// </summary>
-    /// <param name="closest">The closest GameObject to update the meter for.</param>
-    private void UpdateMeter(GameObject closest)
-    {
-        // Get the OutletMeter component from the previous locked reticle (if any)
         OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
-
-        // End the visuals of the previous locked reticle's outlet meter (if any)
         outletMeter?.EndVisuals();
 
-        // Update the lastReticleLock to the closest GameObject
         lastReticleLock = closest;
-
-        // Get the OutletMeter component from the new locked reticle (if any)
         outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+        outletMeter?.StartVisuals();
     }
+
+
+
+        /// <summary>
+        /// Updates the outlet meter based on the closest GameObject.
+        /// </summary>
+        /// <param name="closest">The closest GameObject to update the meter for.</param>
+        private void UpdateMeter(GameObject closest)
+        {
+            // Get the OutletMeter component from the previous locked reticle (if any)
+            OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+
+            // End the visuals of the previous locked reticle's outlet meter (if any)
+            outletMeter?.EndVisuals();
+
+            // Update the lastReticleLock to the closest GameObject
+            lastReticleLock = closest;
+
+            // Get the OutletMeter component from the new locked reticle (if any)
+            outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+        }
 
     #endregion
 
