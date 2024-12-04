@@ -178,6 +178,9 @@ MonoBehaviour:
   dialogueActive: 1
   waitForInteractAvailable: 1
   isTutorialDialogue: 0
+  OnDialogueEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &8126956
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -225,6 +228,9 @@ MonoBehaviour:
   dialogueActive: 1
   waitForInteractAvailable: 3
   isTutorialDialogue: 0
+  OnDialogueEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &10917324
 GameObject:
   m_ObjectHideFlags: 0
@@ -3838,6 +3844,9 @@ MonoBehaviour:
   dialogueActive: 1
   waitForInteractAvailable: 1
   isTutorialDialogue: 1
+  OnDialogueEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &534432785
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4430,6 +4439,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _movingElements: []
+  audioSource: {fileID: 0}
 --- !u!4 &609575654
 Transform:
   m_ObjectHideFlags: 0
@@ -12004,8 +12014,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7803416330169813700, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: toggleButtonText
+      value: 
+      objectReference: {fileID: 1415073263}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+--- !u!114 &1028354825 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7803416330169813700, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+  m_PrefabInstance: {fileID: 1028354824}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e71ecd44ea764668877f10536097ae0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1028354829 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6860228394538578389, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
@@ -12209,6 +12234,9 @@ MonoBehaviour:
   dialogueActive: 1
   waitForInteractAvailable: 3
   isTutorialDialogue: 0
+  OnDialogueEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1040607930
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12704,6 +12732,9 @@ MonoBehaviour:
   dialogueActive: 1
   waitForInteractAvailable: 3
   isTutorialDialogue: 0
+  OnDialogueEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1072355877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12723,6 +12754,7 @@ MonoBehaviour:
   lerpSpeed: 0
   connectedGoal: 0
   chargingGoal: 0
+  targetingGoal: 0
   grappleOverrideRange: {fileID: 0}
 --- !u!61 &1072355878
 BoxCollider2D:
@@ -13488,6 +13520,9 @@ MonoBehaviour:
   dialogueActive: 1
   waitForInteractAvailable: 1
   isTutorialDialogue: 1
+  OnDialogueEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &1191923105
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14585,6 +14620,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: HUD Canvas (NEW)
       objectReference: {fileID: 0}
+    - target: {fileID: 9146057645703804228, guid: fccf9bebee17a464a80ba015554571d9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1028354825}
+    - target: {fileID: 9146057645703804228, guid: fccf9bebee17a464a80ba015554571d9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleMouseAffectsPriority
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fccf9bebee17a464a80ba015554571d9, type: 3}
 --- !u!224 &1415073262 stripped
@@ -14592,6 +14635,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2215219577661768947, guid: fccf9bebee17a464a80ba015554571d9, type: 3}
   m_PrefabInstance: {fileID: 1415073261}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1415073263 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2273070810305523836, guid: fccf9bebee17a464a80ba015554571d9, type: 3}
+  m_PrefabInstance: {fileID: 1415073261}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1424468422
 GameObject:
   m_ObjectHideFlags: 0
@@ -15434,7 +15488,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 3.48
+      value: 2.8
       objectReference: {fileID: 0}
     - target: {fileID: 5507190965753065182, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_BiasX
@@ -48389,6 +48443,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _movingElements: []
+  audioSource: {fileID: 0}
 --- !u!4 &7423055673258010462
 Transform:
   m_ObjectHideFlags: 0
