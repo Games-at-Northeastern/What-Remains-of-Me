@@ -5,9 +5,9 @@ using System.IO;
 using UnityEngine;
 
 /**
- * Reads relevant save data from .json files.
+ * Reads relevant save data from .json files and then formats them into the type given through TDataTypeOnUnformat.
  */
-public class FileDataHandler
+public class FileDataHandler<TDataTypeOnUnformat>
 {
     private string dataDirPath = string.Empty; //The path to the directory the file handler will read from.
     private string dataFileName = string.Empty; //The files name.
@@ -22,14 +22,14 @@ public class FileDataHandler
     /// <summary>
     /// Loads game data from the .json file at the path dataDirPath, and the file name dataFileName
     /// </summary>
-    /// <returns>The loaded data as the GameData type, returns null if no data was loaded</returns>
-    public GameData Load()
+    /// <returns>The loaded data as the PlayerData type, returns null if no data was loaded</returns>
+    public TDataTypeOnUnformat Load()
     {
         //Use Path.Combine to get the full file path.
         string fullPath = Path.Combine(dataDirPath, dataFileName);
 
         //Player data to be returned
-        GameData loadedPlayerData = null;
+        TDataTypeOnUnformat loadedPlayerData = default(TDataTypeOnUnformat);
 
         //temp variable to store the text inside Json file
         String dataToLoad = "";
@@ -47,8 +47,8 @@ public class FileDataHandler
                         dataToLoad = reader.ReadToEnd();
                     }
                 }
-                //Convert string to GameData Type
-                loadedPlayerData = JsonUtility.FromJson<GameData>(dataToLoad);
+                //Convert string to PlayerData Type
+                loadedPlayerData = JsonUtility.FromJson<TDataTypeOnUnformat>(dataToLoad);
 
             }
             catch (Exception e)
@@ -64,8 +64,8 @@ public class FileDataHandler
     /// <summary>
     /// Saves the game data given by 'data' to the .json file at the path dataDirPath, and the file name dataFileName
     /// </summary>
-    /// <returns>The loaded data as the GameData type</returns>
-    public void Save(GameData data)
+    /// <returns>The loaded data as the PlayerData type</returns>
+    public void Save(TDataTypeOnUnformat data)
     {
         //Use Path.Combine to get the full file path.
         string fullPath = Path.Combine(dataDirPath, dataFileName);
@@ -74,21 +74,22 @@ public class FileDataHandler
             //Create file directory if it doesnt already exist
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
 
-            //Serialize gameData into Json
-            string dataToStore = JsonUtility.ToJson(data,true);
+            //Serialize playerData into Json
+            string dataToStore = JsonUtility.ToJson(data, true);
 
             //Write file to file system. Putting this in a using block to ensure it closes when finished
             using (FileStream stream = new FileStream(fullPath, FileMode.Create))
             {
-                using(StreamWriter writer = new StreamWriter(stream))
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
                     writer.Write(dataToStore);
                 }
             }
 
-        }catch(Exception e)
+        }
+        catch (Exception e)
         {
-            Debug.LogError("Error occured when saving data to: "+ fullPath +"\nError name: " + e);
+            Debug.LogError("Error occured when saving data to: " + fullPath + "\nError name: " + e);
         }
 
     }

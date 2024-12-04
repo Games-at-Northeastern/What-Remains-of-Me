@@ -651,15 +651,19 @@ namespace PlayerController
         }
 
 #endif
-        public void LoadData(GameData data)
+        public void LoadPlayerData(PlayerData playerData)
         {
             _speed = Vector2.zero;
-            transform.position = data.playerPosition;
+            transform.position = playerData.playerPosition;
 
         }
-        public void SaveData(ref GameData data)
+        public void LoadLevelData(LevelData levelData)
         {
-            data.playerPosition = transform.position;
+            //No level data to load for Player Controller
+        }
+        public void SaveData(ref PlayerData playerData, ref LevelData levelData)
+        {
+            playerData.playerPosition = transform.position;
         }
     }
 

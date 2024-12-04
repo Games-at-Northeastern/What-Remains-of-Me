@@ -124,9 +124,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb6439f5312bc4408898997a011b210e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energy: 0
+  cleanEnergy: 0
   maxCharge: 0
   virus: 0
-  maxVirus: 0
+  uniqueID: 
   playerInfo: {fileID: 0}
+  OnVirusChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
+  shouldDisappear: 0
+  maskObject: {fileID: 0}
+  invertMask: 0
   posChangeForMaxEnergy: {x: 0, y: 10}

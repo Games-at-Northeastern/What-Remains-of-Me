@@ -422,7 +422,7 @@ public class InkDialogueManager : MonoBehaviour
                         handlerAnimator.Play("JonesUnTakeOver");
                     }
 
-                    if (tagValue == "Jones A.I." && intercomAnimator != null)
+                    if (tagValue == "Jones Intercom" && intercomAnimator != null)
                     {
                         intercomAnimator.Play("JonesIntercom_Talk");
                         GameObject.Find("Intercom Visual 2").GetComponent<Animator>().Play("JonesIntercom_Talk");
@@ -437,7 +437,6 @@ public class InkDialogueManager : MonoBehaviour
                         GameObject.Find("Intercom Visual 3").GetComponent<Animator>().Play("JonesIntercom_Idle");
                         GameObject.Find("Intercom Visual 4").GetComponent<Animator>().Play("JonesIntercom_Idle");
                         GameObject.Find("Intercom Visual 5").GetComponent<Animator>().Play("JonesIntercom_Idle");
-                        handlerAnimator.Play("JonesUnTakeOver");
                     }
                     break;
                 case PORTRAIT_TAG:
