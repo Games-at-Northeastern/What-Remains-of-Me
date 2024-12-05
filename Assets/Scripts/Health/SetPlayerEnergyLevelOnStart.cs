@@ -16,15 +16,17 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
 
     //Keeps track if this is the games first start. We will probably have to remove this once going to a save/load system.
     public static bool firstStart = true;
+    [SerializeField] private bool useDefaultValues = false;
 
     void Start()
     {
-        if (firstStart)
+
+        if (firstStart || useDefaultValues)
         {
             ResetHealth();
             firstStart = false;
         }
-        
+
 
         // Register the reset health event to occur when the player dies
         LevelManager.OnPlayerDeath.AddListener(ResetHealth);
