@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine.UIElements;
+using System;
 
 /// <summary>
 /// This class provides the functionalities for the LevelManager singleton,
@@ -9,26 +12,21 @@ using System.Collections.Generic;
 /// </summary>
 public class LevelManager : MonoBehaviour
 {
-    private static LevelTagDictionary immediateTags = new();
-    private static LevelTagDictionary persistentTags = new();
+    private static SerializableStringIntDict immediateTags = new();
+    private static SerializableStringIntDict persistentTags = new();
     //private static TagContainer consumeTags = new();
     //private static TagContainer consumeSingleTags = new();
     //private static TagContainer consumeUniqueTags = new();
     //private static TagContainer persistentTags = new();
 
-    public static void SendTagImmediate(LevelTagSO tag, int count) => SendTags(tag, count, immediateTags);
-    public static void SendTagPersistent(LevelTagSO tag, int count) => SendTags(tag, count, persistentTags);
+    public static void SendTagImmediate(string tag, int count) => SendTags(tag, count, immediateTags);
+    public static void SendTagPersistent(string tag, int count) => SendTags(tag, count, persistentTags);
 
-    private static void SendTags(LevelTagSO tag, int count, LevelTagDictionary reciever)
+    private static void SendTags(string tag, int count, SerializableStringIntDict reciever)
     {
         if (count < 1)
         {
             Debug.LogError("attempting to send tag count < 1");
-        }
-
-        if (!LevelTags.TagData.Tags.Contains(tag))
-        {
-            Debug.LogError("Sent tag SO not contained in LevelTags.TagData.Tags. This is likely due to an old tag having been deleted from the tag manager but still being referenced elsewhere");
         }
 
         if (reciever.ContainsKey(tag))
@@ -41,7 +39,7 @@ public class LevelManager : MonoBehaviour
     }
 
     //set this on awake, apply according modifications on start
-    public static LevelTagDictionary Tags = new();
+    public static SerializableStringIntDict Tags = new();
 
     /*private static TagContainer GetTagList(Tags.SendType sendType) => sendType switch
     {
@@ -176,3 +174,112 @@ public class LevelManager : MonoBehaviour
         return checkpointHeld;
     }
 }
+
+#pragma warning disable IDE1006 // Naming Styles
+
+[Serializable]
+public class SerializableStringIntDict : SerializableDictionary<string, int>
+{
+    internal bool HasExact(string tag, int count)
+    {
+        if (!ContainsKey(tag))
+        {
+            return 0 == count;
+        }
+
+        return this[tag] == count;
+    }
+    internal bool HasGreaterThanOrEqual(string tag, int count)
+    {
+        if (!ContainsKey(tag))
+        {
+            return 0 >= count;
+        }
+
+        return this[tag] >= count;
+    }
+}
+
+#if UNITY_EDITOR
+
+[CustomPropertyDrawer(typeof(SerializableStringIntDict))]
+public class StringIntDictDrawer : PropertyDrawer
+{
+    private class StoreFoldStateElement : VisualElement
+    {
+        public bool fold = false;
+    }
+
+    public override VisualElement CreatePropertyGUI(SerializedProperty property)
+    {
+        var element = new StoreFoldStateElement();
+
+        var imgui = new IMGUIContainer(() => IMGUI(property, element));
+        element.Add(imgui);
+
+        return element;
+    }
+
+    private void IMGUI(SerializedProperty property, StoreFoldStateElement element)
+    {
+        element.fold = EditorGUILayout.Foldout(element.fold, property.displayName);
+
+        if (element.fold)
+        {
+            var keysProp = property.FindPropertyRelative("keys");
+            var valuesProp = property.FindPropertyRelative("values");
+
+            var toRemove = new List<int>();
+
+            if (GUILayout.Button("Add"))
+            {
+                keysProp.InsertArrayElementAtIndex(keysProp.arraySize);
+                var newKey = keysProp.GetArrayElementAtIndex(keysProp.arraySize - 1);
+                newKey.stringValue = "";
+
+                valuesProp.InsertArrayElementAtIndex(valuesProp.arraySize);
+                var newVal = valuesProp.GetArrayElementAtIndex(valuesProp.arraySize - 1);
+                newVal.intValue = 0;
+            }
+
+            for (var i = 0; i < keysProp.arraySize; i++)
+            {
+                var keyProp = keysProp.GetArrayElementAtIndex(i);
+                var valueProp = valuesProp.GetArrayElementAtIndex(i);
+                if (PairGUI(keyProp, valueProp))
+                {
+                    toRemove.Add(i);
+                }
+            }
+
+            for (var i = toRemove.Count - 1; i >= 0; i--)
+            {
+                keysProp.DeleteArrayElementAtIndex(i);
+                valuesProp.DeleteArrayElementAtIndex(i);
+            }
+        }
+    }
+
+    private bool PairGUI(SerializedProperty keyProp, SerializedProperty valueProp)
+    {
+        var remove = false;
+
+        GUILayout.BeginHorizontal();
+
+        EditorGUILayout.PropertyField(keyProp);
+        EditorGUILayout.PropertyField(valueProp);
+
+        if (GUILayout.Button("Remove"))
+        {
+            remove = true;
+        }
+
+        GUILayout.EndHorizontal();
+
+        return remove;
+    }
+}
+
+#endif
+
+#pragma warning restore IDE1006 // Naming Styles

@@ -3,7 +3,7 @@ using UnityEngine;
 public class Chapter1DetectReverse : MonoBehaviour
 {
     [SerializeField] private bool forceReverse = false;
-    [SerializeField] private LevelTagSO voiceBoxTag;
+    [SerializeField] private string voiceBoxTag;
     private void Awake()
     {
         if (forceReverse)

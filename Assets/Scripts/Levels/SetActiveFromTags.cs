@@ -13,17 +13,14 @@ public class SetActiveFromTags : MonoBehaviour
         public bool Active => active;
         [SerializeField] private bool greaterTrueMatchFalse = true;
         public bool GreaterTrueMatchFalse => greaterTrueMatchFalse;
-        [SerializeField] private LevelTagDictionary tagCase;
+        [SerializeField] private SerializableStringIntDict tagCase;
         [SerializeField] private List<GameObject> objects;
 
-        public LevelTagDictionary TagCase{ get => tagCase; set => tagCase = value; }
+        public SerializableStringIntDict TagCase{ get => tagCase; set => tagCase = value; }
         public List<GameObject> Objects { get => objects; set => objects = value; }
 
-        public TagActivasion()
-        {
-            //tagCase = new();
+        public TagActivasion() =>
             objects = new List<GameObject>();
-        }
     }
 
     [SerializeField] private List<TagActivasion> requirements;
