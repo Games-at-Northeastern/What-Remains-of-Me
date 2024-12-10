@@ -20,8 +20,10 @@ public class Rope2DCreator : MonoBehaviour
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.SetColors(color,color);
         Vector3 ropeStartPoint = StartPoint.transform.position;
-        Vector3 ropeEndPoint = EndPoint.transform.position;
-
+        if (EndPoint != null)
+        {
+            Vector3 ropeEndPoint = EndPoint.transform.position;
+        }
         for (int i = 0; i < segmentLength; i++)
         {
             this.ropeSegments.Add(new RopeSegment(ropeStartPoint));
@@ -70,11 +72,13 @@ public class Rope2DCreator : MonoBehaviour
         firstSegment.posNow = StartPoint.transform.position;
         this.ropeSegments[0] = firstSegment;
 
-        // Constrain the last segment to the new EndPoint position
-        RopeSegment lastSegment = this.ropeSegments[this.segmentLength - 1];
-        lastSegment.posNow = EndPoint.transform.position;
-        this.ropeSegments[this.segmentLength - 1] = lastSegment;
-
+        if (EndPoint != null)
+        {
+            // Constrain the last segment to the new EndPoint position
+            RopeSegment lastSegment = this.ropeSegments[this.segmentLength - 1];
+            lastSegment.posNow = EndPoint.transform.position;
+            this.ropeSegments[this.segmentLength - 1] = lastSegment;
+        }
         // Apply rope segment constraints for the intermediate segments
         for (int i = 0; i < this.segmentLength - 1; i++)
         {
