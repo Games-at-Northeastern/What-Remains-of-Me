@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // Reference: https://vintay.medium.com/creating-a-respawn-checkpoint-system-in-unity-13e51faf44f3
@@ -18,8 +17,9 @@ public class CheckpointManager : MonoBehaviour
 
     private void Start()
     {
-        if (LevelManager.holdingCheckpoint()) {
-            Vector2 teleportPoint = LevelManager.extractRecentCheckpoint();
+        if (LevelManager.HoldingCheckpoint())
+        {
+            var teleportPoint = LevelManager.ExtractRecentCheckpoint();
             GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>().position = teleportPoint;
         }
 
@@ -50,10 +50,9 @@ public class CheckpointManager : MonoBehaviour
     /// <summary>
     /// Performs any necessary reset functionality
     /// </summary>
-    private void ResetCheckpoints()
-    {
-        mostRecentPoint = levelStartPoint;
-    }
+#pragma warning disable IDE0051 // Remove unused private members
+    private void ResetCheckpoints() => mostRecentPoint = levelStartPoint;
+#pragma warning restore IDE0051 // Remove unused private members
 
     /// <summary>
     /// Respawns the given transform at the appropriate recent checkpoint.
@@ -106,7 +105,5 @@ public class CheckpointManager : MonoBehaviour
     /// because, in the case of saving player progress but resetting level state, we need the information of most recent checkpoint
     /// to persist longer than the lifespan of this CheckpointManager object.
     /// </summary>
-    public Checkpoint getMostRecentPoint() {
-        return mostRecentPoint;
-    }
+    public Checkpoint GetMostRecentPoint() => mostRecentPoint;
 }

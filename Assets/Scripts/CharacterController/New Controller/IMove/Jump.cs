@@ -57,10 +57,10 @@ namespace CharacterController
             switch (jumpType)
             {
                 case JumpType.addSpeed:
-                    character.Speed = new Vector2(character.Speed.x, character.Speed.y + initialVelocity);
+                    character.InternalVelocity = new Vector2(character.InternalVelocity.x, character.InternalVelocity.y + initialVelocity);
                     break;
                 case JumpType.setSpeed:
-                    character.Speed = new Vector2(character.Speed.x, initialVelocity);
+                    character.InternalVelocity = new Vector2(character.InternalVelocity.x, initialVelocity);
                     break;
             }
         }
@@ -71,7 +71,7 @@ namespace CharacterController
         public void ContinueMove()
         {
             timePassed += Time.fixedDeltaTime;
-            character.Speed = new Vector2(character.Speed.x, character.Speed.y - (risingGravity * Time.fixedDeltaTime));
+            character.InternalVelocity = new Vector2(character.InternalVelocity.x, character.InternalVelocity.y - (risingGravity * Time.fixedDeltaTime));
         }
     }
     

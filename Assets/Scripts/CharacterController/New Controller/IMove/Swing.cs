@@ -123,12 +123,12 @@ namespace CharacterController
             radius = Mathf.Lerp(radius, initRadius, Time.deltaTime * 10f);
 
             Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
-            character.Speed = (newPos - origPos) / Time.deltaTime;
+            character.InternalVelocity = (newPos - origPos) / Time.deltaTime;
             // Add some free-fall to the mix if above the lowest point possible right now
             if (Mathf.Sin(angle) > 0)
             {
                 gravityVel = fallGravity * Time.deltaTime;
-                character.Speed += new Vector2(0, fallGravity * Time.deltaTime);
+                character.InternalVelocity += new Vector2(0, fallGravity * Time.deltaTime);
             }
             else
             {

@@ -39,7 +39,7 @@ namespace CharacterController
         public void ContinueMove()
         {
 
-            Vector2 speed = character.Speed;
+            Vector2 speed = character.InternalVelocity;
             Vector2 initialSpeed = speed;
             if (Mathf.Abs(speed.x) > Mathf.Abs(maxRunSpeed * xInput))
             {
@@ -51,7 +51,7 @@ namespace CharacterController
                 speed.x = Kinematics.VelocityTowards(speed.x, acceleration, xInput * maxRunSpeed, Time.fixedDeltaTime);
             }
             //Debug.Log("before speed: " + initialSpeed + "AfterSpeed: " + speed);
-            character.Speed = speed;
+            character.InternalVelocity = speed;
         }
         public AnimationType GetAnimationState() => throw new System.NotImplementedException();
         public bool IsMoveComplete() => true;

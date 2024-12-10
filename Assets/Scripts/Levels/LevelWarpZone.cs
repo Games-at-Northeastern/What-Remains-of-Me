@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary> 
@@ -10,23 +9,19 @@ public class LevelWarpZone : MonoBehaviour
 {
     [SerializeField] private LevelManager levelManager;
     [SerializeField] private Animator anim;
-    public int id;
-    public string warpDestinationScene;
-    public int warpDestinationID;
-    public Transform loadInPosition;
 
-    private LevelManager lm;
-    private float transitionTime;
-    
-    
-    /// <summary> 
-    /// Finds the LevelManager and the Animator component in this scene. 
-    /// </summary>
-    private void Start()
-    {
-        lm = levelManager;
+    [SerializeField] private int id;
+    [SerializeField] private string warpDestinationScene;
+    [SerializeField] private int warpDestinationID;
+    [SerializeField] private Transform loadInPosition;
 
-    }
+    private readonly float transitionTime;
+
+    // accessors
+    public int Id { get => id; set => id = value; }
+    public string WarpDestinationScene { get => warpDestinationScene; set => warpDestinationScene = value; }
+    public int WarpDestinationID { get => warpDestinationID; set => warpDestinationID = value; }
+    public Transform LoadInPosition { get => loadInPosition; set => loadInPosition = value; }
 
     /// <summary>
     /// If the player game object collides with the LevelWarpZone, 
@@ -35,7 +30,7 @@ public class LevelWarpZone : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.CompareTag("Player"))
         {
             StartCoroutine(LoadLevel());
         }
@@ -44,11 +39,11 @@ public class LevelWarpZone : MonoBehaviour
     /// <summary>
     /// Warps the player to the set warp destination scene.
     /// </summary>
-    IEnumerator LoadLevel()
+    private IEnumerator LoadLevel()
     {
         //anim.SetTrigger("Start");
-        lm.SetWarpID(warpDestinationScene, warpDestinationID);
+        levelManager.SetWarpID(WarpDestinationScene, WarpDestinationID);
         yield return new WaitForSeconds(transitionTime);
-        lm.WarpToScene();
+        levelManager.WarpToScene();
     }
 }

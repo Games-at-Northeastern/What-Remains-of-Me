@@ -25,9 +25,9 @@ namespace CharacterController
         }
         public void ContinueMove()
         {
-            var speed = character.Speed;
-            speed.y = Kinematics.VelocityTarget(character.Speed.y, slideGravity, Mathf.Sign(slideGravity) * maxWallSlideSpeed, Time.fixedDeltaTime);
-            character.Speed = speed;
+            var speed = character.InternalVelocity;
+            speed.y = Kinematics.VelocityTarget(character.InternalVelocity.y, slideGravity, Mathf.Sign(slideGravity) * maxWallSlideSpeed, Time.fixedDeltaTime);
+            character.InternalVelocity = speed;
         }
         public AnimationType GetAnimationState() => AnimationType.WALL_SLIDE;
         /// <summary>
@@ -40,7 +40,7 @@ namespace CharacterController
         {
             //currently when you start sliding you either decelerate straight to max wall slide speed or keep your y speed
             //would maybe want to change this later
-            character.Speed.Set(0, Mathf.Clamp(character.Speed.y, -maxWallSlideSpeed, maxWallSlideSpeed));
+            character.InternalVelocity.Set(0, Mathf.Clamp(character.InternalVelocity.y, -maxWallSlideSpeed, maxWallSlideSpeed));
         }
     }
 }

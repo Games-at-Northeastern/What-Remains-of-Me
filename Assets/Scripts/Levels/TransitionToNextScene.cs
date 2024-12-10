@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
@@ -33,8 +31,8 @@ public class TransitionToNextScene : MonoBehaviour
 [CustomEditor(typeof(TransitionToNextScene))]
 public class TransitionToNextSceneEditor : Editor
 {
-    SerializedProperty overload;
-    SerializedProperty path;
+    private SerializedProperty overload;
+    private SerializedProperty path;
 
     private void Awake()
     {
@@ -46,12 +44,15 @@ public class TransitionToNextSceneEditor : Editor
     {
         serializedObject.Update();
 
+        // script header
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((TransitionToNextScene)target), typeof(TransitionToNextScene), false);
+        EditorGUI.EndDisabledGroup();
+
         EditorGUILayout.PropertyField(overload);
 
         if (overload.boolValue)
         {
-            var transitioner = target as TransitionToNextScene;
-
             var oldScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(path.stringValue);
 
             EditorGUI.BeginChangeCheck();

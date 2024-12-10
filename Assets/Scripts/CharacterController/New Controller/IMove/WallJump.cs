@@ -34,16 +34,16 @@ namespace CharacterController
             var initY = Kinematics.InitialVelocity(0, RisingGravity, distance.y);
             if (character.LeftOrRight == Facing.left)
             {
-                character.Speed = (new Vector2(distance.x / (initY / RisingGravity), initY));
+                character.InternalVelocity = (new Vector2(distance.x / (initY / RisingGravity), initY));
             }
             else
             {
-                character.Speed = (new Vector2(-distance.x / (initY / RisingGravity), initY));
+                character.InternalVelocity = (new Vector2(-distance.x / (initY / RisingGravity), initY));
             }
         }
         public void ContinueMove()
         {
-            character.Speed = (new Vector2(character.Speed.x, character.Speed.y - RisingGravity));
+            character.InternalVelocity = (new Vector2(character.InternalVelocity.x, character.InternalVelocity.y - RisingGravity));
             timePassed += Time.deltaTime;
         }
         public void CancelMove()

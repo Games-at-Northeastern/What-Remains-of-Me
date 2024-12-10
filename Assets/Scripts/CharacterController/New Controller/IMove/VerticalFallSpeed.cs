@@ -23,9 +23,9 @@ namespace CharacterController
         public void CancelMove() { }
         public void ContinueMove()
         {
-            Vector2 speed = character.Speed;
+            Vector2 speed = character.InternalVelocity;
             speed.y = Kinematics.VelocityTarget(speed.y, terminalVelocity, fallGravity, Time.fixedDeltaTime);
-            character.Speed = speed;
+            character.InternalVelocity = speed;
         }
         public AnimationType GetAnimationState() => AnimationType.JUMP_FALLING;
         public bool IsMoveComplete() => character.Grounded;

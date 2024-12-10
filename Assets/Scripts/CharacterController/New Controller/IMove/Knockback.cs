@@ -31,11 +31,11 @@ namespace CharacterController
         }
 
         public AnimationType GetAnimationState() => AnimationType.KNOCKBACK;
-        public void StartMove() => character.Speed = (vel);
+        public void StartMove() => character.InternalVelocity = (vel);
         public void ContinueMove()
         {
             timePassed += Time.fixedDeltaTime;
-            character.Speed.Set(Mathf.MoveTowards(character.Speed.x, 0, acceleration.x), Mathf.MoveTowards(character.Speed.y,maxFallSpeed, acceleration.y));
+            character.InternalVelocity.Set(Mathf.MoveTowards(character.InternalVelocity.x, 0, acceleration.x), Mathf.MoveTowards(character.InternalVelocity.y,maxFallSpeed, acceleration.y));
         }
         public void CancelMove() { }
         public bool IsMoveComplete()
