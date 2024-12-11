@@ -17,6 +17,9 @@ public class Checkpoint : MonoBehaviour
     [SerializeField] private GameObject[] objectsToActivate;
     [SerializeField] private string checkpointAudioName;
 
+    [SerializeField] private LevelPortalData linkedPortalData;
+    public LevelPortalData LinkedPortalData => linkedPortalData;
+
     private bool isActive;
 
     // EVENTS
@@ -28,10 +31,7 @@ public class Checkpoint : MonoBehaviour
 
 
 
-    private void Start()
-    {
-        checkpointManager = FindObjectOfType<CheckpointManager>();
-    }
+    private void Start() => checkpointManager = FindObjectOfType<CheckpointManager>();
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

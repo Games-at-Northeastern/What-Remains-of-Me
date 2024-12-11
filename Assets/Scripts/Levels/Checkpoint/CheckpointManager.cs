@@ -23,6 +23,8 @@ public class CheckpointManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>().position = teleportPoint;
         }
 
+        mostRecentPoint = GetPointByData(LevelManager.NextStartPotal);
+
         if (mostRecentPoint == null)
         {
             mostRecentPoint = levelStartPoint;
@@ -106,4 +108,22 @@ public class CheckpointManager : MonoBehaviour
     /// to persist longer than the lifespan of this CheckpointManager object.
     /// </summary>
     public Checkpoint GetMostRecentPoint() => mostRecentPoint;
+
+    public Checkpoint GetPointByData(LevelPortalData data)
+    {
+        if (data == null)
+        {
+            return null;
+        }
+
+        foreach (var checkpoint in FindObjectsOfType<Checkpoint>())
+        {
+            if (checkpoint.LinkedPortalData == data)
+            {
+                return checkpoint;
+            }
+        }
+
+        return null;
+    }
 }

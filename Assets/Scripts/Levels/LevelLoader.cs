@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,10 +16,7 @@ public class LevelLoader : MonoBehaviour
     /// Finds the Animator that should be a component 
     /// in a game object that is a child of this LevelLoader.
     /// </summary>
-    private void Start()
-    {
-        anim = animator;
-    }
+    private void Start() => anim = animator;
 
 
     /// <summary>
@@ -40,7 +36,7 @@ public class LevelLoader : MonoBehaviour
     /// Loads the given level.
     /// <param name="name">the string name of the scene to load</param>
     /// </summary>
-    IEnumerator LoadLevel(string name)
+    private IEnumerator LoadLevel(string name)
     {
         anim.SetTrigger("Start");
         yield return new WaitForSeconds(transitionTime);
