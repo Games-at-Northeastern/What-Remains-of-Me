@@ -1,40 +1,26 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 
 public abstract class GenericInteractiveScript : MonoBehaviour
 {
-    public List<string> tagsToInteractWith = new List<string> { "Player", "Interactable" };
+    public List<string> tagsToInteractWith = new() { "Player", "Interactable" };
     private Interaction interaction;
     protected bool objectInRange = false;
 
+    protected ControlSchemes cs;
 
-    protected ControlSchemes _cs;
-
-
-    void Start()
-    {
-        Init();
-    }
+    private void Start() => Init();
     protected virtual void Init()
     {
         Debug.Log("starting to interact");
 
-
-
-
         interaction = GetComponent<Interaction>();
-        _cs = new ControlSchemes();
-        _cs.Enable();
+        cs = new ControlSchemes();
+        cs.Enable();
     }
 
-
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (objectInRange)
         {
@@ -42,9 +28,7 @@ public abstract class GenericInteractiveScript : MonoBehaviour
         }
     }
 
-
     protected abstract void AttemptInteract();
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -54,7 +38,6 @@ public abstract class GenericInteractiveScript : MonoBehaviour
         }
     }
 
-
     private void OnTriggerExit2D(Collider2D other)
     {
         if (tagsToInteractWith.Contains(other.gameObject.tag))
@@ -63,12 +46,5 @@ public abstract class GenericInteractiveScript : MonoBehaviour
         }
     }
 
-
-    protected void Interact()
-    {
-        interaction.Execute();
-    }
-
-
+    protected void Interact() => interaction.Execute();
 }
-

@@ -127,6 +127,10 @@ public class LevelManager : MonoBehaviour
 
     public static bool HoldingCheckpoint() => checkpointHeld;
 
+    // Portal Data
+
+    public static LevelPortalData NextStartPotal { get; set; }
+
     // Level Parameters
 
     private static readonly LevelParamDictionary ImmediateParams = new();
