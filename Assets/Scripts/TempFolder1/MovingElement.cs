@@ -133,7 +133,6 @@ public class MovingElement : MonoBehaviour
                 var steps = diff / change;
                 if (steps < 0)
                 {
-                    Debug.Log(term + " " + init + " " + change);
                     hasMovedPast = true;
                 }
             }
