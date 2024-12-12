@@ -101,23 +101,47 @@ public class MovingElement : MonoBehaviour
         _previousDistance = float.MaxValue; // if not maxed out, the first position might be skipped on lower-end hardware.
     }
 
-    protected void FixedUpdate()
-    {
-        MovePlatform();
-    }
+    protected void FixedUpdate() => MovePlatform();
 
     protected Vector2 MovePlatform()
     {
         if (_shouldMove) // if actionable...
         {
-            float dist = GetDistanceToPoint(_destinationIndex);
+            var dist = GetDistanceToPoint(_destinationIndex);
             //Debug.Log((dist > _previousDistance ? "Greater! " : "") + $"Distance: {dist}, Previous Distance: {_previousDistance}");
 
             // both clauses are needed here. The first catches *just before* we hit the point, and the second
             // catches *just after* we pass the point, in case a fixed-update loop doesn't manage to catch the first in time.
             // The 2nd case is theoretically never needed as physics always occurs in fixed-update, but if the accuracy is small
             // enough, the distance might never be smaller than it.
-            if (dist <= _locationAccuracy || dist > _previousDistance + 0.005) // if we are close enough to point OR if we've passed the target point...
+
+
+            var hasMovedPast = false;
+
+            var curPos = transform.position;
+            var destination = _runtimePoints[_destinationIndex].position;
+
+            void checkMovedPast(float term, float init, float change)
+            {
+                var diff = term - init;
+
+                if (Mathf.Abs(diff) < .05f)
+                {
+                    return;
+                }
+
+                var steps = diff / change;
+                if (steps < 0)
+                {
+                    Debug.Log(term + " " + init + " " + change);
+                    hasMovedPast = true;
+                }
+            }
+
+            checkMovedPast(destination.x, curPos.x, _moveDirection.x);
+            checkMovedPast(destination.y, curPos.y, _moveDirection.y);
+
+            if (dist <= _locationAccuracy || hasMovedPast) // if we are close enough to point OR if we've passed the target point...
             {
                 //Debug.Log("Fired for the following reason: " + (dist > _previousDistance ? $"distance ({dist}) is greater than previous ({_previousDistance})" : "within accuracy"));
                 if (_runtimePoints.Length == 1) {
@@ -135,7 +159,7 @@ public class MovingElement : MonoBehaviour
                 rb.velocity = Vector2.Lerp(rb.velocity, _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection, Time.deltaTime * _lerpSpeed);
 
                 // add tracking speeds from other related bodies
-                foreach (Rigidbody2D body in _relativeBodies)
+                foreach (var body in _relativeBodies)
                 {
                     rb.velocity += body.velocity;
                 }
