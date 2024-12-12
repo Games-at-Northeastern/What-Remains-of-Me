@@ -125,7 +125,7 @@ public class MovingElement : MonoBehaviour
             {
                 var diff = term - init;
 
-                if (Mathf.Abs(diff) < .05f)
+                if (Mathf.Abs(diff) < .05f || change < .005f)
                 {
                     return;
                 }
