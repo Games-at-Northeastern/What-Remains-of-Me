@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using PlayerController;
 
@@ -11,11 +12,10 @@ public class ElevatorController : Interaction
     [Tooltip("Can be left null for scenes accessed after acquiring the voice box")]
     [SerializeField] private bool upDefualtNextBuild = true;
 
-    [Header("Scene References")]
-    [SerializeField] private GameObject player;
-    [SerializeField] private PlayerController2D cc;
-    [SerializeField] private CompositeCollider2D groundCollider;
-    [SerializeField] private GameObject canvas;
+    private GameObject player;
+    private PlayerController2D cc;
+    private List<CompositeCollider2D> groundColliders;
+    private GameObject canvas;
 
     [Header("Internal References")]
     [SerializeField] private GameObject platform;
@@ -30,6 +30,20 @@ public class ElevatorController : Interaction
 
     private void Start()
     {
+        // references
+        player = GameObject.FindWithTag("Player");
+        cc = player.GetComponentInChildren<PlayerController2D>();
+        canvas = FindObjectOfType<Canvas>().gameObject;
+        groundColliders = new();
+        foreach (var tmap in FindObjectsOfType<Tilemap>())
+        {
+            var collider = tmap.gameObject.GetComponent<CompositeCollider2D>();
+            if (collider != null)
+            {
+                groundColliders.Add(collider);
+            }
+        }
+
         var elevatorData = checkpoint.LinkedPortalData as ElevatorPortalData;
         if (elevatorData == null)
         {
@@ -116,7 +130,10 @@ public class ElevatorController : Interaction
         {
             if (lerp > 0.3f && !switched)
             {
-                groundCollider.enabled = false;
+                foreach (var collider in groundColliders)
+                {
+                    collider.enabled = false;
+                }
                 switched = true;
             }
 
