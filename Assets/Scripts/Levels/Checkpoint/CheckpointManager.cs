@@ -30,7 +30,7 @@ public class CheckpointManager : MonoBehaviour
             mostRecentPoint = levelStartPoint;
         }
 
-        if (levelStartPoint == null)
+        if (mostRecentPoint == null)
         {
             Debug.LogWarning("No level start respawn point set - player will not be able to respawn at the beginning of the level");
         }
@@ -62,6 +62,8 @@ public class CheckpointManager : MonoBehaviour
     /// <param name="respawnable"></param>
     public void RespawnAtRecent(Transform respawnable)
     {
+        Debug.Log("ressp");
+        Debug.Log(mostRecentPoint.getRespawnPosition());
         respawnable.transform.position = mostRecentPoint.getRespawnPosition();
         mostRecentPoint.RespawnStart();
         SoundController.instance.PlaySound("Player_Respawn");
@@ -111,8 +113,10 @@ public class CheckpointManager : MonoBehaviour
 
     public Checkpoint GetPointByData(LevelPortalData data)
     {
+        Debug.Log("getting point");
         if (data == null)
         {
+            Debug.Log("Data null");
             return null;
         }
 
@@ -120,10 +124,12 @@ public class CheckpointManager : MonoBehaviour
         {
             if (checkpoint.LinkedPortalData == data)
             {
+                Debug.Log("checkpoint found");
                 return checkpoint;
             }
         }
 
+        Debug.Log("no found");
         return null;
     }
 }

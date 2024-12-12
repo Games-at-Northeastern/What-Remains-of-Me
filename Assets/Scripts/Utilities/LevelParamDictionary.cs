@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
+#if UNITY_EDITOR
 using UnityEditor.UIElements;
+#endif
 
 #pragma warning disable IDE1006 // Naming Styles
 
@@ -21,7 +23,7 @@ public class LevelParamDictionary : Dictionary<string, int>, ISerializationCallb
             this.String = String;
             this.Int = Int;
         }
-
+#if UNITY_EDITOR
         [CustomPropertyDrawer(typeof(Pair))]
         public class PairDrawer : PropertyDrawer
         {
@@ -61,6 +63,7 @@ public class LevelParamDictionary : Dictionary<string, int>, ISerializationCallb
 
             public override VisualElement CreatePropertyGUI(SerializedProperty property) => new PairVisualElement(property);
         }
+#endif
     }
 
     [SerializeField] private List<Pair> pairs;
@@ -213,7 +216,7 @@ public class LevelParamDictionary : Dictionary<string, int>, ISerializationCallb
             }
         }
     }
-
+#if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(LevelParamDictionary))]
     public class SerializableStringIntDictDrawer : PropertyDrawer
     {
@@ -255,4 +258,5 @@ public class LevelParamDictionary : Dictionary<string, int>, ISerializationCallb
         }
         public override VisualElement CreatePropertyGUI(SerializedProperty property) => new SerializableStringIntDictVisualElement(property);
     }
+#endif
 }

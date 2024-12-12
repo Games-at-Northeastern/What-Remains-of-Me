@@ -129,7 +129,7 @@ public class LevelManager : MonoBehaviour
 
     // Portal Data
 
-    public static LevelPortalData NextStartPotal { get; set; }
+    public static LevelPortalData NextStartPotal { get; set; } = null;
 
     // Level Parameters
 

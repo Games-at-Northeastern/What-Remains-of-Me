@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
+#if UNITY_EDITOR
 using UnityEditor.UIElements;
+#endif
 
 public class LevelPortalData : ScriptableObject
 {

@@ -1,6 +1,8 @@
 using UnityEngine.UIElements;
 using UnityEditor;
+#if UNITY_EDITOR
 using UnityEditor.UIElements;
+#endif
 
 #if UNITY_EDITOR
 public class WaitForBlurField<TValueElement, TValueType> : VisualElement where TValueElement : BaseField<TValueType>, new()

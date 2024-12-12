@@ -22,7 +22,7 @@ public class ControllableDoor : AControllable
         set
         {
             shouldDisappear = value;
-            if (!(maskObject is null))
+            if (maskObject != null)
             {
                 maskObject.SetActive(value);
             }

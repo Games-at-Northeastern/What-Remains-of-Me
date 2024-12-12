@@ -1,8 +1,11 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+#if UNITY_EDITOR
 using UnityEditor.UIElements;
+#endif
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(Object), true, isFallback = true)]
 public class DefaultEditor : Editor
 {
@@ -33,3 +36,4 @@ public class DefaultEditor : Editor
         return container;*/
     }
 }
+#endif

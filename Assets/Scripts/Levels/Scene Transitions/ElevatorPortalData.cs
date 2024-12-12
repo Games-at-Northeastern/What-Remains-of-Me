@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
+#if UNITY_EDITOR
 using UnityEditor.UIElements;
+#endif
 
 [CreateAssetMenu(fileName = "ElevatorPortalData", menuName = "SceneTransitions/ElevatorPortalData", order = 1)]
 public class ElevatorPortalData : LevelPortalData

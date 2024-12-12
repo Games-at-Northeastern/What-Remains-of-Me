@@ -45,6 +45,7 @@ public class ElevatorController : Interaction
     }
 
     private bool usingComplex = false;
+    private float timeIn = 0;
     private void Update()
     {
         if (UpgradeHandler.HasVoiceBox)
@@ -52,6 +53,24 @@ public class ElevatorController : Interaction
             usingComplex = true;
         }
         usingComplex = false;
+
+        if (playerIn && !hasTriggered)
+        {
+            timeIn += Time.deltaTime;
+
+            if (timeIn > .9f)
+            {
+                var nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+                if (upDefualtNextBuild)
+                {
+                    GoUp(nextIndex, defaultNextBuildIndexPortalData);
+                }
+                else
+                {
+                    GoDown(nextIndex, defaultNextBuildIndexPortalData);
+                }
+            }
+        }
     }
 
     public void GoToLevel(int index)
@@ -149,6 +168,7 @@ public class ElevatorController : Interaction
     private void NextScene(int scene, LevelPortalData end)
     {
         LevelManager.NextStartPotal = end;
+        Debug.Log("this data is nuLL? " + (end == null).ToString());
         SceneManager.LoadScene(scene);
     }
 
@@ -169,19 +189,21 @@ public class ElevatorController : Interaction
         initializer.Init(this, cc);
     }
 
+    private bool playerIn = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && !usingComplex)
+        if (collision.CompareTag("Player") && !usingComplex && defaultNextBuildIndexPortalData != null)
         {
-            var nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
-            if (upDefualtNextBuild)
-            {
-                GoUp(nextIndex, defaultNextBuildIndexPortalData);
-            }
-            else
-            {
-                GoDown(nextIndex, defaultNextBuildIndexPortalData);
-            }
+            playerIn = true;
+            timeIn = 0;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") && !usingComplex && defaultNextBuildIndexPortalData != null)
+        {
+            playerIn = false;
         }
     }
 }
