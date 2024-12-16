@@ -8,7 +8,7 @@ public class FollowPlayer : MonoBehaviour
     [SerializeField] private GameObject player;
     private float distToPlayer;
     private float lerpSpeed = .5f;
-    private float maxDistance = 2f;
+    [SerializeField] private float maxDistance = 2f;
     private float distFromParent;
     private Vector3 parentPosition;
     void Start()
