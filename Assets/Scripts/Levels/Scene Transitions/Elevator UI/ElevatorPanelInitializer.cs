@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using PlayerController;
 
@@ -9,12 +8,12 @@ public class ElevatorPanelInitializer : MonoBehaviour
     [SerializeField] private GameObject panelObj;
     [SerializeField] private GameObject buttonObj;
     [SerializeField] private GameObject youAreHereObj;
-    private List<LevelPortalData> levels;
+    private List<ElevatorPortalData> levels;
     private int thisLevel;
 
     private bool hasData = false;
 
-    public void PassData(List<LevelPortalData> levels, int thisLevel)
+    public void PassData(List<ElevatorPortalData> levels, int thisLevel)
     {
         this.levels = levels;
         this.thisLevel = thisLevel;

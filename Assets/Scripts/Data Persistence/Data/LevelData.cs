@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using SmartScriptableObjects.ReactiveProperties;
-using UniRx;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
 [System.Serializable]
 /// <summary>
 ///Formats the game data into a readable format for the save and load system.
 /// </summary>
-public class LevelData {
-
+#pragma warning disable IDE1006 // Naming Styles
+public class LevelData
+{
     public string sceneName;
+
     public SerializableDictionary<string, float> outletCleanEnergy; //Saves all the outlets GUID's and clean energy values as a percent 0-1.0f
     public SerializableDictionary<string, float> outletVirusEnergy; //Saves all the outlets GUID's and virus energy values as a percent 0-1.0f
     public SerializableDictionary<string, float> outletMaxEnergy;   //Saves all the outlets GUID's and max energy values as a percent 0-1.0f
@@ -32,6 +26,6 @@ public class LevelData {
         outletCleanEnergy = new SerializableDictionary<string, float>();
         outletVirusEnergy = new SerializableDictionary<string, float>();
         outletMaxEnergy = new SerializableDictionary<string, float>();
-
     }
 }
+#pragma warning restore IDE1006 // Naming Styles

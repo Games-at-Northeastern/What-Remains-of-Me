@@ -51,6 +51,8 @@ public class LevelManager : MonoBehaviour
         {
             Parameters.Add(tag, val);
         }
+
+        AddCondtionalParmas();
     }
     private void Start()
     {
@@ -138,6 +140,16 @@ public class LevelManager : MonoBehaviour
 
     public static void SendParamImmediate(string tag, int count) => SendTags(tag, count, ImmediateParams);
     public static void SendParamPersistent(string tag, int count) => SendTags(tag, count, PersistentParams);
+
+    // condtional parameters
+
+    private static void AddCondtionalParmas()
+    {
+        if (UpgradeHandler.HasVoiceBox)
+        {
+            Parameters.Add("VOICE_BOX", 1);
+        }
+    }
 
     private static void SendTags(string tag, int count, LevelParamDictionary reciever)
     {

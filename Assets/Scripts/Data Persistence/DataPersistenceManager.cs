@@ -86,9 +86,6 @@ public class DataPersistenceManager : MonoBehaviour
         this.levelData = levelFileDataHandler.Load();
         bool loadPlayerData = (playerData.scenePlayerSavedIn == SceneManager.GetActiveScene().name && playerClickedLoad);
 
-
-
-
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
             dataPersistenceObj.LoadLevelData(levelData);
@@ -99,6 +96,8 @@ public class DataPersistenceManager : MonoBehaviour
             }
         }
         playerClickedLoad = false;
+
+        StaticData.Load();
     }
 
     public void LoadGame()
@@ -113,6 +112,7 @@ public class DataPersistenceManager : MonoBehaviour
         //Load save data from file using the data handler 
         this.playerData = playerFileDataHandler.Load();
         this.levelData = levelFileDataHandler.Load();
+        StaticData.Load();
 
         //If we arent in the scene the player saved in during a load, load the scene the player saved in
         if (playerData.scenePlayerSavedIn != SceneManager.GetActiveScene().name)
@@ -138,8 +138,6 @@ public class DataPersistenceManager : MonoBehaviour
                 dataPersistenceObj.LoadLevelData(levelData);
             }
         }
-
-
     }
 
     public void SaveGame()
@@ -158,8 +156,9 @@ public class DataPersistenceManager : MonoBehaviour
         //save that file using the data handler
         playerFileDataHandler.Save(playerData);
         levelFileDataHandler.Save(levelData);
-
+        StaticData.Save();
     }
+
     /// <summary>
     /// Finds all Monobehavior script objects that have the IDataPersistence Interface.
     /// Keep in mind this only finds Monobehavior inheriting scripts.
@@ -171,5 +170,4 @@ public class DataPersistenceManager : MonoBehaviour
         IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<IDataPersistence>();
         return new List<IDataPersistence>(dataPersistenceObjects);
     }
-
 }

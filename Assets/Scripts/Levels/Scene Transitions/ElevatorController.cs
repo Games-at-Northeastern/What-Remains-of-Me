@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using PlayerController;
+using Unity.VisualScripting;
 
 public class ElevatorController : Interaction
 {
@@ -25,7 +26,7 @@ public class ElevatorController : Interaction
 
     private bool hasTriggered = false;
 
-    private List<LevelPortalData> portalData;
+    private List<ElevatorPortalData> portalData;
     private int thisPortalIndex;
 
     private void Start()
@@ -33,7 +34,18 @@ public class ElevatorController : Interaction
         // references
         player = GameObject.FindWithTag("Player");
         cc = player.GetComponentInChildren<PlayerController2D>();
-        canvas = FindObjectOfType<Canvas>().gameObject;
+        var canvi = FindObjectsOfType<Canvas>();
+        foreach (var canvas in canvi)
+        {
+            if (canvas.gameObject.CompareTag("HUD"))
+            {
+                this.canvas = canvas.gameObject;
+            }
+        }
+        if (canvas == null)
+        {
+            Debug.LogError("no hud canvas found");
+        }
         groundColliders = new();
         foreach (var tmap in FindObjectsOfType<Tilemap>())
         {
@@ -50,11 +62,11 @@ public class ElevatorController : Interaction
             throw new System.NullReferenceException("Elevator linked portal data not of type elevator portal data");
         }
 
-        portalData = elevatorData.Layout;
-        thisPortalIndex = elevatorData.Layout.IndexOf(elevatorData);
+        portalData = elevatorData.LayoutData.Portals;
+        thisPortalIndex = portalData.IndexOf(elevatorData);
         if (thisPortalIndex == -1)
         {
-            throw new System.Exception("Elevator layout does not contain a you are here self reference");
+            throw new System.Exception("Elevator layout does not contain a reference to the current portal");
         }
     }
 
@@ -65,6 +77,7 @@ public class ElevatorController : Interaction
         if (UpgradeHandler.HasVoiceBox)
         {
             usingComplex = true;
+            return;
         }
         usingComplex = false;
 
@@ -90,10 +103,11 @@ public class ElevatorController : Interaction
     public void GoToLevel(int index)
     {
         Debug.Log(index);
-        UIUp = true; // so player cant reuse elevator
+        Debug.Log(thisPortalIndex);
+        moving = true; // so player cant reuse elevator
 
         var end = portalData[index];
-        var scene = SceneUtility.GetBuildIndexByScenePath(end.FoundInScene);
+        var scene = SceneUtility.GetBuildIndexByScenePath(end.GetNextScene());
 
         if (index < thisPortalIndex)
         {
@@ -132,7 +146,14 @@ public class ElevatorController : Interaction
             {
                 foreach (var collider in groundColliders)
                 {
-                    collider.enabled = false;
+                    if (collider == null)
+                    {
+                        continue;
+                    }
+                    if (!collider.IsDestroyed())
+                    {
+                        collider.enabled = false;
+                    }
                 }
                 switched = true;
             }
@@ -191,9 +212,11 @@ public class ElevatorController : Interaction
 
     // UI
     public bool UIUp { get; set; } = false;
+    private bool moving = false;
     public override void Execute()
     {
-        if (UIUp || !usingComplex)
+        Debug.Log("execute");
+        if (UIUp || !usingComplex || moving)
         {
             return;
         }
