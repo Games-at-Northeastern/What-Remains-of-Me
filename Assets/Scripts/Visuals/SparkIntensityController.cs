@@ -86,6 +86,7 @@ public class SparkIntensityController : MonoBehaviour
     private void OnValidate()
     {
         UpdateParticlesAndAudio();
+        if(source)
         source.source.volume = Mathf.Lerp(volumeLower, volumeHigher, intensity);
     }
 }
