@@ -2032,7 +2032,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4845609543492887642}
-  - component: {fileID: 7343733707460109483}
+  - component: {fileID: 1380257287}
   m_Layer: 0
   m_Name: OrbServer
   m_TagString: Untagged
@@ -2058,7 +2058,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7343733707460109483
+--- !u!114 &1380257287
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2067,13 +2067,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7948709032050866615}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf0a2c6f1952ca34bbb1527f00ae2063, type: 3}
+  m_Script: {fileID: 11500000, guid: 62080f891fffe314389d87be1955fa0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 0}
   player: {fileID: 0}
-  _rotationOffset: {x: 0, y: 0, z: 0}
-  Speed: 5
-  offSetPoint: {x: 0, y: 0}
+  maxDistance: 0
 --- !u!1 &8756864116521508151
 GameObject:
   m_ObjectHideFlags: 0
@@ -2127,6 +2126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62080f891fffe314389d87be1955fa0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
+  parent: {fileID: 4429372509706204008}
   player: {fileID: 0}
-  maxDistance: 2
+  maxDistance: 1.9
