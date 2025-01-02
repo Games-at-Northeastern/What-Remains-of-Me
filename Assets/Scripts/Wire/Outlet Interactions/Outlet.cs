@@ -93,7 +93,7 @@ public class Outlet : MonoBehaviour
         while (true)
         {
             controlled.GainEnergy(energyTransferSpeed * Time.deltaTime);
-            foreach(AControllable cSec in controlledSecondaries)
+            foreach (AControllable cSec in controlledSecondaries)
             {
                 if (cSec != null)
                 {
@@ -139,7 +139,7 @@ public class Outlet : MonoBehaviour
             {
                 if (cSec != null)
                 {
-                    maxCharge += cSec.GetMaxCharge(); 
+                    maxCharge += cSec.GetMaxCharge();
                 }
             }
             maxCharge += controlled.GetMaxCharge();

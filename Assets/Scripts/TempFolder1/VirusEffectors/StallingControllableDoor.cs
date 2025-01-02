@@ -43,10 +43,10 @@ public class StallingControllableDoor : AControllable
                 //Debug.Log("target pos: " + targetPos);
                 transform.position = Vector2.MoveTowards(transform.position, targetPos, doorMoveSpeed * Time.deltaTime);
             } else {
-                virusEffect.SetFloat("Density", virusPercent.Value);
+                //virusEffect.SetFloat("Density", virusPercent.Value);
             }
         } else {
-            virusEffect.SetFloat("Density", 0f);
+            //virusEffect.SetFloat("Density", 0f);
         }
     }
 }

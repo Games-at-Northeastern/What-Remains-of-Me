@@ -664,7 +664,10 @@ public class WireThrower : MonoBehaviour
     void DestroyPlug()
     {
         if (_activePlug != null)
+        {
             Destroy(_activePlug);
+            Debug.Log("I killed a plug");
+        }
     }
 
     /// <summary>

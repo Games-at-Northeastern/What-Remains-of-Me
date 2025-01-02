@@ -62,9 +62,9 @@ namespace Levels.Objects.Platform
             if (_doVisualEffect && _virusEffect)
             {
                 if (virusPercentage >= _doVirusEffectAt) {
-                    _virusEffect.SetFloat("Density", virusPercentage);
+                    //_virusEffect.SetFloat("Density", virusPercentage);
                 } else {
-                    _virusEffect.SetFloat("Density", 0f);
+                    //_virusEffect.SetFloat("Density", 0f);
                 }
             }
         }
