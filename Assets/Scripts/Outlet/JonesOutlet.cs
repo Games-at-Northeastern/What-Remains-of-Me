@@ -18,7 +18,7 @@ public class JonesOutlet : AControllable
     {
         // slider.value = GetVirus() / 100f;
 
-        if (GetVirus() >= 90f)
+        if (GetVirus() >= 80f)
         {
             door2.sprite = openDoorSprite2;
             doorAnimator2.enabled = false;
