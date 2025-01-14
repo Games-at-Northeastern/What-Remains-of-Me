@@ -15,6 +15,7 @@ public class JonesOutlet : AControllable
     [SerializeField] private VirusTurret turret1;
     [SerializeField] private VirusTurret turret2;
     [SerializeField] private ControllableDoor firstDoor;
+    [SerializeField] public bool firstStep = false;
 
     [SerializeField] private ParticleSystem explosionParticles;
     [SerializeField] private bool exploded;
@@ -22,7 +23,7 @@ public class JonesOutlet : AControllable
     {
         // slider.value = GetVirus() / 100f;
 
-        if (GetVirus() >= 80f)
+        if (GetVirus() >= 80f && firstStep)
         {
             door2.sprite = openDoorSprite2;
             doorAnimator2.enabled = false;

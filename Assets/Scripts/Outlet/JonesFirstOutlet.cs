@@ -13,6 +13,7 @@ public class JonesFirstOutlet : AControllable
     [SerializeField] private MovingElementController elevatorSolve;
     [SerializeField] private Slider slider;
     [SerializeField] private WireThrower wire;
+    [SerializeField] private JonesOutlet secondStepOutlet;
 
     [SerializeField] private ParticleSystem explosionParticles;
     private void Update()
@@ -29,6 +30,7 @@ public class JonesFirstOutlet : AControllable
             GetComponent<BoxCollider2D>().enabled = false;
             wire.Invoke("Disconnect", 0.0f);
             GetComponent<JonesFirstOutlet>().enabled = false;
+            secondStepOutlet.firstStep = true;
 
         }
     }
