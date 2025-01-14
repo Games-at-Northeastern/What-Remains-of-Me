@@ -191,5 +191,10 @@ public class Outlet : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(ControlLight());
     }
+
+    public void EmptyEnergy()
+    {
+        TakeEnergy();
+    }
 }
 
