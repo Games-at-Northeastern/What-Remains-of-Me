@@ -7,11 +7,11 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 
-The outlet in front of you will take you to Jones. #layout:left #portrait:Handler #speaker:The Handler
+The outlet in front of you will take you to Vox. #layout:left #portrait:Handler #speaker:The Handler
 
 You'll need to find enough energy to power it...
 
-#portrait:jones1 #speaker:Jones A.I.
+#portrait:jones1 #speaker:Vox
 
 STOP.
 
@@ -26,4 +26,4 @@ Stay where you are. There’s no escape for you.
 
 ->END
 
-//%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler #portrait:jones1 #speaker:Jones A.I.
+//%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler #portrait:jones1 #speaker:Vox
