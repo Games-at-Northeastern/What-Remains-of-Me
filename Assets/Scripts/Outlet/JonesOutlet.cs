@@ -15,6 +15,7 @@ public class JonesOutlet : AControllable
     [SerializeField] private VirusTurret turret1;
     [SerializeField] private VirusTurret turret2;
     [SerializeField] private ControllableDoor firstDoor;
+    [SerializeField] private ElevatorController leftExit;
     [SerializeField] public bool firstStep = false;
 
     [SerializeField] private ParticleSystem explosionParticles;
@@ -31,6 +32,7 @@ public class JonesOutlet : AControllable
             turret1.enabled = false;
             turret2.enabled = false;
             firstDoor.CreateEnergy(50, 0);
+            leftExit.enabled = true;
             BeatenBoss();
         }
     }
