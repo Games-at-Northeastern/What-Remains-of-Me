@@ -19,6 +19,7 @@ namespace CharacterController
         private float MaxAngularVelocity;
         private float WireSwingNaturalAccelMultiplier;
         private float fallGravity;
+        private float terminalVelocity;
         private float maxWireLength;
 
         // Initializes a wire control move, deciding what angular vel to start with, setting the
@@ -29,6 +30,7 @@ namespace CharacterController
         /// <param name="WT">The wireThrower</param>
         /// <param name="character"> the character swing from a wire</param>
         /// <param name="fallGravity"> the gravity exerted on the character while swinging</param>
+        /// <param name="terminalVelocity"> the highest speed palyer sould get from falling</param>
         /// <param name="WireSwingNaturalAccelMultiplier"> A natural Acceleration force on the swing(IAssume if there is no input from the player)</param>
         /// <param name="WireSwingMaxAngularVelocity"> max angular velocity</param>
         /// <param name="WireSwingDecayMultiplier"> deceleration on the wire</param>
@@ -36,7 +38,7 @@ namespace CharacterController
         /// <param name="WireSwingReferenceWireLength"></param>
         /// <param name="PlayerSwayAccel">I assume the acceleration for the player kicking back and forth</param>
         /// <param name="wireGeneralMaxDistance"></param>
-        public Swing(WireThrower WT, CharacterController2D character, float fallGravity,float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float PlayerSwayAccel, float maxWireLength)
+        public Swing(WireThrower WT, CharacterController2D character, float fallGravity, float terminalVelocity, float WireSwingNaturalAccelMultiplier, float WireSwingMaxAngularVelocity, float WireSwingDecayMultiplier, float WireSwingBounceDecayMultiplier, float PlayerSwayAccel, float maxWireLength)
         {
             this.PlayerSwayAcceleration = PlayerSwayAccel * 1.3f;
             this.maxWireLength = maxWireLength;
@@ -119,22 +121,34 @@ namespace CharacterController
 
             float newAngle = angle + (angularVelocity * Time.deltaTime);
 
-            // To accommodate the downwards movement of moving grapple points
-            radius = Mathf.Lerp(radius, initRadius, Time.deltaTime * 10f);
+            // To accommodate the downwards movement of moving grapple points (don't need it any more)
+            // radius = Mathf.Lerp(radius, initRadius, Time.deltaTime * 10f);
 
-            Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
-            character.InternalVelocity = (newPos - origPos) / Time.deltaTime;
-            // Add some free-fall to the mix if above the lowest point possible right now
-            if (Mathf.Sin(angle) > 0)
+            // Whether the wire is fully stretched or loose
+            if (radius > initRadius - 0.01f)
             {
-                gravityVel = fallGravity * Time.deltaTime;
-                character.InternalVelocity += new Vector2(0, fallGravity * Time.deltaTime);
+                Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
+                character.InternalVelocity = (newPos - origPos) / Time.deltaTime;
+                // Add some free-fall to the mix if above the lowest point possible right now
+                if (Mathf.Sin(angle) > 0)
+                {
+                    gravityVel = fallGravity * Time.deltaTime;
+                    character.InternalVelocity += new Vector2(0, fallGravity * Time.deltaTime);
+                }
+                else
+                {
+                    gravityVel = 0;
+                }
+
             }
-            else
-            {
-                gravityVel = 0;
+            else{
+                // Make the character move and fall under normal gravity acceleration and physics laws.
+                // Apply gravity to the character's vertical velocity.
+                Vector2 speed = character.InternalVelocity;
+                speed.y = Kinematics.VelocityTarget(speed.y, terminalVelocity, fallGravity, Time.fixedDeltaTime) - 0.8f;
+                character.InternalVelocity = speed;
             }
-            //Debug.Log(debugString);
+            
         }
         /// <summary>
         /// Get the length of the wire connecting to an outlet. You should be

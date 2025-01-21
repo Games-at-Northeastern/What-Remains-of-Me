@@ -87,7 +87,7 @@ namespace PlayerController
             airFall = new VerticalFallSpeed(stats_.terminalVelocity, stats_.fallGravity, this);
             jump = new Jump(stats_.risingGravity, stats_.jumpHeight, JumpType.setSpeed, this);
             dash = new Dash(this, stats_.dashSpeedX, stats_.dashTime);
-            swing = new Swing(wire, this, stats_.fallGravity, stats_.wireSwingNaturalAccelMultiplier, stats_.SwingMaxAngularVelocity, stats_.wireSwingDecayMultiplier, stats_.wireSwingBounceDecayMultiplier, stats_.PlayerSwayAccel, stats_.wireLength);
+            swing = new Swing(wire, this, stats_.fallGravity, stats_.terminalVelocity, stats_.wireSwingNaturalAccelMultiplier, stats_.SwingMaxAngularVelocity, stats_.wireSwingDecayMultiplier, stats_.wireSwingBounceDecayMultiplier, stats_.PlayerSwayAccel, stats_.wireLength);
             wallJump = new WallJump(this, stats_.risingGravity, stats_.WallJumpDistance, stats_.takeControlAwayTime);
             wallSlide = new WallSlide(stats_.wallSlideGravity, stats_.maxWallSlideSpeed, this);
         }
