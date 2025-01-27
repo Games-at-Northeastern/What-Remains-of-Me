@@ -43,7 +43,7 @@ public class WireThrower : MonoBehaviour
     public ContactFilter2D contactFilter;
 
     [SerializeField] private Text toggleButtonText;
-    [SerializeField] private bool MouseAffectsPriority = true; // To enable Mouse directional targeting system. If unchecked, defaults to directional targeting system
+    [SerializeField] private bool MouseAffectsPriority = false; // To enable Mouse directional targeting system. If unchecked, defaults to directional targeting system
     #endregion
 
     #region Internal References
