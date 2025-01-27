@@ -148,19 +148,19 @@ public class MovingElement : MonoBehaviour
                 }
                 UpdateDestinationAndDirection();
                 //reset velocity on changing target
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
             }
 
             if (!_completed) // if the track isn't already completed...
             {
                 _previousDistance = GetDistanceToPoint(_destinationIndex);
 
-                rb.velocity = Vector2.Lerp(rb.velocity, _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection, Time.deltaTime * _lerpSpeed);
+                rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection, Time.deltaTime * _lerpSpeed);
 
                 // add tracking speeds from other related bodies
                 foreach (var body in _relativeBodies)
                 {
-                    rb.velocity += body.velocity;
+                    rb.linearVelocity += body.linearVelocity;
                 }
             }
             else
@@ -171,11 +171,11 @@ public class MovingElement : MonoBehaviour
 
         // heavy-handed solution to elements flying off into nowhere.
         // not even sure it works, but eh. Good code is for chumperinos.
-        else if (rb.velocity != Vector2.zero)
+        else if (rb.linearVelocity != Vector2.zero)
         {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
         }
-        return rb.velocity;
+        return rb.linearVelocity;
     }
 
     /// <summary>
@@ -243,7 +243,7 @@ public class MovingElement : MonoBehaviour
     public void Deactivate()
     {
         _shouldMove = false;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
 
          _deactivatedActions?.Invoke();
     }
