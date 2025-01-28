@@ -21,6 +21,7 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueTextTop;
     [SerializeField] private TextMeshProUGUI displayNameTextRight;
     [SerializeField] private TextMeshProUGUI displayNameTextTop;
+    [SerializeField] private TextMeshProUGUI skipTextRight;
     [SerializeField] private Animator portraitAnimatorRight;
     [SerializeField] private Animator portraitAnimatorTop;
     [SerializeField] private Animator handlerAnimator;
@@ -228,6 +229,10 @@ public class InkDialogueManager : MonoBehaviour
         // constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezepositionX;
 
         dialogueText.text = "";
+        if (dialogueText == dialogueTextRight)
+        {
+            AddSkipText();
+        }
     }
 
     private void ContinueStory()
@@ -244,7 +249,10 @@ public class InkDialogueManager : MonoBehaviour
 
             HandleTags(currentStory.currentTags);
 
-
+            if (dialogueText == dialogueTextRight)
+            {
+                RemoveSkipText();
+            }
         }
         else
         {
@@ -567,4 +575,7 @@ public class InkDialogueManager : MonoBehaviour
             dialogueVariables.variables.Add(variableName, newValue);
         }
     }
+
+    private void RemoveSkipText() => skipTextRight.text = "";
+    private void AddSkipText() => skipTextRight.text = "Press 'F'";
 }
