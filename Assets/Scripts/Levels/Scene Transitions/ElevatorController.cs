@@ -23,6 +23,7 @@ public class ElevatorController : Interaction
     [SerializeField] private GameObject panel;
     [SerializeField] private Checkpoint checkpoint;
     [SerializeField] private GameObject elevatorObj;
+    [SerializeField] private SpriteRenderer[] glassSprites;
 
     private bool hasTriggered = false;
 
@@ -136,6 +137,9 @@ public class ElevatorController : Interaction
 
     private IEnumerator UpAnimation(int scene, LevelPortalData end)
     {
+        foreach(SpriteRenderer r in glassSprites){
+            r.sortingLayerName = "Foreground";
+        }
         var originalY = platform.transform.position.y;
         var lerp = 0.0f;
         var switched = false;
@@ -166,6 +170,9 @@ public class ElevatorController : Interaction
 
         // do transition
         cc.UnlockInputs();
+        foreach(SpriteRenderer r in glassSprites){
+            r.sortingLayerName = "Midground";
+        }
         NextScene(scene, end);
     }
 
