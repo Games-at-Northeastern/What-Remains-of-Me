@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using PlayerController;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
@@ -59,6 +61,8 @@ public class PauseMenu : MonoBehaviour
         pausePanel.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
+
+        FindObjectOfType<PlayerController2D>().LockInputs(); // locks player inputs, prevents movement
     }
 
     /// <summary>
@@ -70,6 +74,9 @@ public class PauseMenu : MonoBehaviour
         confirmQuitMenu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
+
+        FindObjectOfType<PlayerController2D>().UnlockInputs(); // unlocks player inputs, allows movement
+
     }
 
     /// <summary>

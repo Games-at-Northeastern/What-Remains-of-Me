@@ -6,21 +6,21 @@ namespace PlayerController
     using More2DGizmos;
     using System;
     /* Script use notes:
-     * 
+     *
      * - the only direct change to rb.velocity should take place once at then end of a FixedUpdate()
-     * 
+     *
      * - Never change the rigidbody's position directly, especially after the FlagUpdates() call in a
      * -- FixedUpdate Loop, this may invalidate the script's flags for that update
-     * 
+     *
      * - When designing behavior in this class which is called in FixedUpdate, limit uses of External Getters like Grounded which are constant throughout each FixedUpdate
      * -- after FlagUpdates(), but require complex operations to resolve. Instead, if the value has a defined flag,
      * -- use the flag, as it stores the value from the start of FixedUpdate()
      * -- additionally, don't modify the values of flags directly outside of FlagUpdates to ensure this behavior
-     * 
+     *
      * Flag/Feature Section concept:
      * - Most feature sections (Jump, Movement, Swinging, etc.) define some private variables for themselves
      * - Other feature sections as well ControllerCore should not modify these feature variables outside of methods explicilty defined for that purpose, e.g. DeclareJumpInputUsed()
-     * 
+     *
      * - ControllerCore should instead signal to features using flags. For example, instead of ControllerCore cancelling a Jump directly when it determines that the player landed on the ground,
      * - it enables the fLanded flag, which signals HandleGroundedJump() to cancel any previous jump
      */
@@ -199,7 +199,7 @@ namespace PlayerController
         }
 
         #region StateTransition
-        
+
         /// <summary>
         /// Switches the current player state to the new state.
         /// if state switches performs startMove methods.
@@ -452,6 +452,10 @@ namespace PlayerController
 
         protected virtual void JumpIfShould()
         {
+            if (isLocked)
+            {
+                return; // prevents jumping while paused
+            }
             if (fLanded && !jumpCanceled)
             {
                 CancelJump();
@@ -486,7 +490,7 @@ namespace PlayerController
         /// <returns></returns>
         public bool TouchingLeftWall()
         {
-            
+
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
             List<RaycastHit2D> hits = new List<RaycastHit2D>();
             Physics2D.BoxCast(origin + new Vector2(-stats_.leftOffset, 0), new Vector2(0.01f, stats_.sideBounds.y), 0, Vector2.left, filter, hits, stats_.sideBounds.x - 0.01f);
