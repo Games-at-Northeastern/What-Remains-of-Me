@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class JonesLightControl : MonoBehaviour
+public class VoxLightControl : MonoBehaviour
 {
     [SerializeField] GameObject hologramLight;
     [SerializeField] Animator animator;
