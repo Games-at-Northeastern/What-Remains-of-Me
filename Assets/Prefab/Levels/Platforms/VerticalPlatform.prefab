@@ -613,6 +613,7 @@ MonoBehaviour:
   cleanEnergy: 0
   maxCharge: 20
   virus: 0
+  uniqueID: 
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
   OnVirusChange:
     m_PersistentCalls:
@@ -622,6 +623,7 @@ MonoBehaviour:
       m_Calls: []
   _movingElements:
   - {fileID: 7982011735628750263}
+  audioSource: {fileID: 0}
 --- !u!114 &3910898554929073209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,6 +637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   intensity: 0
+  isActive: 0
   particleSystem: {fileID: 285820119198467842}
   rateOverTimeLowerMin: 5
   rateOverTimeLowerMax: 20
@@ -850,6 +853,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 992158203481983241, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
+      propertyPath: m_Volume
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 992158203481983243, guid: 2d458157414ee6d45903f9fb957b4c21, type: 3}
       propertyPath: m_Name
       value: Sparks
@@ -888,6 +895,10 @@ PrefabInstance:
       propertyPath: controlled
       value: 
       objectReference: {fileID: 3175746269431765786}
+    - target: {fileID: 5332090570311779802, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
+      propertyPath: uniqueId
+      value: VerticalPlatform_e6e34d85-f60a-4d47-865e-3e061266a5f5
+      objectReference: {fileID: 0}
     - target: {fileID: 9156519854386073056, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
       propertyPath: m_RootOrder
       value: 3

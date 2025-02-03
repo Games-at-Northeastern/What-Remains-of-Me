@@ -81,8 +81,12 @@ public class ControllableDoor : AControllable
     [Header("Position In Editor: Zero Energy")]
     [SerializeField] private Vector2 posChangeForMaxEnergy;
 
+    private AudioSource openingAudioLoop;
+
     private void Awake()
     {
+        openingAudioLoop = GetComponent<AudioSource>();
+
         initPos = transform.position;
         lastFull = -1;
 
@@ -111,6 +115,11 @@ public class ControllableDoor : AControllable
 
             transform.position = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, percentFull);
 
+            if (openingAudioLoop != null && !openingAudioLoop.isPlaying)
+            {
+                openingAudioLoop.Play(); //play sound if moving (sound will loop automatically)
+            }
+
             if (shouldDisappear)
             {
                 maskObject.SetActive(true);
@@ -118,6 +127,10 @@ public class ControllableDoor : AControllable
                 //boxCollider.offset = defaultOffset + new Vector2(0, doorRenderer.size.y * -(percentFull / 2));
                 CalcColliderSize();
             }
+        }
+        else if (openingAudioLoop != null)
+        {
+            openingAudioLoop.Stop(); //stop sound if not moving
         }
 
         lastFull = percentFull;
