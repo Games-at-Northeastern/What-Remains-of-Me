@@ -125,7 +125,7 @@ public class MovingElement : MonoBehaviour
             {
                 var diff = term - init;
 
-                if (Mathf.Abs(diff) < .05f || change < .005f)
+                if (Mathf.Abs(diff) < .05f || Mathf.Abs(change) < .005f)
                 {
                     return;
                 }
@@ -185,7 +185,7 @@ public class MovingElement : MonoBehaviour
     {
         // this needs to be maximized bc if it isn't, you might skip a point when manually invoking this method.
         _previousDistance = float.MaxValue;
-
+        transform.position = _runtimePoints[_destinationIndex].position;
         // go to next
         // even with (what i think is) logically sound index-logic, draining virus/energy and re-adding it sometimes
         // has a chance to OoB. So, I'm clamping. Ah, well.

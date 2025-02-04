@@ -13,15 +13,21 @@ public class MovingPlatform : MovingElement
             if (transform.position.y < collision.ClosestPoint(transform.position).y)
             {
                 player = collision.GetComponent<PlayerController2D>();
+                player.OnMovingPlatform = true;
             }
         }
     }
 
+
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<PlayerController2D>() == player)
+        if (player != null && collision.GetComponent<PlayerController2D>() == player)
         {
-            player.InternalVelocity += rb.velocity;
+            if (rb.velocity.y >= 0)
+            {
+                player.InternalVelocity += rb.velocity;
+            }
+            player.OnMovingPlatform = false;
             player = null;
         }
     }
@@ -29,9 +35,10 @@ public class MovingPlatform : MovingElement
     // Update is called once per frame
     private new void FixedUpdate()
     {
-        if (player != null)
+        if (player != null && player.OnMovingPlatform)
         {
             player.ExternalVelocity = MovePlatform();
+            player.CombineCurrentVelocities();
         }
         else
         {

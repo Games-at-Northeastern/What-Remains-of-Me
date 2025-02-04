@@ -38,7 +38,7 @@ namespace PlayerController
             Swinging,
             OnWall, // On Wall state is currently never reached
         }
-        private PlayerState currentState; // Stores player controller state
+        private PlayerState currentState; // Sl,ktores player controller state
         private bool isLocked = false; // when locked, movement input has no effect
         #region Internal References
 
@@ -59,7 +59,7 @@ namespace PlayerController
         private Knockback knockback; // not implemented
         private WallJump wallJump; // not implemented
         private WallSlide wallSlide; // currently, wallSlide set to have 0 velocity change (effectively disabled)
-
+        
         private PlayerSFX playerSFX;
 
         [SerializeField] private PlayerInputHandler inputs; /* query this class to recieve player inputs, if locked, inputs will return false for all trigger inputs and 0s for movement input
@@ -76,6 +76,7 @@ namespace PlayerController
         private float timeSincePeakJump = 0;
         private float timeSinceLanded = Mathf.Infinity;
         private bool grounded = false;
+        private bool onMovingPlatform = false;
 
         private Facing currentDirection;
         #endregion
@@ -96,6 +97,9 @@ namespace PlayerController
         #region External Getters
         public Vector2 InternalVelocity { get => internalVelocity; set => internalVelocity = value; }
         public Vector2 ExternalVelocity { get => externalVelocity; set => externalVelocity = value; }
+
+
+        public bool OnMovingPlatform { get => onMovingPlatform; set => onMovingPlatform = value; }
 
         public Vector2 Velocity => rb.velocity;
 
@@ -180,8 +184,21 @@ namespace PlayerController
                 default:
                     break;
             }
+            if(!OnMovingPlatform)
+            {
+                CombineCurrentVelocities();
+            }
+        }
+
+        /// <summary>
+        /// Handles the combination of internal and externalVelocity to ensure all moving elements have made their adjustments to external velocity before rb's velocity is calculated.
+        /// EX: If a moving platform has a high enough acceleration and this is not done, there may be a large enough gap in speed where the player is forced into the air.
+        /// </summary>
+        public void CombineCurrentVelocities()
+        {
             rb.velocity = internalVelocity + externalVelocity;
             HandleExternalVelocityDecay();
+
         }
 
         /// <summary>
@@ -410,10 +427,10 @@ namespace PlayerController
             if (!grounded /*&& timeSinceLeftGround > stats_.coyoteTime*/) // apply gravity (uncomment the coyote time section if you dont want the player to fall while they can still coyote jump)
             {
                 float gravityDelta = stats_.fallGravity * Time.deltaTime;
-                if(externalVelocity.y > 0)
+                if (externalVelocity.y > 0)
                 {
                     externalVelocity.y += gravityDelta;
-                    if(externalVelocity.y < 0)
+                    if (externalVelocity.y < 0)
                     {
                         gravityDelta = externalVelocity.y;
                         externalVelocity.y = 0;
@@ -472,6 +489,7 @@ namespace PlayerController
         }
         protected virtual void TriggerJump()
         {
+            OnMovingPlatform = false;
             if (externalVelocity.y < 0)
             {
                 externalVelocity.y = 0;
@@ -530,7 +548,12 @@ namespace PlayerController
 
             Vector2 origin = Kinematics.CapsuleColliderCenter(col);
             List<RaycastHit2D> hits = new List<RaycastHit2D>();
-            Physics2D.BoxCast(origin + new Vector2(0, -stats_.groundOffset), new Vector2(stats_.groundBounds.x, 0.02f), 0, Vector2.down, filter, hits, 0.05f);
+
+            //To game studio dev, you got this. I altered the distance of the cast from .05 to .1 to ensure that the player is able to hit the collider on moving platforms,
+            //as without it, it leads to a large amount of gittery aerial movement on faster platforms. This is not a complete fix.
+            //If the bug persists, look on seperating out the collider and trigger into two game objects to stop the situation from occuring. I don't know if its a full solution, but
+            // it seems like a good start for a more long term solution.
+            Physics2D.BoxCast(origin + new Vector2(0, -stats_.groundOffset), new Vector2(stats_.groundBounds.x, 0.02f), 0, Vector2.down, filter, hits, 0.1f);
             return HitSolidObject(hits);
 
         }

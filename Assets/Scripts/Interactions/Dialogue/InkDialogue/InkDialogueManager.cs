@@ -299,7 +299,6 @@ public class InkDialogueManager : MonoBehaviour
             dialogueText.maxVisibleCharacters++;
 
 
-            Debug.Log("playing sound");
             yield return new WaitForSeconds(typingSpeed);
         }
 
