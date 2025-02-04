@@ -24,6 +24,8 @@ public class CutsceneTrigger : MonoBehaviour
             Debug.LogWarning("No cutscene found! Assign the director in the inspector.");
         }
 
+        cutscene.playOnAwake = false;
+
         characterController = FindObjectOfType<PlayerController2D>();
         cutscene.stopped += EndCutscene;
     }
