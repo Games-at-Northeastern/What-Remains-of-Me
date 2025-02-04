@@ -44,7 +44,7 @@ namespace CharacterController
             if (Mathf.Abs(speed.x) > Mathf.Abs(maxRunSpeed * xInput))
             {
                 //decelerating
-                speed.x = Kinematics.VelocityTowards(speed.x,deceleration, xInput * maxRunSpeed, Time.fixedDeltaTime);
+                speed.x = Kinematics.VelocityTowards(speed.x, deceleration, xInput * maxRunSpeed, Time.fixedDeltaTime);
             }
             else
             {

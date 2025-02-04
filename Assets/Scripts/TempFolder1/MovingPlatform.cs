@@ -21,6 +21,7 @@ public class MovingPlatform : MovingElement
     {
         if (collision.GetComponent<PlayerController2D>() == player)
         {
+            player.InternalVelocity += rb.velocity;
             player = null;
         }
     }

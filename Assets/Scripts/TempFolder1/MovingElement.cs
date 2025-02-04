@@ -8,7 +8,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovingElement : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
 
     private int _destinationIndex;
     private bool _shouldMove;
