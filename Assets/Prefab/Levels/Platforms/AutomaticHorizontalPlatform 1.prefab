@@ -334,6 +334,7 @@ MonoBehaviour:
   cleanEnergy: 0
   maxCharge: 10
   virus: 0
+  uniqueID: 
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
   OnVirusChange:
     m_PersistentCalls:
@@ -343,6 +344,7 @@ MonoBehaviour:
       m_Calls: []
   _movingElements:
   - {fileID: 4240005835234505038}
+  audioSource: {fileID: 0}
 --- !u!1 &4954450812249458767
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,8 +525,15 @@ MonoBehaviour:
   _randomSpeedModifier: 0
   _maxSpeedModifier: 3
   _speedModifier: 1
+  _lerpSpeed: 0.25
   _loopType: 0
   _isMovingRight: 1
+  _activatedActions:
+    m_PersistentCalls:
+      m_Calls: []
+  _deactivatedActions:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &7014710374164080301
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1003,6 +1012,10 @@ PrefabInstance:
     - target: {fileID: 174682162069955919, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5332090570311779802, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
+      propertyPath: uniqueId
+      value: AutomaticHorizontalPlatform 1_3590f8f1-24e7-4477-bde5-268f8ca8a13b
       objectReference: {fileID: 0}
     - target: {fileID: 9156519854386073056, guid: 9ae70508704ae084ca098631b5e0b511, type: 3}
       propertyPath: m_RootOrder

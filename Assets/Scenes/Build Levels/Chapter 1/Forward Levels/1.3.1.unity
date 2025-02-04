@@ -12837,6 +12837,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1265342372}
     m_Modifications:
+    - target: {fileID: 285820119198467842, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 15.472
+      objectReference: {fileID: 0}
+    - target: {fileID: 285820119198467842, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 87.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 285820119198467842, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 11.038
+      objectReference: {fileID: 0}
+    - target: {fileID: 285820119198467842, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: InitialModule.gravityModifier.scalar
+      value: 0.8604
+      objectReference: {fileID: 0}
+    - target: {fileID: 285820119198467842, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: EmissionModule.rateOverTime.minScalar
+      value: 63.589996
+      objectReference: {fileID: 0}
+    - target: {fileID: 285820119198467842, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: InitialModule.gravityModifier.minScalar
+      value: 0.4302
+      objectReference: {fileID: 0}
+    - target: {fileID: 285820119198467855, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: m_Volume
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 475424955347090618, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.63
@@ -12933,9 +12961,45 @@ PrefabInstance:
       propertyPath: maxCharge
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: OnVirusChange.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: OnVirusChange.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: OnVirusChange.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1588318784}
+    - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: OnVirusChange.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: OnVirusChange.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: OnVirusChange.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.ParticleSystem, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: OnVirusChange.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3491440000326382720, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: uniqueId
       value: 1.3.1_91f64e1f-373d-4a75-ad94-b2979f5d0b6d
+      objectReference: {fileID: 0}
+    - target: {fileID: 3910898554929073209, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: isActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3910898554929073209, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: intensity
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5885976549290964041, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: m_Enabled
@@ -59385,6 +59449,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4339165204566451689, guid: 96d200745f0963e49befae04039c7fe5, type: 3}
   m_PrefabInstance: {fileID: 1584395523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1588318784 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 285820119198467842, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+  m_PrefabInstance: {fileID: 918833462}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1597705134
 PrefabInstance:
