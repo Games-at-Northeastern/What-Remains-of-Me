@@ -76,7 +76,7 @@ public class Straight : IPlugMovementModel
     /// </summary>
     public bool Terminate()
     {
-        return (retracting && Vector2.Distance(myTransform.position, returnTransform.position) < 0.1f)
+        return (retracting && Vector2.Distance(myTransform.position, returnTransform.position) < 0.2f)
             || timePassed > 1;
     }
 
