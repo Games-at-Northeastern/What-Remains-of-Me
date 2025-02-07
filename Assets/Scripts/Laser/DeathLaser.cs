@@ -55,26 +55,51 @@ public class DeathLaser : MonoBehaviour
     [SerializeField, Tooltip("How far the laser will travel before stopping (only for Distance LaserMode!)")]
     private float laserDistance;
 
+    [SerializeField, Tooltip("How smoothly the laser jumps from one position to the next."), Range(1f, 250f)]
+    private float resetSpeed;
+
     private LineRenderer renderer; // Laser beam
     private bool lockout = false;  // Death timeout for player
     private bool laserOn = true;   // If the laser is on or off
 
-    private void Awake() => renderer = GetComponent<LineRenderer>();
+    private Vector3 currentLaserTarget;
+
+    private void Awake() {
+        renderer = GetComponent<LineRenderer>();
+        currentLaserTarget = transform.position;
+    }
+
 
     /// <summary>
     /// Casts a raycast of the laser every frame, and kills Atlas if he collided with the laser!
     /// </summary>
     private void Update() {
+        Vector3 laserTarget;
+
         if (laserOn) {
             if (RaycastHit(out RaycastHit2D raycastHitData)) /* If the laser hit any target */{
                 // Draw the laser at the collison point
-                DrawLaser(raycastHitData.point); 
+                laserTarget = raycastHitData.point; 
             } else if (laserMode == LaserMode.Distance) /* If the laser didn't hit a target, and the LaserMode is a fixed distance */ {
                 // Draw the laser at the fixed distance away from the laser (factors in rotation of laser)
-                DrawLaser(transform.position - (transform.rotation * new Vector3(0, laserDistance, 0)));
+                laserTarget = transform.position - (transform.rotation * new Vector3(0, laserDistance, 0));
+            } else /* Laser didn't hit anything */ {
+                laserTarget = transform.position;
             }
 
-            CheckForDeath(raycastHitData); // See if Atlas died
+            bool isLerping = Vector3.Distance(currentLaserTarget, laserTarget) > 0.1f;
+
+            if (Vector3.Distance(transform.position, currentLaserTarget) <= Vector3.Distance(transform.position, laserTarget)) {
+                currentLaserTarget = Vector3.MoveTowards(currentLaserTarget, laserTarget, resetSpeed * Time.deltaTime);
+            } else {
+                currentLaserTarget = laserTarget;
+            }
+            
+            DrawLaser(currentLaserTarget);
+
+            if (!isLerping) {
+                CheckForDeath(raycastHitData); // See if Atlas died
+            }
         } else {
             UndrawLaser(); // Remove laser
         }
