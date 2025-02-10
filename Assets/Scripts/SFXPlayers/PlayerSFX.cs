@@ -87,4 +87,9 @@ public class PlayerSFX : MonoBehaviour
         SoundController.instance.PlaySound("Laser_Death_Sound");
     }
 
+    public void DiedToWater()
+    {
+        SoundController.instance.PlaySound("Player_Die_Water");
+    }
+
 }
