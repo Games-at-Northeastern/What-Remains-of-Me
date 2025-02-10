@@ -20,6 +20,10 @@ public class SpikeTeleport : MonoBehaviour
 
     private GameObject objectToTeleport;
 
+    [SerializeField]
+    // This bool is currently only used to determine what sfx to play on death.
+    private bool actsAsWater = false;
+
     private void Awake()
     {
         //Get the objects needed for the sound effects.
@@ -57,8 +61,17 @@ public class SpikeTeleport : MonoBehaviour
 
         objectToTeleport.GetComponentInChildren<PlayerController2D>().LockInputs();
 
-        //play the player death sound using PlayerSFX
-        sfx.Died();
+        //play the player death sound using PlayerSFX. If this object acts as water, a water sfx will play
+        //based on if the actAsWater bool is setActive from the inspector.
+        if (!actsAsWater)
+        {
+            sfx.Died();
+        }
+        else
+        {
+            sfx.DiedToWater();
+        }
+        
 
         Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
         if (resetScene)
