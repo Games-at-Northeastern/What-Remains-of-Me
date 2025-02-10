@@ -119,6 +119,7 @@ public class Outlet : MonoBehaviour
             {
                 if (cSec != null)
                 {
+
                     cSec.LoseEnergy(energyTransferSpeed * Time.deltaTime);
                 }
             }

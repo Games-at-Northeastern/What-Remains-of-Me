@@ -72,6 +72,7 @@ public class RechargeLeakBatteryPack : Outlet
     /// </summary>
     IEnumerator GiveEnergy()
     {
+
         while (true)
         {
             controlled.GainEnergy(energyTransferSpeed * Time.deltaTime);
