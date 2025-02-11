@@ -52,6 +52,13 @@ public class LaserEditor : Editor
     public override void OnInspectorGUI()
     {
         EditorGUILayout.PropertyField(laserMode);
+        //If the mode is set to distance
+        if (laserMode.enumValueIndex == 1)
+        {
+            EditorGUILayout.PropertyField(laserDistance);
+        }
+
+        EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
 
         EditorGUILayout.PropertyField(mask);
 
@@ -88,7 +95,7 @@ public class LaserEditor : Editor
         EditorGUILayout.EndFoldoutHeaderGroup();
 
         EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
-        EditorGUILayout.PropertyField(laserDistance);
+
         EditorGUILayout.PropertyField(resetSpeed);
 
         serializedObject.ApplyModifiedProperties();
