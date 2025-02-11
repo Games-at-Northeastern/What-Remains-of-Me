@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Build;
 using UnityEngine;
 
 public class OutletDoorOverrider : MonoBehaviour
@@ -50,7 +47,7 @@ public class OutletDoorOverrider : MonoBehaviour
             overridingDoor.LeakEnergy(Time.deltaTime * 100f);
             timer = Mathf.Min(Time.deltaTime + timer, timeWaited);
         }
-        else if(sequenceStarted && overridingDoor.GetEnergy() < overridingDoor.GetMaxCharge())
+        else if (sequenceStarted && overridingDoor.GetEnergy() < overridingDoor.GetMaxCharge())
         {
             overridingDoor.CreateEnergy(chargeIncreasePerSecond * Time.deltaTime, 0f);
         }
