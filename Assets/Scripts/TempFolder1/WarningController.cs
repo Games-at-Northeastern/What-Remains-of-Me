@@ -9,11 +9,13 @@ public class WarningController : MonoBehaviour
 {
     private bool _runLightBlink;
     private bool _runLowHealthAnimation;
+    private bool hasPlayedLowBatterySFX = false;
     [SerializeField] private GameObject virusEyes;
     [SerializeField] private GameObject headlightA;
     [SerializeField] private GameObject headlightB;
     [SerializeField] private Color targetLightColorA;
     [SerializeField] private Color targetLightColorB;
+    [SerializeField] private AudioSource lowBatterySFX;
     private GameObject lowHealthWarning;
     private float time;
     private Color initLightColorA;
@@ -98,6 +100,12 @@ public class WarningController : MonoBehaviour
         {
             lowHealthWarning.GetComponent<Animator>().SetTrigger("Activate");
             lowHealthWarning.GetComponent<Animator>().SetTrigger("Inactive");
+
+            if (!hasPlayedLowBatterySFX) 
+            {
+                lowBatterySFX.Play();
+                hasPlayedLowBatterySFX = true;
+            }
         }
         _runLowHealthAnimation = false;
     }
@@ -110,6 +118,7 @@ public class WarningController : MonoBehaviour
         if (lowHealthWarning != null)
         {
             _runLowHealthAnimation = true;
+            hasPlayedLowBatterySFX = false;
         }
     }
 
