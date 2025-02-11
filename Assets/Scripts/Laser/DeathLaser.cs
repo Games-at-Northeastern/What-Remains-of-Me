@@ -62,13 +62,9 @@ public class DeathLaser : MonoBehaviour
     private bool lockout = false;  // Death timeout for player
     private bool laserOn = true;   // If the laser is on or off
 
-    private Vector3 currentLaserTarget;
+    private float currentLaserDistance = 0.0f;
 
-    private void Awake() {
-        renderer = GetComponent<LineRenderer>();
-        currentLaserTarget = transform.position;
-    }
-
+    private void Awake() => renderer = GetComponent<LineRenderer>();
 
     /// <summary>
     /// Casts a raycast of the laser every frame, and kills Atlas if he collided with the laser!
@@ -77,27 +73,33 @@ public class DeathLaser : MonoBehaviour
         Vector3 laserTarget;
 
         if (laserOn) {
+            // Calculates the laser's target
             if (RaycastHit(out RaycastHit2D raycastHitData)) /* If the laser hit any target */{
                 // Draw the laser at the collison point
                 laserTarget = raycastHitData.point; 
             } else if (laserMode == LaserMode.Distance) /* If the laser didn't hit a target, and the LaserMode is a fixed distance */ {
                 // Draw the laser at the fixed distance away from the laser (factors in rotation of laser)
-                laserTarget = transform.position - (transform.rotation * new Vector3(0, laserDistance, 0));
+                laserTarget = transform.position + (-transform.up * laserDistance);
             } else /* Laser didn't hit anything */ {
                 laserTarget = transform.position;
             }
 
-            bool isLerping = Vector3.Distance(currentLaserTarget, laserTarget) > 0.1f;
+            // Calculates the target's distance from the laser
+            float laserTargetDistance = Vector3.Distance(transform.position, laserTarget);
 
-            if (Vector3.Distance(transform.position, currentLaserTarget) <= Vector3.Distance(transform.position, laserTarget)) {
-                currentLaserTarget = Vector3.MoveTowards(currentLaserTarget, laserTarget, resetSpeed * Time.deltaTime);
-            } else {
-                currentLaserTarget = laserTarget;
+            // If the laser has to move towards the laser target
+            if (currentLaserDistance <= laserTargetDistance) {
+                currentLaserDistance = Mathf.MoveTowards(currentLaserDistance, laserTargetDistance, resetSpeed * Time.deltaTime);
+            } else /*If the laser is backwards to hit a target */ {
+                currentLaserDistance = laserTargetDistance;
             }
-            
+
+            // Calculate the target based on the distance, and draw the laser
+            Vector3 currentLaserTarget = transform.position + (-transform.up * currentLaserDistance);
             DrawLaser(currentLaserTarget);
 
-            if (!isLerping) {
+            // If the current lasers distance is close to the target, and the raycast hit the player
+            if (laserTargetDistance - currentLaserDistance <= 0.1) {
                 CheckForDeath(raycastHitData); // See if Atlas died
             }
         } else {
@@ -160,11 +162,8 @@ public class DeathLaser : MonoBehaviour
         return raycastHitData.collider != null; // Return whether the raycast hit an object
     }
 
-
-    // Death constants
     private const int PlayerHierarchyLayerIndex = 3;
     private string tag = "Player";
-
     /// <summary>
     /// Determines whether Atlas died in the current Raycast
     /// </summary>
@@ -174,17 +173,13 @@ public class DeathLaser : MonoBehaviour
         // triggered several times (that's the purpose of lockout). Additionally, only the capsule collider is on a gameobject tagged
         // as the player; the rest are untagged children. Therefore, I need to look through all the parents (limited to 3, since that's
         // the max relevant hierachy level) to find the player tag. This is very sad. Oh well.
-
         if (!lockout
             && raycastHitData.collider != null
             && UtilityFunctions.CompareTagOfHierarchy(raycastHitData.collider.transform, tag, out var player, PlayerHierarchyLayerIndex)) {
-
             // Teleport Atlas
             StartCoroutine(death.DeathTeleporter.PerformDeath(player.gameObject));
-
             // Play death sound
-            SoundController.instance.PlaySound("Laser_Death_Sound"); 
-
+            SoundController.instance.PlaySound("Laser_Death_Sound");
             // Start lockout time
             lockout = true;
             Invoke(nameof(LockoutCooldownInvocation), death.LockoutTime);
