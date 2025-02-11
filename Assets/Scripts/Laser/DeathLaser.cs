@@ -193,4 +193,10 @@ public class DeathLaser : MonoBehaviour
 
     // IEnumerators are an optimzation for the future.
     private void LockoutCooldownInvocation() => lockout = false;
+
+
+#if UNITY_EDITOR
+    //Makes sure that the mask always has the player and default layers selected
+    private void OnValidate() => mask = mask | LayerMask.GetMask("Player", "Default");
+#endif
 }
