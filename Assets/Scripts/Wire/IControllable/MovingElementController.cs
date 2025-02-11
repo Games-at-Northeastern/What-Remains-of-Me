@@ -28,7 +28,10 @@ public class MovingElementController : AControllable
             /// <summary>
             /// Used for when an audio source has to play when something is moving.
             /// </summary>
-            audioSource.Play();
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
 
         }
         else if (GetPercentFull() < 0.99f && hasMoved)
@@ -39,7 +42,10 @@ public class MovingElementController : AControllable
             /// <summary>
             /// Used for when an audio source has to stop when something isn't moving.
             /// </summary>
-            audioSource.Stop();
+            if (audioSource != null)
+            {
+                audioSource.Stop();
+            }
         }
     }
 
