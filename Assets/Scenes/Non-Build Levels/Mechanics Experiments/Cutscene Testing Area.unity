@@ -647,6 +647,7 @@ GameObject:
   - component: {fileID: 385296446}
   - component: {fileID: 385296448}
   - component: {fileID: 385296449}
+  - component: {fileID: 385296450}
   m_Layer: 0
   m_Name: Cutscene
   m_TagString: Untagged
@@ -686,6 +687,8 @@ PlayableDirector:
   m_SceneBindings:
   - key: {fileID: 7540787177648133799, guid: 739693751e151374d894fc3b49556abd, type: 2}
     value: {fileID: 1562455235}
+  - key: {fileID: 3691960742902663891, guid: 739693751e151374d894fc3b49556abd, type: 2}
+    value: {fileID: 385296450}
   m_ExposedReferences:
     m_References:
     - 3f818d5b89d1ed546847726e1c28f9c5: {fileID: 217622068}
@@ -709,6 +712,9 @@ MonoBehaviour:
   onCutsceneEnd:
     m_PersistentCalls:
       m_Calls: []
+  autoTurnPage: 1
+  cutsceneDialogue:
+  - {fileID: 4900000, guid: 3aa6b31416ba648998e9c5dfa780a7f8, type: 3}
 --- !u!61 &385296449
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -735,6 +741,51 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 4.652384}
   m_EdgeRadius: 0
+--- !u!114 &385296450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385296444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 722a9932e8c4d114da7c432e48d06266, type: 2}
+    - {fileID: 11400000, guid: e4c0abc1fde1c994b8252a19c92b0e9b, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 385296448}
+          m_TargetAssemblyTypeName: CutsceneTrigger, Assembly-CSharp
+          m_MethodName: ShowNextDialogue
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 385296448}
+          m_TargetAssemblyTypeName: CutsceneTrigger, Assembly-CSharp
+          m_MethodName: WaitForDialogue
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &631296773
 GameObject:
   m_ObjectHideFlags: 3
