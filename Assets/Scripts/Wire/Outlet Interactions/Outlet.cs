@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using PlayerController;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -16,7 +17,7 @@ public class Outlet : MonoBehaviour
     [SerializeField] protected float energyTransferSpeed;
     [SerializeField] protected List<Light2D> outletLights;
     [SerializeField] protected float lerpSpeed, connectedGoal, chargingGoal, targetingGoal;
-
+    protected IMovingOutlet movingOutlet;
     public Collider2D grappleOverrideRange;
 
     protected string plugInSound = "Plug_In";
@@ -196,6 +197,28 @@ public class Outlet : MonoBehaviour
     public void EmptyEnergy()
     {
         TakeEnergy();
+    }
+
+
+    /// <summary>
+    /// Sets up the gameobject that can make a movement vector
+    /// </summary>
+    /// <param name="movingOutlet"></param>
+    public void SetMovement(IMovingOutlet movingOutlet)
+    {
+        this.movingOutlet = movingOutlet;
+    }
+
+    /// <summary>
+    /// If the outlet is moving, translates the player by the moving vector of the outlet.
+    /// </summary>
+    /// <param name="player"></param>
+    public void TranslatePlayer(PlayerController2D player)
+    {
+        if (movingOutlet != null)
+        {
+            player.transform.position += movingOutlet.MovementVector();
+        }
     }
 }
 

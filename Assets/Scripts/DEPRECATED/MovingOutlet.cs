@@ -2,7 +2,7 @@ using UnityEngine;
 
 // DEPRECATED SCRIPT: MovingElement.cs encapsulates this behavior.
 
-public class MovingOutlet : MonoBehaviour
+public class MovingOutlet : MonoBehaviour, IMovingOutlet
 {
     [SerializeField] private Transform outletTransform; //transform of the outlet that will be moving
     [SerializeField] private Transform pointA; // Start point
@@ -14,12 +14,14 @@ public class MovingOutlet : MonoBehaviour
     private void Start()
     {
         targetPosition = pointB.position; // Set initial target position to point B
+        outletTransform.GetComponent<Outlet>().SetMovement(this);
     }
 
     private void Update()
     {
         // Move towards the target position
-        outletTransform.position = Vector2.MoveTowards(outletTransform.position, targetPosition, speed * Time.deltaTime);
+        Vector3 newPosition = Vector2.MoveTowards(outletTransform.position, targetPosition, speed * Time.deltaTime);
+        outletTransform.position = newPosition;
 
         // Check if the platform has reached the target position
         if ((Vector2)outletTransform.position == targetPosition)
@@ -34,5 +36,12 @@ public class MovingOutlet : MonoBehaviour
                 targetPosition = (Vector2)pointA.position;
             }
         }
+    }
+
+    public Vector3 MovementVector()
+    {
+
+        Debug.Log(Vector2.Distance(Vector3.MoveTowards(outletTransform.position, targetPosition, speed * Time.deltaTime), outletTransform.position));
+        return Vector3.MoveTowards(outletTransform.position, targetPosition, speed * Time.deltaTime) - outletTransform.position;
     }
 }

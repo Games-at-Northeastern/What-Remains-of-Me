@@ -27,8 +27,8 @@ namespace PlayerController
     public class PlayerController2D : MonoBehaviour, CharacterController2D, IDataPersistence
     {
         // Issue: public fields should not exist, and should instead be accessed using an External Getter
-        private Vector2 externalVelocity; // Vector which external objects (moving platforms, for the most part), modify to change the player's velocity
-        private Vector2 internalVelocity = Vector2.zero; // velocity controlled by actions and inputs native to the player (Basic Ground Movement, Jumping, Swinging, Sliding, etc.)
+        [SerializeField] private Vector2 externalVelocity; // Vector which external objects (moving platforms, for the most part), modify to change the player's velocity
+        [SerializeField] private Vector2 internalVelocity = Vector2.zero; // velocity controlled by actions and inputs native to the player (Basic Ground Movement, Jumping, Swinging, Sliding, etc.)
         [Header("General")]
         [SerializeField] private PlayerState startState = PlayerState.Aerial; // initial player movement state
         public enum PlayerState

@@ -6,7 +6,7 @@ using UnityEngine.Events;
 /// A custom component that moves the gameobject it's on along a given path.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-public class MovingElement : MonoBehaviour
+public class MovingElement : MonoBehaviour, IMovingOutlet
 {
     protected Rigidbody2D rb;
 
@@ -73,6 +73,11 @@ public class MovingElement : MonoBehaviour
 		{
             Deactivate();
     	}
+
+        if (TryGetComponent(out Outlet outlet))
+        {
+            outlet.SetMovement(this);
+        }
     }
 
     // TODO There are a lot of leftover debug logs bc i think there's still a bug here. It just kinda went away
@@ -352,4 +357,8 @@ public class MovingElement : MonoBehaviour
         SetDir(!_isMovingRight);
     }
 
+    public Vector3 MovementVector()
+    {
+        return rb.velocity * Time.deltaTime;
+    }
 }

@@ -37,7 +37,7 @@ public class Kinematics
         }
         else
         {
-            return newSpeed;
+            return Mathf.Abs(newSpeed) < Mathf.Abs(target) ? newSpeed : target;
         }
     }
     //moves velocity towards target

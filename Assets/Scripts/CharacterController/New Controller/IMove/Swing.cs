@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.TerrainUtils;
 namespace CharacterController
 {
     public class Swing : IMove
@@ -42,6 +44,7 @@ namespace CharacterController
         {
             this.PlayerSwayAcceleration = PlayerSwayAccel * 1.3f;
             this.maxWireLength = maxWireLength;
+            this.terminalVelocity = terminalVelocity;
             this.SwingBounceDecayMultiplier = WireSwingBounceDecayMultiplier;
             this.MaxAngularVelocity = WireSwingMaxAngularVelocity * 1.3f;
             this.WireSwingNaturalAccelMultiplier = WireSwingNaturalAccelMultiplier * 1.3f;
@@ -70,6 +73,8 @@ namespace CharacterController
         }
         public void ContinueMove()
         {
+            //Documentation regarding moving platforms found through translate player
+            WT.ConnectedOutlet.TranslatePlayer(WT.pc);
             string debugString = "Swing: ";
             // Get initial positions
             Vector2 origPos = character.position;
@@ -125,7 +130,7 @@ namespace CharacterController
             // radius = Mathf.Lerp(radius, initRadius, Time.deltaTime * 10f);
 
             // Whether the wire is fully stretched or loose
-            if (radius > initRadius - 0.01f)
+            if (radius > (initRadius - 0.01f))
             {
                 Vector2 newPos = connectedOutletPos + (radius * new Vector2(Mathf.Cos(newAngle), Mathf.Sin(newAngle)));
                 character.InternalVelocity = (newPos - origPos) / Time.deltaTime;
@@ -145,7 +150,7 @@ namespace CharacterController
                 // Make the character move and fall under normal gravity acceleration and physics laws.
                 // Apply gravity to the character's vertical velocity.
                 Vector2 speed = character.InternalVelocity;
-                speed.y = Kinematics.VelocityTarget(speed.y, terminalVelocity, fallGravity, Time.fixedDeltaTime) - 0.8f;
+                speed.y = Kinematics.VelocityTarget(speed.y, fallGravity, terminalVelocity, Time.deltaTime) - 0.8f;
                 character.InternalVelocity = speed;
             }
             
