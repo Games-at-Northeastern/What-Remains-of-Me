@@ -11,7 +11,7 @@ public class SimpleTransitionScript : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.CompareTag("Player")) /* If the player entered the camera */
-        { 
+        {
             cam.Priority = 100;  // Make the priority of the camera very high
         }
     }
