@@ -979,7 +979,6 @@ RectTransform:
   m_Children:
   - {fileID: 4913577968595951431}
   - {fileID: 2215219579023523467}
-  - {fileID: 86140950832549506}
   - {fileID: 9097993798725550263}
   - {fileID: 9058095500474847570}
   m_Father: {fileID: 0}
@@ -1194,62 +1193,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &3338949554523947511
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 86140950832549506}
-  - component: {fileID: 9034733467276040539}
-  m_Layer: 5
-  m_Name: Virus Hit FX
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &86140950832549506
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3338949554523947511}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2215219577661768947}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9034733467276040539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3338949554523947511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c44e00a2c2629e54eb430411ca5ad827, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  overlayMaterial: {fileID: 2100000, guid: 07f236d69a32237428588f5a6cfcfe43, type: 2}
-  playerEnergy: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
-  minVirusThreshold: 0.1
-  maxVirusThreshold: 1
-  minIntensity: 0.1
-  maxIntensity: 0.4
-  lastVirusLevel: 0
 --- !u!1 &3400419312406453794
 GameObject:
   m_ObjectHideFlags: 0
@@ -3288,7 +3231,7 @@ RectTransform:
   m_Children:
   - {fileID: 4718063849856811531}
   m_Father: {fileID: 2215219577661768947}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -3477,7 +3420,7 @@ RectTransform:
   - {fileID: 6158779660889837409}
   - {fileID: 1648483791691440242}
   m_Father: {fileID: 2215219577661768947}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
