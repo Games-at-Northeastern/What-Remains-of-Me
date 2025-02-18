@@ -41,7 +41,7 @@ public class PlugMovementExecuter : MonoBehaviour
     void ApplyModel()
     {
         model.AdvanceTime();
-        rb.velocity = model.Velocity();
+        rb.linearVelocity = model.Velocity();
         if (model.Terminate())
         {
             onTerminateRequest.Invoke();

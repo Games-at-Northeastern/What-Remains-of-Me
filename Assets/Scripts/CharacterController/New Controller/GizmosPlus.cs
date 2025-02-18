@@ -140,7 +140,7 @@ namespace More2DGizmos
         public static int DrawOverlapCapsuleCol(CapsuleCollider2D col, Color hit = default, Color miss = default)
         {
             Collider2D[] results = new Collider2D[5];
-            var hitCount = col.OverlapCollider(new ContactFilter2D().NoFilter(), results);
+            var hitCount = col.Overlap(new ContactFilter2D().NoFilter(), results);
             if (hitCount <= 0)
             {
                 DrawWireCapsule(CapsuleSim.CapsuleColliderCenter(col), col.transform.eulerAngles.z, col.size, col.direction, miss);
