@@ -35,7 +35,9 @@ public class Outlet : MonoBehaviour
         CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); goalIntensity = connectedGoal; } };
 
         //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+        if(gameObject.GetComponent<UniqueID>()){
         controlled.uniqueID = gameObject.GetComponent<UniqueID>().uniqueId;
+        }
     }
 
     /// <summary>

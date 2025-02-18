@@ -207,6 +207,7 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     }
     public void LoadLevelData(LevelData levelData)
     {
+        Debug.Log("Loading Object: " + gameObject + " at " + transform.position);
         if (!checkForUniqueIDScript())
         {
             return;
