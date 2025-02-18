@@ -25,7 +25,7 @@ public class ConveyorBelt : MonoBehaviour
         else
         if (collision.rigidbody != null)
         {
-            collision.rigidbody.velocity += ConveyorVelocity() * Time.fixedDeltaTime;
+            collision.rigidbody.linearVelocity += ConveyorVelocity() * Time.fixedDeltaTime;
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
