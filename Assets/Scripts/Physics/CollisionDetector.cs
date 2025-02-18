@@ -38,7 +38,7 @@ public class CollisionDetector : MonoBehaviour
         ContactFilter2D colliderFilter = new ContactFilter2D();
         colliderFilter.SetLayerMask(collidesWith);
         colliderFilter.useTriggers = collidesWithTriggers;
-        int numOverlap = col.Overlap(colliderFilter, overlappingColliders);
+        int numOverlap = col.OverlapCollider(colliderFilter, overlappingColliders);
 
         // Return null if no valid overlaps were found; otherwise, return the first returned collider's game object
         return numOverlap == 0 ? null : overlappingColliders[0].gameObject;

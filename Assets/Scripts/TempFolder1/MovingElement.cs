@@ -153,19 +153,19 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
                 }
                 UpdateDestinationAndDirection();
                 //reset velocity on changing target
-                rb.linearVelocity = Vector2.zero;
+                rb.velocity = Vector2.zero;
             }
 
             if (!_completed) // if the track isn't already completed...
             {
                 _previousDistance = GetDistanceToPoint(_destinationIndex);
 
-                rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection, Time.deltaTime * _lerpSpeed);
+                rb.velocity = Vector2.Lerp(rb.velocity, _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection, Time.deltaTime * _lerpSpeed);
 
                 // add tracking speeds from other related bodies
                 foreach (var body in _relativeBodies)
                 {
-                    rb.linearVelocity += body.linearVelocity;
+                    rb.velocity += body.velocity;
                 }
             }
             else
@@ -176,11 +176,11 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
 
         // heavy-handed solution to elements flying off into nowhere.
         // not even sure it works, but eh. Good code is for chumperinos.
-        else if (rb.linearVelocity != Vector2.zero)
+        else if (rb.velocity != Vector2.zero)
         {
-            rb.linearVelocity = Vector2.zero;
+            rb.velocity = Vector2.zero;
         }
-        return rb.linearVelocity;
+        return rb.velocity;
     }
 
     /// <summary>
@@ -248,7 +248,7 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
     public void Deactivate()
     {
         _shouldMove = false;
-        rb.linearVelocity = Vector2.zero;
+        rb.velocity = Vector2.zero;
 
          _deactivatedActions?.Invoke();
     }
@@ -359,6 +359,6 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
 
     public Vector3 MovementVector()
     {
-        return rb.linearVelocity * Time.deltaTime;
+        return rb.velocity * Time.deltaTime;
     }
 }

@@ -99,7 +99,7 @@ public class BasicEnemyAI : MonoBehaviour, IBehaviorTree
         }
         else if (Vector3.Distance(player.transform.position, this.transform.position) <= attackRadius)
         {
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            rb.velocity = new Vector2(0f, rb.velocity.y);
             StartCoroutine(Attack());
         }
         else if (!isAttacking)
@@ -132,7 +132,7 @@ public class BasicEnemyAI : MonoBehaviour, IBehaviorTree
     {
         if (IsGrounded() || isTurning)
         {
-            rb.linearVelocity = new Vector2(walkSpeed, rb.linearVelocity.y);
+            rb.velocity = new Vector2(walkSpeed, rb.velocity.y);
             if (IsGrounded())
             {
                 isTurning = false;
@@ -153,19 +153,19 @@ public class BasicEnemyAI : MonoBehaviour, IBehaviorTree
     {
         if (walkSpeed < 0) walkSpeed *= -1;
         float currentVel = this.transform.position.x > player.transform.position.x ? -walkSpeed : walkSpeed;
-        if (currentVel != rb.linearVelocity.x)
+        if (currentVel != rb.velocity.x)
         {
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            rb.velocity = new Vector2(0f, rb.velocity.y);
             yield return new WaitForSeconds(pauseTime);
         }
 
         if (IsGrounded())
         {
-            rb.linearVelocity = new Vector2(currentVel, rb.linearVelocity.y);
+            rb.velocity = new Vector2(currentVel, rb.velocity.y);
         }
         else
         {
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            rb.velocity = new Vector2(0f, rb.velocity.y);
         }
     }
 
@@ -192,7 +192,7 @@ public class BasicEnemyAI : MonoBehaviour, IBehaviorTree
     /// </summary>
     private void HandleEnemyDead()
     {
-        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        rb.velocity = new Vector2(0f, rb.velocity.y);
     }
 
 
@@ -202,8 +202,8 @@ public class BasicEnemyAI : MonoBehaviour, IBehaviorTree
     private void UpdateAnimationState()
     {
         //SpriteRenderer sr = this.GetComponent<SpriteRenderer>();
-        if (rb.linearVelocity.x < 0) { sr.flipX = true; }
-        if (rb.linearVelocity.x > 0) { sr.flipX = false; }
+        if (rb.velocity.x < 0) { sr.flipX = true; }
+        if (rb.velocity.x > 0) { sr.flipX = false; }
         if (isDead) { }
     }
 

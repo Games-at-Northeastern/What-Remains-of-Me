@@ -26,9 +26,9 @@ public class MovingPlatform : MovingElement
         {
             //Hello future dev. This sections is done to create caps on movement(too high of a value leads to the player flinging up, negatives make jumps very irritating for the player.)
             //Change these values to alter the caps of what parts of velocity are transfered to the player.
-            if (rb.linearVelocity.y >= 0)
+            if (rb.velocity.y >= 0)
             {
-                Vector2 revisedVelocity = new Vector2(rb.linearVelocity.x, Mathf.Min(rb.linearVelocity.y, MaxUpwardVelocityTransfer));
+                Vector2 revisedVelocity = new Vector2(rb.velocity.x, Mathf.Min(rb.velocity.y, MaxUpwardVelocityTransfer));
                 player.InternalVelocity += revisedVelocity;
             }
             player.OnMovingPlatform = false;

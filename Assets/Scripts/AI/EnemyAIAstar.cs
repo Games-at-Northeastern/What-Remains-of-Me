@@ -93,7 +93,7 @@ public class EnemyAIAstar : MonoBehaviour
         {
             if (TargetInAttackDistance())
             {
-                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+                rb.velocity = new Vector2(0f, rb.velocity.y);
                 StartCoroutine(Attack());
             } else
             {
@@ -200,12 +200,12 @@ public class EnemyAIAstar : MonoBehaviour
         }
         rb.AddForce(moveForce, ForceMode2D.Force);
 
-        if (rb.linearVelocity.x > walkSpeed)
+        if (rb.velocity.x > walkSpeed)
         {
-            rb.linearVelocity = new Vector2(walkSpeed, rb.linearVelocity.y);
-        } else if (rb.linearVelocity.x < -walkSpeed)
+            rb.velocity = new Vector2(walkSpeed, rb.velocity.y);
+        } else if (rb.velocity.x < -walkSpeed)
         {
-            rb.linearVelocity = new Vector2(-walkSpeed, rb.linearVelocity.y);
+            rb.velocity = new Vector2(-walkSpeed, rb.velocity.y);
         }
 
         // move to next waypoint
@@ -218,11 +218,11 @@ public class EnemyAIAstar : MonoBehaviour
         // flip sprite
         if (lookAtEnabled)
         {
-            if (rb.linearVelocity.x > 0.05f)
+            if (rb.velocity.x > 0.05f)
             {
                 transform.localScale = new Vector3(-1f * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             }
-            else if (rb.linearVelocity.x < -0.05f)
+            else if (rb.velocity.x < -0.05f)
             {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             }

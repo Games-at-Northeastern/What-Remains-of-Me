@@ -101,7 +101,7 @@ namespace PlayerController
 
         public bool OnMovingPlatform { get => onMovingPlatform; set => onMovingPlatform = value; }
 
-        public Vector2 Velocity => rb.linearVelocity;
+        public Vector2 Velocity => rb.velocity;
 
         public Vector3 position => transform.position;
 
@@ -196,7 +196,7 @@ namespace PlayerController
         /// </summary>
         public void CombineCurrentVelocities()
         {
-            rb.linearVelocity = internalVelocity + externalVelocity;
+            rb.velocity = internalVelocity + externalVelocity;
             HandleExternalVelocityDecay();
 
         }
@@ -210,7 +210,7 @@ namespace PlayerController
             if (externalVelocity.y < 0 && !grounded)
             {
 
-                internalVelocity.y = Mathf.Clamp(rb.linearVelocity.y, stats_.terminalVelocity, 0);
+                internalVelocity.y = Mathf.Clamp(rb.velocity.y, stats_.terminalVelocity, 0);
                 externalVelocity.y = 0;
             }
         }
@@ -307,7 +307,7 @@ namespace PlayerController
             {
                 timeSinceLeftGround += Time.fixedDeltaTime;
 
-                if (rb.linearVelocity.y < 0)
+                if (rb.velocity.y < 0)
                 {
                     timeSincePeakJump += Time.fixedDeltaTime;
                 }
@@ -598,7 +598,7 @@ namespace PlayerController
         private void Respawn()
         {
             LevelManager._CheckpointManager.RespawnAtRecent(rb.transform);
-            rb.linearVelocity = Vector2.zero;
+            rb.velocity = Vector2.zero;
             currentState = PlayerState.Aerial;
             externalVelocity = Vector2.zero;
             internalVelocity = Vector2.zero;
@@ -609,7 +609,7 @@ namespace PlayerController
         private void Restart()
         {
             LevelManager._CheckpointManager.RespawnAtBeginning(rb.transform);
-            rb.linearVelocity = Vector2.zero;
+            rb.velocity = Vector2.zero;
             externalVelocity = Vector2.zero;
             currentState = PlayerState.Aerial;
             internalVelocity = Vector2.zero;
