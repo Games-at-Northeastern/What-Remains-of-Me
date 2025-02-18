@@ -211,6 +211,13 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
         {
             return;
         }
+
+        if (levelData == null)
+        {
+            Debug.Log($"LodeLevelData: 'levelData' is null on {gameObject.name}.");
+            return;
+        }
+
         if (!levelData.outletCleanEnergy.TryGetValue(uniqueID, out var savedCleanEnergy))
         {
             Debug.LogError("outletCleanEnergy for " + gameObject + " could not be obtained");
