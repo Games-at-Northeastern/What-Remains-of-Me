@@ -212,6 +212,13 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
         {
             return;
         }
+
+        if (levelData == null)
+        {
+            Debug.Log($"LoadLevelData: 'levelData' is null on {gameObject.name}. Cannot load level data.");
+            return;
+        }
+
         if (!levelData.outletCleanEnergy.TryGetValue(uniqueID, out var savedCleanEnergy))
         {
             Debug.LogError("outletCleanEnergy for " + gameObject + " could not be obtained");
@@ -224,6 +231,7 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
             Debug.LogError("outletVirusEnergy for " + gameObject + " could not be obtained");
             return;
         }
+        
         if (!levelData.outletMaxEnergy.TryGetValue(uniqueID, out var savedMaxEnergy))
         {
             Debug.LogError("outletMaxEnergy for " + gameObject + " could not be obtained");
