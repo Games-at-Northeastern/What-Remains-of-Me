@@ -6,6 +6,8 @@ public class MovingPlatform : MovingElement
 
     private PlayerController2D player;
 
+    private const float MaxUpwardVelocityTransfer = 3f;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.GetComponent<PlayerController2D>() != null)
@@ -18,14 +20,16 @@ public class MovingPlatform : MovingElement
         }
     }
 
-
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (player != null && collision.GetComponent<PlayerController2D>() == player)
         {
+            //Hello future dev. This sections is done to create caps on movement(too high of a value leads to the player flinging up, negatives make jumps very irritating for the player.)
+            //Change these values to alter the caps of what parts of velocity are transfered to the player.
             if (rb.velocity.y >= 0)
             {
-                player.InternalVelocity += rb.velocity;
+                Vector2 revisedVelocity = new Vector2(rb.velocity.x, Mathf.Min(rb.velocity.y, MaxUpwardVelocityTransfer));
+                player.InternalVelocity += revisedVelocity;
             }
             player.OnMovingPlatform = false;
             player = null;
