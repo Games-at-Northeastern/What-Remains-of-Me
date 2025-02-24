@@ -32,12 +32,15 @@ public class DataPersistenceManager : MonoBehaviour
 
     public static DataPersistenceManager instance { get; private set; } //A static variable to ensure theres only one DataPersistenceManager in the scene.
 
+    public static int numberOfDataManagers;
+
     private void Awake()
     {
+        numberOfDataManagers = GameObject.FindObjectsOfType(typeof(DataPersistenceManager)).Length;
         this.dataPersistenceObjects = FindAllDataPersistenceObjects(); //When the player opens the game, find all the DataPersistenceObjects so we can begin a save/load
-        if (instance != null)
+        if (numberOfDataManagers > 2)
         {
-            Debug.LogError("Save/Load: Found More than one DataPersistenceManager in the current scene. This may cause errors with saving and loading data.");
+            Debug.LogError("Save/Load: Found More than two DataPersistenceManagers in the current scene. Other than within the prefab. This may cause errors with saving and loading data."); 
         }
 
         instance = this;
