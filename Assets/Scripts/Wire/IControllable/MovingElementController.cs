@@ -28,7 +28,8 @@ public class MovingElementController : AControllable
             /// <summary>
             /// Used for when an audio source has to play when something is moving.
             /// </summary>
-            audioSource.Play();
+            if(audioSource)
+                audioSource.Play();
 
         }
         else if (GetPercentFull() < 0.99f && hasMoved)
