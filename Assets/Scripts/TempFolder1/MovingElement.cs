@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Levels.Objects.Platform;
 using UnityEngine;
 using UnityEngine.Events;
@@ -90,13 +91,13 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
     /// </summary>
     public void Init()
     {
+        _runtimePoints = _points;
         _completed = false;
 
         _initialStartIndex = Mathf.Clamp(_initialStartIndex, 0, _runtimePoints.Length - 1);
 
         // initial placement calculation. NOTE: THIS MIGHT LEAD TO SOME WARPING IF CALLED AGAIN. Abstract it?
         _destinationIndex = GetNextPointIndex(_initialStartIndex); // get next point
-
         var pos1 = _runtimePoints[_initialStartIndex].position; // get our initial position
         var pos2 = _runtimePoints[_destinationIndex].position; // get out next position
         transform.position = ((pos2 - pos1) * _normalizedInitialStartPosition) + pos1; // move towards next depending on _nISP
@@ -360,5 +361,13 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
     public Vector3 MovementVector()
     {
         return rb.linearVelocity * Time.deltaTime;
+    }
+
+    public void ResetPositioning(float position, int index, bool isMovingRight, List<Transform> newPoints)
+    {
+        _initialStartIndex = index;
+        _normalizedInitialStartPosition = position;
+        _isMovingRight = isMovingRight;
+        _points = newPoints.ToArray();
     }
 }

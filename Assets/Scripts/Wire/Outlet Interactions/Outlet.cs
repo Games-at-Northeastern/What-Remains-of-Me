@@ -222,5 +222,11 @@ public class Outlet : MonoBehaviour
             player.transform.position += movingOutlet.MovementVector();
         }
     }
+
+
+    public void AddSecondary(AControllable newSecondary)
+    {
+        controlledSecondaries.Add(newSecondary);
+    }
 }
 
