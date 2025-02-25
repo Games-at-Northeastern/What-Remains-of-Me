@@ -21,31 +21,44 @@ public class ControllableDoor : AControllable
         get => shouldDisappear;
         set
         {
-            shouldDisappear = value;
-            if (maskObject != null)
+            if (shouldDisappear != value)
             {
-                maskObject.SetActive(value);
-            }
-            if (!boxCollider || !doorRenderer)
-            {
-                return;
-            }
+                shouldDisappear = value;
 
-            RecalcMaskLoc();
+                if (maskObject != null)
+                {
+                    maskObject.SetActive(value);
+                }
 
-            if (value)
-            {
-                InvertMask = invertMask;
-            }
-            if (!value)
-            {
-                doorRenderer.maskInteraction = SpriteMaskInteraction.None;
-                boxCollider.size = doorRenderer.size;
-                boxCollider.offset = defaultOffset;
-                return;
+                if (!boxCollider || !doorRenderer)
+                {
+                    return;
+                }
+
+                RecalcMaskLoc();
+
+                if (value)
+                {
+                    InvertMask = invertMask;
+                }
+                else
+                {
+                    doorRenderer.maskInteraction = SpriteMaskInteraction.None;
+                    boxCollider.size = doorRenderer.size;
+                    boxCollider.offset = defaultOffset;
+
+                    // play the breaking SFX
+                    if (disappearSFX != null && openingAudioLoop != null)
+                    {
+                        openingAudioLoop.PlayOneShot(disappearSFX);
+                    }
+                }
             }
         }
     }
+
+    [Header("SFX for Door Disappearing")]
+    [SerializeField] private AudioClip disappearSFX;
 
     [SerializeField] private GameObject maskObject;
 
