@@ -392,6 +392,12 @@ public class InkDialogueManager : MonoBehaviour
 // loop through current tags
         foreach (string tag in currentTags)
         {
+            if (currentTags == null)
+            {
+                Debug.LogError("HandleTags received a null list of tags!");
+                return;
+            }
+
             string[] splitTag = tag.Split(':');
             if (splitTag.Length != 2)
             {
@@ -429,21 +435,36 @@ public class InkDialogueManager : MonoBehaviour
                         handlerAnimator.Play("JonesUnTakeOver");
                     }
 
-                    if (tagValue == "Jones Intercom" && intercomAnimator != null)
+                    if (tagValue == "Jones Intercom")
                     {
-                        intercomAnimator.Play("JonesIntercom_Talk");
-                        GameObject.Find("Intercom Visual 2").GetComponent<Animator>().Play("JonesIntercom_Talk");
-                        GameObject.Find("Intercom Visual 3").GetComponent<Animator>().Play("JonesIntercom_Talk");
-                        GameObject.Find("Intercom Visual 4").GetComponent<Animator>().Play("JonesIntercom_Talk");
-                        GameObject.Find("Intercom Visual 5").GetComponent<Animator>().Play("JonesIntercom_Talk");
+                        if (intercomAnimator != null)
+                        {
+                            intercomAnimator.Play("JonesIntercom_Talk");
+                        }
+                        else
+                        {
+                            Debug.LogWarning("intercomAnimator is NULL! Skipping animation.");
+                        }
+
+                        PlayIntercomAnimations("JonesIntercom_Talk");
+
+                        //GameObject.Find("Intercom Visual 2").GetComponent<Animator>().Play("JonesIntercom_Idle");
+                        //GameObject.Find("Intercom Visual 3").GetComponent<Animator>().Play("JonesIntercom_Idle");
+                        //GameObject.Find("Intercom Visual 4").GetComponent<Animator>().Play("JonesIntercom_Idle");
+                        //GameObject.Find("Intercom Visual 5").GetComponent<Animator>().Play("JonesIntercom_Idle");
                     }
                     else
                     {
-                        intercomAnimator.Play("JonesIntercom_Idle");
-                        GameObject.Find("Intercom Visual 2").GetComponent<Animator>().Play("JonesIntercom_Idle");
-                        GameObject.Find("Intercom Visual 3").GetComponent<Animator>().Play("JonesIntercom_Idle");
-                        GameObject.Find("Intercom Visual 4").GetComponent<Animator>().Play("JonesIntercom_Idle");
-                        GameObject.Find("Intercom Visual 5").GetComponent<Animator>().Play("JonesIntercom_Idle");
+                        if (intercomAnimator != null)
+                        {
+                            intercomAnimator.Play("JonesIntercom_Idle");
+                        }
+                        else
+                        {
+                            Debug.LogWarning("intercomAnimator is NULL! Skipping animation.");
+                        }
+
+                        PlayIntercomAnimations("JonesIntercom_Talk");
                     }
                     break;
                 case PORTRAIT_TAG:
@@ -477,6 +498,32 @@ public class InkDialogueManager : MonoBehaviour
                 default:
                     Debug.LogWarning("Tag came in but isn't being handled" + tag);
                     break;
+            }
+        }
+    }
+
+    private void PlayIntercomAnimations(string animationName)
+    {
+        string[] intercomNames = { "Intercom Visual 2", "Intercom Visual 3", "Intercom Visual 4", "Intercom Visual 5" };
+
+        foreach (string name in intercomNames)
+        {
+            GameObject intercomObject = GameObject.Find(name);
+            if (intercomObject != null)
+            {
+                Animator animator = intercomObject.GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.Play(animationName);
+                }
+                else
+                {
+                    Debug.LogWarning($"Animator not found on {name}! Skipping animation.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"GameObject {name} not found! Skipping animation.");
             }
         }
     }
