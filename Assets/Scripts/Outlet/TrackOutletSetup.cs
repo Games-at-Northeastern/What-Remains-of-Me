@@ -3,21 +3,23 @@ using System.Collections.Generic;
 public class TrackOutletSetup : MonoBehaviour
 {
     [SerializeField] private Transform pointParent;
+    [SerializeField] private Transform outletParent;
     [SerializeField] private bool isMovingRight;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         int elementChildren = 0;
-        foreach (Transform child in transform)
+        foreach (Transform child in outletParent)
         {
             if (child.TryGetComponent(out Outlet outlet))
             {
                 elementChildren++;
-                foreach (Transform child2 in transform)
+                foreach (Transform child2 in outletParent)
                 {
 
                     if (child2.TryGetComponent(out Outlet outlet2) && outlet2 != outlet)
                     {
+                        Debug.Log("here");
                         outlet.AddSecondary(outlet2.GetComponent<AControllable>());
                     }
                 }
@@ -37,9 +39,9 @@ public class TrackOutletSetup : MonoBehaviour
         distance += Vector2.Distance(pointParent.GetChild(0).position, pointParent.GetChild(pointParent.childCount - 1).position);
 
         int movingElementNumber = 0;
-        for (int transformIndex = 0; transformIndex < transform.childCount; transformIndex++)
+        for (int transformIndex = 0; transformIndex < outletParent.childCount; transformIndex++)
         {
-            if (transform.GetChild(transformIndex).TryGetComponent(out MovingElement element) && element.gameObject.activeInHierarchy)
+            if (outletParent.GetChild(transformIndex).TryGetComponent(out MovingElement element) && element.gameObject.activeInHierarchy)
             {
                 movingElementNumber++;
                 SetTrackPosition(element, movingElementNumber, elementChildren, distance, points);
