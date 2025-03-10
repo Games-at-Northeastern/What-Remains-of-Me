@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class OrbServerManager : MonoBehaviour
 {
@@ -14,10 +15,10 @@ public class OrbServerManager : MonoBehaviour
     [SerializeField] public int terminalCount = 0;
     #endregion
     #region lights
-    [SerializeField] private GameObject redLight;
-    [SerializeField] private GameObject greenLight;
-    [SerializeField] private GameObject blueLight;
-    [SerializeField] private GameObject pinkLight;
+    [SerializeField] private Material redLight;
+    [SerializeField] private Material greenLight;
+    [SerializeField] private Material blueLight;
+    [SerializeField] private Material pinkLight;
     #endregion
 
     void Update()
