@@ -26,4 +26,13 @@ public class NPCOutlet : AControllable
             dialogueTrigger.inkJSON = cleanScript;
         }
     }
+
+    public void SetCleanScript(TextAsset newText) {
+        cleanScript = newText;
+    }
+
+    public void SetInfectedScript(TextAsset newText) {
+        infectedScript = newText;
+    }
+
 }

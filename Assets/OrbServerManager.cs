@@ -22,6 +22,8 @@ public class OrbServerManager : MonoBehaviour
 
     [SerializeField] private InkDialogueTrigger dialogueTrigger;
 
+    [SerializeField] private NPCOutlet npcOutlet;
+
     [Header("inkJSONs")]
     public TextAsset noTerminalsInkJSON;
     public TextAsset oneTerminalInkJSON;
@@ -37,7 +39,7 @@ public class OrbServerManager : MonoBehaviour
         thirdTerminalCorrect = ThirdTerminalCheck();
         fourthTerminalCorrect = FourthTerminalCheck();
         terminalCount = CountCorrect();
-        setText();
+        //setText();
     }
 
     private bool FirstTerminalCheck()
@@ -136,21 +138,31 @@ public class OrbServerManager : MonoBehaviour
         return count;
     }
 
-    void setText() {
+    public void SetText() {
         if (terminalCount == 0) {
             dialogueTrigger.inkJSON = noTerminalsInkJSON;
+            npcOutlet.SetCleanScript(noTerminalsInkJSON);
+            npcOutlet.SetInfectedScript(noTerminalsInkJSON);
         }
         else if (terminalCount == 1) {
             dialogueTrigger.inkJSON = oneTerminalInkJSON;
+            npcOutlet.SetCleanScript(oneTerminalInkJSON);
+            npcOutlet.SetInfectedScript(oneTerminalInkJSON);
         }
         else if (terminalCount == 2) {
             dialogueTrigger.inkJSON = twoTerminalsInkJSON;
+            npcOutlet.SetCleanScript(twoTerminalsInkJSON);
+            npcOutlet.SetInfectedScript(twoTerminalsInkJSON);
         }
         else if (terminalCount == 3) {
             dialogueTrigger.inkJSON = threeTerminalsInkJSON;
+            npcOutlet.SetCleanScript(threeTerminalsInkJSON);
+            npcOutlet.SetInfectedScript(threeTerminalsInkJSON);
         }
         else if (terminalCount == 4) {
             dialogueTrigger.inkJSON = fourTerminalsInkJSON;
+            npcOutlet.SetCleanScript(fourTerminalsInkJSON);
+            npcOutlet.SetInfectedScript(fourTerminalsInkJSON);
         }
     }
 }

@@ -4871,7 +4871,6 @@ GameObject:
   m_Component:
   - component: {fileID: 847405760}
   - component: {fileID: 847405761}
-  - component: {fileID: 847405762}
   m_Layer: 0
   m_Name: Boss Terminal
   m_TagString: Untagged
@@ -4951,42 +4950,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &847405762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 847405759}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e92d1b2e1768b4ab8758d03d0d8558, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visualCue: {fileID: 934337130}
-  inkJSON: {fileID: 4900000, guid: e133d085e347c4928b1b53a36b957513, type: 3}
-  forceDialogue: 1
-  stopMovement: 1
-  autoTurnPage: 0
-  waitForPageTurn: 2
-  dialogueActive: 1
-  waitForInteractAvailable: 3
-  isTutorialDialogue: 0
-  OnDialogueEnded:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
 --- !u!1 &870605822
 GameObject:
   m_ObjectHideFlags: 0
@@ -33837,6 +33800,18 @@ MonoBehaviour:
           m_StringArgument: Spawn
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1088254504}
+        m_TargetAssemblyTypeName: OrbServerManager, Assembly-CSharp
+        m_MethodName: SetText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SetText
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &934337134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35384,7 +35359,8 @@ MonoBehaviour:
   greenLight: {fileID: 1103967024}
   blueLight: {fileID: 1769298}
   pinkLight: {fileID: 2135191937}
-  dialogueTrigger: {fileID: 847405762}
+  dialogueTrigger: {fileID: 934337133}
+  npcOutlet: {fileID: 934337132}
   noTerminalsInkJSON: {fileID: 4900000, guid: e408be31afe4242cabd14d8195a86636, type: 3}
   oneTerminalInkJSON: {fileID: 4900000, guid: 4bf0a4816332b45b1a54b9ce40befb23, type: 3}
   twoTerminalsInkJSON: {fileID: 4900000, guid: 0041282434f1447319d266cb41fb60c6, type: 3}
