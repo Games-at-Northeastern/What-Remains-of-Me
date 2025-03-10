@@ -9,9 +9,11 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 ===firstInteraction===
  #layout:left #portrait:Handler #speaker:The Handler
 
-More experimentation is necessary - the subject is.. Violent. 
-We’ve had one human fatality, and lost a lot of robotic material. I’ve replaced his main aperture with a fixed track, so he can’t smash any more researchers against the walls.
-It’s been determined that reducing the Orbserver’s pattern recognition module, the second from the left, to 50% power, 0% virus will help it stop being frustrated with perceived non-performance.
+More experimentation is necessary - the subject is... Violent. 
+We have had one human fatality and lost a lot of robotic material. 
+I have replaced his main aperture with a fixed track, so he cant smash any more researchers against the walls.
+I have determined that reducing the Orbservers pattern recognition module will help it stop being frustrated with perceived non-performance. 
+The terminal second from the left to 50% power, 0% virus should achieve the desired affect.
 
 ->DONE
 

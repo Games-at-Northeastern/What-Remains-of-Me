@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class OrbFirstOutlet : AControllable
 {
-
-
+    [SerializeField] private SpriteRenderer sr;
+    [SerializeField] private Sprite sprite;
+    [SerializeField] private BossRotation br;
     [SerializeField] private Animator[] coverables;
     [SerializeField] private Animator[] unCoverables;
     [SerializeField] private bool Activated = false;
@@ -27,6 +28,8 @@ public class OrbFirstOutlet : AControllable
                 coverables[i].SetBool("Activate", true);
                 coverables[i].GetComponentInParent<BoxCollider2D>().enabled = false;
             }
+            sr.sprite = sprite;
+            br.enabled = true;
             Activated = true;
         }
     }
