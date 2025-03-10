@@ -7,7 +7,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===firstInteraction===
- #layout:left #portrait:Handler #speaker:The Handler
+ #layout:left #portrait:Unknown #speaker:Unknown
 
 The experiment was a success! 
 The inspection module allows it to ingest physical and digital information simultaneously.
@@ -19,4 +19,4 @@ Adjust the first terminal to 80% total power, with around 25% virus to slow it d
 
 ->END
 
-//%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler
+//%:;&::%:;%:& #layout:left #portrait:Unknown #speaker:Unknown

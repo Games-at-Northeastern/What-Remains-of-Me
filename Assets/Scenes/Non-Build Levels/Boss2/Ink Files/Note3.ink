@@ -7,7 +7,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===firstInteraction===
- #layout:left #portrait:Handler #speaker:The Handler
+ #layout:left #portrait:Unknown #speaker:Unknown
 
 Something needs to be done - we have lost a half dozen researchers. 
 The Subject keeps speaking out, claiming to have seen something in the inky blackness. 
@@ -18,4 +18,4 @@ We suggest limiting it. Adjusting the third terminal to ~66% power, ~33% virus s
 
 ->END
 
-//%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler
+//%:;&::%:;%:& #layout:left #portrait:Unknown #speaker:Unknown

@@ -7,7 +7,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===firstInteraction===
- #layout:left #portrait:Handler #speaker:The Handler
+ #layout:left #portrait:Unknown #speaker:Unknown
 
 We’ve started seeing improvements, but depowering the Orbserver may be the correct solution. The previous adjustments have changed it.
 It’s become friendly to the Atlas units we’ve been feeding it, and listening to their beeps and boops. 
@@ -18,4 +18,4 @@ If that fails to make it manageable for our purposes.. I think we may have to sh
 
 ->END
 
-//%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler
+//%:;&::%:;%:& #layout:left #portrait:Unknown #speaker:Unknown

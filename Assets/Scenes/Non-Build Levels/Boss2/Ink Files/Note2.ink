@@ -7,7 +7,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 
 ===firstInteraction===
- #layout:left #portrait:Handler #speaker:The Handler
+ #layout:left #portrait:Unknown #speaker:Unknown
 
 More experimentation is necessary - the subject is... Violent. 
 We have had one human fatality and lost a lot of robotic material. 
@@ -19,4 +19,4 @@ The terminal second from the left to 50% power, 0% virus should achieve the desi
 
 ->END
 
-//%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler
+//%:;&::%:;%:& #layout:left #portrait:Unknown #speaker:Unknown
