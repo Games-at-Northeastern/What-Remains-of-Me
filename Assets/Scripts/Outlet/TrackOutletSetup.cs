@@ -19,7 +19,6 @@ public class TrackOutletSetup : MonoBehaviour
 
                     if (child2.TryGetComponent(out Outlet outlet2) && outlet2 != outlet)
                     {
-                        Debug.Log("here");
                         outlet.AddSecondary(outlet2.GetComponent<AControllable>());
                     }
                 }
