@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class OrbFirstOutlet : AControllable
 {
@@ -7,12 +9,31 @@ public class OrbFirstOutlet : AControllable
     [SerializeField] private BossRotation br;
     [SerializeField] private Animator[] coverables;
     [SerializeField] private Animator[] unCoverables;
-    [SerializeField] private bool Activated = false;
+    [SerializeField] private InkDialogueTrigger dialogueTrigger;
+    [SerializeField] private NPCOutlet npcOutlet;
+    [SerializeField] private Outlet outlet;
+    [SerializeField] private Light2D light;
+    private bool activated = false;
 
     private void Update()
     {
         // slider.value = GetVirus() / 100f;
 
+        if (activated == false)
+        {
+        OrbServerActivate();
+        }
+        else
+        {
+        float currentLight = light.intensity;
+        float targetLight = 2f;
+        light.intensity = Mathf.Lerp(currentLight, targetLight, 0.5f*Time.deltaTime);
+        }
+        
+    }
+
+    private void OrbServerActivate()
+    {
         if (GetEnergy() >= 50f)
         {
             GetComponent<SpriteRenderer>().color = Color.gray;
@@ -30,7 +51,10 @@ public class OrbFirstOutlet : AControllable
             }
             sr.sprite = sprite;
             br.enabled = true;
-            Activated = true;
+            dialogueTrigger.enabled = true;
+            npcOutlet.enabled = true;
+            outlet.enabled = true;
+            activated = true;
         }
     }
 }
