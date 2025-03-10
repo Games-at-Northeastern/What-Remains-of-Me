@@ -19,6 +19,15 @@ public class OrbServerManager : MonoBehaviour
     [SerializeField] private Material greenLight;
     [SerializeField] private Material blueLight;
     [SerializeField] private Material pinkLight;
+
+    [SerializeField] private InkDialogueTrigger dialogueTrigger;
+
+    [Header("inkJSONs")]
+    public TextAsset noTerminalsInkJSON;
+    public TextAsset oneTerminalInkJSON;
+    public TextAsset twoTerminalsInkJSON;
+    public TextAsset threeTerminalsInkJSON;
+    public TextAsset fourTerminalsInkJSON;
     #endregion
 
     void Update()
@@ -28,6 +37,7 @@ public class OrbServerManager : MonoBehaviour
         thirdTerminalCorrect = ThirdTerminalCheck();
         fourthTerminalCorrect = FourthTerminalCheck();
         terminalCount = CountCorrect();
+        setText();
     }
 
     private bool FirstTerminalCheck()
@@ -124,5 +134,23 @@ public class OrbServerManager : MonoBehaviour
         else
             count = 0;
         return count;
+    }
+
+    void setText() {
+        if (terminalCount == 0) {
+            dialogueTrigger.inkJSON = noTerminalsInkJSON;
+        }
+        else if (terminalCount == 1) {
+            dialogueTrigger.inkJSON = oneTerminalInkJSON;
+        }
+        else if (terminalCount == 2) {
+            dialogueTrigger.inkJSON = twoTerminalsInkJSON;
+        }
+        else if (terminalCount == 3) {
+            dialogueTrigger.inkJSON = threeTerminalsInkJSON;
+        }
+        else if (terminalCount == 4) {
+            dialogueTrigger.inkJSON = fourTerminalsInkJSON;
+        }
     }
 }
