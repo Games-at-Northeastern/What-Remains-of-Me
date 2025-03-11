@@ -16,16 +16,41 @@ public class VoxFirstOutlet : AControllable
     [SerializeField] private VoxOutlet secondStepOutlet;
 
     [SerializeField] private ParticleSystem explosionParticles;
+
+
+
     private void Update()
     {
         // slider.value = GetVirus() / 100f;
 
+        //if (GetVirus() >= 30f)
+        //{
+        //    door2.sprite = openDoorSprite2;
+        //    doorAnimator2.enabled = false;
+        //    doorCollider2.enabled = false;
+        //    elevatorSolve.CreateEnergy(20,0);
+        //    GetComponent<SpriteRenderer>().color = Color.gray;
+        //    GetComponent<BoxCollider2D>().enabled = false;
+        //    wire.Invoke("Disconnect", 0.0f);
+        //    GetComponent<VoxFirstOutlet>().enabled = false;
+        //    secondStepOutlet.firstStep = true;
+
+        //}
+
+        StartCoroutine(OpenDoor());
+    }
+
+    private IEnumerator OpenDoor()
+    {
         if (GetVirus() >= 30f)
         {
+            doorAnimator2.SetBool("Opening", true);
+
+            yield return new WaitForSecondsRealtime(2);
             door2.sprite = openDoorSprite2;
             doorAnimator2.enabled = false;
             doorCollider2.enabled = false;
-            elevatorSolve.CreateEnergy(20,0);
+            elevatorSolve.CreateEnergy(20, 0);
             GetComponent<SpriteRenderer>().color = Color.gray;
             GetComponent<BoxCollider2D>().enabled = false;
             wire.Invoke("Disconnect", 0.0f);
@@ -33,5 +58,8 @@ public class VoxFirstOutlet : AControllable
             secondStepOutlet.firstStep = true;
 
         }
+
+        yield break;
     }
+
 }
