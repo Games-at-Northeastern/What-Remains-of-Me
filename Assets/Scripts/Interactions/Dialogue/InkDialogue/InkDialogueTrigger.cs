@@ -107,4 +107,9 @@ public class InkDialogueTrigger : MonoBehaviour
     }
 
     public void SetDialogueActive(bool status) => dialogueActive = status;
+
+    public void resetVisualCue() {
+        _firstInteraction = true;
+        visualCue.SetActive(true);
+    }
 }

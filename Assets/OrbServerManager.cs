@@ -181,5 +181,7 @@ public class OrbServerManager : MonoBehaviour
             npcOutlet.SetCleanScript(fourTerminalsInkJSON);
             npcOutlet.SetInfectedScript(fourTerminalsInkJSON);
         }
+
+        dialogueTrigger.resetVisualCue();
     }
 }
