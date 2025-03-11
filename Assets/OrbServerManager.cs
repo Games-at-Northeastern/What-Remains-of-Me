@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class OrbServerManager : MonoBehaviour
 {
@@ -15,10 +14,10 @@ public class OrbServerManager : MonoBehaviour
     [SerializeField] public int terminalCount = 0;
     #endregion
     #region lights
-    [SerializeField] private Material redLight;
-    [SerializeField] private Material greenLight;
-    [SerializeField] private Material blueLight;
-    [SerializeField] private Material pinkLight;
+    [SerializeField] private GameObject redLight;
+    [SerializeField] private GameObject greenLight;
+    [SerializeField] private GameObject blueLight;
+    [SerializeField] private GameObject pinkLight;
 
     [SerializeField] private InkDialogueTrigger dialogueTrigger;
 
@@ -32,6 +31,8 @@ public class OrbServerManager : MonoBehaviour
     public TextAsset fourTerminalsInkJSON;
     #endregion
 
+
+
     void Update()
     {
         firstTerminalCorrect = FirstTerminalCheck();
@@ -44,73 +45,85 @@ public class OrbServerManager : MonoBehaviour
 
     private bool FirstTerminalCheck()
     {
-        if (firstTerminal.GetEnergy() >= 75 && firstTerminal.GetEnergy() <= 85)
+        if (firstTerminal.GetEnergy() >= 50 && firstTerminal.GetEnergy() <= 70)
         {
             if (firstTerminal.GetVirus() >= 15 && firstTerminal.GetVirus() <= 25)
             {
+                redLight.SetActive(true);
                 return true;
             }
             else
             {
+                redLight.SetActive(false);
                 return false;
             }
         }
         else
         {
+            redLight.SetActive(false);
             return false;
         }
     }
     private bool SecondTerminalCheck()
     {
-        if (secondTerminal.GetEnergy() >= 45 && secondTerminal.GetEnergy() <= 55)
+        if (secondTerminal.GetEnergy() >= 40 && secondTerminal.GetEnergy() <= 60)
         {
             if (secondTerminal.GetVirus() <= 5)
             {
+                greenLight.SetActive(true);
                 return true;
             }
             else
             {
+                greenLight.SetActive(false);
                 return false;
             }
         }
         else
         {
+            greenLight.SetActive(false);
             return false;
         }
     }
     private bool ThirdTerminalCheck()
     {
-        if (thirdTerminal.GetEnergy() >= 61 && thirdTerminal.GetEnergy() <= 71)
+        if (thirdTerminal.GetEnergy() >= 25 && thirdTerminal.GetEnergy() <= 45)
         {
-            if (thirdTerminal.GetVirus() >= 28 && thirdTerminal.GetVirus() <= 38)
+            if (thirdTerminal.GetVirus() >= 25 && thirdTerminal.GetVirus() <= 45)
             {
+                blueLight.SetActive(true);
                 return true;
             }
             else
             {
+                blueLight.SetActive(false);
                 return false;
             }
         }
         else
         {
+            blueLight.SetActive(false);
             return false;
         }
     }
     private bool FourthTerminalCheck()
     {
-        if (fourthTerminal.GetEnergy() >= 15 && fourthTerminal.GetEnergy() <= 25)
+        if (fourthTerminal.GetEnergy() <= 5)
         {
-            if (fourthTerminal.GetVirus() >= 15 && fourthTerminal.GetVirus() <= 25)
+            if (fourthTerminal.GetVirus() >= 15 && fourthTerminal.GetVirus() <= 30)
             {
+                pinkLight.SetActive(true);
                 return true;
             }
             else
             {
+                pinkLight.SetActive(false);
                 return false;
             }
         }
         else
         {
+            pinkLight.SetActive(false);
             return false;
         }
     }
@@ -133,33 +146,37 @@ public class OrbServerManager : MonoBehaviour
         {
             count++;
         }
-        else
-            count = 0;
         return count;
     }
 
-    public void SetText() {
-        if (terminalCount == 0) {
+    public void SetText()
+    {
+        if (terminalCount == 0)
+        {
             dialogueTrigger.inkJSON = noTerminalsInkJSON;
             npcOutlet.SetCleanScript(noTerminalsInkJSON);
             npcOutlet.SetInfectedScript(noTerminalsInkJSON);
         }
-        else if (terminalCount == 1) {
+        else if (terminalCount == 1)
+        {
             dialogueTrigger.inkJSON = oneTerminalInkJSON;
             npcOutlet.SetCleanScript(oneTerminalInkJSON);
             npcOutlet.SetInfectedScript(oneTerminalInkJSON);
         }
-        else if (terminalCount == 2) {
+        else if (terminalCount == 2)
+        {
             dialogueTrigger.inkJSON = twoTerminalsInkJSON;
             npcOutlet.SetCleanScript(twoTerminalsInkJSON);
             npcOutlet.SetInfectedScript(twoTerminalsInkJSON);
         }
-        else if (terminalCount == 3) {
+        else if (terminalCount == 3)
+        {
             dialogueTrigger.inkJSON = threeTerminalsInkJSON;
             npcOutlet.SetCleanScript(threeTerminalsInkJSON);
             npcOutlet.SetInfectedScript(threeTerminalsInkJSON);
         }
-        else if (terminalCount == 4) {
+        else if (terminalCount == 4)
+        {
             dialogueTrigger.inkJSON = fourTerminalsInkJSON;
             npcOutlet.SetCleanScript(fourTerminalsInkJSON);
             npcOutlet.SetInfectedScript(fourTerminalsInkJSON);
