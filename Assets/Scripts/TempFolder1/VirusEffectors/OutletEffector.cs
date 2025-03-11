@@ -1,4 +1,6 @@
+
 using UnityEngine;
+using Levels.Object.Platform;
 
 /// <summary>
 /// When the virus affecting this element gets large enough, overrides the path and loop type (works for outlets).
