@@ -20,7 +20,12 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (playerInRange && !InkDialogueManager.GetInstance().dialogueIsPlaying && dialogueActive && timer == 0f)
+        timer = Mathf.Max(timer - Time.deltaTime, 0f);
+        if (!playerInRange || InkDialogueManager.GetInstance().dialogueIsPlaying || !dialogueActive)
+        {
+            return;
+        }
+        if (timer == 0f)
         {
             var i = InkDialogueManager.GetInstance();
             i.waitBeforePageTurn = 2f;
@@ -29,7 +34,10 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
             i.autoTurnPage = true;
             i.EnterDialogueMode(PickNextDialouge());
         }
-        timer = Mathf.Max(timer - Time.deltaTime, 0f);
+        else if (InkDialogueManager.GetInstance().dialogueEnded)
+        {
+            StartCoroutine(CanInteractAgain());
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -61,4 +69,13 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
         Debug.Log("Line:" + dialougeLines[0].text);
         return dialougeLines[0];
     }
+
+    private IEnumerator CanInteractAgain()
+    {
+        SetDialogueActive(false);
+        yield return new WaitForSeconds(2f);
+        SetDialogueActive(true);
+        InkDialogueManager.GetInstance().dialogueEnded = false;
+    }
+    public void SetDialogueActive(bool status) => dialogueActive = status;
 }

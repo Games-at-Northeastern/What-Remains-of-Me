@@ -287,6 +287,7 @@ public class InkDialogueManager : MonoBehaviour
 // display 1 letter at a time
         foreach (char letter in line.ToCharArray())
         {
+            dialogueText.text = line;
             // if player presses 'submit', entire dialogue line is displayed
             if (canSkip && submitSkip && dialogueText == dialogueTextRight)
             {
@@ -294,7 +295,6 @@ public class InkDialogueManager : MonoBehaviour
                 dialogueText.maxVisibleCharacters = line.Length;
                 break;
             }
-
             PlayDialogueSound(dialogueText.maxVisibleCharacters, dialogueText.text[dialogueText.maxVisibleCharacters]);
             dialogueText.maxVisibleCharacters++;
 
