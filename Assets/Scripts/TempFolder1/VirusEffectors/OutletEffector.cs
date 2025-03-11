@@ -24,10 +24,9 @@ public class OutletEffector : AMovingElementVirusEffector
     /// <summary>
     /// Checks if the effect should be applied based on 
     /// <summary>
-    override protetected bool ShouldDoEffect(float newChargePercentage)
+    override protected bool ShouldDoEffect(float newChargePercentage)
     {
-        if ((_shouldRevertPath && newChargePercentage >= _doVirusEffectAt) || 
-            (!_shouldRevertPath && newChargePercentage < _doVirusEffectAt))
+        if ((_shouldRevertPath && newChargePercentage >= _doVirusEffectAt) || (!_shouldRevertPath && newChargePercentage < _doVirusEffectAt))
         {
             _shouldRevertPath = !_shouldRevertPath;
             return true;
