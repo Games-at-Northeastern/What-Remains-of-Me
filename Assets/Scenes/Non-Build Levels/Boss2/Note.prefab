@@ -9,9 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3546435448086318602}
-  - component: {fileID: 8048909926633889019}
   - component: {fileID: 1708869839549638829}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Note
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,52 +34,6 @@ Transform:
   - {fileID: 8901142365046856026}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &8048909926633889019
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135822618649517173}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.01343143, y: 0.015121222}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.125, y: 2.03125}
-    newSize: {x: 3, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 3.14901, y: 3.1472049}
-  m_EdgeRadius: 0
 --- !u!212 &1708869839549638829
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -149,7 +102,7 @@ GameObject:
   - component: {fileID: 5070083888042369317}
   - component: {fileID: 4093068531804666650}
   - component: {fileID: 7279570113263977662}
-  m_Layer: 13
+  m_Layer: 2
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,8 +184,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualCue: {fileID: 8590589135886962439}
-  inkJSON: {fileID: 4900000, guid: 6ee0bb794045a49328598aedf76bd621, type: 3}
-  forceDialogue: 1
+  inkJSON: {fileID: 4900000, guid: e133d085e347c4928b1b53a36b957513, type: 3}
+  forceDialogue: 0
   stopMovement: 1
   autoTurnPage: 0
   waitForPageTurn: 2
@@ -241,7 +194,19 @@ MonoBehaviour:
   isTutorialDialogue: 0
   OnDialogueEnded:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4093068531804666650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,8 +231,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   dialogueTrigger: {fileID: 5070083888042369317}
-  cleanScript: {fileID: 4900000, guid: 7d3cf77a7d0c108438113f5ba0b5d089, type: 3}
-  infectedScript: {fileID: 4900000, guid: 43c16c9bcce3e704abd79638d69dd824, type: 3}
+  cleanScript: {fileID: 4900000, guid: e133d085e347c4928b1b53a36b957513, type: 3}
+  infectedScript: {fileID: 4900000, guid: e133d085e347c4928b1b53a36b957513, type: 3}
   virusLevelUpdate: 20
 --- !u!114 &7279570113263977662
 MonoBehaviour:
@@ -301,7 +266,7 @@ GameObject:
   - component: {fileID: 8901142365046856026}
   - component: {fileID: 5983552044953965296}
   - component: {fileID: 3774157595885897993}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Visual Cue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -392,7 +357,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: press interact to read
+  m_text: press 'f'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c6faa0cbd240b8f499494d5b4cc89ac5, type: 2}
   m_sharedMaterial: {fileID: 6480215725908031629, guid: c6faa0cbd240b8f499494d5b4cc89ac5, type: 2}
@@ -457,7 +422,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 14.701882, w: 3.7187529}
+  m_margin: {x: 1.46, y: 0, z: 14.701882, w: 3.7187529}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
@@ -474,9 +439,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5330247346844006214}
     m_Modifications:
+    - target: {fileID: 106162561308351343, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 926599845680194000, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1235388018529910977, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238698703925570713, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3651739236974919949, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6801492477888477866, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
       propertyPath: m_Name
       value: Outlet
+      objectReference: {fileID: 0}
+    - target: {fileID: 6801492477888477866, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6801492477888477866, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
       propertyPath: m_IsActive
@@ -529,6 +518,38 @@ PrefabInstance:
     - target: {fileID: 6801492477888477871, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7737278169784093182, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318868034579599, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318868049004251, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318868653122347, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869602360744, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869653575849, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869743109265, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7990318869781412208, guid: 846f15404d6b3144598efc2f82f06b06, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
