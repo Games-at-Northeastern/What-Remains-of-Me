@@ -18,7 +18,7 @@ public class OutletEffector : AMovingElementVirusEffector
         }
     }
 
-    protected override void AffectMovingOutlet(MovingElement element) => 
+    override protected void AffectMovingOutlet(MovingElement element) => 
         element.SetTrack(_chargedPath, _overrideLoopType, _shouldRevertPath); 
     
     /// <summary>
