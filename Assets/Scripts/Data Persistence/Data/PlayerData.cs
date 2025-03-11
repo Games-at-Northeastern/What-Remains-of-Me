@@ -30,7 +30,6 @@ public class PlayerData
         batteryPercentage = 1f;
         virusPercentage = 0f;
         playerPosition = Vector3.zero;
-       
 
     }
 }

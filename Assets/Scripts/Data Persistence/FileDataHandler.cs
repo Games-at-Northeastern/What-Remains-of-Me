@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 
 /**
@@ -43,12 +44,11 @@ public class FileDataHandler<TDataTypeOnUnformat>
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {
-
                         dataToLoad = reader.ReadToEnd();
                     }
                 }
                 //Convert string to PlayerData Type
-                loadedPlayerData = JsonUtility.FromJson<TDataTypeOnUnformat>(dataToLoad);
+                loadedPlayerData = JsonConvert.DeserializeObject<TDataTypeOnUnformat>(dataToLoad);
 
             }
             catch (Exception e)
@@ -75,7 +75,8 @@ public class FileDataHandler<TDataTypeOnUnformat>
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
 
             //Serialize playerData into Json
-            string dataToStore = JsonUtility.ToJson(data, true);
+            string dataToStore = JsonConvert.SerializeObject(data, Formatting.Indented);
+
 
             //Write file to file system. Putting this in a using block to ensure it closes when finished
             using (FileStream stream = new FileStream(fullPath, FileMode.Create))
@@ -83,6 +84,7 @@ public class FileDataHandler<TDataTypeOnUnformat>
                 using (StreamWriter writer = new StreamWriter(stream))
                 {
                     writer.Write(dataToStore);
+                    Debug.Log("Wrote Save data to: " + fullPath);
                 }
             }
 

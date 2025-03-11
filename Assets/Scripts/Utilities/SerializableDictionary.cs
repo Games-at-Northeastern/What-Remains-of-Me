@@ -38,7 +38,7 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
         if (keys.Count != values.Count)
         {
             //If your getting this error you might be assigning a dictionary a type that is too complex for this implementation
-            Debug.LogError("Something went horribly wrong and the size of values doesnt equal the size of keys.");
+            Debug.LogError("Something went horribly wrong and the size of values doesnt equal the size of keys. Keys:" + keys.Count + " Values: " + values.Count);
         }
 
         for (int i = 0; i < keys.Count; i++)
@@ -48,5 +48,24 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
 
         KeyList = Keys.ToList();
         ValueList = Values.ToList();
+    }
+
+    public List<KeyValuePair<TKey, TValue>> ToKeyValuePairList()
+    {
+        var list = new List<KeyValuePair<TKey, TValue>>();
+        foreach (KeyValuePair<TKey, TValue> kvp in this)
+        {
+            list.Add(kvp);
+        }
+        return list;
+    }
+
+    public void FromKeyValuePairList(List<KeyValuePair<TKey, TValue>> keyValuePairs)
+    {
+        this.Clear();
+        foreach (KeyValuePair<TKey, TValue> kvp in keyValuePairs)
+        {
+            this.Add(kvp.Key, kvp.Value);
+        }
     }
 }

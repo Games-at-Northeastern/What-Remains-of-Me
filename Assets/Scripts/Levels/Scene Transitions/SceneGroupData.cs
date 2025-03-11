@@ -25,7 +25,7 @@ public class SceneGroupData : ScriptableObject
     {
         get
         {
-            var data = StaticData.Get();
+            var data = StaticData.Instance;
             if (!data.levelVersions.ContainsKey(this))
             {
                 data.levelVersions.Add(this, 0);
@@ -34,7 +34,7 @@ public class SceneGroupData : ScriptableObject
         }
         set
         {
-            var data = StaticData.Get();
+            var data = StaticData.Instance;
             if (!data.levelVersions.ContainsKey(this))
             {
                 data.levelVersions.Add(this, value);

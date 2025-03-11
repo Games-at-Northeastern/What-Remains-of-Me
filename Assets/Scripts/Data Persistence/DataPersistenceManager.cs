@@ -49,6 +49,7 @@ public class DataPersistenceManager : MonoBehaviour
         playerFileDataHandler = new FileDataHandler<PlayerData>(Application.persistentDataPath, fileName);
         levelFileDataHandler = new FileDataHandler<LevelData>(Application.persistentDataPath, "Level_" + SceneManager.GetActiveScene().name);
     }
+
     private void Start()
     {
         if (loadSaveDataOnStart)
@@ -56,6 +57,10 @@ public class DataPersistenceManager : MonoBehaviour
             LoadSceneData();
         }
 
+        //Testing
+        Debug.Log("Static Data testing variable on load: " + StaticData.Instance.GetSharedData<float>("Test Number"));
+        StaticData.Instance.SetSharedData("Test Number", 5.053);
+        Debug.Log("Static Data testing variable on changing value: " + StaticData.Instance.GetSharedData<float>("Test Number"));
     }
 
     /// <summary>
@@ -145,6 +150,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void SaveGame()
     {
+        Debug.Log("Saving Game!");
         CheckForDataObjects();
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
 

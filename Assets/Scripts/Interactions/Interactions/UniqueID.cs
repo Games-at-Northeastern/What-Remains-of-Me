@@ -42,6 +42,12 @@ public class UniqueID : MonoBehaviour
 
     public string uniqueId;
 
+    //If the object should share it's state with objects in other scenes
+    public bool sharesData;
+
+    public string sharedId;
+
+
     // Only compile the code in an editor build
 #if UNITY_EDITOR
 
