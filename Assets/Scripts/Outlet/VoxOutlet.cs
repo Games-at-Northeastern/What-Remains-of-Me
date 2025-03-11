@@ -31,7 +31,7 @@ public class VoxOutlet : AControllable
             doorCollider2.enabled = false;
             turret1.enabled = false;
             turret2.enabled = false;
-            firstDoor.CreateEnergy(50, 0);
+            firstDoor.CreateEnergy(firstDoor.GetMaxCharge(), 0);
             leftExit.enabled = true;
             BeatenBoss();
         }
