@@ -10,7 +10,7 @@ using UnityEngine;
 /// Applies a movement speed 'glitch' effect to the platforms controlled by this object,
 /// dependent on the ratio of virus to clean energy in the controller (i.e. a higher virus percentage = more glitching).
 /// </summary>
-[RequireComponent(typeof(MovingElementController))]
+//[RequireComponent(typeof(MovingElementController))]
 public class SpeedEffector : MonoBehaviour
 {
     [SerializeField] private MovingElementController platformController;
