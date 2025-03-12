@@ -14,11 +14,12 @@ public class OrbFirstOutlet : AControllable
     [SerializeField] private Outlet outlet;
     [SerializeField] private Light2D light;
     private bool activated = false;
+    [SerializeField] private float total;
 
     private void Update()
     {
         // slider.value = GetVirus() / 100f;
-
+        total = GetEnergy() + GetVirus();
         if (activated == false)
         {
         OrbServerActivate();
@@ -34,7 +35,7 @@ public class OrbFirstOutlet : AControllable
 
     private void OrbServerActivate()
     {
-        if (GetEnergy() >= 50f)
+        if (total >= 45f)
         {
             GetComponent<SpriteRenderer>().color = Color.gray;
             for (int i = 0; i < unCoverables.Length; i++)

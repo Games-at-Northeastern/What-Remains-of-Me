@@ -15,9 +15,13 @@ public class OrbServerManager : MonoBehaviour
     #endregion
     #region lights
     [SerializeField] private GameObject redLight;
-    [SerializeField] private GameObject greenLight;
+    [SerializeField] private GameObject tealLight;
     [SerializeField] private GameObject blueLight;
     [SerializeField] private GameObject pinkLight;
+    [SerializeField] private GameObject redTerminal;
+    [SerializeField] private GameObject tealTerminal;
+    [SerializeField] private GameObject blueTerminal;
+    [SerializeField] private GameObject pinkTerminal;
 
     [SerializeField] private InkDialogueTrigger dialogueTrigger;
 
@@ -50,17 +54,20 @@ public class OrbServerManager : MonoBehaviour
             if (firstTerminal.GetVirus() >= 15 && firstTerminal.GetVirus() <= 25)
             {
                 redLight.SetActive(true);
+                redTerminal.SetActive(true);
                 return true;
             }
             else
             {
                 redLight.SetActive(false);
+                redTerminal.SetActive(false);
                 return false;
             }
         }
         else
         {
             redLight.SetActive(false);
+            redTerminal.SetActive(false);
             return false;
         }
     }
@@ -70,18 +77,21 @@ public class OrbServerManager : MonoBehaviour
         {
             if (secondTerminal.GetVirus() <= 5)
             {
-                greenLight.SetActive(true);
+                tealLight.SetActive(true);
+                tealTerminal.SetActive(true);
                 return true;
             }
             else
             {
-                greenLight.SetActive(false);
+                tealLight.SetActive(false);
+                tealTerminal.SetActive(false);
                 return false;
             }
         }
         else
         {
-            greenLight.SetActive(false);
+            tealLight.SetActive(false);
+            tealTerminal.SetActive(false);
             return false;
         }
     }
@@ -92,17 +102,20 @@ public class OrbServerManager : MonoBehaviour
             if (thirdTerminal.GetVirus() >= 25 && thirdTerminal.GetVirus() <= 45)
             {
                 blueLight.SetActive(true);
+                blueTerminal.SetActive(true);
                 return true;
             }
             else
             {
                 blueLight.SetActive(false);
+                blueTerminal.SetActive(false);
                 return false;
             }
         }
         else
         {
             blueLight.SetActive(false);
+            blueTerminal.SetActive(false);
             return false;
         }
     }
@@ -113,17 +126,20 @@ public class OrbServerManager : MonoBehaviour
             if (fourthTerminal.GetVirus() >= 15 && fourthTerminal.GetVirus() <= 30)
             {
                 pinkLight.SetActive(true);
+                pinkTerminal.SetActive(true);
                 return true;
             }
             else
             {
                 pinkLight.SetActive(false);
+                pinkTerminal.SetActive(false);
                 return false;
             }
         }
         else
         {
             pinkLight.SetActive(false);
+            pinkTerminal.SetActive(false);
             return false;
         }
     }
