@@ -1883,7 +1883,7 @@ Transform:
   m_GameObject: {fileID: 380277531}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.316, z: 0}
+  m_LocalPosition: {x: 0, y: 0.029, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1933,7 +1933,7 @@ SpriteRenderer:
   m_SortingLayerID: -1936469631
   m_SortingLayer: -1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 844d68d20614283438fc9eabb09ea929, type: 3}
+  m_Sprite: {fileID: 21300000, guid: be60a66055545534e8a8aa89314c0268, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -35383,7 +35383,7 @@ GameObject:
   - component: {fileID: 1057557270}
   - component: {fileID: 1057557271}
   m_Layer: 0
-  m_Name: Purple-Light off
+  m_Name: Pink-Light off
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35398,7 +35398,7 @@ Transform:
   m_GameObject: {fileID: 1057557269}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.343, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -35448,8 +35448,8 @@ SpriteRenderer:
   m_SortingLayerID: -1936469631
   m_SortingLayer: -1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 34a48b11dad5d464887073503626d70e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 8121f31d241020047a09e8248dcc0dab, type: 3}
+  m_Color: {r: 1, g: 0.4745098, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -35708,6 +35708,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3959200527301387933, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: be60a66055545534e8a8aa89314c0268, type: 3}
+    - target: {fileID: 3959200527301387933, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
       propertyPath: m_SortingOrder
       value: 3
       objectReference: {fileID: 0}
@@ -35722,6 +35726,10 @@ PrefabInstance:
     - target: {fileID: 4147733570198813478, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4614407208672444333, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.034
       objectReference: {fileID: 0}
     - target: {fileID: 4845609543492887642, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
       propertyPath: m_RootOrder
@@ -35767,10 +35775,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4901853972158664488, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.029
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157068698742888417, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_Name
+      value: Pink-Light
+      objectReference: {fileID: 0}
     - target: {fileID: 5157068698742888417, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5296479184849437083, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_Name
+      value: Pink-Base
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336657435209688002, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 5976560995650462511, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8121f31d241020047a09e8248dcc0dab, type: 3}
     - target: {fileID: 5976560995650462511, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
       propertyPath: m_SortingOrder
       value: 3
@@ -35779,14 +35807,26 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: bdcc000bcff38424b81493c321471d34, type: 2}
+    - target: {fileID: 5998224725197555138, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_Name
+      value: Teal-Base
+      objectReference: {fileID: 0}
     - target: {fileID: 6206969239780332678, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6458120915349506871, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_Name
+      value: Teal-Light
+      objectReference: {fileID: 0}
+    - target: {fileID: 6458120915349506871, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6774165369475643207, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: aa5eef3abc0055b44901a47191e5ea4b, type: 3}
     - target: {fileID: 6774165369475643207, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
       propertyPath: m_SortingOrder
       value: 3
@@ -37497,7 +37537,7 @@ GameObject:
   - component: {fileID: 1319270524}
   - component: {fileID: 1319270525}
   m_Layer: 0
-  m_Name: Green-Light (1)
+  m_Name: Teal-Light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37512,7 +37552,7 @@ Transform:
   m_GameObject: {fileID: 1319270523}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.314, y: 0, z: 0}
+  m_LocalPosition: {x: 0.031, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37562,7 +37602,7 @@ SpriteRenderer:
   m_SortingLayerID: -1936469631
   m_SortingLayer: -1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 1c2a550b753a0fa4eafc3342dd4d58ec, type: 3}
+  m_Sprite: {fileID: 21300000, guid: aa5eef3abc0055b44901a47191e5ea4b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
