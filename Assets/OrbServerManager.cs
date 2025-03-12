@@ -3,6 +3,7 @@ using UnityEngine;
 public class OrbServerManager : MonoBehaviour
 {
     #region terminals
+    [Header("Terminals")]
     [SerializeField] private OrbOutlets firstTerminal;
     [SerializeField] private OrbOutlets secondTerminal;
     [SerializeField] private OrbOutlets thirdTerminal;
@@ -14,6 +15,7 @@ public class OrbServerManager : MonoBehaviour
     [SerializeField] public int terminalCount = 0;
     #endregion
     #region lights
+    [Header("Lights")]
     [SerializeField] private GameObject redLight;
     [SerializeField] private GameObject tealLight;
     [SerializeField] private GameObject blueLight;
@@ -23,6 +25,8 @@ public class OrbServerManager : MonoBehaviour
     [SerializeField] private GameObject blueTerminal;
     [SerializeField] private GameObject pinkTerminal;
 
+    #endregion
+    [Header("Dialogue")]
     [SerializeField] private InkDialogueTrigger dialogueTrigger;
 
     [SerializeField] private NPCOutlet npcOutlet;
@@ -33,7 +37,6 @@ public class OrbServerManager : MonoBehaviour
     public TextAsset twoTerminalsInkJSON;
     public TextAsset threeTerminalsInkJSON;
     public TextAsset fourTerminalsInkJSON;
-    #endregion
 
 
 
