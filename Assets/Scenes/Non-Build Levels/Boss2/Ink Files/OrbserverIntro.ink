@@ -25,8 +25,15 @@ Go to each of the rooms and find the proper levels to bring me back online. I'll
 Here, bug. You will need this to read the manuals. Be careful with this temporary gift.
 Install this inspection module. When you're done, give it back of your own free will, or I'll dispose of you.
 Be quick, without this I can't see outside the observatory. The facility will be exposed.
+
+ #layout:left #portrait:isp #speaker:I.S.P.
+ 
+ Atlas, with this inspection module you can now read human lettering!
+ You will be able to read the note in the room we just came from now.
+ Perhaps that will shed more light on your current situation.
+
 ->DONE
 
 ->END
 
-//%:;&::%:;%:& #layout:left #portrait:OrbServer #speaker:OrbServer
+//%:;&::%:;%:& #layout:left #portrait:isp #speaker:I.S.P.
