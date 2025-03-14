@@ -56,11 +56,6 @@ public class DataPersistenceManager : MonoBehaviour
         {
             LoadSceneData();
         }
-
-        //Testing
-        Debug.Log("Static Data testing variable on load: " + StaticData.Instance.GetSharedData<float>("Test Number"));
-        StaticData.Instance.SetSharedData("Test Number", 5.053);
-        Debug.Log("Static Data testing variable on changing value: " + StaticData.Instance.GetSharedData<float>("Test Number"));
     }
 
     /// <summary>
