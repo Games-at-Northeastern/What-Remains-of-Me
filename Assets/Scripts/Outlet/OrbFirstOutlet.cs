@@ -17,6 +17,12 @@ public class OrbFirstOutlet : AControllable
     private bool activated = false;
     [SerializeField] private float total;
 
+    private InkTextSwapper textSwapper;
+
+    void Start() {
+        textSwapper = GetComponent<InkTextSwapper>();
+    }
+
     private void Update()
     {
         // slider.value = GetVirus() / 100f;
@@ -61,6 +67,7 @@ public class OrbFirstOutlet : AControllable
             npcOutlet.enabled = true;
             outlet.enabled = true;
             activated = true;
+            textSwapper.SwapText();
         }
     }
 
