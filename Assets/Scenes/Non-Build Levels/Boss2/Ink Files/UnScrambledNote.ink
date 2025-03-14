@@ -12,3 +12,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
  If anyone seeks to replicate our research, our notes are in the marked rooms.
  Each corresponds to the matching color terminal.
  Correct application of virus may lead to being allowed to leave alive.
+ 
+  -> DONE
+ 
+ -> END
