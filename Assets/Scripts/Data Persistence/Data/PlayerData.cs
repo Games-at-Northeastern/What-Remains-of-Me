@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using SmartScriptableObjects.ReactiveProperties;
-using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,13 +11,11 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerData
 {
-    public string scenePlayerSavedIn;   //Saves the scene the player is currently in as an int.
+    public string scenePlayerSavedIn = "";   //Saves the scene the player is currently in as an int.
 
-    public float batteryPercentage;     //The percent of clean energy the player was at during the save.
-    public float virusPercentage;       //The percent of virus energy the player was at during the save.
-    public Vector3 playerPosition;      //The saved position of the player.
-
-    
+    public float batteryPercentage = 1f;     //The percent of clean energy the player was at during the save.
+    public float virusPercentage = 0f;       //The percent of virus energy the player was at during the save.
+    public Vector3 playerPosition = Vector3.zero;      //The saved position of the player.
 
     /**
      * When a new game is created, all values in the constructor should be read into the game

@@ -87,7 +87,6 @@ public class FileDataHandler<TDataTypeOnUnformat>
                     Debug.Log("Wrote Save data to: " + fullPath);
                 }
             }
-
         }
         catch (Exception e)
         {
@@ -95,5 +94,4 @@ public class FileDataHandler<TDataTypeOnUnformat>
         }
 
     }
-
 }
