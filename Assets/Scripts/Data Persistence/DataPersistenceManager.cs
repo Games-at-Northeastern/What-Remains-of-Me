@@ -87,6 +87,12 @@ public class DataPersistenceManager : MonoBehaviour
         //Load scene data from file using the data handler 
         this.playerData = playerFileDataHandler.Load();
         this.levelData = levelFileDataHandler.Load();
+
+        if (playerData == null)
+        {
+            playerData = new PlayerData();
+        }
+
         bool loadPlayerData = (playerData.scenePlayerSavedIn == SceneManager.GetActiveScene().name && playerClickedLoad);
 
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
