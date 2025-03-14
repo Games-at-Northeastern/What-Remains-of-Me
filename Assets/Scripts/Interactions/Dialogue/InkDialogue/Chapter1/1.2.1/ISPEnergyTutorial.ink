@@ -13,9 +13,9 @@ MESSAGE:: Traversal of the premises without use of these facilities will prove r
 
 MESSAGE:: You possess the functions necessary to charge and drain these facilities. Latch onto the outlets with the wire.
 
-MESSAGE:: Press <Dpad Left> to drain them of energy and to charge yourself.
+MESSAGE:: Press [Dpad Left] or [Q] to drain them of energy and to charge yourself.
 
-MESSAGE:: Press <Dpad Right> to use your own energy to charge the outlets. The associated facilities will activate shortly after.  
+MESSAGE:: Press [Dpad Right] or [E] to use your own energy to charge the outlets. The associated facilities will activate shortly after.  
 
 ->DONE
 
