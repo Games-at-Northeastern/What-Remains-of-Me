@@ -13,6 +13,7 @@ namespace Levels.Objects.Platform
 
         protected virtual void OnCollisionEnter2D(Collision2D col)
         {
+
             if (IsOnTop(col.GetContact(0).normal))
             {
                 col.transform.SetParent(transform);
