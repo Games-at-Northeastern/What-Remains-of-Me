@@ -57,6 +57,7 @@ public class OrbServerManager : MonoBehaviour
         thirdTerminalCorrect = ThirdTerminalCheck();
         fourthTerminalCorrect = FourthTerminalCheck();
         terminalCount = CountCorrect();
+        SetText();
     }
 
     private bool FirstTerminalCheck()
@@ -67,7 +68,10 @@ public class OrbServerManager : MonoBehaviour
             {
                 redLight.SetActive(true);
                 redTerminal.SetActive(true);
-                SetText();
+                if(!oneTerminalHasFired) {
+                    StartCoroutine(SpeakDelay());
+                    oneTerminalHasFired = true;
+                }
                 return true;
             }
             else
@@ -92,7 +96,10 @@ public class OrbServerManager : MonoBehaviour
             {
                 tealLight.SetActive(true);
                 tealTerminal.SetActive(true);
-                SetText();
+                if(!twoTerminalHasFired) {
+                    StartCoroutine(SpeakDelay());
+                    twoTerminalHasFired = true;
+                }
                 return true;
             }
             else
@@ -117,7 +124,11 @@ public class OrbServerManager : MonoBehaviour
             {
                 blueLight.SetActive(true);
                 blueTerminal.SetActive(true);
-                SetText();
+
+                if(!threeTerminalHasFired) {
+                    StartCoroutine(SpeakDelay());
+                    threeTerminalHasFired = true;
+                }
                 return true;
             }
             else
@@ -142,7 +153,10 @@ public class OrbServerManager : MonoBehaviour
             {
                 pinkLight.SetActive(true);
                 pinkTerminal.SetActive(true);
-                SetText();
+                if(!fourTerminalHasFired) {
+                    StartCoroutine(SpeakDelay());
+                    fourTerminalHasFired = true;
+                }
                 return true;
             }
             else
@@ -183,29 +197,21 @@ public class OrbServerManager : MonoBehaviour
 
     public void SetText()
     {
-        if (terminalCount == 0)
-        {
-            currentText = noTerminalsInkJSON;
-        }
-        else if (terminalCount == 1)
+       if (terminalCount == 1)
         {
             currentText = oneTerminalInkJSON;
-            Speak(oneTerminalHasFired);
         }
         else if (terminalCount == 2)
         {
             currentText = twoTerminalsInkJSON;
-            Speak(twoTerminalHasFired);
         }
         else if (terminalCount == 3)
         {
             currentText = threeTerminalsInkJSON;
-            Speak(threeTerminalHasFired);
         }
         else if (terminalCount == 4)
         {
             currentText = fourTerminalsInkJSON;
-            Speak(fourTerminalHasFired);
         }
         dialogueTrigger.inkJSON = currentText;
         npcOutlet.SetCleanScript(currentText);
@@ -218,15 +224,17 @@ public class OrbServerManager : MonoBehaviour
 
     //####################################### Ambient Dialogue ################################### 
     
+    private IEnumerator SpeakDelay() {
+        yield return new WaitForSeconds(0.5f);
+        Speak();
+    }
 
-    public void Speak(bool hasFired) {
-        if(!hasFired){
-        hasFired = true;
+    public void Speak() {
         var i = InkDialogueManager.GetInstance();
             i.waitBeforePageTurn = 2f;
             i.stopMovement = false;
             i.autoTurnPage = true;
             i.EnterDialogueMode(currentText);
-        }
+        
     }
 }

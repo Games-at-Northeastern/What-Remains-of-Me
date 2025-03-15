@@ -29,19 +29,19 @@ public class OrbServerAmbientDialogue : MonoBehaviour
     }
 
     private IEnumerator ZeroNodeDelay() {
+        if (!orbServerManager.zeroTerminalHasFired) {
         yield return new WaitForSeconds(20);
-        Speak(orbServerManager.zeroTerminalHasFired);
+        Speak();
+        orbServerManager.zeroTerminalHasFired = true;
+        }
     }
 
-    public void Speak(bool hasFired) {
-        if(!hasFired){
+    public void Speak() {
         var i = InkDialogueManager.GetInstance();
             i.waitBeforePageTurn = 2f;
             i.stopMovement = false;
             i.autoTurnPage = true;
-            i.EnterDialogueMode(orbServerManager.currentText);
-        }
-        hasFired = true;
+            i.EnterDialogueMode(orbServerManager.noTerminalsInkJSON);
     }
 
 

@@ -19,6 +19,8 @@ public class OrbFirstOutlet : AControllable
 
     [SerializeField] private OrbServerAmbientDialogue ambientDialogue;
 
+    [SerializeField] private WireThrower wireThrower;
+
     private InkTextSwapper textSwapper;
 
     void Start() {
@@ -70,7 +72,7 @@ public class OrbFirstOutlet : AControllable
             outlet.enabled = true;
             activated = true;
             textSwapper.SwapText();
-            ambientDialogue.StartZeroNodeTimer();
+            wireThrower.DisconnectWire();
         }
     }
 
