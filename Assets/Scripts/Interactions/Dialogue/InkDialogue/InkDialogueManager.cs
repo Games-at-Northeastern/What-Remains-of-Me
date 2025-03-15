@@ -78,6 +78,7 @@ public class InkDialogueManager : MonoBehaviour
     private bool canSkip = false;
     private bool submitSkip = false;
     private TextMeshProUGUI dialogueText;
+    private bool firstLine; //used to determine if we should display the button prompt to continue
 
     [HideInInspector] public bool isTutorialDialogue = false;
 
@@ -170,6 +171,7 @@ public class InkDialogueManager : MonoBehaviour
     {
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
+        firstLine = true;
 
         // This now requires a character controller for the player to be placed into the dialogue manager in every level.
         if (stopMovement)
@@ -317,6 +319,11 @@ public class InkDialogueManager : MonoBehaviour
 
         if (dialogueText == dialogueTextRight)
         {
+            if (firstLine)
+            {
+                firstLine = false;
+                AddSkipText();
+            }
             canContinueToNextLine = true;
         }
         else
@@ -623,5 +630,5 @@ public class InkDialogueManager : MonoBehaviour
     }
 
     private void RemoveSkipText() => skipTextRight.text = "";
-    private void AddSkipText() => skipTextRight.text = "Press 'F'";
+    private void AddSkipText() => skipTextRight.text = "Press 'RB' or 'F'";
 }
