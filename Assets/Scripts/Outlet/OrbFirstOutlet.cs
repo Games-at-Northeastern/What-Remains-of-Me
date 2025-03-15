@@ -17,6 +17,8 @@ public class OrbFirstOutlet : AControllable
     private bool activated = false;
     [SerializeField] private float total;
 
+    [SerializeField] private OrbServerAmbientDialogue ambientDialogue;
+
     private InkTextSwapper textSwapper;
 
     void Start() {
@@ -68,6 +70,7 @@ public class OrbFirstOutlet : AControllable
             outlet.enabled = true;
             activated = true;
             textSwapper.SwapText();
+            ambientDialogue.StartZeroNodeTimer();
         }
     }
 

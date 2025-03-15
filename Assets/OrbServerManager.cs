@@ -221,12 +221,12 @@ public class OrbServerManager : MonoBehaviour
 
     public void Speak(bool hasFired) {
         if(!hasFired){
+        hasFired = true;
         var i = InkDialogueManager.GetInstance();
             i.waitBeforePageTurn = 2f;
             i.stopMovement = false;
             i.autoTurnPage = true;
             i.EnterDialogueMode(currentText);
         }
-        hasFired = true;
     }
 }
