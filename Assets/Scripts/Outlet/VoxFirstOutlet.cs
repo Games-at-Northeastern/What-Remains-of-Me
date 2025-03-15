@@ -17,18 +17,19 @@ public class VoxFirstOutlet : AControllable
 
     [SerializeField] private ParticleSystem explosionParticles;
 
-
-
+    private bool hasTriggered = false; // Ensure coroutine is only started once
     private void Update()
     {
         // slider.value = GetVirus() / 100f;
+
+        //Debug.Log("Current Virus Level: " + GetVirus());
 
         //if (GetVirus() >= 30f)
         //{
         //    door2.sprite = openDoorSprite2;
         //    doorAnimator2.enabled = false;
         //    doorCollider2.enabled = false;
-        //    elevatorSolve.CreateEnergy(20,0);
+        //    elevatorSolve.CreateEnergy(20, 0);
         //    GetComponent<SpriteRenderer>().color = Color.gray;
         //    GetComponent<BoxCollider2D>().enabled = false;
         //    wire.Invoke("Disconnect", 0.0f);
@@ -37,27 +38,27 @@ public class VoxFirstOutlet : AControllable
 
         //}
 
-        StartCoroutine(OpenDoor());
+        if (GetVirus() >= 50f && hasTriggered == false)
+        {
+            StartCoroutine(OpenDoor());
+        }
     }
 
     private IEnumerator OpenDoor()
     {
-        if (GetVirus() >= 30f)
-        {
-            doorAnimator2.SetBool("Opening", true);
+        doorAnimator2.SetBool("Opening", true);
 
-            yield return new WaitForSecondsRealtime(2);
-            door2.sprite = openDoorSprite2;
-            doorAnimator2.enabled = false;
-            doorCollider2.enabled = false;
-            elevatorSolve.CreateEnergy(20, 0);
-            GetComponent<SpriteRenderer>().color = Color.gray;
-            GetComponent<BoxCollider2D>().enabled = false;
-            wire.Invoke("Disconnect", 0.0f);
-            GetComponent<VoxFirstOutlet>().enabled = false;
-            secondStepOutlet.firstStep = true;
-
-        }
+        yield return new WaitForSecondsRealtime(2);
+        hasTriggered = true;
+        elevatorSolve.CreateEnergy(20, 0);
+        GetComponent<SpriteRenderer>().color = Color.gray;
+        GetComponent<BoxCollider2D>().enabled = false;
+        wire.Invoke("Disconnect", 0.0f);
+        GetComponent<VoxFirstOutlet>().enabled = false;
+        secondStepOutlet.firstStep = true;
+        door2.sprite = openDoorSprite2;
+        doorAnimator2.enabled = false;
+        doorCollider2.enabled = false;
 
         yield break;
     }
