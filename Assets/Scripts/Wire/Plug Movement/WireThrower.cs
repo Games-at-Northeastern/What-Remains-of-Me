@@ -8,6 +8,7 @@ using CharacterController;
 using System;
 using PlayerController;
 using System.Collections;
+using System.Linq;
 /// <summary>
 /// The main script for handling wire controls. Spawns/Fires, despawns, and
 /// connects the wire. Also controls bullet time while the wire is being aimed.
@@ -372,7 +373,11 @@ public class WireThrower : MonoBehaviour
         bool isFacingLeft = cc.LeftOrRight == Facing.left;
         Vector3 position = transform.position;
 
-        foreach (GameObject outlet in outlets)
+        // Sort outlets from furthest to closest
+        var sortedOutlets = outlets.OrderByDescending(outlet => Vector2.Distance(position, outlet.transform.position)).ToArray();
+
+
+        foreach (GameObject outlet in sortedOutlets)
         {
             if (!outlet.GetComponent<SpriteRenderer>().isVisible) continue;
 

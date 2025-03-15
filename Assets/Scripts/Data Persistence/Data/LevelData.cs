@@ -27,5 +27,12 @@ public class LevelData
         outletVirusEnergy = new SerializableDictionary<string, float>();
         outletMaxEnergy = new SerializableDictionary<string, float>();
     }
+
+    public void ClearData()
+    {
+        outletCleanEnergy.Clear();
+        outletVirusEnergy.Clear();
+        outletMaxEnergy.Clear();
+    }
 }
 #pragma warning restore IDE1006 // Naming Styles

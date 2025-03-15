@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -13,8 +13,15 @@ public class OrbFirstOutlet : AControllable
     [SerializeField] private NPCOutlet npcOutlet;
     [SerializeField] private Outlet outlet;
     [SerializeField] private Light2D light;
+    [SerializeField] private Light2D[] flickerLights;
     private bool activated = false;
     [SerializeField] private float total;
+
+    private InkTextSwapper textSwapper;
+
+    void Start() {
+        textSwapper = GetComponent<InkTextSwapper>();
+    }
 
     private void Update()
     {
@@ -22,15 +29,15 @@ public class OrbFirstOutlet : AControllable
         total = GetEnergy() + GetVirus();
         if (activated == false)
         {
-        OrbServerActivate();
+            OrbServerActivate();
         }
         else
         {
-        float currentLight = light.intensity;
-        float targetLight = 2f;
-        light.intensity = Mathf.Lerp(currentLight, targetLight, 0.5f*Time.deltaTime);
+            float currentLight = light.intensity;
+            float targetLight = 2f;
+            light.intensity = Mathf.Lerp(currentLight, targetLight, 0.5f * Time.deltaTime);
         }
-        
+
     }
 
     private void OrbServerActivate()
@@ -50,12 +57,48 @@ public class OrbFirstOutlet : AControllable
                 coverables[i].SetBool("Activate", true);
                 coverables[i].GetComponentInParent<BoxCollider2D>().enabled = false;
             }
+            for (int i = 0; i < flickerLights.Length; i++)
+            {
+                StartCoroutine(FlickeringLight(i));
+            }
             sr.sprite = sprite;
             br.enabled = true;
             dialogueTrigger.enabled = true;
             npcOutlet.enabled = true;
             outlet.enabled = true;
             activated = true;
+            textSwapper.SwapText();
         }
+    }
+
+    IEnumerator FlickeringLight(int i)
+    {
+        float timeDelay = Random.Range(0.5f, 2f);
+        yield return new WaitForSeconds(timeDelay);
+        flickerLights[i].enabled = true;
+        timeDelay = Random.Range(0.01f, 0.1f);
+        yield return new WaitForSeconds(timeDelay);
+        flickerLights[i].enabled = false;
+        timeDelay = Random.Range(0.01f, 0.1f);
+        yield return new WaitForSeconds(timeDelay);
+        flickerLights[i].enabled = true;
+        timeDelay = Random.Range(0.01f, 0.1f);
+        yield return new WaitForSeconds(timeDelay);
+        flickerLights[i].enabled = false;
+        timeDelay = Random.Range(0.01f, 0.1f);
+        yield return new WaitForSeconds(timeDelay);
+        flickerLights[i].enabled = true;
+        timeDelay = Random.Range(0.01f, 0.1f);
+        yield return new WaitForSeconds(timeDelay);
+        flickerLights[i].enabled = false;
+        timeDelay = Random.Range(0.01f, 0.1f);
+        yield return new WaitForSeconds(timeDelay);
+        flickerLights[i].enabled = true;
+        timeDelay = Random.Range(0.01f, 0.1f);
+        yield return new WaitForSeconds(timeDelay);
+        flickerLights[i].enabled = false;
+        timeDelay = Random.Range(0.01f, 0.1f);
+        yield return new WaitForSeconds(timeDelay);
+        flickerLights[i].enabled = true;
     }
 }

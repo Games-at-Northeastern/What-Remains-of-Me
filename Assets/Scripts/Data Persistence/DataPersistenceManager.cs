@@ -56,11 +56,6 @@ public class DataPersistenceManager : MonoBehaviour
         {
             LoadSceneData();
         }
-
-        //Testing
-        Debug.Log("Static Data testing variable on load: " + StaticData.Instance.GetSharedData<float>("Test Number"));
-        StaticData.Instance.SetSharedData("Test Number", 5.053);
-        Debug.Log("Static Data testing variable on changing value: " + StaticData.Instance.GetSharedData<float>("Test Number"));
     }
 
     /// <summary>
@@ -92,6 +87,12 @@ public class DataPersistenceManager : MonoBehaviour
         //Load scene data from file using the data handler 
         this.playerData = playerFileDataHandler.Load();
         this.levelData = levelFileDataHandler.Load();
+
+        if (playerData == null)
+        {
+            playerData = new PlayerData();
+        }
+
         bool loadPlayerData = (playerData.scenePlayerSavedIn == SceneManager.GetActiveScene().name && playerClickedLoad);
 
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)

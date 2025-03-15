@@ -8,7 +8,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 WARNING: Elevated Terrain #portrait:isp #speaker:I.S.P.
-PROCEDURE:: Use <Space> actuator to initiate <Jump> action. 
+PROCEDURE:: Use [A] or [Space] actuator to initiate [Jump] action. 
 
 ->DONE
 

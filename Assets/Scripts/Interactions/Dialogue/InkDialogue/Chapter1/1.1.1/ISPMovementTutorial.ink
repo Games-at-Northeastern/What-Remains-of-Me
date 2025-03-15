@@ -12,7 +12,7 @@ RECIEVER:: Atlas class Robot \#1297
 
 :: Obey your Handler.
 
-:: Use <A> and <D> actuators to move left and right.
+:: Use [L3] or [A] and [D] actuator to move left and right.
 
 PROCEDURE:: Find your handler.
 

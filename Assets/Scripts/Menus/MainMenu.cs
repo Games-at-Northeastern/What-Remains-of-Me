@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -25,7 +26,18 @@ public class MainMenu : MonoBehaviour
     public void QuitGame()
     {
         Debug.Log("Quitting Game");
-        Application.Quit();  
+        Application.Quit();
     }
 
+
+    //Just deletes all save data
+    public void ResetProgress()
+    {
+        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath);
+
+        foreach (FileInfo file in di.GetFiles())
+        {
+            file.Delete();
+        }
+    }
 }

@@ -4,6 +4,8 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine.Rendering.Universal;
 
+#if UNITY_EDITOR
+
 public class ShadowCasterApplicator : MonoBehaviour
 {
     [SerializeField] private bool selfShadows = true;
@@ -71,3 +73,4 @@ public class ShadowCaster2DTileMapEditor : Editor
         EditorGUILayout.EndHorizontal();
     }
 }
+#endif

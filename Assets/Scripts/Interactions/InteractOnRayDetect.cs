@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -60,25 +61,25 @@ public class InteractOnRayDetect : MonoBehaviour
                 {
                     detectCone.color = Color.red;
                     activator.GetComponent<Animator>().SetBool("Activate", true);
+                    StopAllCoroutines();
                 }
                 else
                 {
-                    detectCone.color = Color.green;
-                    activator.GetComponent<Animator>().SetBool("Activate", false);
+                    StartCoroutine(Deactivate());
                 }
             }
             //if theere's nothing to hit, not tracking anything
             if (hits == null || hits.Length == 0)
             {
-                activator.GetComponent<Animator>().SetBool("Activate", false);
-                detectCone.color = Color.green;
+                StartCoroutine(Deactivate());
+
                 return;
             }
         }
         else
         {
-            activator.GetComponent<Animator>().SetBool("Activate", false);
-            detectCone.color = Color.green;
+            StartCoroutine(Deactivate());
+
             return;
         }
     }
@@ -145,5 +146,13 @@ public class InteractOnRayDetect : MonoBehaviour
         {
             return;
         }
+    }
+
+    IEnumerator Deactivate()
+    {
+        float timeDelay = 1f;
+        yield return new WaitForSeconds(timeDelay);
+        activator.GetComponent<Animator>().SetBool("Activate", false);
+        detectCone.color = Color.green;
     }
 }

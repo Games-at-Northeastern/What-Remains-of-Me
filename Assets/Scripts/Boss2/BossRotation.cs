@@ -34,9 +34,9 @@ public class BossRotation : MonoBehaviour
         if (player != null)
         {
             if (player.transform.position.x < offSetPoint.x)
-                _rotationOffset = new Vector3(-3, 4, 0);
+                _rotationOffset = new Vector3(-3, 6, 0);
             else
-                _rotationOffset = new Vector3(3, 4, 0);
+                _rotationOffset = new Vector3(3, 6, 0);
         }
         if (player != null)
         {
