@@ -20,6 +20,7 @@ public class VoxOutlet : AControllable
 
     [SerializeField] private ParticleSystem explosionParticles;
     [SerializeField] private bool exploded;
+    [SerializeField] private InkDialogueTrigger endingDialogue;
     private void Update()
     {
         // slider.value = GetVirus() / 100f;
@@ -39,11 +40,13 @@ public class VoxOutlet : AControllable
 
     private void BeatenBoss()
     {
-        if(exploded ==false)
+        if(exploded == false)
         {
             exploded = true;
             explosionParticles.Play();
         }
+
+        endingDialogue.StartDialogue();
     }
 }
 

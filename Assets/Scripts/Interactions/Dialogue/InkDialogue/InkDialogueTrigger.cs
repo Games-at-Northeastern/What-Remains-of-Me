@@ -91,10 +91,14 @@ public class InkDialogueTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && dialogueActive)
-        {
+        if (collision.CompareTag("Player") && dialogueActive) {
             playerInRange = true;
         }
+        InkDialogueManager.GetInstance().isTutorialDialogue = isTutorialDialogue;
+    }
+
+    public void StartDialogue() {
+        playerInRange = true;
         InkDialogueManager.GetInstance().isTutorialDialogue = isTutorialDialogue;
     }
 
