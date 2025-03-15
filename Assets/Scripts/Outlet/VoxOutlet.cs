@@ -25,7 +25,7 @@ public class VoxOutlet : AControllable
     {
         // slider.value = GetVirus() / 100f;
 
-        if (GetVirus() >= 80f && firstStep)
+        if (GetVirus() >= 50f && firstStep)
         {
             door2.sprite = openDoorSprite2;
             doorAnimator2.enabled = false;

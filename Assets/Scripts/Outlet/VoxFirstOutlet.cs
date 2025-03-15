@@ -38,7 +38,7 @@ public class VoxFirstOutlet : AControllable
 
         //}
 
-        if (GetVirus() >= 50f && hasTriggered == false)
+        if (GetVirus() >= 30f && hasTriggered == false)
         {
             StartCoroutine(OpenDoor());
         }
