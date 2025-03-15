@@ -38363,6 +38363,18 @@ MonoBehaviour:
           m_StringArgument: SetText
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1884089608}
+        m_TargetAssemblyTypeName: OrbServerAmbientDialogue, Assembly-CSharp
+        m_MethodName: StartZeroNodeTimer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SetText
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &934337134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39518,6 +39530,18 @@ PrefabInstance:
       propertyPath: inkJSON
       value: 
       objectReference: {fileID: 4900000, guid: 42e286b56229e7e44aea0cf16f5ef06b, type: 3}
+    - target: {fileID: 5070083888042369317, guid: ba657844dc1e643f6af4dc9f36385c40, type: 3}
+      propertyPath: forceDialogue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5070083888042369317, guid: ba657844dc1e643f6af4dc9f36385c40, type: 3}
+      propertyPath: OnDialogueEnded.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5070083888042369317, guid: ba657844dc1e643f6af4dc9f36385c40, type: 3}
+      propertyPath: OnDialogueEnded.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1000325310}
     - target: {fileID: 7093636784760718721, guid: ba657844dc1e643f6af4dc9f36385c40, type: 3}
       propertyPath: m_SortingLayer
       value: 3
@@ -41313,7 +41337,7 @@ MonoBehaviour:
   fourthTerminalCorrect: 0
   terminalCount: 0
   redLight: {fileID: 758646374}
-  tealLight: {fileID: 1769298}
+  tealLight: {fileID: 2083480690}
   blueLight: {fileID: 1769298}
   pinkLight: {fileID: 2135191937}
   redTerminal: {fileID: 278837119}
@@ -41322,11 +41346,17 @@ MonoBehaviour:
   pinkTerminal: {fileID: 2094951060}
   dialogueTrigger: {fileID: 934337133}
   npcOutlet: {fileID: 934337132}
+  zeroTerminalHasFired: 0
+  oneTerminalHasFired: 0
+  twoTerminalHasFired: 0
+  threeTerminalHasFired: 0
+  fourTerminalHasFired: 0
   noTerminalsInkJSON: {fileID: 4900000, guid: e408be31afe4242cabd14d8195a86636, type: 3}
   oneTerminalInkJSON: {fileID: 4900000, guid: 4bf0a4816332b45b1a54b9ce40befb23, type: 3}
   twoTerminalsInkJSON: {fileID: 4900000, guid: 0041282434f1447319d266cb41fb60c6, type: 3}
   threeTerminalsInkJSON: {fileID: 4900000, guid: ee6734933f59f4fafa290b0cb1df9ff4, type: 3}
   fourTerminalsInkJSON: {fileID: 4900000, guid: 2d728fe50e78d4f3d961bca510ac265e, type: 3}
+  currentText: {fileID: 0}
 --- !u!114 &1088254505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50166,19 +50196,19 @@ PrefabInstance:
       objectReference: {fileID: 748226927}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 80.19884
+      value: 123.44331
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 14.044986
+      value: -2.344657
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -18.902128
+      value: -7.0358496
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 8.848069
+      value: 4.445
       objectReference: {fileID: 0}
     - target: {fileID: 5507190965753065182, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_TrackedObjectOffset.x
@@ -77561,8 +77591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58089c17266454b0bba1d2b17f9349ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialougeLines: []
-  timeBetweenDialouge: 0
+  orbServerManager: {fileID: 1088254504}
 --- !u!61 &1884089609
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -78269,6 +78298,7 @@ MonoBehaviour:
   - {fileID: 1145503113}
   - {fileID: 382030754}
   total: 0
+  ambientDialogue: {fileID: 0}
 --- !u!114 &1964338278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103513,6 +103543,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2083480690 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6458120915349506871, guid: 94e44ee8646e8ae4dbdd1b3ef9708a53, type: 3}
+  m_PrefabInstance: {fileID: 1088254499}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2090052676
 PrefabInstance:
   m_ObjectHideFlags: 0

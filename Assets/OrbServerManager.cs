@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class OrbServerManager : MonoBehaviour
 {
@@ -25,11 +27,18 @@ public class OrbServerManager : MonoBehaviour
     [SerializeField] private GameObject blueTerminal;
     [SerializeField] private GameObject pinkTerminal;
 
+
     #endregion
     [Header("Dialogue")]
     [SerializeField] private InkDialogueTrigger dialogueTrigger;
 
     [SerializeField] private NPCOutlet npcOutlet;
+
+    public bool zeroTerminalHasFired = false;
+    public bool oneTerminalHasFired = false;
+    public bool twoTerminalHasFired = false;
+    public bool threeTerminalHasFired = false;
+    public bool fourTerminalHasFired = false;
 
     [Header("inkJSONs")]
     public TextAsset noTerminalsInkJSON;
@@ -37,6 +46,7 @@ public class OrbServerManager : MonoBehaviour
     public TextAsset twoTerminalsInkJSON;
     public TextAsset threeTerminalsInkJSON;
     public TextAsset fourTerminalsInkJSON;
+    public TextAsset currentText;
 
 
 
@@ -47,7 +57,6 @@ public class OrbServerManager : MonoBehaviour
         thirdTerminalCorrect = ThirdTerminalCheck();
         fourthTerminalCorrect = FourthTerminalCheck();
         terminalCount = CountCorrect();
-        //setText();
     }
 
     private bool FirstTerminalCheck()
@@ -58,6 +67,7 @@ public class OrbServerManager : MonoBehaviour
             {
                 redLight.SetActive(true);
                 redTerminal.SetActive(true);
+                SetText();
                 return true;
             }
             else
@@ -82,6 +92,7 @@ public class OrbServerManager : MonoBehaviour
             {
                 tealLight.SetActive(true);
                 tealTerminal.SetActive(true);
+                SetText();
                 return true;
             }
             else
@@ -106,6 +117,7 @@ public class OrbServerManager : MonoBehaviour
             {
                 blueLight.SetActive(true);
                 blueTerminal.SetActive(true);
+                SetText();
                 return true;
             }
             else
@@ -130,6 +142,7 @@ public class OrbServerManager : MonoBehaviour
             {
                 pinkLight.SetActive(true);
                 pinkTerminal.SetActive(true);
+                SetText();
                 return true;
             }
             else
@@ -172,35 +185,48 @@ public class OrbServerManager : MonoBehaviour
     {
         if (terminalCount == 0)
         {
-            dialogueTrigger.inkJSON = noTerminalsInkJSON;
-            npcOutlet.SetCleanScript(noTerminalsInkJSON);
-            npcOutlet.SetInfectedScript(noTerminalsInkJSON);
+            currentText = noTerminalsInkJSON;
         }
         else if (terminalCount == 1)
         {
-            dialogueTrigger.inkJSON = oneTerminalInkJSON;
-            npcOutlet.SetCleanScript(oneTerminalInkJSON);
-            npcOutlet.SetInfectedScript(oneTerminalInkJSON);
+            currentText = oneTerminalInkJSON;
+            Speak(oneTerminalHasFired);
         }
         else if (terminalCount == 2)
         {
-            dialogueTrigger.inkJSON = twoTerminalsInkJSON;
-            npcOutlet.SetCleanScript(twoTerminalsInkJSON);
-            npcOutlet.SetInfectedScript(twoTerminalsInkJSON);
+            currentText = twoTerminalsInkJSON;
+            Speak(twoTerminalHasFired);
         }
         else if (terminalCount == 3)
         {
-            dialogueTrigger.inkJSON = threeTerminalsInkJSON;
-            npcOutlet.SetCleanScript(threeTerminalsInkJSON);
-            npcOutlet.SetInfectedScript(threeTerminalsInkJSON);
+            currentText = threeTerminalsInkJSON;
+            Speak(threeTerminalHasFired);
         }
         else if (terminalCount == 4)
         {
-            dialogueTrigger.inkJSON = fourTerminalsInkJSON;
-            npcOutlet.SetCleanScript(fourTerminalsInkJSON);
-            npcOutlet.SetInfectedScript(fourTerminalsInkJSON);
+            currentText = fourTerminalsInkJSON;
+            Speak(fourTerminalHasFired);
         }
-
+        dialogueTrigger.inkJSON = currentText;
+        npcOutlet.SetCleanScript(currentText);
+        npcOutlet.SetInfectedScript(currentText);
         dialogueTrigger.ResetVisualCue();
+    }
+
+
+
+
+    //####################################### Ambient Dialogue ################################### 
+    
+
+    public void Speak(bool hasFired) {
+        if(!hasFired){
+        var i = InkDialogueManager.GetInstance();
+            i.waitBeforePageTurn = 2f;
+            i.stopMovement = false;
+            i.autoTurnPage = true;
+            i.EnterDialogueMode(currentText);
+        }
+        hasFired = true;
     }
 }
