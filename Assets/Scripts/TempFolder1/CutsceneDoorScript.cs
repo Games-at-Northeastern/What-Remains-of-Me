@@ -50,5 +50,5 @@ public class CutsceneDoorScript : MonoBehaviour
         toDisable.Invoke(false);
     }
 
-    private void OpenDoor() => door.GainEnergy(50);
+    private void OpenDoor() => door.CreateEnergy(50, 0);
 }
