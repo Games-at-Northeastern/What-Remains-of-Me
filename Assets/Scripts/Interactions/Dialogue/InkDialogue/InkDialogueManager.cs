@@ -27,6 +27,10 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private Animator handlerAnimator;
     [SerializeField] private Animator intercomAnimator;
 
+    [Header("Vox Boss Animations")]
+    [SerializeField] private Animator voxScreenAnimator;
+    [SerializeField] private VoxOutlet voxOutlet;
+
     [Header("Audio")]
 
     private static AudioSource audioSource;
@@ -225,6 +229,13 @@ public class InkDialogueManager : MonoBehaviour
         {
             dialoguePanelTop.SetActive(false);
         }
+
+        // makes Vox animation idle when not speaking
+        if(voxScreenAnimator != null)
+        {
+            voxScreenAnimator.SetBool("VoxSpeaking", false);
+        }
+
         //btw if you ever want to adjust this, know that RigidbodyContraints2D are something called a "Bitmap" so they can't be set normally
         // https://answers.unity.com/questions/1104653/im-trying-to-freeze-both-positionx-and-rotation-in.html
         // The constraints property is a Bitmask. Simply setting it to a single option only sets that option. You need to use the | (bitwise OR) operator to merge them together before setting it i.e.
@@ -473,6 +484,19 @@ public class InkDialogueManager : MonoBehaviour
 
                         PlayIntercomAnimations("JonesIntercom_Talk");
                     }
+
+                    if (tagValue == "Vox")
+                    {
+                        if(voxScreenAnimator != null)
+                        {
+                            PlayVoxScreenAnimations();
+                        }
+                        else
+                        {
+                            Debug.LogWarning("voxScreenAnimator is NULL! Skipping animation.");
+                        }
+                    }
+
                     break;
                 case PORTRAIT_TAG:
                     if (stopMovement)
@@ -506,6 +530,22 @@ public class InkDialogueManager : MonoBehaviour
                     Debug.LogWarning("Tag came in but isn't being handled" + tag);
                     break;
             }
+        }
+    }
+
+    private void PlayVoxScreenAnimations()
+    {
+        // if vox's health bar has been unlocked
+        if (voxOutlet.firstStep)
+        {
+            voxScreenAnimator.SetBool("VoxHurt", true);
+            voxScreenAnimator.SetBool("VoxSpeaking", true);
+            Debug.Log("Triggering VoxSpeakingHurt animation");
+        }
+        else
+        {
+            voxScreenAnimator.SetBool("VoxSpeaking", true);
+            Debug.Log("Triggering VoxSpeakingReg animation");
         }
     }
 
