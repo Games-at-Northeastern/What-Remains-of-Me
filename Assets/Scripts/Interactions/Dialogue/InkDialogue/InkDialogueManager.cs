@@ -538,7 +538,7 @@ public class InkDialogueManager : MonoBehaviour
         // if vox's health bar has been unlocked
         if (voxOutlet.firstStep)
         {
-            voxScreenAnimator.SetBool("VoxHurt", true);
+            voxScreenAnimator.SetBool("VoxHurted", true);
             voxScreenAnimator.SetBool("VoxSpeaking", true);
             Debug.Log("Triggering VoxSpeakingHurt animation");
         }
