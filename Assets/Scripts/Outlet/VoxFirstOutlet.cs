@@ -14,7 +14,7 @@ public class VoxFirstOutlet : AControllable
     [SerializeField] private Slider slider;
     [SerializeField] private WireThrower wire;
     [SerializeField] private VoxOutlet secondStepOutlet;
-
+    [SerializeField] private Animator secondOutletAnimator;
     [SerializeField] private ParticleSystem explosionParticles;
 
     private bool hasTriggered = false; // Ensure coroutine is only started once
@@ -56,6 +56,9 @@ public class VoxFirstOutlet : AControllable
         wire.Invoke("Disconnect", 0.0f);
         GetComponent<VoxFirstOutlet>().enabled = false;
         secondStepOutlet.firstStep = true;
+        secondOutletAnimator.SetBool("Shielded", false);
+        secondOutletAnimator.SetBool("Activate", true);
+        secondOutletAnimator.GetComponentInParent<BoxCollider2D>().enabled = true;
         door2.sprite = openDoorSprite2;
         doorAnimator2.enabled = false;
         doorCollider2.enabled = false;
