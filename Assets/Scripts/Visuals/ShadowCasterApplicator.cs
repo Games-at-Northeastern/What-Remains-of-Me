@@ -11,15 +11,19 @@ public class ShadowCasterApplicator : MonoBehaviour
     [SerializeField] private bool selfShadows = true;
     private CompositeCollider2D tilemapCollider;
 
+    //static readonly FieldInfo meshField = typeof(ShadowCaster2D).GetField("m_Mesh", BindingFlags.NonPublic | BindingFlags.Instance);
+	static readonly FieldInfo shapePathField = typeof(ShadowCaster2D).GetField("m_ShapePath", BindingFlags.NonPublic | BindingFlags.Instance);
+	static readonly FieldInfo shapePathHashField = typeof(ShadowCaster2D).GetField("m_ShapePathHash", BindingFlags.NonPublic | BindingFlags.Instance);
+	static readonly MethodInfo generateShadowMeshMethod = typeof(ShadowCaster2D)
+									.Assembly
+									.GetType("UnityEngine.Rendering.Universal.ShadowUtility")
+									.GetMethod("GenerateShadowMesh", BindingFlags.Public | BindingFlags.Static);
+
     public void Create()
     {
+        //Debug.Log(meshField);
+        DestroyOldShadowCasters();
         tilemapCollider = GetComponent<CompositeCollider2D>();
-        
-        FieldInfo meshField = typeof(ShadowCaster2D).GetField("m_Mesh", BindingFlags.NonPublic | BindingFlags.Instance);
-        FieldInfo shapePathField = typeof(ShadowCaster2D).GetField("m_ShapePath", BindingFlags.NonPublic | BindingFlags.Instance);
-        FieldInfo shapePathHashField = typeof(ShadowCaster2D).GetField("m_ShapePathHash", BindingFlags.NonPublic | BindingFlags.Instance);
-        MethodInfo generateShadowMeshMethod = typeof(ShadowCaster2D).Assembly
-            .GetType("UnityEngine.Rendering.Universal.ShadowUtility").GetMethod("GenerateShadowMesh", BindingFlags.Public | BindingFlags.Static);
 
         for (int i = 0; i < tilemapCollider.pathCount; i++)
         {
@@ -38,8 +42,9 @@ public class ShadowCasterApplicator : MonoBehaviour
 
             shapePathField.SetValue(shadowCasterComponent, testPath);
             shapePathHashField.SetValue(shadowCasterComponent, Random.Range(int.MinValue, int.MaxValue));
-            meshField.SetValue(shadowCasterComponent, new Mesh());
-            generateShadowMeshMethod.Invoke(shadowCasterComponent, new object[] { meshField.GetValue(shadowCasterComponent), shapePathField.GetValue(shadowCasterComponent)});
+            //meshField.SetValue(shadowCasterComponent, new Mesh());
+            //generateShadowMeshMethod.Invoke(shadowCasterComponent, new object[] { new Mesh(), shapePathField.GetValue(shadowCasterComponent)});
+            //meshField.GetValue(shadowCasterComponent)
         }
     }
 
