@@ -10,7 +10,7 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
     [SerializeField] private float timeBetweenDialouge;
     private float timer = 0f;
     private bool playerInRange = false;
-
+    [SerializeField] private bool needAdditionalCondition;
     // Start is called before the first frame update
     private void Start()
     {
@@ -20,6 +20,11 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (needAdditionalCondition)
+        {
+            return;
+        }
+
         timer = Mathf.Max(timer - Time.deltaTime, 0f);
         if (!playerInRange || InkDialogueManager.GetInstance().dialogueIsPlaying || !dialogueActive)
         {
@@ -78,4 +83,6 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
         InkDialogueManager.GetInstance().dialogueEnded = false;
     }
     public void SetDialogueActive(bool status) => dialogueActive = status;
+
+    public void TurnOffAdditionalTriggerRequirement() => needAdditionalCondition = false;
 }
