@@ -89,7 +89,6 @@ public class ElevatorController : Interaction
             if (timeIn > .9f)
             {
                 var nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
-                Debug.Log(nextIndex);
                 if (upDefualtNextBuild)
                 {
                     GoUp(nextIndex, defaultNextBuildIndexPortalData);
