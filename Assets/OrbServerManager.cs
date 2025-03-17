@@ -33,6 +33,7 @@ public class OrbServerManager : MonoBehaviour
     [SerializeField] private InkDialogueTrigger dialogueTrigger;
 
     [SerializeField] private NPCOutlet npcOutlet;
+    [SerializeField] private OrbServerCompletion beat;
 
     public bool zeroTerminalHasFired = false;
     public bool oneTerminalHasFired = false;
@@ -62,9 +63,9 @@ public class OrbServerManager : MonoBehaviour
 
     private bool FirstTerminalCheck()
     {
-        if (firstTerminal.GetEnergy() >= 50 && firstTerminal.GetEnergy() <= 70)
+        if (firstTerminal.GetEnergy() >= 40 && firstTerminal.GetEnergy() <= 60)
         {
-            if (firstTerminal.GetVirus() >= 15 && firstTerminal.GetVirus() <= 25)
+            if (firstTerminal.GetVirus() >= 15 && firstTerminal.GetVirus() <= 35)
             {
                 redLight.SetActive(true);
                 redTerminal.SetActive(true);
@@ -118,9 +119,9 @@ public class OrbServerManager : MonoBehaviour
     }
     private bool ThirdTerminalCheck()
     {
-        if (thirdTerminal.GetEnergy() >= 25 && thirdTerminal.GetEnergy() <= 45)
+        if (thirdTerminal.GetEnergy() >= 23 && thirdTerminal.GetEnergy() <= 43)
         {
-            if (thirdTerminal.GetVirus() >= 25 && thirdTerminal.GetVirus() <= 45)
+            if (thirdTerminal.GetVirus() >= 23 && thirdTerminal.GetVirus() <= 43)
             {
                 blueLight.SetActive(true);
                 blueTerminal.SetActive(true);
@@ -212,6 +213,7 @@ public class OrbServerManager : MonoBehaviour
         else if (terminalCount == 4)
         {
             currentText = fourTerminalsInkJSON;
+            beat.isBossBeaten = true;
         }
         dialogueTrigger.inkJSON = currentText;
         npcOutlet.SetCleanScript(currentText);
