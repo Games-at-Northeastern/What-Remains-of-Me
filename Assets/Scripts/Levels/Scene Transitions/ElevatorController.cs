@@ -89,6 +89,7 @@ public class ElevatorController : Interaction
             if (timeIn > .9f)
             {
                 var nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+                Debug.Log(nextIndex);
                 if (upDefualtNextBuild)
                 {
                     GoUp(nextIndex, defaultNextBuildIndexPortalData);
@@ -103,7 +104,7 @@ public class ElevatorController : Interaction
 
     public void GoToLevel(int index)
     {
-        Debug.Log(index);
+        Debug.Log((index, "11111111111111111111111111111111111111"));
         Debug.Log(thisPortalIndex);
         moving = true; // so player cant reuse elevator
 
