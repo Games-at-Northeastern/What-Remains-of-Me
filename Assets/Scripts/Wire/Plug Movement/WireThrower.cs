@@ -49,6 +49,7 @@ public class WireThrower : MonoBehaviour
 
     #region Internal References
     private Camera mainCamera;
+    private bool _isMouseInactivated = false;
     private RaycastHit2D[] hits = new RaycastHit2D[1];
     private GameObject _activePlug;
     private ControlSchemes _controlSchemes;
@@ -471,6 +472,24 @@ public class WireThrower : MonoBehaviour
         Vector2 playerScreenPos = mainCamera.WorldToScreenPoint(transform.position);
         Vector2 aimScreenPos = _controlSchemes.Player.AimMouse.ReadValue<Vector2>();
         Vector2 fireDir = aimScreenPos - playerScreenPos;
+        
+        if (_isMouseInactivated)
+        {
+            // Get player direction
+            Facing playerDirection = pc.currentDirection;
+
+            // Modify fireDir based on player direction
+            if (playerDirection == Facing.left)
+            {
+                fireDir = Vector2.left;
+            }
+            else if (playerDirection == Facing.right)
+            {
+                fireDir = Vector2.right;
+            }
+        }
+        
+
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
         PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
         pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
@@ -482,6 +501,7 @@ public class WireThrower : MonoBehaviour
         pme.onTerminateRequest.AddListener(() => DestroyPlug());
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
+
 
     /// <summary>
     /// Determines whether or not the Wire for this WireThrower exits.
@@ -540,12 +560,14 @@ public class WireThrower : MonoBehaviour
     /// <summary>
     /// Handle Mouse inactivity when playing (if mouse hasn't moved in a while, reset it to the center of the screen)
     /// </summary>
-     private void HandleMouseInactivity()
+    private void HandleMouseInactivity()
     {
         Vector3 mousePos = Input.mousePosition;
 
         if (mousePos != lastMousePosition)
         {
+            _isMouseInactivated = false;
+            Cursor.visible = true;
             inactivityTimer = 0f;
             lastMousePosition = mousePos;
         }
@@ -556,7 +578,9 @@ public class WireThrower : MonoBehaviour
             //inactivity exceeds threshold, reset mouse to center
             if (inactivityTimer >= mouseInactivityThreshold)
             {
-                Mouse.current.WarpCursorPosition(new Vector2(Screen.width / 2f, Screen.height / 2f));
+                //Mouse.current.WarpCursorPosition(new Vector2(Screen.width / 2f, Screen.height / 2f));
+                _isMouseInactivated = true;
+                Cursor.visible = false;
                 lastMousePosition = Input.mousePosition;
                 inactivityTimer = 0f;
             }
