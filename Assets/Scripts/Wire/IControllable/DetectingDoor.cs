@@ -57,10 +57,13 @@ public class DetectingDoor : AControllable
         }
     }
 
-    [Header("How much energy should Atlas have?")]
+    [Header("Atlas Energy Requirements")]
 
     [SerializeField]
     private float requiredAtlasEnergy;
+    [Tooltip("Is Atlas' energy allowed to be virus?")]
+    [SerializeField]
+    private bool virusAllowed;
 
     [Header("SFX for Door Disappearing")]
     [SerializeField] private AudioClip disappearSFX;
@@ -123,8 +126,16 @@ public class DetectingDoor : AControllable
         cleanEnergy = 0;
         virus = 0;
         maxCharge = (float)Math.Round(playerInfo.battery - requiredAtlasEnergy) - 1.0f;
+
+        if(!virusAllowed && playerInfo.virus > 0){
+            //If Atlas has virus and we don't want him to, make him drain all his energy
+            maxCharge = playerInfo.battery;
+        }
+
         if (maxCharge <= 1) {
-            maxCharge = 0;
+            // Atlas is at the correct amount of energy
+            cleanEnergy = 50;
+            maxCharge = 50;
         }
         Debug.Log("New max charge: " + maxCharge);
     }
