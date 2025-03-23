@@ -4,7 +4,7 @@ using PlayerController;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class CameraFramer : MonoBehaviour
+public class CameraHook : MonoBehaviour
 {
 
     private CinemachineVirtualCamera framingCamera;
