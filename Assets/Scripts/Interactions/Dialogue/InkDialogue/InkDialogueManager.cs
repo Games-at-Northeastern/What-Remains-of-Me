@@ -26,6 +26,7 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private Animator portraitAnimatorTop;
     [SerializeField] private Animator handlerAnimator;
     [SerializeField] private Animator intercomAnimator;
+    [SerializeField] private Animator voxSmallScreenAnimator; 
 
     [Header("Vox Boss Animations")]
     [SerializeField] private Animator voxScreenAnimator;
@@ -497,7 +498,19 @@ public class InkDialogueManager : MonoBehaviour
                         }
                     }
 
+                    if (tagValue == "Small Vox")
+                    {
+                        if (voxSmallScreenAnimator != null) 
+                        {
+                            PlayVoxSmallScreenAnimation();
+                        }
+                        else 
+                        {
+                            Debug.LogWarning("voxSmallScreenAnimator is NULL! Skipping animation.");
+                        }
+                    }
                     break;
+
                 case PORTRAIT_TAG:
                     if (stopMovement)
                     {
@@ -547,6 +560,26 @@ public class InkDialogueManager : MonoBehaviour
             voxScreenAnimator.SetBool("VoxSpeaking", true);
             Debug.Log("Triggering VoxSpeakingReg animation");
         }
+    }
+
+    private void PlayVoxSmallScreenAnimation()
+    {
+        //voxSmallScreenAnimator.SetBool("SmallVoxSpeaking", true);
+        //Debug.Log("Triggering SmallVoxSpeaking animation");
+        
+        // If vox's health bar has been unlocked. 
+        if (voxOutlet.firstStep)
+        {
+            voxSmallScreenAnimator.SetBool("SmallVoxHurt", true);
+            voxSmallScreenAnimator.SetBool("SmallVoxSpeaking", true);
+            Debug.Log("Triggering SmallVoxSpeakingHurt animation");
+        }
+        else 
+        {
+            voxSmallScreenAnimator.SetBool("SmallVoxSpeaking", true);
+            Debug.Log("Triggering VoxSpeaking animation");
+        }
+        
     }
 
     private void PlayIntercomAnimations(string animationName)
