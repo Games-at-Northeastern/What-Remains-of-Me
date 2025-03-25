@@ -228,5 +228,15 @@ public class Outlet : MonoBehaviour
     {
         controlledSecondaries.Add(newSecondary);
     }
+
+    public void Lock(bool shouldBeEnabled)
+    {
+        if (!shouldBeEnabled)
+        {
+            //....
+        }
+        energyTransferSpeed = 0f;
+        targetingGoal = 0f;
+    }
 }
 
