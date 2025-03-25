@@ -454,6 +454,7 @@ public class InkDialogueManager : MonoBehaviour
                         handlerAnimator.Play("JonesUnTakeOver");
                     }
 
+                    /**
                     if (tagValue == "Jones Intercom")
                     {
                         if (intercomAnimator != null)
@@ -485,6 +486,7 @@ public class InkDialogueManager : MonoBehaviour
 
                         PlayIntercomAnimations("JonesIntercom_Talk");
                     }
+                    */
 
                     if (tagValue == "Vox")
                     {
@@ -498,7 +500,7 @@ public class InkDialogueManager : MonoBehaviour
                         }
                     }
 
-                    if (tagValue == "Small Vox")
+                    if (tagValue == "Vox Screen")
                     {
                         if (voxSmallScreenAnimator != null) 
                         {
@@ -564,20 +566,37 @@ public class InkDialogueManager : MonoBehaviour
 
     private void PlayVoxSmallScreenAnimation()
     {
-        //voxSmallScreenAnimator.SetBool("SmallVoxSpeaking", true);
-        //Debug.Log("Triggering SmallVoxSpeaking animation");
-        
-        // If vox's health bar has been unlocked. 
-        if (voxOutlet.firstStep)
+        string[] screenNames = { "Vox Screen 1", "Vox Screen 2", "Vox Screen 3", "Vox Screen 4"};
+
+        foreach (string name in screenNames)
         {
-            voxSmallScreenAnimator.SetBool("SmallVoxHurt", true);
-            voxSmallScreenAnimator.SetBool("SmallVoxSpeaking", true);
-            Debug.Log("Triggering SmallVoxSpeakingHurt animation");
-        }
-        else 
-        {
-            voxSmallScreenAnimator.SetBool("SmallVoxSpeaking", true);
-            Debug.Log("Triggering VoxSpeaking animation");
+            GameObject screenObject = GameObject.Find(name);
+            if (screenObject != null)
+            {
+                Animator animator = screenObject.GetComponent<Animator>();
+                if (animator != null)
+                {
+                    voxSmallScreenAnimator.SetBool("SmallVoxSpeaking", true);
+                    if (voxOutlet.firstStep)
+                    {
+                        voxSmallScreenAnimator.SetBool("SmallVoxHurt", true);
+                        Debug.Log("Triggering SmallVoxSpeakingHurt animation");
+                    }
+                    else
+                    {
+                        Debug.Log("Triggering VoxSpeaking animation");
+                    }
+                }
+                else 
+                {
+                    Debug.LogWarning($"Animator not found on {name}! Skipping animation.");
+                }
+
+            }
+            else
+            {
+                Debug.LogWarning($"GameObject {name} not found! Skipping animation.");
+            }
         }
         
     }
