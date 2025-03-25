@@ -14,7 +14,6 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
     private int _destinationIndex;
     private bool _shouldMove;
     private bool _completed = false;
-    private float _previousDistance;
 
     private Vector3 _moveDirection;
     private Transform[] _runtimePoints;
@@ -104,83 +103,83 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
                                                                                        //
 
         _moveDirection = GetDirectionToPoint(_destinationIndex);
-        _previousDistance = float.MaxValue; // if not maxed out, the first position might be skipped on lower-end hardware.
     }
 
     protected void FixedUpdate() => MovePlatform();
 
     protected Vector2 MovePlatform()
     {
-        if (_shouldMove) // if actionable...
+        if (!_shouldMove) // if actionable...
         {
-            var dist = GetDistanceToPoint(_destinationIndex);
-            //Debug.Log((dist > _previousDistance ? "Greater! " : "") + $"Distance: {dist}, Previous Distance: {_previousDistance}");
-
-            // both clauses are needed here. The first catches *just before* we hit the point, and the second
-            // catches *just after* we pass the point, in case a fixed-update loop doesn't manage to catch the first in time.
-            // The 2nd case is theoretically never needed as physics always occurs in fixed-update, but if the accuracy is small
-            // enough, the distance might never be smaller than it.
-
-
-            var hasMovedPast = false;
-
-            var curPos = transform.position;
-            var destination = _runtimePoints[_destinationIndex].position;
-
-            void checkMovedPast(float term, float init, float change)
+            // heavy-handed solution to elements flying off into nowhere.
+            // not even sure it works, but eh. Good code is for chumperinos.
+            if (rb.linearVelocity != Vector2.zero)
             {
-                var diff = term - init;
-
-                if (Mathf.Abs(diff) < .05f || Mathf.Abs(change) < .005f)
-                {
-                    return;
-                }
-
-                var steps = diff / change;
-                if (steps < 0)
-                {
-                    hasMovedPast = true;
-                }
-            }
-
-            checkMovedPast(destination.x, curPos.x, _moveDirection.x);
-            checkMovedPast(destination.y, curPos.y, _moveDirection.y);
-
-            if (dist <= _locationAccuracy || hasMovedPast) // if we are close enough to point OR if we've passed the target point...
-            {
-                //Debug.Log("Fired for the following reason: " + (dist > _previousDistance ? $"distance ({dist}) is greater than previous ({_previousDistance})" : "within accuracy"));
-                if (_runtimePoints.Length == 1) {
-                    transform.position = _runtimePoints[0].position;
-                }
-                UpdateDestinationAndDirection();
-                //reset velocity on changing target
                 rb.linearVelocity = Vector2.zero;
             }
+            return rb.linearVelocity;
+        }
 
-            if (!_completed) // if the track isn't already completed...
+        var dist = GetDistanceToPoint(_destinationIndex);
+        //Debug.Log((dist > _previousDistance ? "Greater! " : "") + $"Distance: {dist}, Previous Distance: {_previousDistance}");
+
+        // both clauses are needed here. The first catches *just before* we hit the point, and the second
+        // catches *just after* we pass the point, in case a fixed-update loop doesn't manage to catch the first in time.
+        // The 2nd case is theoretically never needed as physics always occurs in fixed-update, but if the accuracy is small
+        // enough, the distance might never be smaller than it.
+
+
+        var hasMovedPast = false;
+
+        var curPos = transform.position;
+        var destination = _runtimePoints[_destinationIndex].position;
+
+        void checkMovedPast(float term, float init, float change)
+        {
+            var diff = term - init;
+
+            if (Mathf.Abs(diff) < .05f || Mathf.Abs(change) < .005f)
             {
-                _previousDistance = GetDistanceToPoint(_destinationIndex);
-
-                rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection, Time.deltaTime * _lerpSpeed);
-
-                // add tracking speeds from other related bodies
-                foreach (var body in _relativeBodies)
-                {
-                    rb.linearVelocity += body.linearVelocity;
-                }
+                return;
             }
-            else
+
+            var steps = diff / change;
+            if (steps < 0)
             {
-                Deactivate();
+                hasMovedPast = true;
             }
         }
 
-        // heavy-handed solution to elements flying off into nowhere.
-        // not even sure it works, but eh. Good code is for chumperinos.
-        else if (rb.linearVelocity != Vector2.zero)
+        checkMovedPast(destination.x, curPos.x, _moveDirection.x);
+        checkMovedPast(destination.y, curPos.y, _moveDirection.y);
+
+        if (dist <= _locationAccuracy || hasMovedPast) // if we are close enough to point OR if we've passed the target point...
         {
+            //Debug.Log("Fired for the following reason: " + (dist > _previousDistance ? $"distance ({dist}) is greater than previous ({_previousDistance})" : "within accuracy"));
+            if (_runtimePoints.Length == 1) {
+                transform.position = _runtimePoints[0].position;
+            }
+            UpdateDestinationAndDirection();
+            //reset velocity on changing target
             rb.linearVelocity = Vector2.zero;
         }
+
+        if (!_completed) // if the track isn't already completed...
+        {
+
+            rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, _speed * (_speedModifier + _randomSpeedModifier) * _moveDirection, Time.deltaTime * _lerpSpeed);
+
+            // add tracking speeds from other related bodies
+            foreach (var body in _relativeBodies)
+            {
+                rb.linearVelocity += body.linearVelocity;
+            }
+        }
+        else
+        {
+            Deactivate();
+        }
+
         return rb.linearVelocity;
     }
 
@@ -189,8 +188,6 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
     /// </summary>
     private void UpdateDestinationAndDirection()
     {
-        // this needs to be maximized bc if it isn't, you might skip a point when manually invoking this method.
-        _previousDistance = float.MaxValue;
         transform.position = _runtimePoints[_destinationIndex].position;
         // go to next
         // even with (what i think is) logically sound index-logic, draining virus/energy and re-adding it sometimes
@@ -358,11 +355,22 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
         SetDir(!_isMovingRight);
     }
 
+    /// <summary>
+    /// Determines the current movement of the element this frame.
+    /// </summary>
+    /// <returns>The current movement of the element this frame.</returns>
     public Vector3 MovementVector()
     {
         return rb.linearVelocity * Time.deltaTime;
     }
 
+    /// <summary>
+    /// Resets the moving element's path based on a set of new points, which point to start going to, its normalized position, and its direction.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="index"></param>
+    /// <param name="isMovingRight"></param>
+    /// <param name="newPoints"></param>
     public void ResetPositioning(float position, int index, bool isMovingRight, List<Transform> newPoints)
     {
         _initialStartIndex = index;
