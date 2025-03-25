@@ -65,8 +65,13 @@ public class Outlet : MonoBehaviour
     }
 
     //Lerps the light to the goal
-    IEnumerator ControlLight()
+        IEnumerator ControlLight()
     {
+        if (outletLights.Count == 0)
+        {
+            yield break;
+        }
+
         while (true)
         {
             foreach (Light2D outletLight in outletLights)
@@ -75,9 +80,15 @@ public class Outlet : MonoBehaviour
         }
     }
 
+
     //Fades out the light
     IEnumerator FadeOutLight()
     {
+        if (outletLights.Count == 0)
+        {
+            yield break;
+        }
+
         while (outletLights[0].intensity > 0.1f)
         {
             foreach (Light2D outletLight in outletLights)
@@ -88,6 +99,7 @@ public class Outlet : MonoBehaviour
         foreach (Light2D outletLight in outletLights)
             outletLight.intensity = 0f;
     }
+
     /// <summary>
     /// Gives energy to the controlled object until this coroutine is called to end.
     /// </summary>

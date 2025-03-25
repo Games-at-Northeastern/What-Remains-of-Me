@@ -21,8 +21,7 @@ namespace Levels.Objects.Platform
 
 
             // platform behavior was deleted by a merge resolution; this should work?
-            if (col.gameObject.CompareTag(_eventCollisionTag))
-            {
+            if (!string.IsNullOrEmpty(_eventCollisionTag) && col.gameObject.CompareTag(_eventCollisionTag)) {
                 var coll = col.gameObject.GetComponent<IOnCollision>();
 
                 if (coll != null)

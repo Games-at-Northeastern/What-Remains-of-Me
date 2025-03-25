@@ -78,7 +78,7 @@ namespace PlayerController
         private bool grounded = false;
         private bool onMovingPlatform = false;
 
-        private Facing currentDirection;
+        public Facing currentDirection;
         #endregion
 
         private void SetupMoves() // loads stats and this character instance into IMove instances

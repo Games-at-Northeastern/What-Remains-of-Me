@@ -16,6 +16,7 @@ public class OutletDoorOverrider : MonoBehaviour
     private float timeWaited = 2f;
     private AControllable overridingDoor;
     private WireThrower wireThrower;
+    [SerializeField] InkDialogueAmbientTrigger turnOnTrigger;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +51,10 @@ public class OutletDoorOverrider : MonoBehaviour
         else if (sequenceStarted && overridingDoor.GetEnergy() < overridingDoor.GetMaxCharge())
         {
             overridingDoor.CreateEnergy(chargeIncreasePerSecond * Time.deltaTime, 0f);
+            if (turnOnTrigger != null)
+            {
+                turnOnTrigger.TurnOffAdditionalTriggerRequirement();
+            }
         }
 
     }

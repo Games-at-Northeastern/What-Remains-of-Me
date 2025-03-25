@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
-using UnityEditor;
 
 #if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [RequireComponent(typeof(Grid))]
 public class ReplaceAllTiles : MonoBehaviour
@@ -57,7 +58,7 @@ public class ReplaceAllTiles : MonoBehaviour
     {
         var foundTilemaps = transform.gameObject.GetComponents<Tilemap>();
 
-        foreach(Tilemap tilemap in foundTilemaps)
+        foreach (Tilemap tilemap in foundTilemaps)
         {
             if (!(tilemap == null))
             {
@@ -72,7 +73,7 @@ public class ReplaceAllTiles : MonoBehaviour
     }
 }
 
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(ReplaceAllTiles))]
 public class ReplaceAllTilesEditor : Editor
 {
@@ -100,5 +101,4 @@ public class ReplaceAllTilesEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
-
 #endif
