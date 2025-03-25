@@ -10,12 +10,16 @@ public class WarningController : MonoBehaviour
     private bool _runLightBlink;
     private bool _runLowHealthAnimation;
     private bool hasPlayedLowBatterySFX = false;
+    private bool hasPlayedVirusSFX = false;
+
     [SerializeField] private GameObject virusEyes;
     [SerializeField] private GameObject headlightA;
     [SerializeField] private GameObject headlightB;
     [SerializeField] private Color targetLightColorA;
     [SerializeField] private Color targetLightColorB;
     [SerializeField] private AudioSource lowBatterySFX;
+    [SerializeField] private AudioSource virusAffectedSFX;
+
     private GameObject lowHealthWarning;
     private float time;
     private Color initLightColorA;
@@ -48,9 +52,9 @@ public class WarningController : MonoBehaviour
         //if (lowHealthWarning != null && lowHealthWarning.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("No Warning"))
         if (_runLightBlink)
         {
-            
+
             if (time <= 0.1)   // Since time is set to a negative number in Start and StopAnimation, 
-                                // this line is always true on first update when _runAnimation is true
+                               // this line is always true on first update when _runAnimation is true
             {
                 headlightA.SetActive(!headlightA.activeSelf);
                 headlightB.SetActive(!headlightB.activeSelf);
@@ -101,7 +105,7 @@ public class WarningController : MonoBehaviour
             lowHealthWarning.GetComponent<Animator>().SetTrigger("Activate");
             lowHealthWarning.GetComponent<Animator>().SetTrigger("Inactive");
 
-            if (!hasPlayedLowBatterySFX) 
+            if (!hasPlayedLowBatterySFX)
             {
                 lowBatterySFX.Play();
                 hasPlayedLowBatterySFX = true;
@@ -129,7 +133,7 @@ public class WarningController : MonoBehaviour
     /// </summary>
     public void VirusControl(float percentVirus)
     {
-       // Debug.Log(percentVirus);
+        // Debug.Log(percentVirus);
         headlightA.GetComponent<UnityEngine.Rendering.Universal.Light2D>().color =
             new Color(initLightColorA.r + (percentVirus * (targetLightColorA.r - initLightColorA.r)),
             initLightColorA.g + (percentVirus * (targetLightColorA.g - initLightColorA.g)),
@@ -141,6 +145,16 @@ public class WarningController : MonoBehaviour
             initLightColorB.a);
         virusEyes.GetComponent<SpriteRenderer>().color = new Color(eyeColor.r, eyeColor.g, eyeColor.b, percentVirus);
 
+        // Play virus SFX only if the virus level is high enough and the sound hasn’t played yet
+        if (percentVirus > 0.5f && !hasPlayedVirusSFX)
+        {
+            virusAffectedSFX.Play();
+            hasPlayedVirusSFX = true;
+        }
+        else if (percentVirus <= 0.5f)
+        {
+            hasPlayedVirusSFX = false; // Reset flag if virus level drops
+        }
     }
 
     /// <summary>
