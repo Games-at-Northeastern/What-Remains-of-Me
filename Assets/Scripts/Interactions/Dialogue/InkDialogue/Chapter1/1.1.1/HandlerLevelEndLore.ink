@@ -2,13 +2,14 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 ->main
 
 === main ===
+#layout:left #portrait:Handler #speaker:The Handler
+You now seem operational.
 
-You now seem operational. Now for your mission, the lab is overrun with %:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler
+For your next mission: esape the lab.
 
-and I need your help.
+There are security systems that will attempt to block your path, but the situation is critical. Others are counting on your success.
 
-Their %:;&::%:;%:& Jones uploaded %:;&::%:;%:& to the lab’s defense system, and now we’re locked out of our equipment.
+You must travel forward and escape the lab. 
 
-You must reclaim this lab. %:;&::%:;%:& fate of humanity %:;&::%:;%:& on you.
-
+Everything relies on you.
 ->END
