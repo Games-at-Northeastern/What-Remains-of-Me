@@ -10,7 +10,8 @@ public class InkDialogueTrigger : MonoBehaviour
     [SerializeField] private GameObject visualCue;
 
     [Header("inkJSON")]
-    public TextAsset inkJSON;
+    public TextAsset KeyboardInkJSON;
+    public TextAsset ControllerInkJSON;
     [Header("Force Dialogue")]
     [SerializeField] private bool forceDialogue;
     [SerializeField] private bool stopMovement = true;
@@ -70,7 +71,17 @@ public class InkDialogueTrigger : MonoBehaviour
                 i.stopMovement = this.stopMovement;
                 i.autoTurnPage = this.autoTurnPage;
                 i.waitBeforePageTurn = this.waitForPageTurn;
-                i.EnterDialogueMode(inkJSON);
+
+                switch (InputManager.DEVICE) {
+                    case InputManager.InputDevice.KEYBOARD:
+                        i.EnterDialogueMode(KeyboardInkJSON);
+                        break;
+                    case InputManager.InputDevice.GAMEPAD:
+                        i.EnterDialogueMode(ControllerInkJSON);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

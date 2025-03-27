@@ -21,9 +21,9 @@ public class NPCOutlet : AControllable
     void Update()
     {
         if(virus > virusLevelUpdate) {
-            dialogueTrigger.inkJSON = infectedScript;
+            dialogueTrigger.KeyboardInkJSON = infectedScript;
         } else {
-            dialogueTrigger.inkJSON = cleanScript;
+            dialogueTrigger.KeyboardInkJSON = cleanScript;
         }
     }
 

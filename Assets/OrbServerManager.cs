@@ -215,7 +215,7 @@ public class OrbServerManager : MonoBehaviour
             currentText = fourTerminalsInkJSON;
             beat.isBossBeaten = true;
         }
-        dialogueTrigger.inkJSON = currentText;
+        dialogueTrigger.KeyboardInkJSON = currentText;
         npcOutlet.SetCleanScript(currentText);
         npcOutlet.SetInfectedScript(currentText);
         dialogueTrigger.ResetVisualCue();
