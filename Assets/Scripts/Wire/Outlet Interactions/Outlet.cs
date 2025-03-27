@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using PlayerController;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -17,6 +18,8 @@ public class Outlet : MonoBehaviour
     [SerializeField] protected float energyTransferSpeed;
     [SerializeField] protected List<Light2D> outletLights;
     [SerializeField] protected float lerpSpeed, connectedGoal, chargingGoal, targetingGoal;
+    [SerializeField] private CinemachineVirtualCamera grappleCam;
+
     protected IMovingOutlet movingOutlet;
     public Collider2D grappleOverrideRange;
 
@@ -50,6 +53,9 @@ public class Outlet : MonoBehaviour
         SoundController.instance.PlaySound(plugInSound);
         goalIntensity = connectedGoal;
         StartCoroutine(ControlLight());
+        if (grappleCam) {
+            grappleCam.Priority = 100;
+        }
         //src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
         //soundController.PlaySound("Plug_In");
     }
@@ -62,6 +68,9 @@ public class Outlet : MonoBehaviour
         CS.Disable();
         StopAllCoroutines();
         StartCoroutine(FadeOutLight());
+        if (grappleCam) {
+            grappleCam.Priority = -100;
+        }
     }
 
     //Lerps the light to the goal
