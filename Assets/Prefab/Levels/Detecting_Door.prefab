@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4469911290250423091}
   - component: {fileID: 7213385087429926384}
   - component: {fileID: 2895122529285687132}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CalculateTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -665,6 +665,7 @@ MonoBehaviour:
   connectedGoal: 0.75
   chargingGoal: 3.25
   targetingGoal: 0
+  grappleCam: {fileID: 0}
   grappleOverrideRange: {fileID: 0}
 --- !u!82 &800136588658639738
 AudioSource:
@@ -775,7 +776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c12ee1a17463ce47a622b5b49b0d548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueId: DoorDetection_95efb9c8-b5a9-457f-a12c-314ae18834bf
+  uniqueId: Detecting_Door_3083d9bc-1674-4c20-a387-ac10427051ec
   sharesData: 0
   sharedId: 
 --- !u!1 &5538078599133873410
@@ -6269,6 +6270,7 @@ MonoBehaviour:
   initPos: {x: 0, y: 0}
   shouldDisappear: 0
   requiredAtlasEnergy: 0
+  virusAllowed: 0
   disappearSFX: {fileID: 8300000, guid: 9bcc8aa9a168d9e40a1914eced98bc49, type: 3}
   maskObject: {fileID: 687000449587981760}
   invertMask: 0

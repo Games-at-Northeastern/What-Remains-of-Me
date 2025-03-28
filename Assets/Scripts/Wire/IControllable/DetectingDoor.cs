@@ -63,7 +63,7 @@ public class DetectingDoor : AControllable
     private float requiredAtlasEnergy;
     [Tooltip("Is Atlas' energy allowed to be virus?")]
     [SerializeField]
-    private bool virusAllowed;
+    private bool virusAllowed = true;
 
     [Header("SFX for Door Disappearing")]
     [SerializeField] private AudioClip disappearSFX;
@@ -132,7 +132,7 @@ public class DetectingDoor : AControllable
             maxCharge = playerInfo.battery;
         }
 
-        if (maxCharge <= 1) {
+        if (maxCharge <= 1){
             // Atlas is at the correct amount of energy
             cleanEnergy = 50;
             maxCharge = 50;

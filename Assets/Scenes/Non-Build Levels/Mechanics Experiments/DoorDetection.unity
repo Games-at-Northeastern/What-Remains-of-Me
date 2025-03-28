@@ -2222,6 +2222,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.31216818
       objectReference: {fileID: 0}
+    - target: {fileID: 3482813679797165868, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9.98015
+      objectReference: {fileID: 0}
     - target: {fileID: 3482813679797165869, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_Follow
       value: 
@@ -2232,7 +2236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3121682
+      value: 0.31216818
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2240,7 +2244,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 6.95
+      value: 5.4
       objectReference: {fileID: 0}
     - target: {fileID: 5528148736629256998, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: player
@@ -9734,7 +9738,7 @@ GameObject:
   - component: {fileID: 1834544569}
   - component: {fileID: 1834544570}
   - component: {fileID: 1834544571}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CalculateTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10233,6 +10237,7 @@ MonoBehaviour:
   connectedGoal: 0.75
   chargingGoal: 3.25
   targetingGoal: 0
+  grappleCam: {fileID: 0}
   grappleOverrideRange: {fileID: 0}
 --- !u!61 &1198589107436889124
 BoxCollider2D:
@@ -16832,6 +16837,7 @@ MonoBehaviour:
   initPos: {x: 0, y: 0}
   shouldDisappear: 0
   requiredAtlasEnergy: 0
+  virusAllowed: 1
   disappearSFX: {fileID: 8300000, guid: 9bcc8aa9a168d9e40a1914eced98bc49, type: 3}
   maskObject: {fileID: 621573790712824805}
   invertMask: 0
