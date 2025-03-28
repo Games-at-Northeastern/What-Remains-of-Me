@@ -135,7 +135,9 @@ GameObject:
   - component: {fileID: 3482813679797165869}
   - component: {fileID: 3482813679797165870}
   - component: {fileID: 2628205766195551580}
+  - component: {fileID: 4034539486737096120}
   - component: {fileID: 5528148736629256998}
+  - component: {fileID: 6929753073680469027}
   m_Layer: 0
   m_Name: CinemachineVirtualCamera
   m_TagString: Untagged
@@ -152,7 +154,7 @@ Transform:
   m_GameObject: {fileID: 3482813679797165906}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.6356697, y: 0.31216818, z: -9.98015}
+  m_LocalPosition: {x: -9.204778, y: -2.104774, z: -16.861364}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -222,10 +224,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44d70cc20219cd84593f67d248eafe36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Offset: {x: 0, y: 1, z: 0}
+  m_Offset: {x: 0, y: 0, z: 0}
   m_ApplyAfter: 1
   m_PreserveComposition: 0
---- !u!114 &5528148736629256998
+--- !u!114 &4034539486737096120
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -234,6 +236,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 3482813679797165906}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8130119060ac4c4bae2410148320018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  virtualCamera: {fileID: 3482813679797165869}
+  screenBias: 0.05
+  smoothingSpeed: 5
+--- !u!114 &5528148736629256998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3482813679797165906}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 909ab6e50d0923e409d7c5e290b5d474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -241,6 +259,22 @@ MonoBehaviour:
   player: {fileID: 0}
   maxLookAheadDistance: 3.5
   lookAheadSpeed: 2
+--- !u!114 &6929753073680469027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3482813679797165906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BoundingShape2D: {fileID: 0}
+  m_Damping: 5
+  m_MaxWindowSize: 5
+  m_Padding: 0
 --- !u!1 &3482813680084645556
 GameObject:
   m_ObjectHideFlags: 0
