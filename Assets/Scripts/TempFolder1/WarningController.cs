@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Handles virus and low health warnings for the player
@@ -11,6 +12,7 @@ public class WarningController : MonoBehaviour
     private bool _runLowHealthAnimation;
     private bool hasPlayedLowBatterySFX = false;
     private bool hasPlayedVirusSFX = false;
+    public bool isDead;
 
     [SerializeField] private GameObject virusEyes;
     [SerializeField] private GameObject headlightA;
@@ -26,6 +28,9 @@ public class WarningController : MonoBehaviour
     private Color initLightColorB;
     private Color eyeColor;
 
+    private UnityEngine.Rendering.Universal.Light2D light1;
+    private UnityEngine.Rendering.Universal.Light2D light2;
+
     /// <summary>
     /// Initializes animation to not run, initializes time and eye/light colors
     /// </summary>
@@ -39,6 +44,8 @@ public class WarningController : MonoBehaviour
         time = -1.0f;
         initLightColorA = headlightA.GetComponent<UnityEngine.Rendering.Universal.Light2D>().color;
         initLightColorB = headlightB.GetComponent<UnityEngine.Rendering.Universal.Light2D>().color;
+        light1 = headlightA.GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+        light2 = headlightB.GetComponent<UnityEngine.Rendering.Universal.Light2D>();
         eyeColor = virusEyes.GetComponent<SpriteRenderer>().color;
         virusEyes.GetComponent<SpriteRenderer>().color = new Color(eyeColor.r, eyeColor.g, eyeColor.b, 0.0f);
 
@@ -50,9 +57,16 @@ public class WarningController : MonoBehaviour
     void Update()
     {
         //if (lowHealthWarning != null && lowHealthWarning.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("No Warning"))
-        if (_runLightBlink)
+        if (isDead)
         {
-
+            Debug.Log("turn off the light");
+            light1.enabled = false;
+            light2.enabled = false;
+        }
+        else if (_runLightBlink)
+        {
+            light1.enabled = true;
+            light2.enabled = true;
             if (time <= 0.1)   // Since time is set to a negative number in Start and StopAnimation, 
                                // this line is always true on first update when _runAnimation is true
             {
@@ -65,6 +79,10 @@ public class WarningController : MonoBehaviour
                 time = -1.0f;
             }
             time += Time.deltaTime;
+        } else
+        {
+            light1.enabled = true;
+            light2.enabled = true;
         }
     }
 

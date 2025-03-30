@@ -53,6 +53,8 @@ public class SpikeTeleport : MonoBehaviour
         objectToTeleport = target;
         Rigidbody2D targetRb = target.GetComponent<Rigidbody2D>();
         targetRb.isKinematic = true;
+        WarningController wc = target.GetComponentInChildren<WarningController>();
+        wc.isDead = true;
         targetRb.constraints = RigidbodyConstraints2D.FreezeAll;
         deathParticles.gameObject.transform.position = objectToTeleport.transform.position + particleOffset;
         deathParticles.Clear();
@@ -98,6 +100,8 @@ public class SpikeTeleport : MonoBehaviour
         objectToTeleport.GetComponentInChildren<PlayerController2D>().UnlockInputs();
 
         objectToTeleport.SetActive(true);
+        WarningController wc = objectToTeleport.GetComponentInChildren<WarningController>();
+        wc.isDead = false;
         LevelManager.PlayerReset();
         InkDialogueVariables.deathCount++;
     }
