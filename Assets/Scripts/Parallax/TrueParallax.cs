@@ -20,6 +20,7 @@ public class TrueParallax : MonoBehaviour
     {
         startpos = transform.position.x;
         startpos2 = transform.position.y;
+
         if(GetComponent<SpriteRenderer>() != null)
         {
             lengthX = GetComponent<SpriteRenderer>().bounds.size.x;
@@ -43,34 +44,35 @@ public class TrueParallax : MonoBehaviour
     // needs to be a LateUpdate because the camera uses LateUpdate (otherwise some layers studder)
     void LateUpdate()
     {
-        float temp = cam.transform.position.x * (1 - parallaxEffectX);
-        float temp2 = cam.transform.position.y * (1 - parallaxEffectY);
-        float dist = cam.transform.position.x * parallaxEffectX;
-        float dist2 = cam.transform.position.y * parallaxEffectY;
-        float moveY = startpos2;
+        // Calculate new position with fixed parallax direction
+        float newX = startpos + (cam.transform.position.x - startpos) * parallaxEffectX;
+        float newY = transform.position.y;
 
         if (enableVerticleParallax)
         {
-            moveY = startpos2 + dist2;
+            newY = startpos2 + (cam.transform.position.y - startpos2) * parallaxEffectY;
 
-            if (temp2 > startpos2 + lengthY)
+            // Handle vertical wrapping
+            float tempY = cam.transform.position.y * (1 - parallaxEffectY);
+            if (tempY > startpos2 + lengthY)
             {
                 startpos2 += lengthY;
             }
-            else if (temp2 < startpos2 - lengthY)
+            else if (tempY < startpos2 - lengthY)
             {
                 startpos2 -= lengthY;
             }
-
         }
 
-        transform.position = new Vector3(startpos + dist, moveY, transform.position.z);
+        transform.position = new Vector3(newX, newY, transform.position.z);
 
-        if (temp > startpos + lengthX)
+        // Handle horizontal wrapping
+        float tempX = cam.transform.position.x * (1 - parallaxEffectX);
+        if (tempX > startpos + lengthX)
         {
             startpos += lengthX;
         }
-        else if (temp < startpos - lengthX)
+        else if (tempX < startpos - lengthX)
         {
             startpos -= lengthX;
         }
