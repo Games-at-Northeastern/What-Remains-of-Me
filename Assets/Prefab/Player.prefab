@@ -190,7 +190,7 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 0
+  m_ShadowsEnabled: 1
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0
   m_ShadowSoftnessFalloffIntensity: 0.5
@@ -543,12 +543,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d98deb179357924ba7e182ce45768fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDead: 0
   virusEyes: {fileID: 3305428300401156300}
   headlightA: {fileID: 1987736687173844117}
   headlightB: {fileID: 7279311233505151241}
   targetLightColorA: {r: 0.6901961, g: 0.32941177, b: 0.8, a: 0}
   targetLightColorB: {r: 0.6901961, g: 0.13725491, b: 0.8, a: 0}
   lowBatterySFX: {fileID: 0}
+  virusAffectedSFX: {fileID: 0}
 --- !u!1 &6860228394538578391
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,6 +701,7 @@ MonoBehaviour:
   wire: {fileID: 7803416330169813700}
   col: {fileID: 1911170117102511828}
   inputs: {fileID: 6931513395316122100}
+  currentDirection: 0
 --- !u!114 &6931513395316122100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -943,7 +946,7 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 0
+  m_ShadowsEnabled: 1
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0
   m_ShadowSoftnessFalloffIntensity: 0.5
