@@ -14,6 +14,7 @@ public class CutsceneDoorScript : MonoBehaviour
     [SerializeField] private UnityEvent<bool> toDisable;
 
     private ControllableDoor door;
+    private bool doorOpening = false;
 
     private void Awake()
     {
@@ -35,11 +36,19 @@ public class CutsceneDoorScript : MonoBehaviour
         if (npc.GetEnergy() <= 0.5f || npc.GetVirus() >= 50f)
         {
             KillNPC();
-            OpenDoor();
+            if (!doorOpening)
+            {
+                doorOpening = true;
+                OpenDoor();
+            }
         }
         else if (npc.GetVirusPercent() <= 0.4f)
         {
-            OpenDoor();
+            if (!doorOpening)
+            {
+                doorOpening = true;
+                OpenDoor();
+            }
         }
     }
 
@@ -50,5 +59,14 @@ public class CutsceneDoorScript : MonoBehaviour
         toDisable.Invoke(false);
     }
 
-    private void OpenDoor() => door.CreateEnergy(50, 0);
+    //cannot get the door to open gradually for some reason. not sure why
+    private void OpenDoor()
+    {
+        float currentTime = 0;
+        while (currentTime < 5.0f) //this loop should take 5 seconds
+        {
+            door.SetEnergy(currentTime * 10.0f);
+            currentTime += Time.deltaTime; //maybe Time.deltaTime is off somehow?
+        }
+    }
 }

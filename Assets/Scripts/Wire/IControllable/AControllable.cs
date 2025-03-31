@@ -96,6 +96,18 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
         //EnergyChange(totalEnergy);
     }
 
+    public void SetEnergy(float amount)
+    {
+        if (amount <= 0 || totalEnergy >= maxCharge)
+        {
+            return;
+        }
+
+        amount = Mathf.Min(amount, maxCharge - totalEnergy);
+
+        cleanEnergy = amount;
+    }
+
     /// <summary>
     /// This controllable loses the given amount of energy and gives it to the player health.
     /// <param name="amount"> float amount of energy for this controllable to lose </param>
