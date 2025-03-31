@@ -15,5 +15,6 @@ public class DialogueAudioInfoSO : ScriptableObject
     public float minPitch = 0.5f;
     [Range (-3, 3)]
     public float maxPitch = 3f;
+    [Range(0, 1f)] public float volume = 1f;
 }
 

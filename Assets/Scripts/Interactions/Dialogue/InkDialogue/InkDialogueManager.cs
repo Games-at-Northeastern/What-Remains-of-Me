@@ -26,7 +26,7 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private Animator portraitAnimatorTop;
     [SerializeField] private Animator handlerAnimator;
     [SerializeField] private Animator intercomAnimator;
-    [SerializeField] private Animator voxSmallScreenAnimator; 
+    [SerializeField] private Animator voxSmallScreenAnimator;
 
     [Header("Vox Boss Animations")]
     [SerializeField] private Animator voxScreenAnimator;
@@ -396,7 +396,7 @@ public class InkDialogueManager : MonoBehaviour
         }
 
 
-        audioSource.PlayOneShot(soundClip);
+        audioSource.PlayOneShot(soundClip, currentAudioInfo.volume);
     }
     private void HideChoices()
     {
@@ -502,11 +502,11 @@ public class InkDialogueManager : MonoBehaviour
 
                     if (tagValue == "Vox Screen")
                     {
-                        if (voxSmallScreenAnimator != null) 
+                        if (voxSmallScreenAnimator != null)
                         {
                             PlayVoxSmallScreenAnimation();
                         }
-                        else 
+                        else
                         {
                             Debug.LogWarning("voxSmallScreenAnimator is NULL! Skipping animation.");
                         }
@@ -587,7 +587,7 @@ public class InkDialogueManager : MonoBehaviour
                         Debug.Log("Triggering VoxSpeaking animation");
                     }
                 }
-                else 
+                else
                 {
                     Debug.LogWarning($"Animator not found on {name}! Skipping animation.");
                 }
@@ -598,7 +598,7 @@ public class InkDialogueManager : MonoBehaviour
                 Debug.LogWarning($"GameObject {name} not found! Skipping animation.");
             }
         }
-        
+
     }
 
     private void PlayIntercomAnimations(string animationName)
