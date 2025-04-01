@@ -29,7 +29,7 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
 
 
         // Register the reset health event to occur when the player dies
-        LevelManager.OnPlayerDeath.AddListener(ResetHealth);
+        LevelManager.OnPlayerDeath.AddListener(ResetVirus);
     }
 
     /// <summary>
@@ -38,6 +38,11 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
     void ResetHealth()
     {
         playerBatterySO.Value = PlayerEnergyStartingValue;
+        playerVirusSO.Value = PlayerVirusStartingValue;
+    }
+
+    void ResetVirus()
+    {
         playerVirusSO.Value = PlayerVirusStartingValue;
     }
 }
