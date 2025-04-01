@@ -26,7 +26,7 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private Animator portraitAnimatorTop;
     [SerializeField] private Animator handlerAnimator;
     [SerializeField] private Animator intercomAnimator;
-    [SerializeField] private Animator voxSmallScreenAnimator;
+    [SerializeField] private Animator SmallVox;
 
     [Header("Vox Boss Animations")]
     [SerializeField] private Animator voxScreenAnimator;
@@ -502,13 +502,13 @@ public class InkDialogueManager : MonoBehaviour
 
                     if (tagValue == "Vox Screen")
                     {
-                        if (voxSmallScreenAnimator != null)
+                        if (SmallVox != null)
                         {
                             PlayVoxSmallScreenAnimation();
                         }
                         else
                         {
-                            Debug.LogWarning("voxSmallScreenAnimator is NULL! Skipping animation.");
+                            Debug.LogWarning("Small Vox(Animator) is NULL! Skipping animation.");
                         }
                     }
                     break;
@@ -566,7 +566,7 @@ public class InkDialogueManager : MonoBehaviour
 
     private void PlayVoxSmallScreenAnimation()
     {
-        string[] screenNames = { "Vox Screen 1", "Vox Screen 2", "Vox Screen 3", "Vox Screen 4"};
+        string[] screenNames = { "SmallVoxScreen", "SmallVoxScreen1", "SmallVoxScreen2", "SmallVoxScreen3", "SmallVoxScreen4", "SmallVoxScreen5"};
 
         foreach (string name in screenNames)
         {
@@ -576,10 +576,10 @@ public class InkDialogueManager : MonoBehaviour
                 Animator animator = screenObject.GetComponent<Animator>();
                 if (animator != null)
                 {
-                    voxSmallScreenAnimator.SetBool("SmallVoxSpeaking", true);
+                    SmallVox.SetBool("SmallVoxSpeaking", true);
                     if (voxOutlet.firstStep)
                     {
-                        voxSmallScreenAnimator.SetBool("SmallVoxHurt", true);
+                        SmallVox.SetBool("SmallVoxHurt", true);
                         Debug.Log("Triggering SmallVoxSpeakingHurt animation");
                     }
                     else
