@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using PlayerController;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
 /// <summary>
 /// This class provides the functionalities needed for the pause menu.
 /// </summary>
@@ -17,6 +15,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject settingsPanel;
     public GameObject confirmQuitMenu;
 
+    private PlayerController2D player;
+
     /// <summary>
     /// Pauses the game if the "P" key is pressed.
     /// </summary>
@@ -27,6 +27,15 @@ public class PauseMenu : MonoBehaviour
             Debug.LogWarning("pause menu won't work without an Event System and.or UI input module");
         }
     }
+    
+    private void Start()
+    {
+        pausePanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        confirmQuitMenu.SetActive(false);
+        player = FindAnyObjectByType<PlayerController2D>();
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -37,7 +46,8 @@ public class PauseMenu : MonoBehaviour
             }
             else
             {
-                if (settingsPanel.activeInHierarchy){
+                if (settingsPanel.activeInHierarchy)
+                {
                     ExitSettingsMenu();
                 }
                 else
@@ -46,11 +56,6 @@ public class PauseMenu : MonoBehaviour
                 }
             }
         }
-    }
-    private void Start()
-    {
-        pausePanel.SetActive(false);
-        settingsPanel.SetActive(false);
     }
 
     /// <summary>
@@ -61,8 +66,8 @@ public class PauseMenu : MonoBehaviour
         pausePanel.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
-
-        FindObjectOfType<PlayerController2D>().LockInputs(); // locks player inputs, prevents movement
+        if (player != null)
+            player.LockInputs();
     }
 
     /// <summary>
@@ -71,11 +76,13 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         pausePanel.SetActive(false);
+        settingsPanel.SetActive(false);
         confirmQuitMenu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
 
-        FindObjectOfType<PlayerController2D>().UnlockInputs(); // unlocks player inputs, allows movement
+        if (player != null)
+            player.UnlockInputs();
 
     }
 
