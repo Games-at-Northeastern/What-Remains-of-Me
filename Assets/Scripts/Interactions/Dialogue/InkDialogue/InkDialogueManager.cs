@@ -566,7 +566,7 @@ public class InkDialogueManager : MonoBehaviour
 
     private void PlayVoxSmallScreenAnimation()
     {
-        string[] screenNames = { "SmallVoxScreen", "SmallVoxScreen1", "SmallVoxScreen2", "SmallVoxScreen3", "SmallVoxScreen4", "SmallVoxScreen5"};
+        string[] screenNames = { "VoxScreen", "VoxScreen1", "VoxScreen2", "VoxScreen3", "VoxScreen4", "VoxScreen5"};
 
         foreach (string name in screenNames)
         {
