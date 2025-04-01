@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// This class provides the functionalities needed for the pause menu.
@@ -14,6 +15,9 @@ public class PauseMenu : MonoBehaviour
     public GameObject pausePanel;
     public GameObject settingsPanel;
     public GameObject confirmQuitMenu;
+
+    [SerializeField] private TMP_Text mouseToggleText;
+    private bool isMouseEnabled = true;
 
     private PlayerController2D player;
 
@@ -138,4 +142,14 @@ public class PauseMenu : MonoBehaviour
         Application.Quit();
     }
 
+    /// <summary>
+    /// Switch the states of toggle mouse(on/off).
+    /// </summary>
+    public void ToggleMouse()
+    {
+        isMouseEnabled = !isMouseEnabled;
+        Cursor.visible = isMouseEnabled;
+        Cursor.lockState = isMouseEnabled ? CursorLockMode.None : CursorLockMode.Locked;
+        mouseToggleText.text = "Toggle Mouse Enable: " + (isMouseEnabled ? "On" : "Off");
+    }
 }
