@@ -21,12 +21,16 @@ public class VoxOutlet : AControllable
     [SerializeField] private ParticleSystem explosionParticles;
     [SerializeField] private bool exploded;
     [SerializeField] private InkDialogueTrigger endingDialogue;
+
+    [SerializeField] private GameObject cutsceneTrigger;
     private void Update()
     {
         // slider.value = GetVirus() / 100f;
 
         if (GetVirus() >= 50f && firstStep)
         {
+            cutsceneTrigger.SetActive(true);
+
             door2.sprite = openDoorSprite2;
             doorAnimator2.enabled = false;
             doorCollider2.enabled = false;
