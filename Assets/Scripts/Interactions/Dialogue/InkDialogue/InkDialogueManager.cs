@@ -11,6 +11,7 @@ using UnityEngine.Serialization;
 public class InkDialogueManager : MonoBehaviour
 {
     [Header("Params")] [SerializeField] private float typingSpeed = 0.04f;
+    [SerializeField] private float ambientTypingSpeed = 0.02f;
     [SerializeField] private float dialogueDelayTime = 100f;
     [SerializeField] private float exitDialogueTime = 1.0f;
 
@@ -312,8 +313,12 @@ public class InkDialogueManager : MonoBehaviour
             PlayDialogueSound(dialogueText.maxVisibleCharacters, dialogueText.text[dialogueText.maxVisibleCharacters]);
             dialogueText.maxVisibleCharacters++;
 
-
-            yield return new WaitForSeconds(typingSpeed);
+            if (stopMovement) {
+                yield return new WaitForSeconds(typingSpeed);
+            } else {
+                yield return new WaitForSeconds(ambientTypingSpeed);
+            }
+            
         }
 
 
