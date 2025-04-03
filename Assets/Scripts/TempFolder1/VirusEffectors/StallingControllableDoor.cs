@@ -24,9 +24,17 @@ public class StallingControllableDoor : AControllable
 
     private Vector2 initPos;
 
+    private AudioSource openingAudioLoop;
+
+    private Vector2 currentPos;
+
     private void Awake()
     {
         initPos = transform.position;
+
+        openingAudioLoop = GetComponent<AudioSource>();
+
+        currentPos = transform.position;
     }
 
     /// <summary>
@@ -42,7 +50,24 @@ public class StallingControllableDoor : AControllable
                 Vector2 targetPos = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, this.GetPercentFull());
                 //Debug.Log("target pos: " + targetPos);
                 transform.position = Vector2.MoveTowards(transform.position, targetPos, doorMoveSpeed * Time.deltaTime);
-            } else {
+
+                if (currentPos.y != transform.position.y)
+                {
+                    if (openingAudioLoop != null && !openingAudioLoop.isPlaying)
+                    {
+                        openingAudioLoop.Play(); //play sound if moving (sound will loop automatically)
+                    }
+                }
+                else if (openingAudioLoop != null)
+                {
+                    openingAudioLoop.Stop(); //stop sound if not moving
+                }
+
+                currentPos = transform.position;
+
+            } 
+            else
+            {
                 //virusEffect.SetFloat("Density", virusPercent.Value);
             }
         } else {
