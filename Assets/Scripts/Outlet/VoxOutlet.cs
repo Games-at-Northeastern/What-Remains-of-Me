@@ -22,6 +22,10 @@ public class VoxOutlet : AControllable
     [SerializeField] private bool exploded;
     [SerializeField] private InkDialogueTrigger endingDialogue;
 
+    [SerializeField] private float disableScreenTime = 8f;
+    [SerializeField] private GameObject voxDefeatedScreen;
+    [SerializeField] private List<GameObject> voxDefeatedDisable;
+
     [SerializeField] private GameObject cutsceneTrigger;
     private void Update()
     {
@@ -29,28 +33,43 @@ public class VoxOutlet : AControllable
 
         if (GetVirus() >= 50f && firstStep)
         {
-            cutsceneTrigger.SetActive(true);
-
-            door2.sprite = openDoorSprite2;
-            doorAnimator2.enabled = false;
-            doorCollider2.enabled = false;
-            turret1.enabled = false;
-            turret2.enabled = false;
-            firstDoor.CreateEnergy(firstDoor.GetMaxCharge(), 0);
-            leftExit.enabled = true;
             BeatenBoss();
         }
     }
 
-    private void BeatenBoss()
+    public void BeatenBoss()
     {
-        if(exploded == false)
+        cutsceneTrigger.SetActive(true);
+
+        door2.sprite = openDoorSprite2;
+        doorAnimator2.enabled = false;
+        doorCollider2.enabled = false;
+        turret1.enabled = false;
+        turret2.enabled = false;
+        firstDoor.CreateEnergy(firstDoor.GetMaxCharge(), 0);
+        leftExit.enabled = true;
+
+        if (exploded == false)
         {
             exploded = true;
             explosionParticles.Play();
         }
 
         endingDialogue.StartDialogue();
+
+        StartCoroutine(VoxDisableScreen());
+    }
+
+    private IEnumerator VoxDisableScreen() {
+        yield return new WaitForSeconds(disableScreenTime);
+
+        // Make screen true
+        voxDefeatedScreen.SetActive(true);
+
+        // Disable lights and wires from Vox
+        foreach (GameObject g in voxDefeatedDisable) {
+            g.SetActive(false);
+        }
     }
 }
 
