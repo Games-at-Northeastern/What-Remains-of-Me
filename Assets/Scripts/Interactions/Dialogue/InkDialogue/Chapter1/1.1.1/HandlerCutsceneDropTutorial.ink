@@ -7,6 +7,8 @@ We had installed this drop to test your vertical stabilizers. #layout:left #port
 
 I don't know if they're still functional after &!;;%;&&$ incident, but this is the only way forward.
 
-Good luck, Atlas.
+You can trust me, Atlas.
+
+There is nothing to fear.
 
 -> END
