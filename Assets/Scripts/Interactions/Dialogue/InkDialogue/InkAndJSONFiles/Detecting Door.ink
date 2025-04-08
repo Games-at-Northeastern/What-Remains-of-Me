@@ -5,8 +5,11 @@ INCLUDE globas.ink
 
 Atlas, some of the doors you encounter aren't actually in need of energy. #layout:left #portrait:Handler #speaker:The Handler
 
-They'll detect how much you have ahead of time, to make sure you didn't have the wrong amount of energy
+They're equipped with sensors to detect how much energy you have before you enter. 
 
-When going into a new area. We later used them to detect virus as well, so make sure to keep an eye on your energy level.
+They were designed to keep maintenance bots well-charged - and to keep infected bots out.
+
+Be sure to keep an eye on your energy level. We wouldn’t want you to get locked out of anywhere, now would we?
+
 
 -> END

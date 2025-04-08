@@ -5,14 +5,13 @@ INCLUDE globas.ink
 
 Atlas, do you see the batteries over there? #layout:left #portrait:Handler #speaker:The Handler
 
-As long as they haven't been damaged after &!;;%;&&$, they will never run out of battery.
+As long as they haven't been damaged after the &!;;%;&&$, they will never run out of battery.
 
-They run on geothermal energy and will never run out.
+However, they run on geothermal energy. If their outer shells are damaged, they cannot function anymore. 
 
-If they're damaged, they're not functional anymore. 
-
-Any energy you put into them will be drained away. You can't get it back.
+Any energy you put into those broken batteries will be drained away completely. You can't get it back.
 
 Be careful, Atlas.
+
 
 -> END
