@@ -115,6 +115,7 @@ public class ControllableDoor : AControllable
     }
 
     private float lastFull;
+    private bool firstFrame = true;
 
     /// <summary>
     /// Updates the door's position based on the amount of energy supplied to it.
@@ -122,6 +123,15 @@ public class ControllableDoor : AControllable
     void Update()
     {
         float percentFull = this.GetPercentFull();
+
+        // skips first frame, when atlas loads in as to not play the sound of door
+        // if it is already charged with percentage
+        if (firstFrame)
+        {
+            lastFull = percentFull;
+            firstFrame = false;
+            return;
+        }
 
         if (!Mathf.Approximately(lastFull, percentFull))
         {
