@@ -21,6 +21,7 @@ public class InkDialogueTrigger : MonoBehaviour
     [SerializeField] private float waitForInteractAvailable = 3f;
 
     [SerializeField] private bool isTutorialDialogue = false;
+    [SerializeField] private bool useDialogueCamera = false;
 
     private bool playerInRange;
 
@@ -57,6 +58,11 @@ public class InkDialogueTrigger : MonoBehaviour
             // disables dialogue so that the player can't enter the dialogue mode until waitForInteractAvailable seconds
             if (InkDialogueManager.GetInstance().dialogueEnded)
             {
+                if (DialogueCamera.Instance != null)
+                {
+                    DialogueCamera.Instance.StopFramingDialogue();
+                }
+
                 if (OnDialogueEnded != null)
                 {
                     OnDialogueEnded.Invoke();
@@ -65,6 +71,11 @@ public class InkDialogueTrigger : MonoBehaviour
             }
             else if (_cs.Player.Dialogue.WasReleasedThisFrame() || forceDialogue)
             {
+                if (DialogueCamera.Instance != null && useDialogueCamera)
+                {
+                    DialogueCamera.Instance.StartFramingDialogue(transform);
+                }
+
                 _firstInteraction = false;
                 forceDialogue = false;
                 var i = InkDialogueManager.GetInstance();
