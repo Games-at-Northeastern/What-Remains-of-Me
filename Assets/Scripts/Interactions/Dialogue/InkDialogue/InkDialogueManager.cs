@@ -571,17 +571,15 @@ public class InkDialogueManager : MonoBehaviour
 
     private void PlayVoxSmallScreenAnimation()
     {
-        string[] screenNames = { "VoxScreen", "VoxScreen1", "VoxScreen2", "VoxScreen3", "VoxScreen4", "VoxScreen5"};
-
-        foreach (string name in screenNames)
-        {
-            GameObject screenObject = GameObject.Find(name);
+        GameObject screenObject = ActiveScreenManager.Instance.GetActiveScreen();
             if (screenObject != null)
             {
                 Animator animator = screenObject.GetComponent<Animator>();
+
                 if (animator != null)
                 {
                     SmallVox.SetBool("SmallVoxSpeaking", true);
+                    Debug.Log($"SmallVoxSpeaking: {SmallVox.GetBool("SmallVoxSpeaking")}");
                     if (voxOutlet.firstStep)
                     {
                         SmallVox.SetBool("SmallVoxHurt", true);
@@ -594,18 +592,20 @@ public class InkDialogueManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"Animator not found on {name}! Skipping animation.");
+                    
+                    Debug.LogWarning($"Animator not found on active VoxScreen! Skipping animation.");
                 }
 
             }
             else
             {
-                Debug.LogWarning($"GameObject {name} not found! Skipping animation.");
+                Debug.LogWarning("No VoxScreen is active.");
             }
-        }
-
     }
 
+    
+
+    /**
     private void PlayIntercomAnimations(string animationName)
     {
         string[] intercomNames = { "Intercom Visual 2", "Intercom Visual 3", "Intercom Visual 4", "Intercom Visual 5" };
@@ -631,7 +631,7 @@ public class InkDialogueManager : MonoBehaviour
             }
         }
     }
-
+    */
     private void DisplayChoices()
     {
         List<Choice> currentChoices = currentStory.currentChoices;
