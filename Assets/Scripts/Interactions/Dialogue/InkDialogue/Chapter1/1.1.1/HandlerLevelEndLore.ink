@@ -3,9 +3,13 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 === main ===
 #layout:left #portrait:Handler #speaker:The Handler
-You now seem operational.
+Oh. You made it.
 
-For your next mission: esape the lab.
+Don't worry I never doubted you for a second.
+
+You now seem fully operational.
+
+Your main objective: escape the lab.
 
 There are security systems that will attempt to block your path, but the situation is critical. Others are counting on your success.
 
