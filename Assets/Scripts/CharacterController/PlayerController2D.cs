@@ -42,7 +42,7 @@ namespace PlayerController
         private bool isLocked = false; // when locked, movement input has no effect
         #region Internal References
 
-        [SerializeField] private PlayerSettings stats_; // settings which define player movement
+        [SerializeField] public PlayerSettings stats_; // settings which define player movement
         [SerializeField] private WireThrower wire; // Handles wire and wire physics
 
         private Rigidbody2D rb; // final value of rb.velocity after each FixedUpdate is ExternalVelocity + _speed
@@ -81,7 +81,7 @@ namespace PlayerController
         public Facing currentDirection;
         #endregion
 
-        private void SetupMoves() // loads stats and this character instance into IMove instances
+        public void SetupMoves() // loads stats and this character instance into IMove instances
         {
             groundMovement = new HorizontalSpeed(stats_.maxRunSpeed, stats_.groundedAcceleration, stats_.groundedDeceleration, this);
             airMovement = new HorizontalSpeed(stats_.maxAirSpeed, stats_.airAcceleration, stats_.airDeceleration, this);
