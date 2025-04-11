@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 6929753073680469027}
   m_Layer: 0
   m_Name: CinemachineVirtualCamera
-  m_TagString: Untagged
+  m_TagString: PlayerCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -239,7 +239,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8130119060ac4c4bae2410148320018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   virtualCamera: {fileID: 3482813679797165869}
   screenBias: 0.05
   smoothingSpeed: 5
@@ -256,7 +255,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCam: {fileID: 3482813679797165869}
-  player: {fileID: 0}
   maxLookAheadDistance: 3.5
   lookAheadSpeed: 2
 --- !u!114 &6929753073680469027
@@ -426,15 +424,15 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: -0.012500001
     y: 0
-    width: 1
-    height: 1
+    width: 0.16666667
+    height: 0.3398148
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.4
+  orthographic size: 7.34
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

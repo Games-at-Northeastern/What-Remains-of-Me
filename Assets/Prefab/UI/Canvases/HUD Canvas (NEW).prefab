@@ -1382,7 +1382,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Toggle Mouse Enable: On'
+  m_text: 'Toggle Mouse Camera: Off
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c6faa0cbd240b8f499494d5b4cc89ac5, type: 2}
   m_sharedMaterial: {fileID: 6480215725908031629, guid: c6faa0cbd240b8f499494d5b4cc89ac5, type: 2}
@@ -4565,6 +4567,7 @@ GameObject:
   - component: {fileID: 4453379177468359704}
   - component: {fileID: 2297709214909832078}
   - component: {fileID: 4498331884718806373}
+  - component: {fileID: 2173331173032184645}
   m_Layer: 5
   m_Name: ToggleMouseButton
   m_TagString: Untagged
@@ -4674,9 +4677,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: RestartLevel
+      - m_Target: {fileID: 2173331173032184645}
+        m_TargetAssemblyTypeName: ToggleMouseButton, Assembly-CSharp
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4686,6 +4689,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2173331173032184645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5208159758785297326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87acb7a22534d144ca0d8b7d3d0dedab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 8676052526776484042}
 --- !u!1 &5233185584780412051
 GameObject:
   m_ObjectHideFlags: 0
@@ -6084,7 +6100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6158779660889837409
 RectTransform:
   m_ObjectHideFlags: 0

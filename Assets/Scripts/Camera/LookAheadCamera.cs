@@ -1,10 +1,11 @@
 using UnityEngine;
 using Cinemachine;
+using PlayerController;
 
 public class LookAheadCamera : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera virtualCam;
-    [SerializeField] private PlayerController.PlayerController2D player;
+    private PlayerController2D player;
     [SerializeField] private float maxLookAheadDistance = 3.5f;
     [SerializeField] private float lookAheadSpeed = 2f;
 
@@ -19,6 +20,7 @@ public class LookAheadCamera : MonoBehaviour
 
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController2D>();
         transposer = virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>();
         if (transposer != null)
         {
