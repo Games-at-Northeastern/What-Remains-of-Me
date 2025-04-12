@@ -36,6 +36,11 @@ public class AirLockers : MonoBehaviour
     [SerializeField]
     private float startDelay = 0.5f;
 
+    [SerializeField]
+    private AudioSource sfxSlam;
+    [SerializeField]
+    private AudioSource sfxReturn;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -105,10 +110,12 @@ public class AirLockers : MonoBehaviour
         if (moveBack)
         {
             yield return new WaitForSeconds(stationatyWait);
+            sfxSlam.Play();
         }
         else
         {
             yield return new WaitForSeconds(fallenWait);
+            sfxReturn.Play();
         }
         moveBack = !moveBack;
         closeTime = 0f;
@@ -121,6 +128,7 @@ public class AirLockers : MonoBehaviour
     {
         yield return new WaitForSeconds(startDelay);
         waiting = false;
+        sfxSlam.Play();
     }
 
 }
