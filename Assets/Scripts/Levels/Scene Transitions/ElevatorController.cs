@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using PlayerController;
 using Unity.VisualScripting;
+using UnityEngine.Rendering.Universal;
 
 public class ElevatorController : Interaction
 {
@@ -25,6 +26,9 @@ public class ElevatorController : Interaction
     [SerializeField] private GameObject elevatorObj;
     [SerializeField] private SpriteRenderer[] glassSprites;
 
+    [SerializeField] private Light2D playerLight;
+    private float defaultLightIntensity; // Store orginal intensity
+
     private bool hasTriggered = false;
 
     private List<ElevatorPortalData> portalData;
@@ -36,6 +40,17 @@ public class ElevatorController : Interaction
         player = GameObject.FindWithTag("Player");
         cc = player.GetComponentInChildren<PlayerController2D>();
         var canvi = FindObjectsOfType<Canvas>();
+
+        // Store default intensity
+        if (playerLight != null)
+        {
+            defaultLightIntensity = playerLight.intensity;
+        }
+        else
+        {
+            Debug.LogWarning("Player light not found!");
+        }
+
         foreach (var canvas in canvi)
         {
             if (canvas.gameObject.CompareTag("HUD"))
@@ -137,7 +152,7 @@ public class ElevatorController : Interaction
 
     private IEnumerator UpAnimation(int scene, LevelPortalData end)
     {
-        foreach(SpriteRenderer r in glassSprites){
+        foreach (SpriteRenderer r in glassSprites){
             r.sortingLayerName = "Foreground";
         }
         var originalY = platform.transform.position.y;
@@ -173,6 +188,13 @@ public class ElevatorController : Interaction
         foreach(SpriteRenderer r in glassSprites){
             r.sortingLayerName = "Midground";
         }
+
+        // Restore light intensity before scene transition
+        if (playerLight != null)
+        {
+            playerLight.intensity = defaultLightIntensity;
+        }
+
         NextScene(scene, end);
     }
 
@@ -243,6 +265,12 @@ public class ElevatorController : Interaction
         {
             playerIn = true;
             timeIn = 0;
+
+            // Set light intensity to 0 immediately
+            if (playerLight != null)
+            {
+                playerLight.intensity = 0f;
+            }
         }
     }
 
