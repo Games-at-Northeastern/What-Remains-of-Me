@@ -62,11 +62,17 @@ public class CutsceneDoorScript : MonoBehaviour
     //cannot get the door to open gradually for some reason. not sure why
     private void OpenDoor()
     {
-        float currentTime = 0;
+        Animator animator = GetComponent<Animator>();
+        if (animator)
+            animator.SetTrigger("OpenDoor");
+        else
+            Debug.LogWarning("No animator attached to this door");
+
+        /*float currentTime = 0;
         while (currentTime < 5.0f) //this loop should take 5 seconds
         {
             door.SetEnergy(currentTime * 10.0f);
             currentTime += Time.deltaTime; //maybe Time.deltaTime is off somehow?
-        }
+        }*/
     }
 }
