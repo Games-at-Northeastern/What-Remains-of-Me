@@ -112,6 +112,8 @@ public class ControllableDoor : AControllable
         maskObject.transform.localScale = doorRenderer.size;
 
         ShouldDisappear = shouldDisappear;
+        float percentFull = GetPercentFull();
+        transform.position = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, percentFull);
     }
 
     private float lastFull;
