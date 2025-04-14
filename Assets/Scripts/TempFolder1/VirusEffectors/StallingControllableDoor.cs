@@ -20,6 +20,9 @@ public class StallingControllableDoor : AControllable
     private VisualEffect virusEffect;
 
     [SerializeField]
+    private VisualEffect virusEffect2;
+
+    [SerializeField]
     private float doorMoveSpeed;
 
     private Vector2 initPos;
@@ -28,6 +31,8 @@ public class StallingControllableDoor : AControllable
 
     private Vector2 currentPos;
 
+    private float initDensity;
+
     private void Awake()
     {
         initPos = transform.position;
@@ -35,6 +40,8 @@ public class StallingControllableDoor : AControllable
         openingAudioLoop = GetComponent<AudioSource>();
 
         currentPos = transform.position;
+
+        initDensity = virusEffect.GetFloat("Density");
     }
 
     /// <summary>
@@ -43,10 +50,28 @@ public class StallingControllableDoor : AControllable
     void Update()
     {
         float? virusPercent = GetVirusPercent();
+        float totalEnergy = GetEnergy() + GetVirus();
+        //if (virusPercent > doVirusEffectAt * 10f)
+        //{
+        //    virusEffect.enabled = true;
+        //} else
+        //{
+        //    virusEffect.enabled = false;
+        //}
         //Debug.Log("virus percent: " + virusPercent);
+        if (totalEnergy < 1)
+        {
+            virusEffect.SetFloat("Density", 0f);
+            virusEffect2.SetFloat("Density", 0f);
+        } else
+        {
+            virusEffect.SetFloat("Density", initDensity);
+            virusEffect2.SetFloat("Density", initDensity);
+        }
         if (virusPercent != null) {
             if (virusPercent < doVirusEffectAt) {
                 virusEffect.SetFloat("Density", 0f);
+                virusEffect2.SetFloat("Density", 0f);
                 Vector2 targetPos = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, this.GetPercentFull());
                 //Debug.Log("target pos: " + targetPos);
                 transform.position = Vector2.MoveTowards(transform.position, targetPos, doorMoveSpeed * Time.deltaTime);
