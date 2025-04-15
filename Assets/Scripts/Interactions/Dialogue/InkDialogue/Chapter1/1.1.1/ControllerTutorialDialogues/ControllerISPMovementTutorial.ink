@@ -14,7 +14,8 @@ RECIEVER:: Atlas class Robot \#1297
 
 :: Use [L3] actuator to move left and right.
 
-PROCEDURE:: Find your handler.
+PROCEDURE:: Find your handler. 
+Use [RSB] to initiate communication protocols.
 
 
 ->DONE
