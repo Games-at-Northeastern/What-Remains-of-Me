@@ -11,8 +11,6 @@ public class OutletEffector : AMovingElementVirusEffector
 
     [SerializeField] private LoopType _overrideLoopType;
 
-    [SerializeField] private MonoBehaviour outletMovementScript;
-
     private bool _shouldRevertPath = true;
 
     private void Awake()
@@ -30,7 +28,6 @@ public class OutletEffector : AMovingElementVirusEffector
         Debug.Log($"[AffectMovingElement] Applying effect. shouldRevert={_shouldRevertPath}");
 
         element.SetTrack(_chargedPath, _overrideLoopType, false);
-        outletMovementScript.enabled = false;
     }
 
     /// <summary>
