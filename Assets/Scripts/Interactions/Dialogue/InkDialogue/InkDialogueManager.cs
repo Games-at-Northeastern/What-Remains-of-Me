@@ -259,6 +259,12 @@ public class InkDialogueManager : MonoBehaviour
             voxScreenAnimator.SetBool("VoxSpeaking", false);
         }
 
+        // Stops all small screen Vox animations when dialogue ends. 
+        if (SmallVox != null)
+        {
+            StopVoxSmallScreenAnimation();
+        }
+
         //btw if you ever want to adjust this, know that RigidbodyContraints2D are something called a "Bitmap" so they can't be set normally
         // https://answers.unity.com/questions/1104653/im-trying-to-freeze-both-positionx-and-rotation-in.html
         // The constraints property is a Bitmask. Simply setting it to a single option only sets that option. You need to use the | (bitwise OR) operator to merge them together before setting it i.e.
@@ -590,6 +596,7 @@ public class InkDialogueManager : MonoBehaviour
         }
     }
 
+    // Activates small screen animations (ONLY WORKS FOR VOXSMALLSCREEN)
     private void PlayVoxSmallScreenAnimation()
     {
         GameObject screenObject = ActiveScreenManager.Instance.GetActiveScreen();
@@ -599,6 +606,7 @@ public class InkDialogueManager : MonoBehaviour
 
                 if (animator != null)
                 {
+                    // Sets only speaking (NORMAL) animation bool to true. 
                     SmallVox.SetBool("SmallVoxSpeaking", true);
                     Debug.Log($"SmallVoxSpeaking: {SmallVox.GetBool("SmallVoxSpeaking")}");
                     if (voxOutlet.firstStep)
@@ -624,7 +632,34 @@ public class InkDialogueManager : MonoBehaviour
             }
     }
 
+    // Private method to stop animations (only works for Vox Small Screen)
+    private void StopVoxSmallScreenAnimation()
+    {
+        GameObject screenObject = ActiveScreenManager.Instance.GetActiveScreen();
 
+        if (screenObject != null)
+        {
+            Animator animator = screenObject.GetComponent<Animator>();
+
+            if (animator != null)
+            {
+                animator.SetBool("SmallVoxSpeaking", false);
+                animator.SetBool("SmallVoxHurt", false);
+                Debug.Log("SmallVox animations stopped.");
+            }
+            else 
+            {
+                Debug.LogWarning("Animator not found on active VoxScreen!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No active VoxScreen to stop animation on.");
+        }
+
+        // Clear active screen!
+        ActiveScreenManager.Instance.ClearActiveScreen();
+    }
 
     /**
     private void PlayIntercomAnimations(string animationName)
