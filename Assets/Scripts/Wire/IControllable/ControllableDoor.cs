@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
 
 /// <summary>
 /// Represents a door which can be moved up or down based on the amount of energy
@@ -56,6 +57,13 @@ public class ControllableDoor : AControllable
             }
         }
     }
+
+    [Header("Atlas Energy Requirements")]
+    [SerializeField] private bool enableDetectingFeatures = false;
+
+    [SerializeField] private float requiredAtlasEnergy;
+    [Tooltip("Is Atlas' energy allowed to be virus?")]
+    [SerializeField] private bool virusAllowed = true;
 
     [Header("SFX for Door Disappearing")]
     [SerializeField] private AudioClip disappearSFX;
@@ -114,12 +122,37 @@ public class ControllableDoor : AControllable
         maskObject.transform.localScale = doorRenderer.size;
 
         ShouldDisappear = shouldDisappear;
-        float percentFull = GetPercentFull();
-        transform.position = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, percentFull);
+
+        if(!enableDetectingFeatures)
+        {
+            float percentFull = GetPercentFull();
+            transform.position = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, percentFull);
+        }
     }
 
     private float lastFull;
     private bool firstFrame = true;
+
+    public void setMaxCharge()
+    {
+        cleanEnergy = 0;
+        virus = 0;
+        maxCharge = (float)Math.Round(playerInfo.battery - requiredAtlasEnergy) - 1.0f;
+
+        if (!virusAllowed && playerInfo.virus > 0)
+        {
+            //If Atlas has virus and we don't want him to, make him drain all his energy
+            maxCharge = playerInfo.battery;
+        }
+
+        if (maxCharge <= 1)
+        {
+            // Atlas is at the correct amount of energy
+            cleanEnergy = 50;
+            maxCharge = 50;
+        }
+        Debug.Log("New max charge: " + maxCharge);
+    }
 
     /// <summary>
     /// Updates the door's position based on the amount of energy supplied to it.
