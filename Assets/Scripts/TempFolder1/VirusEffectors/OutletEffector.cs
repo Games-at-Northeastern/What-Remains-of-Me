@@ -27,17 +27,10 @@ public class OutletEffector : AMovingElementVirusEffector
 
     override protected void AffectMovingElement(MovingElement element)
     {
-        element.SetTrack(_chargedPath, _overrideLoopType, _shouldRevertPath);
-        if (_shouldRevertPath)
-        {
-            // Revert to regular moving outlet 
-            outletMovementScript.enabled = true;
-        }
-        else 
-        {
-            // Apply virus effect. 
-            outletMovementScript.enabled = false;
-        }
+        Debug.Log($"[AffectMovingElement] Applying effect. shouldRevert={_shouldRevertPath}");
+
+        element.SetTrack(_chargedPath, _overrideLoopType, false);
+        outletMovementScript.enabled = false;
     }
 
     /// <summary>
@@ -47,12 +40,12 @@ public class OutletEffector : AMovingElementVirusEffector
     {
         Debug.Log($"[ShouldDoEffect] Checking condition: newChargePercentage = {newChargePercentage}, _doVirusEffectAt = {_doVirusEffectAt}, _shouldRevertPath = {_shouldRevertPath}");
 
-        if ((_shouldRevertPath && newChargePercentage >= _doVirusEffectAt) || 
-            (!_shouldRevertPath && newChargePercentage < _doVirusEffectAt))
+        // Virus charge
+        if (_shouldRevertPath && newChargePercentage >= _doVirusEffectAt) 
         {
-            _shouldRevertPath = !_shouldRevertPath;
-            Debug.Log($"[ShouldDoEffect] outletMovementScript.enabled set to {_shouldRevertPath}");
-            return true;
+            Debug.Log("[ShouldDoEffect] Triggering virus effect.");
+            _shouldRevertPath = false; 
+            return true; 
         }
 
         return false;
