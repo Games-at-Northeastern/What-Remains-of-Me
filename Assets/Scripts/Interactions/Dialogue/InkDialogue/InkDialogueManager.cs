@@ -523,7 +523,7 @@ public class InkDialogueManager : MonoBehaviour
                     {
                         if(voxScreenAnimator != null)
                         {
-                            PlayVoxSmallScreenAnimation();
+                            PlayVoxScreenAnimations();
                         }
                         else
                         {
