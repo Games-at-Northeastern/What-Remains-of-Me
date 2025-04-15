@@ -28,7 +28,16 @@ public class OutletEffector : AMovingElementVirusEffector
     override protected void AffectMovingElement(MovingElement element)
     {
         element.SetTrack(_chargedPath, _overrideLoopType, _shouldRevertPath);
-        outletMovementScript.enabled = false; // Enable regular outlet movement script
+        if (_shouldRevertPath)
+        {
+            // Revert to regular moving outlet 
+            outletMovementScript.enabled = true;
+        }
+        else 
+        {
+            // Apply virus effect. 
+            outletMovementScript.enabled = false;
+        }
     }
 
     /// <summary>
@@ -38,11 +47,11 @@ public class OutletEffector : AMovingElementVirusEffector
     {
         Debug.Log($"[ShouldDoEffect] Checking condition: newChargePercentage = {newChargePercentage}, _doVirusEffectAt = {_doVirusEffectAt}, _shouldRevertPath = {_shouldRevertPath}");
 
-        if ((_shouldRevertPath && newChargePercentage >= _doVirusEffectAt) || (!_shouldRevertPath && newChargePercentage < _doVirusEffectAt))
+        if ((_shouldRevertPath && newChargePercentage >= _doVirusEffectAt) || 
+            (!_shouldRevertPath && newChargePercentage < _doVirusEffectAt))
         {
             _shouldRevertPath = !_shouldRevertPath;
             Debug.Log($"[ShouldDoEffect] outletMovementScript.enabled set to {_shouldRevertPath}");
-            outletMovementScript.enabled = _shouldRevertPath;
             return true;
         }
 
