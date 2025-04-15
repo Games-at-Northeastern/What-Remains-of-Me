@@ -27,7 +27,7 @@ public class ActiveScreenManager : MonoBehaviour
     public void SetActiveScreen(GameObject screen) 
     {
         activeScreen = screen; 
-        Debug.Log($"Active screen has been set to: {screen.name}");
+        Debug.Log($"Active screen has been set");
     }
 
     public GameObject GetActiveScreen() 

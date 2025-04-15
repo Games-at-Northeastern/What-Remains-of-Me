@@ -27,7 +27,6 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private Animator portraitAnimatorTop;
     [SerializeField] private Animator handlerAnimator;
     [SerializeField] private Animator intercomAnimator;
-    [SerializeField] private Animator SmallVox;
 
     [Header("Vox Boss Animations")]
     [SerializeField] private Animator voxScreenAnimator;
@@ -260,7 +259,7 @@ public class InkDialogueManager : MonoBehaviour
         }
 
         // Stops all small screen Vox animations when dialogue ends. 
-        if (SmallVox != null)
+        if (ActiveScreenManager.Instance.GetActiveScreen() != null)
         {
             StopVoxSmallScreenAnimation();
         }
@@ -524,7 +523,7 @@ public class InkDialogueManager : MonoBehaviour
                     {
                         if(voxScreenAnimator != null)
                         {
-                            PlayVoxScreenAnimations();
+                            PlayVoxSmallScreenAnimation();
                         }
                         else
                         {
@@ -534,7 +533,7 @@ public class InkDialogueManager : MonoBehaviour
 
                     if (tagValue == "Vox Screen")
                     {
-                        if (SmallVox != null)
+                        if (ActiveScreenManager.Instance.GetActiveScreen() != null)
                         {
                             PlayVoxSmallScreenAnimation();
                         }
@@ -600,37 +599,50 @@ public class InkDialogueManager : MonoBehaviour
     private void PlayVoxSmallScreenAnimation()
     {
         GameObject screenObject = ActiveScreenManager.Instance.GetActiveScreen();
-            if (screenObject != null)
-            {
-                Animator animator = screenObject.GetComponent<Animator>();
 
-                if (animator != null)
-                {
-                    // Sets only speaking (NORMAL) animation bool to true. 
-                    SmallVox.SetBool("SmallVoxSpeaking", true);
-                    Debug.Log($"SmallVoxSpeaking: {SmallVox.GetBool("SmallVoxSpeaking")}");
-                    if (voxOutlet.firstStep)
-                    {
-                        SmallVox.SetBool("SmallVoxHurt", true);
-                        Debug.Log("Triggering SmallVoxSpeakingHurt animation");
-                    }
-                    else
-                    {
-                        Debug.Log("Triggering VoxSpeaking animation");
-                    }
-                }
-                else
-                {
-
-                    Debug.LogWarning($"Animator not found on active VoxScreen! Skipping animation.");
-                }
-
-            }
-            else
-            {
-                Debug.LogWarning("No VoxScreen is active.");
-            }
+    if (screenObject == null)
+    {
+        Debug.LogWarning("[PlayVoxSmallScreenAnimation] No active screen found.");
+        return;
     }
+
+    Debug.Log($"[PlayVoxSmallScreenAnimation] Active screen: {screenObject.name}");
+
+    Animator animator = screenObject.GetComponent<Animator>();
+    if (animator == null)
+    {
+        // Try searching in children just in case
+        animator = screenObject.GetComponentInChildren<Animator>();
+        if (animator == null)
+        {
+            Debug.LogError($"[PlayVoxSmallScreenAnimation] Animator not found on or in children of: {screenObject.name}");
+            return;
+        }
+        else
+        {
+            Debug.Log($"[PlayVoxSmallScreenAnimation] Animator found in children of: {screenObject.name}");
+        }
+    }
+    else
+    {
+        Debug.Log($"[PlayVoxSmallScreenAnimation] Animator found on: {screenObject.name}");
+    }
+
+    // Trigger the animation
+    animator.SetBool("SmallVoxSpeaking", true);
+    Debug.Log("[PlayVoxSmallScreenAnimation] Set SmallVoxSpeaking = true");
+
+    if (voxOutlet.firstStep)
+    {
+        animator.SetBool("SmallVoxHurt", true);
+        Debug.Log("[PlayVoxSmallScreenAnimation] Set SmallVoxHurt = true");
+    }
+    else
+    {
+        Debug.Log("[PlayVoxSmallScreenAnimation] Playing standard speaking animation");
+    }
+}
+    
 
     // Private method to stop animations (only works for Vox Small Screen)
     private void StopVoxSmallScreenAnimation()
@@ -640,7 +652,7 @@ public class InkDialogueManager : MonoBehaviour
         if (screenObject != null)
         {
             Animator animator = screenObject.GetComponent<Animator>();
-
+            Debug.Log($"Animator found: {animator != null}, enabled: {animator?.enabled}");
             if (animator != null)
             {
                 animator.SetBool("SmallVoxSpeaking", false);
@@ -656,9 +668,6 @@ public class InkDialogueManager : MonoBehaviour
         {
             Debug.LogWarning("No active VoxScreen to stop animation on.");
         }
-
-        // Clear active screen!
-        ActiveScreenManager.Instance.ClearActiveScreen();
     }
 
     /**
