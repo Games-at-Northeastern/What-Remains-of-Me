@@ -63,7 +63,8 @@ public class TrackOutletSetup : MonoBehaviour
             {
                 int adjustedIndex = transformIndex - 1;
                 
-                float adjustedNormal = distance / Vector2.Distance(pointParent.GetChild(transformIndex).position, pointParent.GetChild(transformIndex - 1).position);
+                float adjustedNormal = (distance + Random.Range(-1.5f, 1.5f)) / Vector2.Distance(pointParent.GetChild(transformIndex).position, pointParent.GetChild(transformIndex - 1).position);
+                adjustedNormal %= 1;
                 if (!isMovingRight)
                 {
                     adjustedIndex = adjustedIndex + 1;
