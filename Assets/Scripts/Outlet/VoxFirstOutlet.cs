@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class VoxFirstOutlet : AControllable
 {
-
+    [SerializeField][Range(0, 100)] private float VirusNeeded = 50f;
     [SerializeField] private SpriteRenderer door2;
     [SerializeField] private Sprite openDoorSprite2;
     [SerializeField] private Collider2D doorCollider2;
@@ -38,7 +38,7 @@ public class VoxFirstOutlet : AControllable
 
         //}
 
-        if (GetVirus() >= 30f && hasTriggered == false)
+        if (GetVirus() >= 40f && hasTriggered == false)
         {
             StartCoroutine(OpenDoor());
         }
