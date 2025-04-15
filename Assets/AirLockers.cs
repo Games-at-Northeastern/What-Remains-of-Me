@@ -11,14 +11,19 @@ public class AirLockers : MonoBehaviour
 
     Vector2 startingPos;
 
+
+    // Travel distance of the door.
     [SerializeField]
     private float moveDistance = 1f;
 
+    // reverses the direction the door moves depending on if it is on the ceiling or floor.
     [SerializeField]
     private bool isTopLocker;
 
+    // How fast the doors are moving.
+    [Header("Moving Speeds")]
     [SerializeField]
-    private float closeSpeed = 1f;
+    private float closeSpeed = 5f;
     [SerializeField]
     private float openSpeed = 0.5f;
     private float closeTime = 0;
@@ -28,14 +33,19 @@ public class AirLockers : MonoBehaviour
     private bool moveBack = false;
     private bool waiting = false;
 
+    // Time to wait after movement.
+    [Header("Wait times")]
     [SerializeField]
     private float stationatyWait = 3f;
     [SerializeField]
     private float fallenWait = 1.5f;
 
+    // Delay before starting movement(offset).
     [SerializeField]
     private float startDelay = 0.5f;
 
+    // One plays when slamming down, the other when moving back up.
+    [Header("Audio")]
     [SerializeField]
     private AudioSource sfxSlam;
     [SerializeField]
