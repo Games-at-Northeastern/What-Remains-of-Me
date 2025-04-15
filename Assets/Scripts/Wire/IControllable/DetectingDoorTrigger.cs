@@ -10,7 +10,7 @@ public class DetectingDoorTrigger : MonoBehaviour
     }
 
     [SerializeField]
-    private DetectingDoor controlled;
+    private ControllableDoor controlled;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") && !hasTriggered)
