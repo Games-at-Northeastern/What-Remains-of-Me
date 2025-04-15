@@ -87,6 +87,8 @@ public class ControllableDoor : AControllable
         }
     }
 
+
+
     private BoxCollider2D boxCollider = null;
     private Vector2 defaultOffset;
     private SpriteRenderer doorRenderer = null;
@@ -160,6 +162,33 @@ public class ControllableDoor : AControllable
 
         lastFull = percentFull;
     }
+
+    public void GraduallyFillDoor(float duration = 3f)
+    {
+        StartCoroutine(GraduallyFillDoorCoroutine(duration));
+    }
+
+    private IEnumerator GraduallyFillDoorCoroutine(float duration)
+    {
+        // get current energy values
+        float currentTotalEnergy = GetEnergy() + GetVirus();
+        float missingEnergy = GetMaxCharge() - currentTotalEnergy;
+        float elapsedTime = 0f;
+
+        // gradually add energy over the specified duration
+        while (elapsedTime < duration)
+        {
+            // calculate the increment to add this frame
+            float increment = missingEnergy * (Time.deltaTime / duration);
+            CreateEnergy(increment, 0f);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // add any remaining energy needed
+        CreateEnergy(missingEnergy, 0f);
+    }
+
 
     private void CalcColliderSize()
     {
@@ -263,6 +292,8 @@ public class ControllableDoor : AControllable
 
         maskObject.transform.position = initPos + new Vector2(maskOffX, maskOffY);
     }
+
+
 
 #if UNITY_EDITOR
     // switches disappear and invertmask functionality when value is changed in editor

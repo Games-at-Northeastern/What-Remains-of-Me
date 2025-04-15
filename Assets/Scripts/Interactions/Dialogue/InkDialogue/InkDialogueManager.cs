@@ -48,6 +48,11 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private DialogueAudioInfoSO currentAudioInfo;
     private Dictionary<string, DialogueAudioInfoSO> audioInfoDictionary;
 
+    [Header("Ink Function Calls")] // fields for objects that get called from external functions in ink dialogue files
+    [SerializeField] private TextAsset inkJSONAsset;
+    [SerializeField] private ControllableDoor doorController;
+
+
     [Header("Choices UI")] [SerializeField]
     private GameObject[] choices;
 
@@ -176,6 +181,22 @@ public class InkDialogueManager : MonoBehaviour
     public void EnterDialogueMode(TextAsset inkJSON)
     {
         currentStory = new Story(inkJSON.text);
+
+        // binds external function openDoor
+        currentStory.BindExternalFunction("openDoor", () =>
+        {
+            if (doorController != null)
+            {
+                // gradually fill the door's energy
+                doorController.GraduallyFillDoor(2.5f);
+                Debug.Log("Door is opening slowly via Ink external function.");
+            }
+            else
+            {
+                Debug.LogWarning("DoorController reference is not assigned in the InkDialogueManager.");
+            }
+        });
+
         dialogueIsPlaying = true;
         firstLine = true;
 
@@ -318,7 +339,7 @@ public class InkDialogueManager : MonoBehaviour
             } else {
                 yield return new WaitForSeconds(ambientTypingSpeed);
             }
-            
+
         }
 
 
@@ -592,7 +613,7 @@ public class InkDialogueManager : MonoBehaviour
                 }
                 else
                 {
-                    
+
                     Debug.LogWarning($"Animator not found on active VoxScreen! Skipping animation.");
                 }
 
@@ -603,7 +624,7 @@ public class InkDialogueManager : MonoBehaviour
             }
     }
 
-    
+
 
     /**
     private void PlayIntercomAnimations(string animationName)
