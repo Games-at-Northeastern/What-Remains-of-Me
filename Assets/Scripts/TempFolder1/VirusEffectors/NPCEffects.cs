@@ -23,7 +23,9 @@ public class NPCEffects : AControllable
         float? virusPercent = GetVirusPercent();
         float totalEnergy = GetEnergy() + GetVirus();
 
-        if (totalEnergy < 1)
+        Debug.Log(totalEnergy + " " + virusPercent);
+
+        if (totalEnergy <= 1)
         {
             foreach(var virus in virusEffect){
                 virus.SetFloat("Density", 0f);
