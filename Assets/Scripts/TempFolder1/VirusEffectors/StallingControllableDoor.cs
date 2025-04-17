@@ -17,6 +17,9 @@ public class StallingControllableDoor : AControllable
     private float doVirusEffectAt;
 
     [SerializeField]
+    private GameObject[] lights;
+
+    [SerializeField]
     private VisualEffect virusEffect;
 
     [SerializeField]
@@ -63,15 +66,24 @@ public class StallingControllableDoor : AControllable
         {
             virusEffect.SetFloat("Density", 0f);
             virusEffect2.SetFloat("Density", 0f);
+            foreach(var light in lights){
+                light.SetActive(false);
+            }
         } else
         {
             virusEffect.SetFloat("Density", initDensity);
             virusEffect2.SetFloat("Density", initDensity);
+            foreach(var light in lights){
+                light.SetActive(true);
+            }
         }
         if (virusPercent != null) {
             if (virusPercent < doVirusEffectAt) {
                 virusEffect.SetFloat("Density", 0f);
                 virusEffect2.SetFloat("Density", 0f);
+                foreach(var light in lights){
+                    light.SetActive(false);
+                }
                 Vector2 targetPos = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, this.GetPercentFull());
                 //Debug.Log("target pos: " + targetPos);
                 transform.position = Vector2.MoveTowards(transform.position, targetPos, doorMoveSpeed * Time.deltaTime);
