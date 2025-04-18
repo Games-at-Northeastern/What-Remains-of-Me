@@ -262,7 +262,7 @@ public class InkDialogueManager : MonoBehaviour
         }
 
         // Stops all small screen Vox animations when dialogue ends. 
-        if (ActiveScreenManager.Instance.GetActiveScreen() != null)
+        if (ActiveScreenManager.Instance?.GetActiveScreen() != null)
         {
             StopVoxSmallScreenAnimation();
         }
