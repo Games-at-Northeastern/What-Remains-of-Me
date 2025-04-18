@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-6374234660851903883
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 61e5ca580a08b404dbb18401455801cb
+  m_EffectName: Attenuation
+  m_MixLevel: 979aa3a4e0c8aa04eb6598262ed649a1
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!243 &-4933504121245501143
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -53,13 +67,24 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 1835c4dead7f25f4d96f61ad7ee6b0cf
+    name: AmbientVol
+  - guid: 260bda3e03a14a240905016fc14d2338
+    name: DialogueVol
+  - guid: c6f47eec37291574d97082794717b962
+    name: MasterVol
+  - guid: 21229bd75b0a8374eaba6f848bbdd6d5
+    name: MusicVol
+  - guid: cc8fc74270cbde343862de1fd770cb58
+    name: SFXVol
   m_AudioMixerGroupViews:
   - guids:
     - 3a0ca4fda98e11a48984aaf061976b7a
     - add29aeaacc696a488e192202c67ef44
     - ffad1fe8d8b9185429e6c44b4e9768ec
     - 01b478d8a496fcb45bc1443f6f0163fb
+    - f3a2923a92f466148bb3f9aebefa4f3c
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -76,6 +101,7 @@ AudioMixerGroupController:
   - {fileID: -4933504121245501143}
   - {fileID: -359023986698004688}
   - {fileID: 7168468151216740195}
+  - {fileID: 864623404717642598}
   m_Volume: c6f47eec37291574d97082794717b962
   m_Pitch: 26053a01f70fea04aa3921aef4d0d5d7
   m_Send: 00000000000000000000000000000000
@@ -109,9 +135,28 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 1b2dd9e36bd3d164b955712496e61709
   m_FloatValues:
-    cc8fc74270cbde343862de1fd770cb58: -4.9356413
+    cc8fc74270cbde343862de1fd770cb58: -0.08374856
     21229bd75b0a8374eaba6f848bbdd6d5: -0.16685188
   m_TransitionOverrides: {}
+--- !u!243 &864623404717642598
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Dialogue
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: f3a2923a92f466148bb3f9aebefa4f3c
+  m_Children: []
+  m_Volume: 260bda3e03a14a240905016fc14d2338
+  m_Pitch: 0b1268b889accf8418ce131f02410efe
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -6374234660851903883}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!244 &5713166025914360539
 AudioMixerEffectController:
   m_ObjectHideFlags: 3

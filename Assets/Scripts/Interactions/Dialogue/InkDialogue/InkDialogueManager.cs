@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using Unity.VisualScripting;
 using PlayerController;
 using UnityEngine.Serialization;
+using UnityEngine.Audio;
 
 public class InkDialogueManager : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class InkDialogueManager : MonoBehaviour
 
     //new Audio
 
+    [SerializeField] private AudioMixerGroup mixerGroup;
     [SerializeField] private DialogueAudioInfoSO handlerAudioInfo;
     [SerializeField] private DialogueAudioInfoSO jonesAudioInfo;
 
@@ -104,6 +106,7 @@ public class InkDialogueManager : MonoBehaviour
         dialogueVariables = new InkDialogueVariables(globalsJSON);
 
         audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.outputAudioMixerGroup = mixerGroup;
         currentAudioInfo = handlerAudioInfo;
     }
 
