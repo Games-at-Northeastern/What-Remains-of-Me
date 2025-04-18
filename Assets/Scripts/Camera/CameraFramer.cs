@@ -20,14 +20,28 @@ public class CameraFramer : MonoBehaviour
     private CinemachineSmoothPath dollyPath;
 
     private BoxCollider2D frameTrigger;
+    private PlayerController2D player;
 
+    private void Awake() {
+        frameTrigger = GetComponent<BoxCollider2D>();
+        framingCamera = GetComponentInChildren<CinemachineVirtualCamera>();
+        dollyPath = GetComponentInChildren<CinemachineSmoothPath>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController2D>();
+    }
 
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-        framingCamera.Priority = -100;
-        framingCamera.Follow = FindObjectOfType<PlayerController2D>().transform;
+    private void Start() {
+        if (framingCamera != null) {
+            framingCamera.Priority = -100;
+            if (player != null) {
+                framingCamera.Follow = player.transform;
+            }
+            else {
+                Debug.LogWarning("Player not found!");
+            }
+        }
+        else {
+            Debug.LogError("CinemachineVirtualCamera not found!");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
