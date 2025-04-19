@@ -17,6 +17,7 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class DeathLaser : MonoBehaviour
 {
+
     [System.Serializable]
     private enum LaserMode {
         Raycast, Distance
@@ -64,7 +65,13 @@ public class DeathLaser : MonoBehaviour
 
     private float currentLaserDistance = 0.0f;
 
-    private void Awake() => renderer = GetComponent<LineRenderer>();
+    private DeathLaserSound dlsScript;
+
+    private void Awake()
+    {
+        renderer = GetComponent<LineRenderer>();
+        dlsScript = GetComponent<DeathLaserSound>();
+    }
 
     /// <summary>
     /// Casts a raycast of the laser every frame, and kills Atlas if he collided with the laser!
@@ -113,6 +120,14 @@ public class DeathLaser : MonoBehaviour
     /// </summary>
     public void ToggleLaser() {
         laserOn = !laserOn; // Turn laser on or off
+        if (laserOn)
+        {
+            DeathLaserSound.PlayLaserOnSound(transform);
+        }
+        if (!laserOn)
+        {
+            DeathLaserSound.PlayLaserOffSound(transform);
+        }
     }
 
     /// <summary>
