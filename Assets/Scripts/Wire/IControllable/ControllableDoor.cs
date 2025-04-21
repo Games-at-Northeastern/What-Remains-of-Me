@@ -14,6 +14,7 @@ public class ControllableDoor : AControllable
 {
     Vector2 initPos;
 
+    [SerializeField] private GameObject doorTriggerObject;
     [Header("Should door dissapear as it opens?")]
     [SerializeField] private bool shouldDisappear = false;
 
@@ -203,23 +204,30 @@ public class ControllableDoor : AControllable
 
     private IEnumerator GraduallyFillDoorCoroutine(float duration)
     {
-        // get current energy values
+        // disable the trigger when door is fully opened
+        // this is used to disable any dialogues that were attached to the closed door
+        if (doorTriggerObject != null)
+        {
+            doorTriggerObject.SetActive(false);
+            Debug.Log("Door trigger disabled after door opened.");
+        }
+
         float currentTotalEnergy = GetEnergy() + GetVirus();
         float missingEnergy = GetMaxCharge() - currentTotalEnergy;
         float elapsedTime = 0f;
 
-        // gradually add energy over the specified duration
         while (elapsedTime < duration)
         {
-            // calculate the increment to add this frame
             float increment = missingEnergy * (Time.deltaTime / duration);
             CreateEnergy(increment, 0f);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // add any remaining energy needed
+        // ensure the final energy is added
         CreateEnergy(missingEnergy, 0f);
+
+
     }
 
 

@@ -1,4 +1,5 @@
 INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
+
 ->main
 
 === main ===
