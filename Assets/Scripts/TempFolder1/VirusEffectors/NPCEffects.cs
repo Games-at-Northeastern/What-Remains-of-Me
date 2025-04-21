@@ -20,28 +20,48 @@ public class NPCEffects : AControllable
 
     void Update()
     {
+
         float? virusPercent = GetVirusPercent();
         float totalEnergy = GetEnergy() + GetVirus();
 
-        Debug.Log(totalEnergy + " " + virusPercent);
-
-        if (totalEnergy <= 1)
+        if (totalEnergy <= 1 || (cleanEnergy <= 1 && virusPercent <= 1))
         {
-            foreach(var virus in virusEffect){
-                virus.SetFloat("Density", 0f);
-            }
-        } else
-        {
-            foreach(var virus in virusEffect){
-                virus.SetFloat("Density", initDensity);
+            Debug.Log("total energy less than 0");
+            foreach(var v in virusEffect){
+                Debug.Log("turn off");
+                v.SetFloat("Density", 0f);
             }
         }
-        if (virusPercent != null) {
-            if (virusPercent < doVirusEffectAt) {
-                foreach(var virus in virusEffect){
-                    virus.SetFloat("Density", 0f);
+        else
+        {
+            if (virusPercent != null)
+            {
+                Debug.Log("virus percent is not null");
+                if (virusPercent < doVirusEffectAt)
+                {
+                    Debug.Log("virus percent less than total virus");
+                    foreach (var v in virusEffect)
+                    {
+                        Debug.Log("turn off");
+                        v.SetFloat("Density", 0f);
+                    }
+                }
+                else
+                {
+                    foreach (var v in virusEffect)
+                    {
+                        v.SetFloat("Density", initDensity);
+                    }
                 }
             }
-        }
+            else
+            {
+                foreach (var v in virusEffect)
+                {
+                    Debug.Log("turn off");
+                    v.SetFloat("Density", 0f);
+                }
+            }
+        } 
     }
 }
