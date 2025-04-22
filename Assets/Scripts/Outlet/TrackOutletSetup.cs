@@ -2,8 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// A class that set ups a full track of moving outlets acros a set of points
+/// A class that set ups a full track of moving outlets acros a set of points.
 /// </summary>
+/// NOTE:Example currently found in 1.5.2 if you want to see its use case.
 public class TrackOutletSetup : MonoBehaviour
 {
     //Transform parent of all the points of the track(assumed that all points are the children of the transform)

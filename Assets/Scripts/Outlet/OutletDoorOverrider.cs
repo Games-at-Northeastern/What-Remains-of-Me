@@ -3,6 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Class attached to an outlet to an outlet that has a controllable with the purpose of filtering players through an area by detecting the power they have.
 /// </summary>
+/// NOTE:Example currently found in 1.5.2 if you want to see its use case.
 public class OutletDoorOverrider : MonoBehaviour
 {
     [SerializeField]
