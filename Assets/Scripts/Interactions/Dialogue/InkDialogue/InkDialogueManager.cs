@@ -536,6 +536,7 @@ public class InkDialogueManager : MonoBehaviour
 
                     if (tagValue == "Vox Screen")
                     {
+                        // Plays animations for the small Vox Screens only, not the large screens
                         if (ActiveScreenManager.Instance.GetActiveScreen() != null)
                         {
                             PlayVoxSmallScreenAnimation();
@@ -601,6 +602,7 @@ public class InkDialogueManager : MonoBehaviour
     // Activates small screen animations (ONLY WORKS FOR VOXSMALLSCREEN)
     private void PlayVoxSmallScreenAnimation()
     {
+        // uses ActiveScreenManager to locate the active screen triggered. 
         GameObject screenObject = ActiveScreenManager.Instance.GetActiveScreen();
 
     if (screenObject == null)

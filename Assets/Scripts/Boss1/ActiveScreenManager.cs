@@ -3,6 +3,7 @@ using UnityEngine;
 /**
     Singleton class that manages the instances of the small vox screens. 
     This is to prevent the wrong screen from triggering its animation. 
+    *NOTE* this script should be attached to 1 object within a scene, not multiple. 
 */
 public class ActiveScreenManager : MonoBehaviour
 {
@@ -30,11 +31,13 @@ public class ActiveScreenManager : MonoBehaviour
         Debug.Log($"Active screen has been set");
     }
 
+    // Get active screen
     public GameObject GetActiveScreen() 
     {
         return activeScreen;
     }
 
+    // Resets active scene. 
     public void ClearActiveScreen()
     {
         activeScreen = null; 

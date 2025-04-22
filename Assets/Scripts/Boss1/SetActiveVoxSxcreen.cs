@@ -4,6 +4,7 @@ using UnityEngine;
     This script is to be used with the ActiveScreenManager. It sets the active screen to 
     the triggered one (thru the dialogue trigger) by traversing up to the root of the trigger 
     and then finds the VoxScreenObject. 
+    *NOTE* to use this script, attach it to the trigger object for dialogue. NOT a screen. 
 */
 
 public class SetActiveVoxSxcreen : MonoBehaviour
@@ -58,6 +59,7 @@ public class SetActiveVoxSxcreen : MonoBehaviour
             //Debug.LogWarning($"VoxScreen not found inside SmallVox.");
             //return null;
         //}
+        // returns the vox screen with the animator parent object. 
         Debug.Log($"Found Vox Screen Animator on {parent.name}.");
         return animator.gameObject;
     }
