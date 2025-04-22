@@ -1,21 +1,32 @@
 using UnityEngine;
 
+/// <summary>
+/// Class attached to an outlet to an outlet that has a controllable with the purpose of filtering players through an area by detecting the power they have.
+/// </summary>
 public class OutletDoorOverrider : MonoBehaviour
 {
     [SerializeField]
+    //Done as percenteages, so the percent the a player must have(or lower) to pass through
     [Range(0.0F, 100.0F)]
     private float threashHold = 15f;
+    //Do they need a connection to the outlet to start the sequence?
     [SerializeField]
     private bool needConnection;
+    //Has the automatic rise started?
     private bool sequenceStarted = false;
-    private PlayerHealth health;
     private float timer = 0;
+    //Among of energy added to the door per second after the threasehold has been hit
     [SerializeField]
     private float chargeIncreasePerSecond;
+    //A delay before the charge starts occuring
     [SerializeField]
     private float timeWaited = 2f;
+    //What controllable is this overriding?
     private AControllable overridingDoor;
+
+    //Player values linked up to check Atlas's status
     private WireThrower wireThrower;
+    private PlayerHealth health;
     [SerializeField] InkDialogueAmbientTrigger turnOnTrigger;
     // Start is called before the first frame update
     void Start()
@@ -28,13 +39,14 @@ public class OutletDoorOverrider : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        //Do we need a connection?s
         bool canStart = true;
         if (needConnection)
         {
             canStart = GetComponent<Outlet>() == wireThrower.ConnectedOutlet;
         }
 
-
+        //Have we hit the threashold and can we start the sequence?
         if (health.playerInfo.battery < threashHold && !sequenceStarted && canStart)
         {
             sequenceStarted = true;
@@ -43,11 +55,13 @@ public class OutletDoorOverrider : MonoBehaviour
             GetComponent<Collider2D>().enabled = false;
 
         }
+        //Have we hit the threasehold and just need to wait for the delay?
         else if (sequenceStarted && timer < timeWaited)
         {
             overridingDoor.LeakEnergy(Time.deltaTime * 100f);
             timer = Mathf.Min(Time.deltaTime + timer, timeWaited);
         }
+        //Can we start charging up the door?
         else if (sequenceStarted && overridingDoor.GetEnergy() < overridingDoor.GetMaxCharge())
         {
             overridingDoor.CreateEnergy(chargeIncreasePerSecond * Time.deltaTime, 0f);

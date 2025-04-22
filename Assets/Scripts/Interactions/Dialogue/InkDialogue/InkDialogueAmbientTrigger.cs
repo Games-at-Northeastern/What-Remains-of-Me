@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// A dialouge trigger that occurs in intervals in a collider with a list of random dialogue to pick from.
+/// </summary>
 public class InkDialogueAmbientTrigger : MonoBehaviour
 {
     [SerializeField] private List<TextAsset> dialougeLines;
@@ -26,10 +30,13 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
         }
 
         timer = Mathf.Max(timer - Time.deltaTime, 0f);
+        //Is there any reason we shouldn't work on the dialogue?
         if (!playerInRange || InkDialogueManager.GetInstance().dialogueIsPlaying || !dialogueActive)
         {
             return;
         }
+
+        //Should we play a new set of dialogue
         if (timer == 0f)
         {
             var i = InkDialogueManager.GetInstance();
@@ -39,6 +46,7 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
             i.autoTurnPage = true;
             i.EnterDialogueMode(PickNextDialouge());
         }
+        //Should we reset the dialogue since the previous one is over
         else if (InkDialogueManager.GetInstance().dialogueEnded)
         {
             StartCoroutine(CanInteractAgain());
@@ -62,6 +70,10 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Grab a random set of dialouge and throw it to the start of the list.
+    /// </summary>
+    /// <returns></returns>
     private TextAsset PickNextDialouge()
     {
         if(dialougeLines.Count > 1)
@@ -74,6 +86,10 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
         Debug.Log("Line:" + dialougeLines[0].text);
         return dialougeLines[0];
     }
+    /// <summary>
+    /// Initiate a delay before Atlas can receive dialogue in the trigger
+    /// </summary>
+    /// <returns></returns>
 
     private IEnumerator CanInteractAgain()
     {
