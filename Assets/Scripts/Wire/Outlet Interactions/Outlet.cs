@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using PlayerController;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -19,7 +20,9 @@ public class Outlet : MonoBehaviour
     [SerializeField] protected List<Light2D> outletLights;
     [SerializeField] protected float lerpSpeed, connectedGoal, chargingGoal, targetingGoal;
     [SerializeField] private CinemachineVirtualCamera grappleCam;
-
+    //Should the energy be based on only the primaryControl(true: split it to the rest of the controllers) or all of them (false:don't alter any and go as is)
+    [SerializeField, Tooltip("Should we just use the controlled and split it across the secondaries, or factor in the secondaries?")]
+    protected bool shouldBaseOnControlled = false;
     protected IMovingOutlet movingOutlet;
     public Collider2D grappleOverrideRange;
 
@@ -41,6 +44,14 @@ public class Outlet : MonoBehaviour
         //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
         if(gameObject.GetComponent<UniqueID>()){
         controlled.uniqueID = gameObject.GetComponent<UniqueID>().uniqueId;
+        }
+
+        if (this.shouldBaseOnControlled)
+        {
+            //Split energy among all secondaries
+            this.controlled.PropogateEnergyTo(this.controlledSecondaries);
+            //Split transfer speeds among all secondaries
+            this.energyTransferSpeed /= 1 + this.controlledSecondaries.Count;
         }
     }
 

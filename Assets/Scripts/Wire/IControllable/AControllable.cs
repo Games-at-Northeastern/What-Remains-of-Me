@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Ink.Parsed;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -295,6 +298,20 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
 
     }
 
+
+    public void PropogateEnergyTo(List<AControllable> secondaryControllables)
+    {
+        int splitEntries  = secondaryControllables.Count + 1;
+        this.maxCharge /= splitEntries;
+        this.cleanEnergy /= splitEntries;
+        this.virus /= splitEntries;
+        foreach (AControllable controllable in secondaryControllables)
+        {
+            controllable.maxCharge = maxCharge;
+            controllable.virus = virus;
+            controllable.cleanEnergy = cleanEnergy;
+        }
+    }
 
     //Debug Control
     /*
