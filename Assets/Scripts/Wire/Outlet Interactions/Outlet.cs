@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using PlayerController;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -42,8 +41,9 @@ public class Outlet : MonoBehaviour
         CS.Player.TakeEnergy.canceled += _ => { if (controlled != null) { StopCoroutine("TakeEnergy"); SoundController.instance.StopSound(takingChargeSound); goalIntensity = connectedGoal; } };
 
         //soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
-        if(gameObject.GetComponent<UniqueID>()){
-        controlled.uniqueID = gameObject.GetComponent<UniqueID>().uniqueId;
+        if (gameObject.GetComponent<UniqueID>())
+        {
+            controlled.uniqueID = gameObject.GetComponent<UniqueID>().uniqueId;
         }
 
         if (this.shouldBaseOnControlled)
@@ -64,7 +64,8 @@ public class Outlet : MonoBehaviour
         SoundController.instance.PlaySound(plugInSound);
         goalIntensity = connectedGoal;
         StartCoroutine(ControlLight());
-        if (grappleCam) {
+        if (grappleCam)
+        {
             grappleCam.Priority = 100;
         }
         //src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
@@ -79,13 +80,14 @@ public class Outlet : MonoBehaviour
         CS.Disable();
         StopAllCoroutines();
         StartCoroutine(FadeOutLight());
-        if (grappleCam) {
+        if (grappleCam)
+        {
             grappleCam.Priority = -100;
         }
     }
 
     //Lerps the light to the goal
-        IEnumerator ControlLight()
+    IEnumerator ControlLight()
     {
         if (outletLights.Count == 0)
         {
