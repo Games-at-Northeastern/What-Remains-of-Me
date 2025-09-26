@@ -48,6 +48,8 @@ public class VirusTurret : MonoBehaviour
 
     private void Update()
     {
+
+        lineRenderer.gameObject.SetActive(false);
         if (turnedOn)
         {
             // Calculate the direction towards the player, and rotate that way
@@ -57,13 +59,16 @@ public class VirusTurret : MonoBehaviour
             rotatingPointTransform.rotation = Quaternion.Lerp(rotatingPointTransform.rotation, targetRotation, speed * Time.deltaTime);
             //turretTransform.rotation = targetRotation;
 
-            if (activateVisual)
+            if (activateVisual && Vector3.Distance(shootingPoint.position, playerTransform.position) < maxLaserDistance)
             {
 
                 // Determine the nearest collision from the turret's shooting line towards the player,
                 // and set the line renderer to display until that collision point
                 RaycastHit2D hit = Physics2D.Raycast(shootingPoint.position, shootingPoint.right, maxLaserDistance, laserCollidesWith);
                 // Debug.Log(hit.collider.gameObject); why is this left in here? it errors.
+
+                //Render the laser
+                lineRenderer.gameObject.SetActive(true);
                 lineRenderer.SetPosition(0, shootingPoint.position);
                 lineRenderer.SetPosition(1, hit.point);
 
@@ -112,7 +117,6 @@ public class VirusTurret : MonoBehaviour
     private void SetVirusBeamActive(bool isActive)
     {
         activateVisual = isActive;
-        lineRenderer.gameObject.SetActive(isActive);
         if (isActive)
         {
             audioSource.Play();
