@@ -32,6 +32,22 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
         return maxCharge;
     }
 
+    /// <summary>
+    /// Energy can go negative when gaining or losing if it overshoots it due to floats. If this is the case, force it to 0 to prevent bad displaying.
+    /// </summary>
+    private void EnsureNoNegativeEnergy()
+    {
+        if (virus < 0)
+        {
+            cleanEnergy += virus;
+            virus = 0;
+        }
+        if (cleanEnergy < 0)
+        {
+            cleanEnergy = 0;
+        }
+    }
+
     // Gets the number of units of virus contained within this controllable
     public float GetVirus()
     {
@@ -69,7 +85,7 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
 
         cleanEnergy += amount * (1f - virusProportion);
         virus += amount * virusProportion;
-
+        EnsureNoNegativeEnergy();
         VirusChange(virus / totalEnergy);
         EnergyChange(totalEnergy - totalEnergyBefore);
 
@@ -92,7 +108,7 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
 
         cleanEnergy += amount * (1f - virusRatio);
         virus += amount * virusRatio;
-
+        EnsureNoNegativeEnergy();
         VirusChange(virus / totalEnergy);
         //EnergyChange(totalEnergy);
     }
@@ -131,7 +147,7 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
 
         cleanEnergy -= amount * (1f - virusProportion);
         virus -= amount * virusProportion;
-
+        EnsureNoNegativeEnergy();
         VirusChange(virus / totalEnergy);
         EnergyChange(totalEnergy - totalEnergyBefore);
 
