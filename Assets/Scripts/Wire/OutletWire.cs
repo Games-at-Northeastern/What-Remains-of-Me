@@ -6,6 +6,11 @@ using UnityEngine.Tilemaps;
 //Updates the wires attached to outlets to match their energy level
 public class OutletWire : MonoBehaviour
 {
+
+    [SerializeField]
+    private bool useCombinedEnergy = false;
+    [SerializeField]
+    private float combinedEnergyToActivate;
     //The amount of energy required in the outlet to turn the wire green
     [SerializeField]
     private float cleanEnergyToActivate;
@@ -40,6 +45,25 @@ public class OutletWire : MonoBehaviour
 
     void Update()
     {
+        var desiredState = WireState.off;
+        if (useCombinedEnergy)
+        {
+            desiredState = CombinedEnergyState();
+        }
+        else
+        {
+            desiredState = IndividualEnergyState();
+        }
+        if (desiredState != currentState)
+        {
+            tilemap.SwapTile(GetWireTile(currentState), GetWireTile(desiredState));
+            currentState = desiredState;
+        }
+    }
+
+    private WireState IndividualEnergyState()
+    {
+
         //Prioratize showing virus if the states are conflicting
         var desiredState = WireState.off;
         if (outlet.GetVirus() >= virusEnergyToActivate)
@@ -50,13 +74,28 @@ public class OutletWire : MonoBehaviour
         {
             desiredState = WireState.clean;
         }
-
-        if (desiredState != currentState)
-        {
-            tilemap.SwapTile(GetWireTile(currentState), GetWireTile(desiredState));
-            currentState = desiredState;
-        }
+        return desiredState;
     }
+
+    private WireState CombinedEnergyState()
+    {
+
+        //Prioratize whatever has a larger portion, ties go to virus
+        var desiredState = WireState.off;
+        if (outlet.GetVirus() + outlet.GetEnergy() >= combinedEnergyToActivate)
+        {
+            if (outlet.GetEnergy() > outlet.GetVirus())
+            {
+                desiredState = WireState.clean;
+            }
+            else
+            {
+                desiredState = WireState.virus;
+            }
+        }
+        return desiredState;
+    }
+
 
     private TileBase GetWireTile(WireState state)
     {
