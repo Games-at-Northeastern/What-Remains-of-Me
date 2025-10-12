@@ -26,7 +26,7 @@ public class DeathLaserSound : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(laserOnSound, t.position);
         }
-        if (laserHum.volume == 0)
+        if (laserHum != null && laserHum.volume == 0)
         {
             laserHum.volume = laserVolume;
         }
@@ -38,7 +38,7 @@ public class DeathLaserSound : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(laserOffSound, t.position);
         }
-        if (laserHum.volume > 0)
+        if (laserHum != null && laserHum.volume > 0)
         {
             laserHum.volume = 0;
         }
