@@ -10,6 +10,7 @@ using UnityEngine.Events;
 public class EventCollectable : MonoBehaviour
 {
     public UnityEvent onCollected;
+    public PlayerInfo playerInfo;
     
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -26,6 +27,7 @@ public class EventCollectable : MonoBehaviour
             Ink.Runtime.Object obj = new Ink.Runtime.BoolValue(voiceModuleObtained);
             // call the DialogueManager to set the variable in the globals dictionary
             InkDialogueManager.GetInstance().SetVariableState("voiceModuleObtained", obj);
+            playerInfo.GainModule(UpgradeType.VOICEMODULE);
         }
     }
 }

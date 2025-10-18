@@ -44,11 +44,28 @@ public class PlayerInfo : ScriptableObject
     public float maxVirus = 100;
     [SerializeField] private float initialMaxBattery;
     public float iframesTime;
+    public Dictionary<UpgradeType, IUpgrade> upgrades = new();
+    public List<UpgradeType> currentActivatedUpgrades;
 
+    public VoiceModule.VoiceTypes _currentVoice;
     private void OnValidate()
     {
         batteryPercentage = _batteryPercentageSO;
         virusPercentage = _virusPercentageSO;
+    }
+
+    public void GainModule(UpgradeType type)
+    {
+        currentActivatedUpgrades.Add(type);
+        upgrades[type].Aquire();
+    } 
+
+    public void ActivateModules()
+    {
+        foreach(UpgradeType upgrade in currentActivatedUpgrades)
+        {
+            upgrades[upgrade].TurnOn();
+        }
     }
 
     public void ResetMaxBattery()
