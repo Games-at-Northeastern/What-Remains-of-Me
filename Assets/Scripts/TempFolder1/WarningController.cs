@@ -19,8 +19,9 @@ public class WarningController : MonoBehaviour
     [SerializeField] private GameObject headlightB;
     [SerializeField] private Color targetLightColorA;
     [SerializeField] private Color targetLightColorB;
+    [SerializeField] private AudioSource playerAudioSource;
     [SerializeField] private AudioSource lowBatterySFX;
-    [SerializeField] private AudioSource virusAffectedSFX;
+    [SerializeField] private AudioClip virusAffectedSFX;
 
     private GameObject lowHealthWarning;
     private float time;
@@ -166,7 +167,7 @@ public class WarningController : MonoBehaviour
         // Play virus SFX only if the virus level is high enough and the sound hasn’t played yet
         if (percentVirus > 0.5f && !hasPlayedVirusSFX)
         {
-            virusAffectedSFX.Play();
+            playerAudioSource.PlayOneShot(virusAffectedSFX);
             hasPlayedVirusSFX = true;
         }
         else if (percentVirus <= 0.5f)
