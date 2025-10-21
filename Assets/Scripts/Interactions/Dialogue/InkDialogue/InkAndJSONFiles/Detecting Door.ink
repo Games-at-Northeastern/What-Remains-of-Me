@@ -9,7 +9,7 @@ They're equipped with sensors to detect how much energy you have before you ente
 
 They were designed to keep maintenance bots well-charged - and to keep infected bots out.
 
-Be sure to keep an eye on your energy level. We wouldn’t want you to get locked out of anywhere, now would we?
+Remember that you can drain energy from outlets and swing from them. Be sure to keep an eye on your energy level. We wouldn’t want you to get locked out of anywhere, now would we?
 
 
 -> END
