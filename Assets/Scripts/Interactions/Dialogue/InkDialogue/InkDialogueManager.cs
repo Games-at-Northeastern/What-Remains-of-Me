@@ -76,6 +76,7 @@ public class InkDialogueManager : MonoBehaviour
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
     private const string LAYOUT_TAG = "layout";
+    private const string FOCUS_TAG = "focus";
 
     // dialogue variables
     private InkDialogueVariables dialogueVariables;
@@ -576,6 +577,15 @@ public class InkDialogueManager : MonoBehaviour
                     }
 
                     break;
+                case FOCUS_TAG:
+                    var target = GameObject.Find(tagValue);
+                    if (target && DialogueCamera.Instance != null)
+                    {
+                        DialogueCamera.Instance.StartFramingDialogue(target.transform);
+                    }
+                    Debug.Log("Focus = " + tagValue);
+                    break;
+
                 default:
                     Debug.LogWarning("Tag came in but isn't being handled" + tag);
                     break;

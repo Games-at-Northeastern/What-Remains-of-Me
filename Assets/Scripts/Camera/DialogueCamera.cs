@@ -9,9 +9,12 @@ public class DialogueCamera : MonoBehaviour
     private CinemachineVirtualCamera dialogueCameara;
     private CinemachineTargetGroup targetGroup;
 
+
+    float prevPlayerWeight, prevPlayerRadius;
+    float prevTargetWeight, prevTargetRadius;
     public static DialogueCamera Instance { get; private set; }
 
-    private void Start()
+    void Start()
     {
         Instance = this;
 
@@ -19,28 +22,55 @@ public class DialogueCamera : MonoBehaviour
         characterController = FindFirstObjectByType<PlayerController2D>();
         targetGroup = GetComponentInChildren<CinemachineTargetGroup>();
 
-
-        var playerTarget = new CinemachineTargetGroup.Target();
-        playerTarget.target = characterController.transform;
-        playerTarget.weight = 1;
+        var playerTarget = new CinemachineTargetGroup.Target
+        {
+            target = characterController.transform,
+            weight = 1f,
+            radius = 0f
+        };
 
         targetGroup.m_Targets[0] = playerTarget;
 
-        //Just incase our camera priority starts too high
         StopFramingDialogue();
     }
-
     public void StartFramingDialogue(Transform speaker)
     {
-        //We add the speaker into the tracking group and let cinemachine deal with the rest
-        var speakerTarget = new CinemachineTargetGroup.Target();
-        speakerTarget.target = speaker.transform;
-        speakerTarget.weight = 1;
+        prevPlayerWeight = targetGroup.m_Targets[0].weight;
+        prevPlayerRadius = targetGroup.m_Targets[0].radius;
 
-        targetGroup.m_Targets[1] = speakerTarget;
+
+        targetGroup.m_Targets[0].weight = 0f;
+        targetGroup.m_Targets[0].radius = 0f;
+
+        prevTargetWeight = targetGroup.m_Targets[1].weight;
+        prevTargetRadius = targetGroup.m_Targets[1].radius;
+
+        targetGroup.m_Targets[1] = new CinemachineTargetGroup.Target
+        {
+            target = speaker,
+            weight = 1.2f,
+            radius = 0.1f
+        };
 
         dialogueCameara.Priority = 100;
     }
 
-    public void StopFramingDialogue() => dialogueCameara.Priority = -100;
+    public void StopFramingDialogue()
+    {
+        targetGroup.m_Targets[0] = new CinemachineTargetGroup.Target
+        {
+            target = targetGroup.m_Targets[0].target,
+            weight = prevPlayerWeight == 0 ? 1f : prevPlayerWeight,
+            radius = prevPlayerRadius
+        };
+
+        targetGroup.m_Targets[1] = new CinemachineTargetGroup.Target
+        {
+            target = targetGroup.m_Targets[1].target,
+            weight = 0f,
+            radius = prevTargetRadius
+        };
+
+        dialogueCameara.Priority = -100;
+    }
 }
