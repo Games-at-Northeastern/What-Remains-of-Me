@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "ControlSchemes",
     "maps": [
         {
@@ -117,7 +118,7 @@
                     "name": "GiveVirus",
                     "type": "Button",
                     "id": "f0cdd94c-a7d4-4a11-ae65-780da11069f3",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -127,6 +128,15 @@
                     "type": "Button",
                     "id": "7cedad7e-3066-48ce-8857-2f41672f5029",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchVoiceModule",
+                    "type": "Button",
+                    "id": "f0bdc6a5-1e62-4ae3-97f6-8109ebac291a",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -528,6 +538,28 @@
                     "action": "TakeVirus",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "48dd793c-31c1-423c-98f5-5e17a8e3b456",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchVoiceModule",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21c7dd28-967d-4551-afaf-b271f64c5376",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchVoiceModule",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -539,7 +571,7 @@
                     "name": "Restart",
                     "type": "Button",
                     "id": "149ee7d2-34e3-4473-895a-814e690b0225",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

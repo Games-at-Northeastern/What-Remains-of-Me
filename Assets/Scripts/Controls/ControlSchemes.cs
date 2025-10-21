@@ -204,7 +204,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""name"": ""GiveVirus"",
                     ""type"": ""Button"",
                     ""id"": ""f0cdd94c-a7d4-4a11-ae65-780da11069f3"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -214,6 +214,15 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""7cedad7e-3066-48ce-8857-2f41672f5029"",
                     ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchVoiceModule"",
+                    ""type"": ""Button"",
+                    ""id"": ""f0bdc6a5-1e62-4ae3-97f6-8109ebac291a"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -615,6 +624,28 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""action"": ""TakeVirus"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48dd793c-31c1-423c-98f5-5e17a8e3b456"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchVoiceModule"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21c7dd28-967d-4551-afaf-b271f64c5376"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchVoiceModule"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -626,7 +657,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""name"": ""Restart"",
                     ""type"": ""Button"",
                     ""id"": ""149ee7d2-34e3-4473-895a-814e690b0225"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -1201,6 +1232,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
         m_Player_UIMovement = m_Player.FindAction("UI Movement", throwIfNotFound: true);
         m_Player_GiveVirus = m_Player.FindAction("GiveVirus", throwIfNotFound: true);
         m_Player_TakeVirus = m_Player.FindAction("TakeVirus", throwIfNotFound: true);
+        m_Player_SwitchVoiceModule = m_Player.FindAction("SwitchVoiceModule", throwIfNotFound: true);
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_Restart = m_Debug.FindAction("Restart", throwIfNotFound: true);
@@ -1313,6 +1345,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_UIMovement;
     private readonly InputAction m_Player_GiveVirus;
     private readonly InputAction m_Player_TakeVirus;
+    private readonly InputAction m_Player_SwitchVoiceModule;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1381,6 +1414,10 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @TakeVirus => m_Wrapper.m_Player_TakeVirus;
         /// <summary>
+        /// Provides access to the underlying input action "Player/SwitchVoiceModule".
+        /// </summary>
+        public InputAction @SwitchVoiceModule => m_Wrapper.m_Player_SwitchVoiceModule;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1448,6 +1485,9 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
             @TakeVirus.started += instance.OnTakeVirus;
             @TakeVirus.performed += instance.OnTakeVirus;
             @TakeVirus.canceled += instance.OnTakeVirus;
+            @SwitchVoiceModule.started += instance.OnSwitchVoiceModule;
+            @SwitchVoiceModule.performed += instance.OnSwitchVoiceModule;
+            @SwitchVoiceModule.canceled += instance.OnSwitchVoiceModule;
         }
 
         /// <summary>
@@ -1501,6 +1541,9 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
             @TakeVirus.started -= instance.OnTakeVirus;
             @TakeVirus.performed -= instance.OnTakeVirus;
             @TakeVirus.canceled -= instance.OnTakeVirus;
+            @SwitchVoiceModule.started -= instance.OnSwitchVoiceModule;
+            @SwitchVoiceModule.performed -= instance.OnSwitchVoiceModule;
+            @SwitchVoiceModule.canceled -= instance.OnSwitchVoiceModule;
         }
 
         /// <summary>
@@ -1941,6 +1984,13 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTakeVirus(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SwitchVoiceModule" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSwitchVoiceModule(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Debug" which allows adding and removing callbacks.

@@ -52,6 +52,8 @@ public class PlayerInfo : ScriptableObject
     {
         batteryPercentage = _batteryPercentageSO;
         virusPercentage = _virusPercentageSO;
+        _currentVoice = VoiceModule.VoiceTypes.NONE;
+        currentActivatedUpgrades.Clear();
     }
 
     public void GainModule(UpgradeType type)
@@ -62,7 +64,7 @@ public class PlayerInfo : ScriptableObject
 
     public void ActivateModules()
     {
-        foreach(UpgradeType upgrade in currentActivatedUpgrades)
+        foreach (UpgradeType upgrade in currentActivatedUpgrades)
         {
             upgrades[upgrade].TurnOn();
         }
