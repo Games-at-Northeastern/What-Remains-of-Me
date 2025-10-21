@@ -59,7 +59,7 @@ namespace PlayerController
         private Knockback knockback; // not implemented
         private WallJump wallJump; // not implemented
         private WallSlide wallSlide; // currently, wallSlide set to have 0 velocity change (effectively disabled)
-        
+
         private PlayerSFX playerSFX;
 
         [SerializeField] private PlayerInputHandler inputs; /* query this class to recieve player inputs, if locked, inputs will return false for all trigger inputs and 0s for movement input
