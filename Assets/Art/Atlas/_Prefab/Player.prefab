@@ -594,8 +594,9 @@ MonoBehaviour:
   headlightB: {fileID: 7279311233505151241}
   targetLightColorA: {r: 0.6901961, g: 0.32941177, b: 0.8, a: 0}
   targetLightColorB: {r: 0.6901961, g: 0.13725491, b: 0.8, a: 0}
+  playerAudioSource: {fileID: 1065947360339903343}
   lowBatterySFX: {fileID: 0}
-  virusAffectedSFX: {fileID: 0}
+  virusAffectedSFX: {fileID: 8300000, guid: 582788b9f867f499b9f3dafa273db163, type: 3}
 --- !u!1 &6860228394538578391
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,6 +1629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e826f3660d3e9d842999f04551c68a7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeList: []
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
 --- !u!1001 &6015637029711542914
 PrefabInstance:
