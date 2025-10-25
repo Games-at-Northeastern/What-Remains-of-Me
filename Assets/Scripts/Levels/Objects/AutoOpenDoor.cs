@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class AutoOpenDoor : MonoBehaviour
 {
-    public bool HasKey { get; private set; } = false;
+    [SerializeField] private float openHeight = 3f;
+    [SerializeField] private float openSpeed = 2f;
 
-    public float openHeight = 3f;
-    public float openSpeed = 2f;
+    public bool HasKey { get; private set; } = false;
 
     private bool isOpening = false;
     private bool isOpened = false;
     private Vector3 closedPos;
     private Vector3 openPos;
-    [SerializeField] private AudioSource openingAudioLoop;
+    private AudioSource openingAudioLoop;
 
     void Start()
     {
