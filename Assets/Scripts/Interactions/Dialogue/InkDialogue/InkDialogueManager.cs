@@ -245,6 +245,9 @@ public class InkDialogueManager : MonoBehaviour
 
         dialogueIsPlaying = false;
         dialogueEnded = true;
+        yield return null;
+        dialogueEnded = false;
+
         //turns off the X constraint on the player's rigidbody when dialogue has stopped
         if (stopMovement)
         {
