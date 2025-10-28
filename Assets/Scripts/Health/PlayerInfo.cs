@@ -47,13 +47,36 @@ public class PlayerInfo : ScriptableObject
     public Dictionary<UpgradeType, IUpgrade> upgrades = new();
     public List<UpgradeType> currentActivatedUpgrades;
 
-    public VoiceModule.VoiceTypes _currentVoice;
+    public VoiceModule.VoiceTypes currentVoice
+    {
+
+        get => _currentVoice;
+        set
+        {
+            _currentVoice = value;
+            Ink.Runtime.Object obj = new Ink.Runtime.StringValue(VoiceModule.VoiceTypeString(_currentVoice));
+            // call the DialogueManager to set the variable in the globals dictionary
+            InkDialogueManager.GetInstance().SetVariableState("currentVoice", obj);
+        }
+    }
+
+    private VoiceModule.VoiceTypes _currentVoice;
     private void OnValidate()
     {
         batteryPercentage = _batteryPercentageSO;
         virusPercentage = _virusPercentageSO;
-        _currentVoice = VoiceModule.VoiceTypes.NONE;
+        currentVoice = VoiceModule.VoiceTypes.NONE;
         currentActivatedUpgrades.Clear();
+    }
+
+    public void ResetUpgrades(List<UpgradeType> upgrades)
+    {
+        currentActivatedUpgrades.Clear();
+
+        foreach(var upgrade in upgrades)
+        { 
+            currentActivatedUpgrades.Add(upgrade);
+        }
     }
 
     public void GainModule(UpgradeType type)

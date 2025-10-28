@@ -1,11 +1,16 @@
+using SmartScriptableObjects.ReactiveProperties;
 using UnityEngine;
 
 public enum UpgradeType
 {
     VOICEMODULE
 }
-public abstract class IUpgrade : MonoBehaviour 
+
+
+public abstract class IUpgrade : MonoBehaviour
 {
+    [SerializeField]
+    protected IntReactivePropertySO upgradeHolder;
     /// <summary>
     /// The type of the upgrade this upgrade is
     /// </summary>
@@ -20,5 +25,8 @@ public abstract class IUpgrade : MonoBehaviour
     /// How the upgrade should be turned on in the level, other than the first aquirement
     /// </summary>
     public abstract void TurnOn();
+
+
+    public bool IsOn() => upgradeHolder.Value == 1;
 
 }

@@ -7,7 +7,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: jones1
+  m_Name: Vox1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -386,6 +386,32 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1102 &7575629671622547841
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atlasResponse
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 811bda314dcd63e4e8c184e92c6c4a1f, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &7980673491015554640
 AnimatorState:
   serializedVersion: 6
@@ -494,7 +520,10 @@ AnimatorStateMachine:
     m_Position: {x: 360, y: 630, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 259072938573903275}
-    m_Position: {x: 395, y: 695, z: 0}
+    m_Position: {x: 90, y: 720, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 7575629671622547841}
+    m_Position: {x: 125, y: 785, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
