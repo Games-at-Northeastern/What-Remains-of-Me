@@ -23,7 +23,7 @@ public class PowerTrail : MonoBehaviour, IRenderableTrail
 
     [SerializeField] private AControllable linkedControllable;
 
-    private bool _isActive = false;
+    private bool _isActive = true;
 
     private void Awake()
     {
@@ -52,10 +52,8 @@ public class PowerTrail : MonoBehaviour, IRenderableTrail
 
     public void SetActiveStatus(float energy)
     {
-        if (enabled == !_isActive)
-        {
             _meshRenderer.material = energy >= _enableAt ? _poweredMaterial : _deadMaterial;
-        }
+        
     }
 
     public void SetVirus(float virusPercentage)
@@ -77,11 +75,10 @@ public class PowerTrail : MonoBehaviour, IRenderableTrail
         }
         else
         {
-            if (_virusEffectMover.gameObject.activeInHierarchy)
-            {
+        
                 _virusEffectMover.gameObject.SetActive(false);
                 _virusEffectMover.Deactivate();
-            }
+            
         }
     }
 }
