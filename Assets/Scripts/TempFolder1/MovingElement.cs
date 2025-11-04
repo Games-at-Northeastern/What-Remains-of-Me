@@ -246,7 +246,10 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
     public void Deactivate()
     {
         _shouldMove = false;
-        rb.linearVelocity = Vector2.zero;
+        if (rb)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
 
          _deactivatedActions?.Invoke();
     }
