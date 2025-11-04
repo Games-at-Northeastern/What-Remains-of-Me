@@ -11,7 +11,7 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
 {
     protected Rigidbody2D rb;
 
-    private int _destinationIndex;
+    public int _destinationIndex { get; private set; }
     private bool _shouldMove;
     private bool _completed = false;
 
