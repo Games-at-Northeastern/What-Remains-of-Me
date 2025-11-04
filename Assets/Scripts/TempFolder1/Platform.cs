@@ -35,5 +35,30 @@ namespace Levels.Objects.Platform
         {
             collision.transform.SetParent(null);
         }
+
+        protected virtual void OnTriggerEnter2D(Collider2D other)
+        {
+            if (IsOnTop(other.transform.position))
+            {
+                other.transform.SetParent(transform);
+            }
+
+            if (!string.IsNullOrEmpty(_eventCollisionTag) && other.CompareTag(_eventCollisionTag))
+            {
+                var triggerHandler = other.GetComponent<IOnCollision>();
+                if (triggerHandler != null)
+                {
+                    triggerHandler.Collide((other.transform.position - transform.position).normalized);
+                }
+            }
+        }
+
+        protected virtual void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.transform.parent == transform)
+            {
+                other.transform.SetParent(null);
+            }
+        }
     }
 }

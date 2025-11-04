@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayerID: 55973931
   m_SortingLayer: 4
   m_SortingOrder: 1
-  m_Sprite: {fileID: -2735198311082812330, guid: 37a446b894cfbd649aa79b390577113d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7596f2d3806a9ca4da62eaeb8ceb3d92, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -134,7 +134,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.25, y: 1.25}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c12ee1a17463ce47a622b5b49b0d548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueId: Binxuan Yan 1_f3d35298-e2ed-4ee5-97bb-577d91a432cd
+  uniqueId: ServerOutlet_cebe5ec0-bf9f-4558-b7bb-1514e11d8c85
   sharesData: 0
   sharedId: 
 --- !u!114 &8365264674181129616
@@ -296,6 +296,7 @@ MonoBehaviour:
   grappleOverrideRange: {fileID: 0}
   door: {fileID: 0}
   grantOnce: 1
+  delayBeforeGrant: 2
 --- !u!1 &1406014806231983908
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,6 +926,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1089928275480475313}
     m_Modifications:
+    - target: {fileID: 5170075247413472986, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3f15faad64089b54e9bb953839b048e4, type: 3}
     - target: {fileID: 5170075247413472988, guid: 425ebdfd87a392749b28dfeddf0d6a8e, type: 3}
       propertyPath: m_IsActive
       value: 1
