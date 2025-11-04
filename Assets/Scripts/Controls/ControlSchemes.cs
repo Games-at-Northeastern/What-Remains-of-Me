@@ -105,7 +105,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""a72efe12-9d57-4f77-8374-829960feee7e"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -114,7 +114,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""6211cdff-1ee3-4a1d-8a74-547acc33f1de"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -123,7 +123,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""name"": ""Throw"",
                     ""type"": ""Button"",
                     ""id"": ""0635193c-0a26-41b7-a04e-b6f5ece26cad"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -141,7 +141,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""name"": ""ThrowController"",
                     ""type"": ""Button"",
                     ""id"": ""02b510ba-9854-44d6-a2d2-cc1722e77e7e"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -192,13 +192,22 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""UI Movement"",
-                    ""type"": ""Value"",
+                    ""name"": ""UI Movement Up"",
+                    ""type"": ""Button"",
                     ""id"": ""be20ef65-4008-458f-a79c-844a47b2ca83"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UI Movement Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""52596ffb-7ff8-4ca1-8c09-094c0d12925e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""GiveVirus"",
@@ -213,7 +222,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""name"": ""TakeVirus"",
                     ""type"": ""Button"",
                     ""id"": ""7cedad7e-3066-48ce-8857-2f41672f5029"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -286,7 +295,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""016638cf-eb80-4a08-8cae-3347608c1110"",
+                    ""id"": ""054bc776-923c-4139-b1bb-8927383bb525"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -505,61 +514,6 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""b37b502a-0506-4b51-acc7-095da763c856"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UI Movement"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""f45ed29b-63bb-47f2-b890-095b6ad4860e"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UI Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""316ebc00-6efa-49bd-9f26-82bf11257489"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UI Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""8a7bc391-e088-4cd2-a504-2fb3b6acf46f"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UI Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""113c6717-4df5-408e-ad55-9eb6f4793fdc"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UI Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""c6e66fdf-91ce-4bea-8ac4-c472dd323e82"",
                     ""path"": ""<Keyboard>/e"",
@@ -644,6 +598,50 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SwitchVoiceModule"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""80df0cba-fa95-45f4-8b14-e25bf3091fe4"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Movement Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5308398f-b919-4f3d-99ec-8ccc61a28219"",
+                    ""path"": ""<Joystick>/stick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Movement Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bcac0b7d-e870-4a35-ab4c-0c6f6cba0ca5"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Movement Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da8f7218-5fb9-4747-837d-d3873a31b75c"",
+                    ""path"": ""<Joystick>/stick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Movement Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1229,7 +1227,8 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
         m_Player_GiveEnergy = m_Player.FindAction("GiveEnergy", throwIfNotFound: true);
         m_Player_TakeEnergy = m_Player.FindAction("TakeEnergy", throwIfNotFound: true);
         m_Player_Dialogue = m_Player.FindAction("Dialogue", throwIfNotFound: true);
-        m_Player_UIMovement = m_Player.FindAction("UI Movement", throwIfNotFound: true);
+        m_Player_UIMovementUp = m_Player.FindAction("UI Movement Up", throwIfNotFound: true);
+        m_Player_UIMovementDown = m_Player.FindAction("UI Movement Down", throwIfNotFound: true);
         m_Player_GiveVirus = m_Player.FindAction("GiveVirus", throwIfNotFound: true);
         m_Player_TakeVirus = m_Player.FindAction("TakeVirus", throwIfNotFound: true);
         m_Player_SwitchVoiceModule = m_Player.FindAction("SwitchVoiceModule", throwIfNotFound: true);
@@ -1342,7 +1341,8 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_GiveEnergy;
     private readonly InputAction m_Player_TakeEnergy;
     private readonly InputAction m_Player_Dialogue;
-    private readonly InputAction m_Player_UIMovement;
+    private readonly InputAction m_Player_UIMovementUp;
+    private readonly InputAction m_Player_UIMovementDown;
     private readonly InputAction m_Player_GiveVirus;
     private readonly InputAction m_Player_TakeVirus;
     private readonly InputAction m_Player_SwitchVoiceModule;
@@ -1402,9 +1402,13 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Dialogue => m_Wrapper.m_Player_Dialogue;
         /// <summary>
-        /// Provides access to the underlying input action "Player/UIMovement".
+        /// Provides access to the underlying input action "Player/UIMovementUp".
         /// </summary>
-        public InputAction @UIMovement => m_Wrapper.m_Player_UIMovement;
+        public InputAction @UIMovementUp => m_Wrapper.m_Player_UIMovementUp;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UIMovementDown".
+        /// </summary>
+        public InputAction @UIMovementDown => m_Wrapper.m_Player_UIMovementDown;
         /// <summary>
         /// Provides access to the underlying input action "Player/GiveVirus".
         /// </summary>
@@ -1476,9 +1480,12 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
             @Dialogue.started += instance.OnDialogue;
             @Dialogue.performed += instance.OnDialogue;
             @Dialogue.canceled += instance.OnDialogue;
-            @UIMovement.started += instance.OnUIMovement;
-            @UIMovement.performed += instance.OnUIMovement;
-            @UIMovement.canceled += instance.OnUIMovement;
+            @UIMovementUp.started += instance.OnUIMovementUp;
+            @UIMovementUp.performed += instance.OnUIMovementUp;
+            @UIMovementUp.canceled += instance.OnUIMovementUp;
+            @UIMovementDown.started += instance.OnUIMovementDown;
+            @UIMovementDown.performed += instance.OnUIMovementDown;
+            @UIMovementDown.canceled += instance.OnUIMovementDown;
             @GiveVirus.started += instance.OnGiveVirus;
             @GiveVirus.performed += instance.OnGiveVirus;
             @GiveVirus.canceled += instance.OnGiveVirus;
@@ -1532,9 +1539,12 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
             @Dialogue.started -= instance.OnDialogue;
             @Dialogue.performed -= instance.OnDialogue;
             @Dialogue.canceled -= instance.OnDialogue;
-            @UIMovement.started -= instance.OnUIMovement;
-            @UIMovement.performed -= instance.OnUIMovement;
-            @UIMovement.canceled -= instance.OnUIMovement;
+            @UIMovementUp.started -= instance.OnUIMovementUp;
+            @UIMovementUp.performed -= instance.OnUIMovementUp;
+            @UIMovementUp.canceled -= instance.OnUIMovementUp;
+            @UIMovementDown.started -= instance.OnUIMovementDown;
+            @UIMovementDown.performed -= instance.OnUIMovementDown;
+            @UIMovementDown.canceled -= instance.OnUIMovementDown;
             @GiveVirus.started -= instance.OnGiveVirus;
             @GiveVirus.performed -= instance.OnGiveVirus;
             @GiveVirus.canceled -= instance.OnGiveVirus;
@@ -1964,12 +1974,19 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDialogue(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "UI Movement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "UI Movement Up" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUIMovement(InputAction.CallbackContext context);
+        void OnUIMovementUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UI Movement Down" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUIMovementDown(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "GiveVirus" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

@@ -35,13 +35,13 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
     /// <summary>
     /// Resets the player health to the original starting value
     /// </summary>
-    void ResetHealth()
+    private void ResetHealth()
     {
         playerBatterySO.Value = PlayerEnergyStartingValue;
         playerVirusSO.Value = PlayerVirusStartingValue;
     }
 
-    void ResetVirus()
+    private void ResetVirus()
     {
         playerVirusSO.Value = PlayerVirusStartingValue;
     }

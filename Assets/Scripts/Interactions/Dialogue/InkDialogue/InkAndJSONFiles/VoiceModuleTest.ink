@@ -3,17 +3,13 @@ INCLUDE globas.ink
 
 === main ===    
 Test dialgoue1. #layout:left #portrait:atlas1012 #speaker:???
-{
 
-    - currentVoice == "None":
+* [Test dialgoue with none response]
     ->NoVoice
-    - currentVoice == "Atlas":
+* {VoiceAtlas} [\[Atlas\]Test dialgoue with Atlas response]
     ->AtlasResponse
-    - currentVoice == "Vox":
+* {VoiceVox} [\[Vox\] Test dialgoue with Vox response]
     ->VoxResponse
-    Test final response #layout:left #portrait:atlas1012 #speaker:???
-
-}
 
 ===NoVoice===
 Test dialgoue with none response. #layout:left #portrait:atlas1012 #speaker:???

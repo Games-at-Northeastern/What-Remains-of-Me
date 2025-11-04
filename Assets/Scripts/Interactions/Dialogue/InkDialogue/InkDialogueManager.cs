@@ -54,10 +54,12 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private ControllableDoor doorController;
 
 
-    [Header("Choices UI")] [SerializeField]
-    private GameObject[] choices;
-
-    private TextMeshProUGUI[] choicesText;
+    [Header("Choices UI")]
+    [SerializeField] private GameObject choicesSet;
+    [SerializeField] private GameObject dialogueOptionPrefab;
+    private List<GameObject> choices = new List<GameObject>();
+    [SerializeField] private int currentSelectedOption = 0;
+    private List<TextMeshProUGUI> choicesText = new List<TextMeshProUGUI>();
 
     [Header("Load Globals JSON")] [SerializeField]
     private TextAsset globalsJSON;
@@ -134,14 +136,6 @@ public class InkDialogueManager : MonoBehaviour
 
         layoutAnimator = dialoguePanelRight.GetComponent<Animator>();
 
-        // get all of the choices text
-        choicesText = new TextMeshProUGUI[choices.Length];
-        int index = 0;
-        foreach (GameObject choice in choices)
-        {
-            choicesText[index] = choice.GetComponentInChildren<TextMeshProUGUI>();
-            index++;
-        }
     }
 
     private void Update()
@@ -171,6 +165,21 @@ public class InkDialogueManager : MonoBehaviour
                      dialogueText.maxVisibleCharacters == dialogueText.text.Length)
             {
                 ContinueStory();
+            }
+        }
+        else if (canContinueToNextLine && _cs.Player.Dialogue.WasPressedThisFrame() && dialogueText == dialogueTextRight)
+        {
+            MakeChoice();
+        }
+        else if (currentStory.currentChoices.Count > 0)
+        {
+            if (_cs.Player.UIMovementUp.WasPressedThisFrame())
+            {
+                MoveCurrentChoiceCursorUp();
+            }
+            else if(_cs.Player.UIMovementDown.WasPressedThisFrame())
+            {
+                MoveCurrentChoiceCursorDown();
             }
         }
     }
@@ -330,7 +339,7 @@ public class InkDialogueManager : MonoBehaviour
         StartCoroutine(CanSkip());
 
 //hide previous choices
-        HideChoices();
+        ClearChoices();
 
 // display 1 letter at a time
         foreach (char letter in line.ToCharArray())
@@ -436,11 +445,13 @@ public class InkDialogueManager : MonoBehaviour
 
         audioSource.PlayOneShot(soundClip, currentAudioInfo.volume);
     }
-    private void HideChoices()
+    private void ClearChoices()
     {
-        foreach (GameObject choicebutton in choices)
+        choices.Clear();
+        choicesText.Clear();
+        foreach (Transform child in choicesSet.transform)
         {
-            choicebutton.SetActive(false);
+            Destroy(child.gameObject);
         }
     }
 
@@ -717,48 +728,46 @@ public class InkDialogueManager : MonoBehaviour
     */
     private void DisplayChoices()
     {
+        ClearChoices();
         List<Choice> currentChoices = currentStory.currentChoices;
-
-// defensive check to make sure our UI can support the number of choices coming in
-        if (currentChoices.Count > choices.Length)
-        {
-            Debug.LogError(
-                "More choices were given than the UI can support. Number of choices given: "
-                + currentChoices.Count);
-        }
-
         int index = 0;
-// enable and initialize the choices up to the amount of choices for this line of dialogue
+        // enable and initialize the choices up to the amount of choices for this line of dialogue
         foreach (Choice choice in currentChoices)
         {
-            choices[index].gameObject.SetActive(true);
+            GameObject choiceObj = Instantiate(dialogueOptionPrefab, choicesSet.transform);
+            choices.Add(choiceObj);
+            choicesText.Add(choiceObj.GetComponentInChildren<TextMeshProUGUI>());
             choicesText[index].text = choice.text;
             index++;
         }
-
-// go through the remaining choices the UI supports and make sure they're hidden
-        for (int i = index; i < choices.Length; i++)
-        {
-            choices[i].gameObject.SetActive(false);
-        }
-
-        StartCoroutine(SelectFirstChoice());
+        SetColoration();
     }
 
-    private IEnumerator SelectFirstChoice()
+    private void SetColoration()
     {
-// Event System requires we clear it first, then wait
-// for at least one frame before we set the current selected object.
-        EventSystem.current.SetSelectedGameObject(null);
-        yield return new WaitForEndOfFrame();
-        EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
+       
+        for (int index = 0; index < choices.Count; index++)
+        {
+            if (index == currentSelectedOption)
+            {
+                choicesText[index].color = Color.yellow;
+                choicesText[index].fontStyle = FontStyles.Bold;
+            }
+            else
+            {
+                choicesText[index].color = Color.white;
+                choicesText[index].fontStyle = FontStyles.Normal;
+
+            }
+        }
     }
 
-    public void MakeChoice(int choiceIndex)
+
+    public void MakeChoice()
     {
         if (canContinueToNextLine)
         {
-            currentStory.ChooseChoiceIndex(choiceIndex);
+            currentStory.ChooseChoiceIndex(currentSelectedOption);
 
             ContinueStory();
         }
@@ -808,6 +817,20 @@ public class InkDialogueManager : MonoBehaviour
             dialogueVariables.variables.Add(variableName, newValue);
         }
     }
+
+    public void MoveCurrentChoiceCursorDown()
+    {
+        currentSelectedOption = (currentSelectedOption + 1) % choices.Count;
+
+        SetColoration();
+    }
+    public void MoveCurrentChoiceCursorUp()
+    {
+        currentSelectedOption = (currentSelectedOption - 1 + choices.Count) % choices.Count;
+
+        SetColoration();
+    }
+
 
     private void RemoveSkipText() => skipTextRight.text = "";
     private void AddSkipText() => skipTextRight.text = "Press 'RB' or 'F'";

@@ -47,25 +47,12 @@ public class PlayerInfo : ScriptableObject
     public Dictionary<UpgradeType, IUpgrade> upgrades = new();
     public List<UpgradeType> currentActivatedUpgrades;
 
-    public VoiceModule.VoiceTypes currentVoice
-    {
 
-        get => _currentVoice;
-        set
-        {
-            _currentVoice = value;
-            Ink.Runtime.Object obj = new Ink.Runtime.StringValue(VoiceModule.VoiceTypeString(_currentVoice));
-            // call the DialogueManager to set the variable in the globals dictionary
-            InkDialogueManager.GetInstance().SetVariableState("currentVoice", obj);
-        }
-    }
 
-    private VoiceModule.VoiceTypes _currentVoice;
     private void OnValidate()
     {
         batteryPercentage = _batteryPercentageSO;
         virusPercentage = _virusPercentageSO;
-        currentVoice = VoiceModule.VoiceTypes.NONE;
         currentActivatedUpgrades.Clear();
     }
 
@@ -76,6 +63,19 @@ public class PlayerInfo : ScriptableObject
         foreach(var upgrade in upgrades)
         { 
             currentActivatedUpgrades.Add(upgrade);
+        }
+    }
+
+    public void AddVoices(List<VoiceModule.VoiceTypes> voices)
+    {
+        foreach (var type in voices)
+        {
+            if(type != VoiceModule.VoiceTypes.NONE)
+            {
+                Ink.Runtime.Object obj = new Ink.Runtime.BoolValue(true);
+                // call the DialogueManager to set the variable in the globals dictionary
+                InkDialogueManager.GetInstance().SetVariableState(VoiceModule.VoiceTypeString(type), obj);
+            }
         }
     }
 

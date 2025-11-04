@@ -29,9 +29,9 @@ public class VoiceModule : IUpgrade
 
     public static string VoiceTypeString(VoiceTypes type) => type switch
     {
-        VoiceTypes.NONE => "None",
-        VoiceTypes.ATLAS => "Atlas",
-        VoiceTypes.VOX => "Vox",
+        VoiceTypes.NONE => "VoiceNone",
+        VoiceTypes.ATLAS => "VoiceAtlas",
+        VoiceTypes.VOX => "VoiceVox",
         _ => throw new System.ArgumentException("VoiceType not found"),
     };
 
@@ -57,18 +57,13 @@ public class VoiceModule : IUpgrade
     public override UpgradeType GetUpgradeType() => UpgradeType.VOICEMODULE;
     public override void Aquire()
     {
-        playerInfo.currentVoice = VoiceTypes.VOX;
+        playerInfo.AddVoices(new List<VoiceTypes> { VoiceTypes.ATLAS, VoiceTypes.VOX });
         TurnOn();
     }
 
     public override void TurnOn()
     {
         gameObject.SetActive(true);
-        VoiceModuleUI.Instance.InitiateOptions(voiceList, 0);
-        if(playerInfo.currentVoice != VoiceTypes.NONE)
-        {
-            VoiceModuleUI.Instance.ForceRotateTo(playerInfo.currentVoice);
-        }
     }
 
 
@@ -78,11 +73,6 @@ public class VoiceModule : IUpgrade
     /// </summary>
     private void HandleVoiceModuleKeyboard(InputAction.CallbackContext ctx)
     {
-        if (gameObject.activeSelf && !pc.LockedOrNot())
-        {
-            playerInfo.currentVoice = VoiceModuleUI.Instance.Rotate();
-            countDownForSwap = VoiceModuleUI.Instance.timeForRotate;
-        }
     }
     private void OnDestroy() => _controlSchemes.Player.SwitchVoiceModule.started -= HandleVoiceModuleKeyboard;
 }

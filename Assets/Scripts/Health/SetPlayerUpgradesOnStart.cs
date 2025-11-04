@@ -9,6 +9,8 @@ public class SetPlayerUpgradesOnStart : MonoBehaviour
     [Header("What upgrades should this player have for this scene?")]
     [SerializeField] private List<UpgradeType> upgrades;
 
+    [Header("What voices should this player have for this scene?")]
+    [SerializeField] private List<VoiceModule.VoiceTypes> types;
     //Keeps track if this is the games first start. We will probably have to remove this once going to a save/load system.
     public static bool firstStart = true;
     [SerializeField] private bool useDefaultValues = false;
@@ -18,13 +20,12 @@ public class SetPlayerUpgradesOnStart : MonoBehaviour
 
         if (firstStart || useDefaultValues)
         {
-            ResetUpgrades();
+            playerInfo.ResetUpgrades(upgrades);
+            if (upgrades.Contains(UpgradeType.VOICEMODULE))
+            {
+                playerInfo.AddVoices(types);
+            }
             firstStart = false;
         }
-    }
-
-    void ResetUpgrades()
-    {
-        playerInfo.ResetUpgrades(upgrades);
     }
 }

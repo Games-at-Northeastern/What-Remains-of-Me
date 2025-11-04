@@ -19,7 +19,7 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "a72efe12-9d57-4f77-8374-829960feee7e",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -28,7 +28,7 @@
                     "name": "Dash",
                     "type": "Button",
                     "id": "6211cdff-1ee3-4a1d-8a74-547acc33f1de",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -37,7 +37,7 @@
                     "name": "Throw",
                     "type": "Button",
                     "id": "0635193c-0a26-41b7-a04e-b6f5ece26cad",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -55,7 +55,7 @@
                     "name": "ThrowController",
                     "type": "Button",
                     "id": "02b510ba-9854-44d6-a2d2-cc1722e77e7e",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -106,13 +106,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "UI Movement",
-                    "type": "Value",
+                    "name": "UI Movement Up",
+                    "type": "Button",
                     "id": "be20ef65-4008-458f-a79c-844a47b2ca83",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UI Movement Down",
+                    "type": "Button",
+                    "id": "52596ffb-7ff8-4ca1-8c09-094c0d12925e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "GiveVirus",
@@ -127,7 +136,7 @@
                     "name": "TakeVirus",
                     "type": "Button",
                     "id": "7cedad7e-3066-48ce-8857-2f41672f5029",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -200,7 +209,7 @@
                 },
                 {
                     "name": "",
-                    "id": "016638cf-eb80-4a08-8cae-3347608c1110",
+                    "id": "054bc776-923c-4139-b1bb-8927383bb525",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
@@ -419,61 +428,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "2D Vector",
-                    "id": "b37b502a-0506-4b51-acc7-095da763c856",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UI Movement",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "f45ed29b-63bb-47f2-b890-095b6ad4860e",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UI Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "316ebc00-6efa-49bd-9f26-82bf11257489",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UI Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "8a7bc391-e088-4cd2-a504-2fb3b6acf46f",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UI Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "113c6717-4df5-408e-ad55-9eb6f4793fdc",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UI Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
                     "id": "c6e66fdf-91ce-4bea-8ac4-c472dd323e82",
                     "path": "<Keyboard>/e",
@@ -558,6 +512,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "SwitchVoiceModule",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "80df0cba-fa95-45f4-8b14-e25bf3091fe4",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Movement Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5308398f-b919-4f3d-99ec-8ccc61a28219",
+                    "path": "<Joystick>/stick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Movement Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bcac0b7d-e870-4a35-ab4c-0c6f6cba0ca5",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Movement Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "da8f7218-5fb9-4747-837d-d3873a31b75c",
+                    "path": "<Joystick>/stick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Movement Down",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
