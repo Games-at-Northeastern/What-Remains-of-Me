@@ -91,14 +91,18 @@ public class VirusTurret : MonoBehaviour
 
     private IEnumerator ShootLaserCycle()
     {
-        //Wait first half of delay and start animation
-        yield return new WaitForSeconds(startDelay * 0.5f);
-
-        StartPowerUpAnimation();
-
-        // Delay before beginning the laser cycle 
-        // Wait the other half of delay
-        yield return new WaitForSeconds(startDelay * 0.5f);
+        //Delay before beginning of the laser cycle
+        //Wait until 1.55 seconds are left on startDelay to play animation if possible
+        if (startDelay < 1.55f)
+        {
+            StartPowerUpAnimation();
+            yield return new WaitForSeconds(startDelay); 
+        } else 
+        {
+            yield return new WaitForSeconds(startDelay - 1.55f);
+            StartPowerUpAnimation();
+            yield return new WaitForSeconds(1.55f);
+        }
 
         while (true)
         {
@@ -110,12 +114,13 @@ public class VirusTurret : MonoBehaviour
                 yield return new WaitForSeconds(shootDuration);
 
                 // pause shooting for <delayBetweenShots> seconds
+                // for animations to work delayBetweenShots has to be at least 1.55 seconds
                 SetVirusBeamActive(false);
                 StartPowerDownAnimation();
-                yield return new WaitForSeconds(delayBetweenShots * 0.5f);
+                yield return new WaitForSeconds(delayBetweenShots - 1.55f);
                 
                 StartPowerUpAnimation();
-                yield return new WaitForSeconds(delayBetweenShots * 0.5f);
+                yield return new WaitForSeconds(1.55f);
             } else
             {
                 yield return new WaitForSeconds(delayBetweenShots);
