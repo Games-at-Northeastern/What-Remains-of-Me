@@ -31,6 +31,8 @@ public class Outlet : MonoBehaviour
 
     float goalIntensity = 0f;
 
+    public bool isConnected = false;
+
     private void Awake()
     {
         // TODO : This should be moved into one of the player scripts
@@ -70,6 +72,8 @@ public class Outlet : MonoBehaviour
         }
         //src.PlayOneShot(OutletSounds.GetSound("Plug_In"));
         //soundController.PlaySound("Plug_In");
+
+        isConnected = true;
     }
 
     /// <summary>
@@ -84,6 +88,8 @@ public class Outlet : MonoBehaviour
         {
             grappleCam.Priority = -100;
         }
+
+        isConnected = false;
     }
 
     //Lerps the light to the goal
