@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// This is the script that controls the RAD (Rapid Atlas Disassembly) laser.
@@ -10,7 +11,7 @@ using UnityEngine;
 /// Raycast casts a raycast from the current position and rotation of the laser until it collides with the player or obstacles.
 ///
 /// Fixed casts a raycast from the current postion and rotation of the laser, but has a max distance that the laser can travel!
-/// 
+///
 /// </summary>
 ///
 
@@ -43,6 +44,13 @@ public class DeathLaser : MonoBehaviour
         [Range(1.5f, 10f), Tooltip("The amount of time before the laser could hit Atlas again!")]
         public float LockoutTime;
     }
+
+    [SerializeField, Tooltip("The sprite to display for the laser emitter when the laser is on")]
+    private SpriteRenderer onSprite;
+    [SerializeField, Tooltip("The sprite to display for the laser emitter when the laser is off")]
+    private SpriteRenderer offSprite;
+    [SerializeField, Tooltip("The light to turn on when the layer is on")]
+    private Light2D onLight;
 
     [SerializeField, Tooltip("Raycast: The laser travels until it hits an obstacle.\nFixed: The laser stops at a set distance.")]
     private LaserMode laserMode;
@@ -83,7 +91,7 @@ public class DeathLaser : MonoBehaviour
             // Calculates the laser's target
             if (RaycastHit(out RaycastHit2D raycastHitData)) /* If the laser hit any target */{
                 // Draw the laser at the collison point
-                laserTarget = raycastHitData.point; 
+                laserTarget = raycastHitData.point;
             } else if (laserMode == LaserMode.Distance) /* If the laser didn't hit a target, and the LaserMode is a fixed distance */ {
                 // Draw the laser at the fixed distance away from the laser (factors in rotation of laser)
                 laserTarget = transform.position + (-transform.up * laserDistance);
@@ -123,10 +131,16 @@ public class DeathLaser : MonoBehaviour
         if (laserOn)
         {
             DeathLaserSound.PlayLaserOnSound(transform);
+            onSprite.enabled = true;
+            onLight.enabled = true;
+            offSprite.enabled = false;
         }
         if (!laserOn)
         {
             DeathLaserSound.PlayLaserOffSound(transform);
+            onSprite.enabled = false;
+            onLight.enabled = false;
+            offSprite.enabled = true;
         }
     }
 

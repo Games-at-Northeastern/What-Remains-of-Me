@@ -28,6 +28,10 @@ public class LaserEditor : Editor
     private SerializedProperty laserDistance;
     private SerializedProperty resetSpeed;
 
+    private SerializedProperty onSprite;
+    private SerializedProperty offSprite;
+    private SerializedProperty onLight;
+
     private void OnEnable()
     {
         laserMode = serializedObject.FindProperty("laserMode");
@@ -46,6 +50,10 @@ public class LaserEditor : Editor
 
         laserDistance = serializedObject.FindProperty("laserDistance");
         resetSpeed = serializedObject.FindProperty("resetSpeed");
+
+        onSprite = serializedObject.FindProperty("onSprite");
+        offSprite = serializedObject.FindProperty("offSprite");
+        onLight = serializedObject.FindProperty("onLight");
     }
 
 
@@ -97,6 +105,11 @@ public class LaserEditor : Editor
         EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
 
         EditorGUILayout.PropertyField(resetSpeed);
+
+        EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
+        EditorGUILayout.PropertyField(onSprite);
+        EditorGUILayout.PropertyField(offSprite);
+        EditorGUILayout.PropertyField(onLight);
 
         serializedObject.ApplyModifiedProperties();
     }
