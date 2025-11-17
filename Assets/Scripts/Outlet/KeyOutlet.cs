@@ -12,23 +12,11 @@ public class KeyOutlet : Outlet
     public static bool hasKey = false;
     private Coroutine grantRoutine;
 
-    public override void Connect()
+    private void Awake()
     {
-        base.Connect();
-
-        if (grantOnce && hasKey)
-            return;
-        if (grantRoutine != null)
-            return;
-
-        grantRoutine = StartCoroutine(GetKey());
-        Debug.Log("Start getting key! ");
-    }
-
-    public override void Disconnect()
-    {
-        base.Disconnect();
-        grantRoutine = null;
+        CS = new ControlSchemes();
+        CS.Player.TakeEnergy.performed += _ => { if (!(grantOnce && hasKey)) { grantRoutine = StartCoroutine(GetKey()); } };
+        CS.Player.TakeEnergy.canceled += _ => { StopAllCoroutines(); grantRoutine = null; };
     }
     
     float timer = 0f;
