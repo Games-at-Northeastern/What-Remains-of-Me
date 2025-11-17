@@ -2,15 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class KeyGrantOutlet : Outlet
+public class KeyOutlet : Outlet
 {
-    [SerializeField] private AutoOpenDoor door;
     [SerializeField] private bool grantOnce = true;
     [SerializeField] private float delayBeforeGrant = 2f;
 
     private List<IAlarmListener> listeners = new List<IAlarmListener>();
 
-    private bool granted = false;
+    public static bool granted = false;
     private Coroutine grantRoutine;
 
     public override void Connect()
@@ -19,12 +18,11 @@ public class KeyGrantOutlet : Outlet
 
         if (grantOnce && granted)
             return;
-        if (!door)
-            return;
         if (grantRoutine != null)
-            StopCoroutine(grantRoutine);
+            return;
 
         grantRoutine = StartCoroutine(GetKey());
+        Debug.Log("Start getting key! ");
     }
 
     public override void Disconnect()
@@ -44,7 +42,6 @@ public class KeyGrantOutlet : Outlet
             yield return null;
         }
 
-        door.SetHasKey();
         granted = true;
         Debug.Log("Player has key! ");
 

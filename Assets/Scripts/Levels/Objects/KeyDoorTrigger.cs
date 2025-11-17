@@ -2,11 +2,15 @@ using UnityEngine;
 
 public class KeyDoorTrigger : MonoBehaviour
 {
-    public AutoOpenDoor autoOpenDoor;
+    [SerializeField] private AutoOpenDoor autoOpenDoor;
+    void Start()
+    {
+        autoOpenDoor = transform.parent.GetComponentInChildren<AutoOpenDoor>();
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && autoOpenDoor.HasKey)
+        if (other.CompareTag("Player") && KeyOutlet.granted)
         {
             autoOpenDoor.OpenDoor();
         }
