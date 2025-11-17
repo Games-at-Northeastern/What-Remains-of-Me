@@ -12,7 +12,6 @@ public class OutletTriggerCameraZoom : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
         cameraCollider = zoomCamera.GetComponent<BoxCollider2D>();
     }
 
@@ -20,6 +19,6 @@ public class OutletTriggerCameraZoom : MonoBehaviour
     void Update()
     {
         connected = keyOutlet.isConnected;
-        cameraCollider.enabled = connected;
+        cameraCollider.enabled = connected && KeyOutlet.hasKey;
     }
 }
