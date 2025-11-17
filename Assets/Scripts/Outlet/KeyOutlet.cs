@@ -32,13 +32,14 @@ public class KeyGrantOutlet : Outlet
         base.Disconnect();
         grantRoutine = null;
     }
+    
+    float timer = 0f;
 
     private IEnumerator GetKey()
     {
-        var timer = 0f;
-
         while (timer < delayBeforeGrant)
         {
+            Debug.Log(timer);
             timer += Time.deltaTime;
             yield return null;
         }
