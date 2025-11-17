@@ -17,13 +17,13 @@ public class KeyDoorTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && KeyOutlet.granted)
+        if (other.CompareTag("Player") && KeyOutlet.hasKey)
         {
             autoOpenDoor.OpenDoor();
             screenRenderer.sprite = checkSprite;
             return;
         }
-        else if (other.CompareTag("Player") && !KeyOutlet.granted)
+        else if (other.CompareTag("Player") && !KeyOutlet.hasKey)
         {
             screenRenderer.sprite = crossSprite;
             if (resetRoutine != null)

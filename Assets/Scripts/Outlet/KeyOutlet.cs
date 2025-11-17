@@ -9,14 +9,14 @@ public class KeyOutlet : Outlet
 
     private List<IAlarmListener> listeners = new List<IAlarmListener>();
 
-    public static bool granted = false;
+    public static bool hasKey = false;
     private Coroutine grantRoutine;
 
     public override void Connect()
     {
         base.Connect();
 
-        if (grantOnce && granted)
+        if (grantOnce && hasKey)
             return;
         if (grantRoutine != null)
             return;
@@ -42,7 +42,7 @@ public class KeyOutlet : Outlet
             yield return null;
         }
 
-        granted = true;
+        hasKey = true;
         Debug.Log("Player has key! ");
 
         foreach (IAlarmListener listener in listeners)
