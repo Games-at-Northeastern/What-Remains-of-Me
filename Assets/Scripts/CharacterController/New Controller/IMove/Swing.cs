@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.TerrainUtils;
+using UnityEngine.TextCore.Text;
 namespace CharacterController
 {
     public class Swing : IMove
@@ -74,10 +75,11 @@ namespace CharacterController
         public void ContinueMove()
         {
             //Documentation regarding moving platforms found through translate player
-            WT.ConnectedOutlet.TranslatePlayer(WT.pc);
+            WT.ConnectedOutlet.UpdateOutletForce(WT.pc);
             string debugString = "Swing: ";
             // Get initial positions
-            Vector2 origPos = character.position;
+            Vector2 vec = new Vector2(character.position.x, character.position.y);
+            Vector2 origPos = vec + WT.pc.ExternalVelocity() * Time.fixedDeltaTime;
             Vector2 connectedOutletPos = WT.ConnectedOutlet.transform.position;
             // Angle going from outlet to player
             float angle = Mathf.Atan2(origPos.y - connectedOutletPos.y, origPos.x - connectedOutletPos.x);

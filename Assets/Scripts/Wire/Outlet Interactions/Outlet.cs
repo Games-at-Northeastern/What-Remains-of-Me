@@ -255,11 +255,11 @@ public class Outlet : MonoBehaviour
     /// If the outlet is moving, translates the player by the moving vector of the outlet.
     /// </summary>
     /// <param name="player"></param>
-    public void TranslatePlayer(PlayerController2D player)
+    public void UpdateOutletForce(PlayerController2D player)
     {
-        if (movingOutlet != null)
+        if (TryGetComponent(out Rigidbody2D rb))
         {
-            player.transform.position += movingOutlet.MovementVector();
+            player.AddOrUpdateForce(gameObject, rb.linearVelocity);
         }
     }
 

@@ -291,18 +291,19 @@ public class WireThrower : MonoBehaviour
         }
 
         Vector2 playerScreenPos = mainCamera.WorldToScreenPoint(transform.position);
-        Vector2 fireDir = playerScreenPos;
-
-        if (_lockOnOutlet != null)
-        {
-            Vector2 closestPos = mainCamera.WorldToScreenPoint(_lockOnOutlet.transform.position);
-            fireDir = closestPos - playerScreenPos;
-
-        }
 
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
         PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
-        pme.Fire(new Straight(fireDir, _activePlug.transform, transform, _plugMovementSettings));
+        if (_lockOnOutlet != null)
+        {
+            Debug.Log("here");
+            pme.Fire(new Straight(_lockOnOutlet.transform, _activePlug.transform, transform, _plugMovementSettings));
+        }
+        else
+        {
+            pme.Fire(new Straight(playerScreenPos, _activePlug.transform, transform, _plugMovementSettings));
+        }
+
         
         // Play SFX for shooting plug
         src.clip = shootWire;
@@ -618,6 +619,7 @@ public class WireThrower : MonoBehaviour
     {
         OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
         outletMeter?.DisconnectPlug();
+        pc.RemoveForce(ConnectedOutlet.gameObject);
         UpdateMeter(lastReticleLock);
         onDisconnect.Invoke();
         _distanceJoint.enabled = false;

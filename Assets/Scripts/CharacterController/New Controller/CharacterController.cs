@@ -24,7 +24,9 @@ namespace CharacterController
         /// Enables the character to receive inputs again and do moves
         public void UnlockInputs();
 
+        public void AddOrUpdateForce(GameObject ID, Vector2 force);
 
+        public void RemoveForce(GameObject ID);
         // these will check player collisions
         public bool TouchingLeftWall();
         public bool TouchingRightWall();

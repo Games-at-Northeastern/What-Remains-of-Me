@@ -342,7 +342,7 @@ public class MovingObjectScript : MonoBehaviour
         rb.linearVelocity += velocity - lastVelocity;
 
         // Saves the platform's velocity this frame
-        lastVelocity = velocity;
+        lastVelocity = velocity; 
     }
 
     void MovePlatformObjects(Vector2 velocity, Vector2 lastVel)
@@ -374,13 +374,16 @@ public class MovingObjectScript : MonoBehaviour
             }
         }
 
-        if (!playerOnPlatform && player != null) {
+        if (!playerOnPlatform && player != null)
+        {
+            player.RemoveForce(gameObject);
             player.OnMovingPlatform = false;
             player = null;
         }
 
-        if (player is not null) {
-            player.ExternalVelocity = rb.linearVelocity;
+        if (player is not null)
+        {
+            player.AddOrUpdateForce(gameObject, rb.linearVelocity);
             player.CombineCurrentVelocities();
         }
     }

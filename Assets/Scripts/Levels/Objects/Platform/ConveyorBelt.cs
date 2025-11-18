@@ -20,7 +20,7 @@ public class ConveyorBelt : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<PlayerController2D>() != null)
         {
-            collision.gameObject.GetComponent<PlayerController2D>().ExternalVelocity = ConveyorVelocity();
+            collision.gameObject.GetComponent<PlayerController2D>().AddOrUpdateForce(gameObject, ConveyorVelocity());
         }
         else
         if (collision.rigidbody != null)
@@ -32,7 +32,7 @@ public class ConveyorBelt : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<PlayerController2D>() != null)
         {
-            collision.gameObject.GetComponent<PlayerController2D>().ExternalVelocity = ConveyorVelocity();
+            collision.gameObject.GetComponent<PlayerController2D>().AddOrUpdateForce(gameObject, ConveyorVelocity()); 
         }
         else if (collision.attachedRigidbody != null)
         {
@@ -43,7 +43,7 @@ public class ConveyorBelt : MonoBehaviour
     {
         if (other.gameObject.GetComponent<PlayerController2D>() != null)
         {
-            other.gameObject.GetComponent<PlayerController2D>().ExternalVelocity = ConveyorVelocity();
+            other.gameObject.GetComponent<PlayerController2D>().AddOrUpdateForce(gameObject, ConveyorVelocity());
         }
         else
 if (other.attachedRigidbody != null)
