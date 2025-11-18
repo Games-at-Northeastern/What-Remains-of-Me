@@ -42,7 +42,10 @@ public class VoxOutlet : AControllable
     public void BeatenBoss()
     {
         //Start the ending cutscene
-        cutsceneTrigger.SetActive(true);
+        if (cutsceneTrigger)
+        {
+            cutsceneTrigger.SetActive(true);
+        }
 
         //Open the right door
         door2.sprite = openDoorSprite2;
