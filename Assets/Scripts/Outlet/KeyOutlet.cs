@@ -15,6 +15,8 @@ public class KeyOutlet : Outlet
     [SerializeField] private Animator redWarningAnim;
     [SerializeField] private SpriteRenderer redWarningSprite;
 
+    public WireThrower wire;
+
     private List<IAlarmListener> listeners = new List<IAlarmListener>();
 
     public static bool hasKey = false;
@@ -93,7 +95,9 @@ public class KeyOutlet : Outlet
                 yellowWarningAnim.enabled = false;
                 yellowWarningSprite.enabled = false;
             }
-            
+            if(wire)
+                wire.showEnergyFlow(-1f);
+
             yield return null;
         }
 

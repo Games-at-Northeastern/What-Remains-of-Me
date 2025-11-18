@@ -640,7 +640,7 @@ public class WireThrower : MonoBehaviour
         mainModule.startColor = lerpedColor;
     }
 
-    void showEnergyFlow(float newEnergy)
+    public void showEnergyFlow(float newEnergy)
     {
         if (timeSinceParticlePlaying < 1.0f) {
             timeSinceParticlePlaying += Time.deltaTime;
