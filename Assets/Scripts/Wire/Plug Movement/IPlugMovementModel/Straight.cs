@@ -10,6 +10,7 @@ public class Straight : IPlugMovementModel
 {
     readonly Vector2 direction;
     readonly PlugMovementSettings pms;
+    readonly Transform outletTransform;
     readonly Transform returnTransform;
     readonly Transform myTransform;
     private float timePassed = 0;
@@ -26,6 +27,17 @@ public class Straight : IPlugMovementModel
         this.myTransform = myTransform;
         this.returnTransform = returnTransform;
         this.pms = pms;
+        outletTransform = null;
+    }
+
+    public Straight(Transform outletTransform, Transform myTransform, Transform returnTransform, PlugMovementSettings pms)
+    {
+        direction = Vector2.zero;
+        this.outletTransform = outletTransform;
+        this.myTransform = myTransform;
+        this.returnTransform = returnTransform;
+        this.pms = pms;
+
     }
 
 
@@ -46,10 +58,22 @@ public class Straight : IPlugMovementModel
     /// </summary>
     public Vector2 Velocity()
     {
+        Vector2 dir = direction;
+        if (dir == Vector2.zero && outletTransform != null)
+        {
+            Vector2 returnPos =  Camera.main.WorldToScreenPoint(myTransform.position);
+            Vector2 headingPos = Camera.main.WorldToScreenPoint(outletTransform.position);
+            dir = (headingPos - returnPos).normalized;
+        }
         // First Phase (moving away from origin transform)
         if (!retracting)
         {
-            return direction * pms.StraightSpeed;
+            if (outletTransform != null && outletTransform.gameObject.TryGetComponent(out Rigidbody2D rb))
+            {
+                float velocity = Mathf.Max(rb.linearVelocity.magnitude / 5, 1.0f);
+                return pms.StraightSpeed * velocity * dir;
+            }
+            return dir * pms.StraightSpeed;
         }
         // Second Phase (moving towards origin transform)
         else

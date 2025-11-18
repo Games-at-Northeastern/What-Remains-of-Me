@@ -38,11 +38,13 @@ public class VirusTurret : MonoBehaviour
     public AudioSource audioSource;
 
     private bool activateVisual = false;
+    private Animator virusAnimator;
 
     private void Start()
     {
         turnedOn = true;
         lineRenderer.textureMode = LineTextureMode.Tile;
+        virusAnimator = rotatingPointTransform.transform.GetChild(2).GetComponent<Animator>();
         StartCoroutine(ShootLaserCycle());
     }
 
@@ -50,6 +52,7 @@ public class VirusTurret : MonoBehaviour
     {
 
         lineRenderer.gameObject.SetActive(false);
+
         if (turnedOn)
         {
             // Calculate the direction towards the player, and rotate that way
@@ -88,8 +91,18 @@ public class VirusTurret : MonoBehaviour
 
     private IEnumerator ShootLaserCycle()
     {
-        // Delay before beginning the laser cycle
-        yield return new WaitForSeconds(startDelay);
+        //Delay before beginning of the laser cycle
+        //Wait until 1.55 seconds are left on startDelay to play animation if possible
+        if (startDelay < 1.55f)
+        {
+            StartPowerUpAnimation();
+            yield return new WaitForSeconds(startDelay); 
+        } else 
+        {
+            yield return new WaitForSeconds(startDelay - 1.55f);
+            StartPowerUpAnimation();
+            yield return new WaitForSeconds(1.55f);
+        }
 
         while (true)
         {
@@ -97,11 +110,17 @@ public class VirusTurret : MonoBehaviour
             {
                 // begin shooting for <shootDuration> seconds
                 SetVirusBeamActive(true);
+                StartFiringAnimation();
                 yield return new WaitForSeconds(shootDuration);
 
                 // pause shooting for <delayBetweenShots> seconds
+                // for animations to work delayBetweenShots has to be at least 1.55 seconds
                 SetVirusBeamActive(false);
-                yield return new WaitForSeconds(delayBetweenShots);
+                StartPowerDownAnimation();
+                yield return new WaitForSeconds(delayBetweenShots - 1.55f);
+                
+                StartPowerUpAnimation();
+                yield return new WaitForSeconds(1.55f);
             } else
             {
                 yield return new WaitForSeconds(delayBetweenShots);
@@ -124,6 +143,46 @@ public class VirusTurret : MonoBehaviour
         else
         {
             audioSource.Stop();
+        }
+    }
+
+    // Functions for animations for the virus laser
+    private void StartPowerUpAnimation()
+    {
+        // Support for virus laser turning on/off and animation turning on/off with it if laser has an animator
+        if (virusAnimator != null)
+        {
+            if (turnedOn)
+            {
+                virusAnimator.SetBool("turnedOn", true);
+                virusAnimator.SetInteger("firingStatus", 1);
+            } else 
+            {
+                virusAnimator.SetBool("turnedOn", false);
+            }
+        }
+    }
+
+    private void StartFiringAnimation()
+    {
+        if (virusAnimator != null)
+        {
+            virusAnimator.SetInteger("firingStatus", 0);
+        }
+    }
+
+    private void StartPowerDownAnimation()
+    {
+        if (virusAnimator != null)
+        {
+            if (turnedOn)
+            {
+                virusAnimator.SetBool("turnedOn", true);
+                virusAnimator.SetInteger("firingStatus", -1);
+            } else 
+            {
+                virusAnimator.SetBool("turnedOn", false);
+            }
         }
     }
 }

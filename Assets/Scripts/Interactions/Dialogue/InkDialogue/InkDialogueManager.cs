@@ -90,7 +90,7 @@ public class InkDialogueManager : MonoBehaviour
     private Animator layoutAnimator;
     private static InkDialogueManager instance;
     private ControlSchemes _cs;
-    private bool canSkip = false;
+    [SerializeField] private bool canSkip = false;
     private bool submitSkip = false;
     private TextMeshProUGUI dialogueText;
     private bool firstLine; //used to determine if we should display the button prompt to continue
@@ -367,6 +367,8 @@ public class InkDialogueManager : MonoBehaviour
 // display choices, if any, for this dialogue line
         DisplayChoices();
 
+        canSkip = false;
+
         if (canSkip)
         {
             StartCoroutine(ContinueWithDelay());
@@ -390,8 +392,6 @@ public class InkDialogueManager : MonoBehaviour
             yield return new WaitForSeconds(2.0f);
             canContinueToNextLine = true;
         }
-
-        canSkip = false;
     }
 
     private IEnumerator CanSkip()

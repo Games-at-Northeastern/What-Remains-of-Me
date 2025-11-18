@@ -27,7 +27,7 @@ namespace PlayerController
     public class PlayerController2D : MonoBehaviour, CharacterController2D, IDataPersistence
     {
         // Issue: public fields should not exist, and should instead be accessed using an External Getter
-        [SerializeField] private Vector2 externalVelocity; // Vector which external objects (moving platforms, for the most part), modify to change the player's velocity
+        private Dictionary<GameObject, Vector2> externalVelocity = new(); // Vector which external objects (moving platforms, for the most part), modify to change the player's velocity
         [SerializeField] private Vector2 internalVelocity = Vector2.zero; // velocity controlled by actions and inputs native to the player (Basic Ground Movement, Jumping, Swinging, Sliding, etc.)
         [Header("General")]
         [SerializeField] private PlayerState startState = PlayerState.Aerial; // initial player movement state
@@ -96,8 +96,25 @@ namespace PlayerController
 
         #region External Getters
         public Vector2 InternalVelocity { get => internalVelocity; set => internalVelocity = value; }
-        public Vector2 ExternalVelocity { get => externalVelocity; set => externalVelocity = value; }
 
+
+        public void AddOrUpdateForce(GameObject ID, Vector2 force) 
+        {
+            if (externalVelocity.ContainsKey(ID))
+            {
+                externalVelocity[ID] = force;   
+            }
+            else
+            {
+                Debug.Log("here");
+                externalVelocity.Add(ID, force);
+            }
+        }
+
+        public void RemoveForce(GameObject ID) 
+        {
+            externalVelocity.Remove(ID);
+        }
 
         public bool OnMovingPlatform { get => onMovingPlatform; set => onMovingPlatform = value; }
 
@@ -184,10 +201,7 @@ namespace PlayerController
                 default:
                     break;
             }
-            if(!OnMovingPlatform)
-            {
-                CombineCurrentVelocities();
-            }
+            CombineCurrentVelocities();
         }
 
         /// <summary>
@@ -196,9 +210,22 @@ namespace PlayerController
         /// </summary>
         public void CombineCurrentVelocities()
         {
-            rb.linearVelocity = internalVelocity + externalVelocity;
-            HandleExternalVelocityDecay();
+            rb.linearVelocity = internalVelocity;
+            foreach (GameObject key in externalVelocity.Keys)
+            {
+                rb.linearVelocity += externalVelocity[key];
+            }
 
+        }
+
+        public Vector2 ExternalVelocity()
+        {
+            Vector2 returnVec = Vector2.zero;
+            foreach (GameObject key in externalVelocity.Keys)
+            {
+                returnVec += externalVelocity[key];
+            }
+            return returnVec;
         }
 
         /// <summary>
@@ -206,13 +233,6 @@ namespace PlayerController
         /// </summary>
         private void HandleExternalVelocityDecay()
         {
-            externalVelocity.x = Mathf.MoveTowards(externalVelocity.x, 0, stats_.ExternalVelocityDecay * Time.fixedDeltaTime);
-            if (externalVelocity.y < 0 && !grounded)
-            {
-
-                internalVelocity.y = Mathf.Clamp(rb.linearVelocity.y, stats_.terminalVelocity, 0);
-                externalVelocity.y = 0;
-            }
         }
 
         #region StateTransition
@@ -361,10 +381,6 @@ namespace PlayerController
             if (fLanded) // On landing, sets _speed.y to a small negative value and resets ExternalVelocity
             {
                 internalVelocity.y = -1 * Time.fixedDeltaTime;
-                if (externalVelocity.y > 0)
-                {
-                    externalVelocity.y = 0;
-                }
             }
         }
 
@@ -427,17 +443,6 @@ namespace PlayerController
             if (!grounded /*&& timeSinceLeftGround > stats_.coyoteTime*/) // apply gravity (uncomment the coyote time section if you dont want the player to fall while they can still coyote jump)
             {
                 float gravityDelta = stats_.fallGravity * Time.deltaTime;
-                if (externalVelocity.y > 0)
-                {
-                    externalVelocity.y += gravityDelta;
-                    if (externalVelocity.y < 0)
-                    {
-                        gravityDelta = externalVelocity.y;
-                        externalVelocity.y = 0;
-
-                    }
-                }
-
                 internalVelocity.y = Mathf.Max(stats_.terminalVelocity, InternalVelocity.y + gravityDelta);
             }
         }
@@ -490,10 +495,6 @@ namespace PlayerController
         protected virtual void TriggerJump()
         {
             OnMovingPlatform = false;
-            if (externalVelocity.y < 0)
-            {
-                externalVelocity.y = 0;
-            }
             jump.StartMove();
             jumpCanceled = false;
             timeSinceJumpWasTriggered = 0;
@@ -600,7 +601,7 @@ namespace PlayerController
             LevelManager._CheckpointManager.RespawnAtRecent(rb.transform);
             rb.linearVelocity = Vector2.zero;
             currentState = PlayerState.Aerial;
-            externalVelocity = Vector2.zero;
+            externalVelocity.Clear();
             internalVelocity = Vector2.zero;
         }
         /// <summary>
@@ -610,7 +611,7 @@ namespace PlayerController
         {
             LevelManager._CheckpointManager.RespawnAtBeginning(rb.transform);
             rb.linearVelocity = Vector2.zero;
-            externalVelocity = Vector2.zero;
+            externalVelocity.Clear();
             currentState = PlayerState.Aerial;
             internalVelocity = Vector2.zero;
         }
