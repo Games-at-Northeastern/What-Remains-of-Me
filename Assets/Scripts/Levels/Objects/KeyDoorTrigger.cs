@@ -8,8 +8,12 @@ public class KeyDoorTrigger : MonoBehaviour
     [SerializeField] private Sprite defaultSprite;
     [SerializeField] private Sprite checkSprite;
     [SerializeField] private Sprite crossSprite;
+    [SerializeField] private AudioSource moniterAudioSource;
+    [SerializeField] private AudioClip denySFX;
+    [SerializeField] private AudioClip acceptSFX;
 
     private Coroutine resetRoutine;
+
     void Start()
     {
         autoOpenDoor = transform.parent.GetComponentInChildren<AutoOpenDoor>();
@@ -21,11 +25,13 @@ public class KeyDoorTrigger : MonoBehaviour
         {
             autoOpenDoor.OpenDoor();
             screenRenderer.sprite = checkSprite;
+            moniterAudioSource.PlayOneShot(acceptSFX);
             return;
         }
         else if (other.CompareTag("Player") && !KeyOutlet.hasKey)
         {
             screenRenderer.sprite = crossSprite;
+            moniterAudioSource.PlayOneShot(denySFX);
             if (resetRoutine != null)
                 StopCoroutine(resetRoutine);
 

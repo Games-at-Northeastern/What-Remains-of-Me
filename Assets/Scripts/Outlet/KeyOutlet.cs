@@ -1,19 +1,22 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
+[RequireComponent(typeof(AudioSource))]
 public class KeyOutlet : Outlet
 {
     [SerializeField] private bool grantOnce = true;
     [SerializeField] private float delayBeforeGrant = 10f;
     [SerializeField] private SpriteRenderer progressDisplay;
     [SerializeField] private List<Sprite> progressSprites;
-
     [SerializeField] private Animator yellowWarningAnim;
     [SerializeField] private SpriteRenderer yellowWarningSprite;
     [SerializeField] private Animator redWarningAnim;
     [SerializeField] private SpriteRenderer redWarningSprite;
+    [SerializeField] private AudioSource audioSourceMonitor;
+    [SerializeField] private AudioClip completedDownloadSFX;
+    [SerializeField] private AudioClip warningBeepsYellow;
+    [SerializeField] private AudioClip warningBeepsRed;
 
     public WireThrower wire;
 
@@ -21,6 +24,8 @@ public class KeyOutlet : Outlet
 
     public static bool hasKey = false;
     private Coroutine grantRoutine;
+    private AudioSource audioSourceSelf;
+    
     
     enum ProgressState
     {
@@ -38,10 +43,19 @@ public class KeyOutlet : Outlet
         CS = new ControlSchemes();
         CS.Player.TakeEnergy.performed += _ => StartDownload();
         CS.Player.TakeEnergy.canceled += _ => PauseDownload();
+
+        audioSourceSelf = GetComponent<AudioSource>();
+
+        // allows UnPause()
+        audioSourceSelf.Play();
+        audioSourceSelf.Pause();
     }
 
     private void StartDownload()
     {
+        audioSourceSelf.UnPause();
+        audioSourceMonitor.UnPause();
+
         if (!(grantOnce && hasKey))
         {
             grantRoutine = StartCoroutine(GetKey());
@@ -66,6 +80,8 @@ public class KeyOutlet : Outlet
         yellowWarningSprite.enabled = false;
         redWarningAnim.enabled = false;
         redWarningSprite.enabled = false;
+        audioSourceSelf.Pause();
+        audioSourceMonitor.Pause();
     }
     
     float timer = 0f;
@@ -86,6 +102,13 @@ public class KeyOutlet : Outlet
             {
                 currentProgress = ProgressState.YELLOW;
                 yellowWarningAnim.enabled = true;
+                audioSourceMonitor.Stop();
+
+                if (audioSourceMonitor.clip != warningBeepsYellow)
+                {
+                    audioSourceMonitor.clip = warningBeepsYellow;
+                    audioSourceMonitor.Play();
+                }
             }
 
             if (timer > (delayBeforeGrant * 0.65) && currentProgress == ProgressState.YELLOW)
@@ -94,6 +117,11 @@ public class KeyOutlet : Outlet
                 redWarningAnim.enabled = true;
                 yellowWarningAnim.enabled = false;
                 yellowWarningSprite.enabled = false;
+                if (audioSourceMonitor.clip != warningBeepsRed)
+                {
+                    audioSourceMonitor.clip = warningBeepsRed;
+                    audioSourceMonitor.Play();
+                }
             }
             if(wire)
                 wire.showEnergyFlow(-1f);
@@ -108,7 +136,9 @@ public class KeyOutlet : Outlet
         redWarningSprite.enabled = false;
         hasKey = true;
         Debug.Log("Player has key! ");
-        
+        audioSourceSelf.Stop();
+        audioSourceMonitor.Stop();
+        audioSourceSelf.PlayOneShot(completedDownloadSFX);
 
         OnDownloaded();
 
