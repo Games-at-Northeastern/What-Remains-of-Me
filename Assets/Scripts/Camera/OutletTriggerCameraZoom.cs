@@ -28,7 +28,7 @@ public class OutletTriggerCameraZoom : MonoBehaviour
     {
         if (KeyOutlet.hasKey && !keyUsed) 
         {
-           StartCoroutine(EnableColliderForTime(4f));
+           StartCoroutine(EnableColliderForTime(5f));
            keyUsed = true;
         } 
         

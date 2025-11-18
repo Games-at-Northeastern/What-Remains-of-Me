@@ -118,9 +118,14 @@ public class KeyOutlet : Outlet
     private void OnDownloaded()
     {
         // Start the animation for when the download is finished here
-        
+
         // Move this code to be triggered by the animation when you want the lasers and lights to turn on
         // (probably after the camera has panned out)
+        Invoke("StartAlarms", 1.5f);
+    }
+
+    void StartAlarms()
+    {
         foreach (IAlarmListener listener in listeners)
         {
             listener.OnAlarmStart();
