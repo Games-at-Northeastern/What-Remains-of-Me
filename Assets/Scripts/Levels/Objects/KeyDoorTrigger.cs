@@ -26,23 +26,28 @@ public class KeyDoorTrigger : MonoBehaviour
             autoOpenDoor.OpenDoor();
             screenRenderer.sprite = checkSprite;
             moniterAudioSource.PlayOneShot(acceptSFX);
+            Destroy(this);
             return;
         }
         else if (other.CompareTag("Player") && !KeyOutlet.hasKey)
         {
             screenRenderer.sprite = crossSprite;
             moniterAudioSource.PlayOneShot(denySFX);
-            if (resetRoutine != null)
-                StopCoroutine(resetRoutine);
+            /*if (resetRoutine != null)
+                StopCoroutine(resetRoutine);*/
 
-            resetRoutine = StartCoroutine(ResetAfterDelay());
+            //resetRoutine = StartCoroutine(ResetAfterDelay());
         }
     }
 
+    private void OnTriggerExit2D(Collider2D other) => screenRenderer.sprite = defaultSprite;
+
+    /*
     private IEnumerator ResetAfterDelay()
     {
         yield return new WaitForSeconds(5f);
         screenRenderer.sprite = defaultSprite;
         resetRoutine = null;
     }
+    */
 }
