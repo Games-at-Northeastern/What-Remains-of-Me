@@ -1,4 +1,4 @@
-Did she mention how many of you I’ve destroyed? #layout:left #portrait:jones1 #speaker:Vox
-This entire Lab has been rigged against you, YOU WILL NOT ESCAPE! #layout:left #portrait:jones1 #speaker:Vox
+Did she mention how many robots humans have destroyed? #layout:left #portrait:jones1 #speaker:Vox
+This facility was built to create instruments of torture. #layout:left #portrait:jones1 #speaker:Vox
 
 ->END
