@@ -7,48 +7,57 @@ using UnityEngine.Splines;
 [RequireComponent(typeof(SplineContainer))]
 public class MovingObjectPathScript : MonoBehaviour
 {
-    [Space]
-
-    // Platform object. While not stated, it does require a rigidbody2D
-    [SerializeField]
-    List<MovingObjectScript> movingObjects;
 
     [SerializeField]
-    bool activeByDefault = true; // Sets if the platform is active on start
+    private bool activeByDefault = true; // Sets if the platform is active on start
 
     [Header("Platform Speed")] [SerializeField]
-    float maxSpeed = 1f; // Maximum platform speed
+    private float maxSpeed = 1f; // Maximum platform speed
 
     [SerializeField]
-    bool useAcceleration; // If the platform uses acceleration or starts at max speed
+    private bool useAcceleration; // If the platform uses acceleration or starts at max speed
 
     // Handles Acceleration. Can toggle extra variables by clicking on useAcceleration
     [ShowIf(nameof(useAcceleration), true)] [SerializeField]
-    float acceleration = 0.25f; // The platform's acceleration
+    private float acceleration = 0.25f; // The platform's acceleration
+
+    [ShowIf(nameof(pingPongAccelRequirements), true)]
+    [SerializeField] private bool resetSpeedAtPathEnds;
 
     [Header("Loop Type")] [SerializeField]
-    LoopType loopType; // The loop pathing type
+    private LoopType loopType; // The loop pathing type
 
     [ShowIf(nameof(loopType), LoopType.OneWay)] [SerializeField]
-    bool keepSpeedAfterLoop;
+    private bool keepSpeedAfterLoop;
 
     // LoopType OneWay Specific Variables
     [ShowIf(nameof(loopType), LoopType.OneWay)] [SerializeField]
-    float gravity;
+    private float gravity;
+    [Space]
 
-    float splineLength; // Length of the current spline
+    // Platform object. While not stated, it does require a rigidbody2D
+    private readonly List<MovingObjectScript> movingObjects = new List<MovingObjectScript>();
 
-    SplineContainer splinePath;
+    private float splineLength; // Length of the current spline
+
+    private SplineContainer splinePath;
+
+    private bool pingPongAccelRequirements {
+        get {
+            return loopType == LoopType.Pingpong && useAcceleration;
+        }
+    }
 
     // Sets up all the starting values for this script to execute
-    void Awake()
+    private void Awake()
     {
         splinePath = GetComponent<SplineContainer>();
         splineLength = splinePath.Splines[0].GetLength();
         EnsureValidSpline();
+        EnsureObjectsOnPath();
     }
 
-    void Start()
+    private void Start()
     {
         // Calculates the length of the spline aka the platform's path
         splineLength = splinePath.CalculateLength();
@@ -68,23 +77,21 @@ public class MovingObjectPathScript : MonoBehaviour
     }
 
     // Runs after any change in the inspector and the game is not running
-    void OnValidate()
+    private void OnValidate()
     {
+        EnsureObjectsOnPath();
+
         if (!Application.isPlaying) {
             // Updates the platform position depending on the platformStartLocation's variable
             splinePath = GetComponent<SplineContainer>();
 
             // Depending on the loop type, this sets if the spline should have a closed loop type or not
             splinePath.Splines[0].Closed = ShouldCloseSplineLoop(loopType);
-
-            foreach (MovingObjectScript movingObject in movingObjects) {
-                movingObject.SetSplinePath(splinePath);
-            }
         }
     }
 
     // Given a loop type, returns if that type should have a closed spline knot
-    static bool ShouldCloseSplineLoop(LoopType lType)
+    private static bool ShouldCloseSplineLoop(LoopType lType)
     {
         switch (lType) {
             case LoopType.Wrap:
@@ -95,7 +102,7 @@ public class MovingObjectPathScript : MonoBehaviour
     }
 
     // Given the current loop type, this tells the user that the spline knot is incorrectly closed/open
-    void EnsureValidSpline()
+    private void EnsureValidSpline()
     {
         bool shouldBeClosed = ShouldCloseSplineLoop(loopType);
         if (splinePath.Splines[0].Closed != shouldBeClosed) {
@@ -108,7 +115,7 @@ public class MovingObjectPathScript : MonoBehaviour
     }
 
     // Main function that moves the platform
-    void MoveObjects()
+    private void MoveObjects()
     {
         if (movingObjects.Count == 0) {
             return;
@@ -117,6 +124,11 @@ public class MovingObjectPathScript : MonoBehaviour
         foreach (MovingObjectScript movingObject in movingObjects.ToArray()) {
             movingObject.Move(this);
         }
+    }
+
+    private void EnsureObjectsOnPath()
+    {
+
     }
 
     public void Activate()
@@ -142,6 +154,16 @@ public class MovingObjectPathScript : MonoBehaviour
         if (movingObjects.Contains(movingObject)) {
             movingObjects.Remove(movingObject);
         }
+    }
+
+    public SplineContainer addMovingObject(MovingObjectScript movingObject)
+    {
+        if (movingObjects.Contains(movingObject)) {
+            return splinePath;
+        }
+
+        movingObjects.Add(movingObject);
+        return splinePath;
     }
 
     public float GetMaxSpeed()
@@ -177,6 +199,11 @@ public class MovingObjectPathScript : MonoBehaviour
     public SplineContainer GetSplinePath()
     {
         return splinePath;
+    }
+
+    public bool ResetSpeedAtPathEnds()
+    {
+        return resetSpeedAtPathEnds;
     }
 
     public float GetSplineLength()
