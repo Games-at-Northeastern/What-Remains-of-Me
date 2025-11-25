@@ -77,7 +77,7 @@ public class VirusTurret : MonoBehaviour
             rotatingPointTransform.rotation = Quaternion.Lerp(rotatingPointTransform.rotation, targetRotation, speed * Time.deltaTime);
             //turretTransform.rotation = targetRotation;
 
-            if (activateVisual && Vector3.Distance(shootingPoint.position, targetPos) < firingRadius) {
+            if (activateVisual && Vector3.Distance(transform.position, targetPos) < firingRadius) {
 
                 // Determine the nearest collision from the turret's shooting line towards the player,
                 // and set the line renderer to display until that collision point
@@ -114,7 +114,7 @@ public class VirusTurret : MonoBehaviour
     private Transform GetPlayerIfInNoticeRange()
     {
         // Getting all layer objects players, just in case there are multiple things with the player layer
-        Collider2D[] desiredTargets = Physics2D.OverlapCircleAll(shootingPoint.position, firingRadius, playerLayer);
+        Collider2D[] desiredTargets = Physics2D.OverlapCircleAll(transform.position, firingRadius, playerLayer);
         foreach (Collider2D target in desiredTargets) {
             PlayerController2D playerController = target.GetComponent<PlayerController2D>();
             if (playerController != null) {
