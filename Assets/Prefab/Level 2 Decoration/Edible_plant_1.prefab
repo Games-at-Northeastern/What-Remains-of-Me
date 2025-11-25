@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2998639156890220187}
   - component: {fileID: 7232927496091180870}
+  - component: {fileID: 6160645971911949258}
   m_Layer: 0
   m_Name: Edible_plant_1
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7439920708464470965}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -46.583, y: -3.6460001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -87,3 +88,87 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6160645971911949258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7439920708464470965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_Priority: 6
+  m_ComponentVersion: 5
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: 154752b179cd986d81d1938c00000000d327c739d381b3212b185603
+  m_ShapePath:
+  - {x: -0.12479401, y: -0.15635145, z: 0}
+  - {x: -0.12501526, y: -0.000011026859, z: 0}
+  - {x: -0.09376526, y: -0.0000113248825, z: 0}
+  - {x: -0.0940094, y: 0.030883253, z: 0}
+  - {x: -0.12499237, y: 0.031135142, z: 0}
+  - {x: -0.12506104, y: 0.06253517, z: 0}
+  - {x: -0.0940094, y: 0.06262487, z: 0}
+  - {x: -0.09384918, y: 0.15638494, z: 0}
+  - {x: -0.06277084, y: 0.15638494, z: 0}
+  - {x: -0.06277466, y: 0.18746233, z: 0}
+  - {x: -0.03117752, y: 0.18746233, z: 0}
+  - {x: -0.030918121, y: 0.12504637, z: 0}
+  - {x: 0.00016403198, y: 0.12504631, z: 0}
+  - {x: -0.00009918213, y: 0.15612376, z: 0}
+  - {x: 0.030979156, y: 0.15638489, z: 0}
+  - {x: 0.031051636, y: 0.18788105, z: 0}
+  - {x: 0.06309128, y: 0.18805027, z: 0}
+  - {x: 0.0630455, y: 0.15664977, z: 0}
+  - {x: 0.09434509, y: 0.15664971, z: 0}
+  - {x: 0.09434509, y: 0.09405398, z: 0}
+  - {x: 0.12525558, y: 0.09405398, z: 0}
+  - {x: 0.12512207, y: 0.062485874, z: 0}
+  - {x: 0.06264496, y: 0.062388957, z: 0}
+  - {x: 0.06266403, y: 0.031458378, z: 0}
+  - {x: 0.09410858, y: 0.031458378, z: 0}
+  - {x: 0.09396362, y: 0.0001604557, z: 0}
+  - {x: 0.12506104, y: 0.00005531311, z: 0}
+  - {x: 0.125103, y: -0.15651423, z: 0}
+  - {x: 0.093753815, y: -0.1563353, z: 0}
+  - {x: 0.09380722, y: -0.18755847, z: 0}
+  - {x: 0.06270599, y: -0.18755001, z: 0}
+  - {x: 0.06259155, y: -0.21902901, z: 0}
+  - {x: -0.062480927, y: -0.21883658, z: 0}
+  - {x: -0.062603, y: -0.1876952, z: 0}
+  - {x: -0.093746185, y: -0.1875807, z: 0}
+  - {x: -0.09384537, y: -0.15643942, z: 0}
+  m_ShapePathHash: 1629428317
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 0}
+  m_ShadowShape2DProvider:
+    rid: -2
+  m_ShadowCastingSource: 1
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: 0.00009727478, y: -0.01548937, z: 0}
+      m_Extent: {x: 0.12515831, y: 0.20353964, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0.03
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0
+  m_CastingOption: 1
+  m_PreviousTrimEdge: 0.03
+  m_PreviousEdgeProcessing: 1
+  m_PreviousShadowCastingSource: 1
+  m_PreviousShadowShape2DSource: {fileID: 7232927496091180870}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
