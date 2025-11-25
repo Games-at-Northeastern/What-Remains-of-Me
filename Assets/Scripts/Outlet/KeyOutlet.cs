@@ -13,6 +13,7 @@ public class KeyOutlet : Outlet
     [SerializeField] private SpriteRenderer yellowWarningSprite;
     [SerializeField] private Animator redWarningAnim;
     [SerializeField] private SpriteRenderer redWarningSprite;
+    [SerializeField] private SpriteRenderer completedSprite;
     [SerializeField] private AudioSource audioSourceMonitor;
     [SerializeField] private AudioClip completedDownloadSFX;
     [SerializeField] private AudioClip warningBeepsYellow;
@@ -123,6 +124,7 @@ public class KeyOutlet : Outlet
                     audioSourceMonitor.Play();
                 }
             }
+
             if(wire)
                 wire.showEnergyFlow(-1f);
 
@@ -134,6 +136,7 @@ public class KeyOutlet : Outlet
         yellowWarningSprite.enabled = false;
         redWarningAnim.enabled = false;
         redWarningSprite.enabled = false;
+        completedSprite.enabled = true;
         hasKey = true;
         Debug.Log("Player has key! ");
         audioSourceSelf.Stop();
@@ -148,9 +151,7 @@ public class KeyOutlet : Outlet
     private void OnDownloaded()
     {
         // Start the animation for when the download is finished here
-
         // Move this code to be triggered by the animation when you want the lasers and lights to turn on
-        // (probably after the camera has panned out)
         Invoke("StartAlarms", 1.5f);
     }
 
