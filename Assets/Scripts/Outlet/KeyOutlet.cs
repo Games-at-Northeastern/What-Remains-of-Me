@@ -41,120 +41,133 @@ public class KeyOutlet : Outlet
 
     private void Awake()
     {
+        // Set the control scheme for this outlet to start and pause the download when the take energy key is held
+        // or released.
         CS = new ControlSchemes();
         CS.Player.TakeEnergy.performed += _ => StartDownload();
         CS.Player.TakeEnergy.canceled += _ => PauseDownload();
 
         audioSourceSelf = GetComponent<AudioSource>();
-
-        // allows UnPause()
-        audioSourceSelf.Play();
-        audioSourceSelf.Pause();
     }
 
+    // Start or continue the download
     private void StartDownload()
     {
-        audioSourceSelf.UnPause();
-        audioSourceMonitor.UnPause();
-
+        // Begin the coroutine to run the download timer and animation.
         if (!(grantOnce && hasKey))
         {
-            grantRoutine = StartCoroutine(GetKey());
+            grantRoutine = StartCoroutine(RunDownload());
         }
+        // Start the warning that was active before the download was last paused, if one had been started.
         if (currentProgress == ProgressState.YELLOW)
         {
-            yellowWarningAnim.enabled = true;
+            StartYellowWarning();
         }
         else if (currentProgress == ProgressState.RED)
         {
-            redWarningAnim.enabled = true;
-            yellowWarningAnim.enabled = false;
-            yellowWarningSprite.enabled = false;
+            StartRedWarning();
         }
     }
 
+    // Pause the download by stopping the timer coroutine and the warning animations.
     private void PauseDownload()
     {
         StopAllCoroutines();
         grantRoutine = null;
+        StopWarnings();
+    }
+
+    // Enable the yellow blinking animation and play the first warning sound.
+    private void StartYellowWarning()
+    {
+        yellowWarningAnim.enabled = true;
+        audioSourceMonitor.Stop();
+
+        if (audioSourceMonitor.clip != warningBeepsYellow)
+        {
+            audioSourceMonitor.clip = warningBeepsYellow;
+            audioSourceMonitor.Play();
+        }
+    }
+
+    // Disable the yellow blinking, enable the red blinking, and play the second warning sound.
+    private void StartRedWarning()
+    {
+        redWarningAnim.enabled = true;
+        yellowWarningAnim.enabled = false;
+        yellowWarningSprite.enabled = false;
+        audioSourceMonitor.Stop();
+        
+        if (audioSourceMonitor.clip != warningBeepsRed)
+        {
+            audioSourceMonitor.clip = warningBeepsRed;
+            audioSourceMonitor.Play();
+        }
+    }
+
+    // Stop all warning animations and sounds.
+    private void StopWarnings()
+    {
         yellowWarningAnim.enabled = false;
         yellowWarningSprite.enabled = false;
         redWarningAnim.enabled = false;
         redWarningSprite.enabled = false;
-        audioSourceSelf.Pause();
-        audioSourceMonitor.Pause();
+        audioSourceSelf.Stop();
+        audioSourceMonitor.Stop();
     }
     
+    // The timer that keeps track of how far the download has progressed, in seconds.
     float timer = 0f;
 
-    private IEnumerator GetKey()
+    // The main download sequence coroutine
+    private IEnumerator RunDownload()
     {
         while (timer < delayBeforeGrant)
         {
             timer += Time.deltaTime;
-            int progress = (int)((timer / delayBeforeGrant) * (progressSprites.Count - 1));
-            if (progress != currentSprite)
-            {
-                currentSprite = progress;
-                progressDisplay.sprite = progressSprites[progress];
-            }
-
-            if (timer > (delayBeforeGrant * 0.3) && currentProgress == ProgressState.START)
-            {
-                currentProgress = ProgressState.YELLOW;
-                yellowWarningAnim.enabled = true;
-                audioSourceMonitor.Stop();
-
-                if (audioSourceMonitor.clip != warningBeepsYellow)
-                {
-                    audioSourceMonitor.clip = warningBeepsYellow;
-                    audioSourceMonitor.Play();
-                }
-            }
-
-            if (timer > (delayBeforeGrant * 0.65) && currentProgress == ProgressState.YELLOW)
-            {
-                currentProgress = ProgressState.RED;
-                redWarningAnim.enabled = true;
-                yellowWarningAnim.enabled = false;
-                yellowWarningSprite.enabled = false;
-                if (audioSourceMonitor.clip != warningBeepsRed)
-                {
-                    audioSourceMonitor.clip = warningBeepsRed;
-                    audioSourceMonitor.Play();
-                }
-            }
-
-            if(wire)
-                wire.showEnergyFlow(-1f);
-
+            UpdateAnimation();
             yield return null;
         }
 
         currentProgress = ProgressState.END;
-        yellowWarningAnim.enabled = false;
-        yellowWarningSprite.enabled = false;
-        redWarningAnim.enabled = false;
-        redWarningSprite.enabled = false;
-        completedSprite.enabled = true;
+        StopWarnings();
         hasKey = true;
-        Debug.Log("Player has key! ");
-        audioSourceSelf.Stop();
-        audioSourceMonitor.Stop();
         audioSourceSelf.PlayOneShot(completedDownloadSFX);
 
-        OnDownloaded();
+        Invoke("StartAlarms", 1.5f);
 
         grantRoutine = null;
     }
 
-    private void OnDownloaded()
+    // Update the state of the progress bar and warning animations.
+    private void UpdateAnimation()
     {
-        // Start the animation for when the download is finished here
-        // Move this code to be triggered by the animation when you want the lasers and lights to turn on
-        Invoke("StartAlarms", 1.5f);
+        int progress = (int)((timer / delayBeforeGrant) * (progressSprites.Count - 1));
+        if (progress != currentSprite)
+        {
+            currentSprite = progress;
+            progressDisplay.sprite = progressSprites[progress];
+        }
+
+        // Start the yellow warning once it reaches 30%.
+        if (timer > (delayBeforeGrant * 0.3) && currentProgress == ProgressState.START)
+        {
+            currentProgress = ProgressState.YELLOW;
+            StartYellowWarning();
+        }
+
+        // Start the red warning once it reaches 65%
+        if (timer > (delayBeforeGrant * 0.65) && currentProgress == ProgressState.YELLOW)
+        {
+            currentProgress = ProgressState.RED;
+            StartRedWarning();
+        }
+
+        if(wire)
+            wire.showEnergyFlow(-1f);
     }
 
+    // Activate all alarm listeners subscribed to this alarm.
     void StartAlarms()
     {
         foreach (IAlarmListener listener in listeners)
@@ -163,6 +176,7 @@ public class KeyOutlet : Outlet
         }
     }
 
+    // Subscribe an alarm listener to this alarm.
     public void Subscribe(IAlarmListener listener)
     {
         listeners.Add(listener);
