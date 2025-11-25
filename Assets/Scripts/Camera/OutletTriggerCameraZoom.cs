@@ -31,8 +31,6 @@ public class OutletTriggerCameraZoom : MonoBehaviour
            StartCoroutine(EnableColliderForTime(5f));
            keyUsed = true;
         } 
-        
-    
     }
 
     // Enables the collider for a certain amount of time

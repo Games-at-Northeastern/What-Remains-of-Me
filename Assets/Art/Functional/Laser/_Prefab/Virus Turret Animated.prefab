@@ -639,21 +639,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotatingPointTransform: {fileID: 6024566834844738280}
-  playerTransform: {fileID: 0}
   speed: 2
   lineRenderer: {fileID: 7094890259500355583}
   shootingPoint: {fileID: 6231597123975154448}
   laserCollidesWith:
     serializedVersion: 2
     m_Bits: 111065
-  turnedOn: 0
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  turnedOn: 1
   playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
   energyTransferPerSecond: 0
   virusTransferPerSecond: 5
-  startDelay: 5
+  startDelay: 1.55
+  endDelay: 1.55
   shootDuration: 2
   delayBetweenShots: 2
-  maxLaserDistance: 20
+  firingRadius: 10
   audioSource: {fileID: 2955271615718957930}
 --- !u!1818360609 &1217607481
 RotationConstraint:

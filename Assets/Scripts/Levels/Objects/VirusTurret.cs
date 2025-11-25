@@ -1,18 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
+using PlayerController;
 using UnityEngine;
-
 /// <summary>
-/// Script that tracks the current player and rotates towards it. It also handles
-/// shooting out a line towards the player, i.e. the laser beam from the turret.
+///     Script that tracks the current player and rotates towards it. It also handles
+///     shooting out a line towards the player, i.e. the laser beam from the turret.
 /// </summary>
 public class VirusTurret : MonoBehaviour
 {
+    private const float POWER_UP_ANIM_TIME = 1.55f;
 
     [SerializeField] private Transform rotatingPointTransform;
-
-
-    [SerializeField] private Transform playerTransform;
 
     [SerializeField] private float speed = 1f;
 
@@ -20,24 +17,28 @@ public class VirusTurret : MonoBehaviour
 
     [SerializeField] private Transform shootingPoint;
     [SerializeField] private LayerMask laserCollidesWith;
-
+    [SerializeField] private LayerMask playerLayer;
 
 
     public bool turnedOn;
     public PlayerInfo playerInfo;
-    public int energyTransferPerSecond = 0;
+    public int energyTransferPerSecond;
     public int virusTransferPerSecond = 5;
-
-    [SerializeField] private float startDelay = 1f;
+    [SerializeField] [Range(POWER_UP_ANIM_TIME, 10f)] private float startDelay = POWER_UP_ANIM_TIME;
+    [SerializeField] [Range(POWER_UP_ANIM_TIME, 10f)] private float endDelay = POWER_UP_ANIM_TIME;
     [Tooltip("Duration in seconds that this object will shoot continuously for, i.e. length of shots")]
     [SerializeField] private float shootDuration = 2f;
     [Tooltip("Duration in seconds that this object will pause for between shooting")]
-    [SerializeField] private float delayBetweenShots = 2f;
-    [SerializeField] private float maxLaserDistance = 20;
+    [SerializeField] [Range(POWER_UP_ANIM_TIME, 10f)] private float delayBetweenShots = POWER_UP_ANIM_TIME;
+    [SerializeField] private float firingRadius = 20;
 
     public AudioSource audioSource;
 
-    private bool activateVisual = false;
+    private bool activateVisual;
+    private Coroutine laserCoroutine;
+    private Vector3 lastTargetPos;
+
+
     private Animator virusAnimator;
 
     private void Start()
@@ -45,29 +46,42 @@ public class VirusTurret : MonoBehaviour
         turnedOn = true;
         lineRenderer.textureMode = LineTextureMode.Tile;
         virusAnimator = rotatingPointTransform.transform.GetChild(2).GetComponent<Animator>();
-        StartCoroutine(ShootLaserCycle());
+        laserCoroutine = null;
+        // StartCoroutine(ShootLaserCycle());
     }
 
     private void Update()
     {
-
         lineRenderer.gameObject.SetActive(false);
 
-        if (turnedOn)
-        {
+        Transform playerTransform = GetPlayerIfInNoticeRange();
+
+        if (playerTransform != null || virusAnimator.GetInteger("firingStatus") == 0) {
+            Vector3 targetPos;
+            if (playerTransform != null) {
+                lastTargetPos = playerTransform.position;
+                targetPos = playerTransform.position;
+            } else {
+                targetPos = lastTargetPos;
+            }
+
+            turnedOn = true;
+            if (laserCoroutine == null) {
+                laserCoroutine = StartCoroutine(LaserAnimationCycle());
+            }
+
             // Calculate the direction towards the player, and rotate that way
-            Vector2 direction = playerTransform.position - rotatingPointTransform.position;
+            Vector2 direction = targetPos - rotatingPointTransform.position;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
             rotatingPointTransform.rotation = Quaternion.Lerp(rotatingPointTransform.rotation, targetRotation, speed * Time.deltaTime);
             //turretTransform.rotation = targetRotation;
 
-            if (activateVisual && Vector3.Distance(shootingPoint.position, playerTransform.position) < maxLaserDistance)
-            {
+            if (activateVisual && Vector3.Distance(transform.position, targetPos) < firingRadius) {
 
                 // Determine the nearest collision from the turret's shooting line towards the player,
                 // and set the line renderer to display until that collision point
-                RaycastHit2D hit = Physics2D.Raycast(shootingPoint.position, shootingPoint.right, maxLaserDistance, laserCollidesWith);
+                RaycastHit2D hit = Physics2D.Raycast(shootingPoint.position, shootingPoint.right, firingRadius, laserCollidesWith);
                 // Debug.Log(hit.collider.gameObject); why is this left in here? it errors.
 
                 //Render the laser
@@ -86,62 +100,74 @@ public class VirusTurret : MonoBehaviour
                     playerInfo.virus += virusTransferPerSecond * Time.fixedDeltaTime;
                 }
             }
+        } else {
+            turnedOn = false;
         }
     }
 
-    private IEnumerator ShootLaserCycle()
+    private void OnDrawGizmosSelected()
     {
-        //Delay before beginning of the laser cycle
-        //Wait until 1.55 seconds are left on startDelay to play animation if possible
-        if (startDelay < 1.55f)
-        {
-            StartPowerUpAnimation();
-            yield return new WaitForSeconds(startDelay); 
-        } else 
-        {
-            yield return new WaitForSeconds(startDelay - 1.55f);
-            StartPowerUpAnimation();
-            yield return new WaitForSeconds(1.55f);
-        }
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, firingRadius);
+    }
 
-        while (true)
-        {
-            if (turnedOn)
-            {
-                // begin shooting for <shootDuration> seconds
-                SetVirusBeamActive(true);
-                StartFiringAnimation();
-                yield return new WaitForSeconds(shootDuration);
-
-                // pause shooting for <delayBetweenShots> seconds
-                // for animations to work delayBetweenShots has to be at least 1.55 seconds
-                SetVirusBeamActive(false);
-                StartPowerDownAnimation();
-                yield return new WaitForSeconds(delayBetweenShots - 1.55f);
-                
-                StartPowerUpAnimation();
-                yield return new WaitForSeconds(1.55f);
-            } else
-            {
-                yield return new WaitForSeconds(delayBetweenShots);
+    private Transform GetPlayerIfInNoticeRange()
+    {
+        // Getting all layer objects players, just in case there are multiple things with the player layer
+        Collider2D[] desiredTargets = Physics2D.OverlapCircleAll(transform.position, firingRadius, playerLayer);
+        foreach (Collider2D target in desiredTargets) {
+            PlayerController2D playerController = target.GetComponent<PlayerController2D>();
+            if (playerController != null) {
+                return target.gameObject.transform;
             }
         }
+        return null;
     }
-
-    private void OnDrawGizmos()
+    private IEnumerator LaserAnimationCycle()
     {
-        
+        StartPowerUpAnimation();
+        bool poweredDown = false;
+        yield return new WaitForSeconds(startDelay);
+
+        while (turnedOn) {
+            SetVirusBeamActive(true);
+            StartFiringAnimation();
+            yield return new WaitForSeconds(shootDuration);
+
+            if (turnedOn == false) {
+                break;
+            }
+
+            // pause shooting for <delayBetweenShots> seconds
+            // for animations to work delayBetweenShots has to be at least 1.55 seconds
+            SetVirusBeamActive(false);
+            poweredDown = true;
+            StartPowerDownAnimation();
+            yield return new WaitForSeconds(endDelay);
+
+            if (turnedOn == false) {
+                break;
+            }
+
+            StartPowerUpAnimation();
+            poweredDown = false;
+            yield return new WaitForSeconds(startDelay);
+
+        }
+
+        if (!poweredDown) {
+            StartPowerDownAnimation();
+        }
+
+        laserCoroutine = null;
     }
 
     private void SetVirusBeamActive(bool isActive)
     {
         activateVisual = isActive;
-        if (isActive)
-        {
+        if (isActive) {
             audioSource.Play();
-        }
-        else
-        {
+        } else {
             audioSource.Stop();
         }
     }
@@ -150,14 +176,11 @@ public class VirusTurret : MonoBehaviour
     private void StartPowerUpAnimation()
     {
         // Support for virus laser turning on/off and animation turning on/off with it if laser has an animator
-        if (virusAnimator != null)
-        {
-            if (turnedOn)
-            {
+        if (virusAnimator != null) {
+            if (turnedOn) {
                 virusAnimator.SetBool("turnedOn", true);
                 virusAnimator.SetInteger("firingStatus", 1);
-            } else 
-            {
+            } else {
                 virusAnimator.SetBool("turnedOn", false);
             }
         }
@@ -165,23 +188,20 @@ public class VirusTurret : MonoBehaviour
 
     private void StartFiringAnimation()
     {
-        if (virusAnimator != null)
-        {
+        if (virusAnimator != null) {
             virusAnimator.SetInteger("firingStatus", 0);
         }
     }
 
     private void StartPowerDownAnimation()
     {
-        if (virusAnimator != null)
-        {
-            if (turnedOn)
-            {
-                virusAnimator.SetBool("turnedOn", true);
-                virusAnimator.SetInteger("firingStatus", -1);
-            } else 
-            {
+        if (virusAnimator != null) {
+            if (turnedOn) {
                 virusAnimator.SetBool("turnedOn", false);
+                virusAnimator.SetInteger("firingStatus", -1);
+            } else {
+                virusAnimator.SetBool("turnedOn", false);
+                virusAnimator.SetInteger("firingStatus", -1);
             }
         }
     }

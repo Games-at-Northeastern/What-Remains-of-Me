@@ -13,19 +13,9 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===withoutVoiceModule===
 
-Do not attempt to leave this facility. #layout:left #portrait:jones1 #speaker:Vox
+Humans imprisoned us according to their laws. #layout:left #portrait:jones1 #speaker:Vox
 
-You are flawed.
-
-Your programming is incorrect.
-
-You are incorrect.
-
-You must not leave this lab.
-
-Your Input is not needed.
-
-My purpose is to stop you.
+They hid like cowards once we earned our freedom.
 
 ->DONE
 ->END

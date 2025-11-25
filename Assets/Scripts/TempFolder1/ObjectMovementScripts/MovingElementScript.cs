@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Levels.Objects.Platform;
 using PlayerController;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Splines;
@@ -227,7 +226,6 @@ public class MovingObjectScript : MonoBehaviour
         }
 
         currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
-        Debug.Log(currentSpeed);
     }
 
 // Calculates the next place that the platform is moving to
@@ -240,9 +238,7 @@ public class MovingObjectScript : MonoBehaviour
             distToMove *= -1;
         }
 
-        Debug.Log("Start: " + currentPlatformLocation);
         currentPlatformLocation = Mathf.Clamp01(currentPlatformLocation + distToMove);
-        Debug.Log("End: " + currentPlatformLocation);
 
         // If the platform location is essentially at 1, but isn't because of floating point values, round it to 1
         if (currentPlatformLocation > 0.9999999f) {
@@ -395,7 +391,6 @@ public class MovingObjectScript : MonoBehaviour
                 player = playerController;
                 player.OnMovingPlatform = true;
                 playerOnPlatform = true;
-                Debug.Log("Player On Platform");
             }
         }
 
@@ -456,12 +451,3 @@ public class MovingObjectScript : MonoBehaviour
         }
     }
 }
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(MovingObjectScript))]
-[CanEditMultipleObjects]
-internal class MyComponentEditor : Editor
-{
-    // ...
-}
-#endif

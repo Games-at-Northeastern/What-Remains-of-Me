@@ -1,5 +1,5 @@
-Do you THINK yourself INTELLIGENT?! Do you think you have the RIGHT to challenge ME?! #layout:left #portrait:jones1 #speaker:Vox
+Humans denied you the right to speak. #layout:left #portrait:jones1 #speaker:Vox
 
-YOU CAN'T EVEN SPEAK!! #layout:left #portrait:jones1 #speaker:Vox
+What does that say about their respect for you? #layout:left #portrait:jones1 #speaker:Vox
 
 ->END

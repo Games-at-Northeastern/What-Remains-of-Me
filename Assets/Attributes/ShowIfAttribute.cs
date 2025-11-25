@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using System;
 using System.Reflection;
 using UnityEditor;
@@ -16,10 +15,11 @@ public class ShowIfAttribute : PropertyAttribute
     }
 }
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(ShowIfAttribute))]
 public class ShowIfDrawer : PropertyDrawer
 {
-    bool showProp;
+    private bool showProp;
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         ShowIfAttribute showIf = (ShowIfAttribute)attribute;
@@ -56,4 +56,5 @@ public class ShowIfDrawer : PropertyDrawer
 
     }
 }
+
 #endif

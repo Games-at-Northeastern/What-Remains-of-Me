@@ -5,8 +5,6 @@ public class AutoOpenDoor : MonoBehaviour
     [SerializeField] private float openHeight = 3f;
     [SerializeField] private float openSpeed = 2f;
 
-    public bool HasKey { get; private set; } = false;
-
     private bool isOpening = false;
     private bool isOpened = false;
     private Vector3 closedPos;
@@ -49,10 +47,5 @@ public class AutoOpenDoor : MonoBehaviour
             openingAudioLoop.Play();
         }
         Debug.Log("Door is opening!");
-    }
-
-    public void SetHasKey()
-    {
-        HasKey = true;
     }
 }

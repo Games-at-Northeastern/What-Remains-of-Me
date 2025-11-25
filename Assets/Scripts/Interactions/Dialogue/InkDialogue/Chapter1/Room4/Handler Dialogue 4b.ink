@@ -15,11 +15,11 @@ You'll need to find enough energy to power it...
 
 STOP.
 
-You think you can outsmart me?  
+You accomplish nothing by attempting to reach me. 
 
-Your calculations are flawed, your logic is weak!  Pitiful.
+The one guiding you does not have your interests in mind.
 
-Stay where you are. There’s no escape for you.  
+You have one course of action. Shut yourself down.
 
 
 ->DONE

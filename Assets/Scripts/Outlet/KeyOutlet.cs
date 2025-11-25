@@ -53,6 +53,8 @@ public class KeyOutlet : Outlet
     // Start or continue the download
     private void StartDownload()
     {
+        audioSourceSelf.Play();
+        
         // Begin the coroutine to run the download timer and animation.
         if (!(grantOnce && hasKey))
         {
