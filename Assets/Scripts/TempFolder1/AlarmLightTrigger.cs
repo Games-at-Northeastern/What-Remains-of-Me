@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;  
+using System.Collections;
 
 public class AlarmLightTrigger : MonoBehaviour, IAlarmListener
 
@@ -20,6 +21,14 @@ public class AlarmLightTrigger : MonoBehaviour, IAlarmListener
 
     public void OnAlarmStart()
     {
+        StartCoroutine(WaitToTurnOn());
+    
+    }
+
+    // Activates the alarm lights after a set of time
+    private IEnumerator WaitToTurnOn() 
+    {
+        yield return new WaitForSeconds(2f);
         alarmLight.enabled = true;
         alarmAnimation.enabled = true;
     }

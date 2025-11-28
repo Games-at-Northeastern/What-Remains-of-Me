@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class AlarmLaserTrigger : MonoBehaviour, IAlarmListener
 {
@@ -9,6 +10,7 @@ public class AlarmLaserTrigger : MonoBehaviour, IAlarmListener
 
     void Start()
     {
+
         keyOutlet.Subscribe(this);
         if(laser)
             laser.ToggleLaser();
@@ -16,9 +18,18 @@ public class AlarmLaserTrigger : MonoBehaviour, IAlarmListener
 
     public void OnAlarmStart()
     {
+
+        StartCoroutine(WaitToTurnOn());
+    }
+
+    // Activates the alarm lights after a set of time
+    private IEnumerator WaitToTurnOn() 
+    {
+        yield return new WaitForSeconds(2f);
         if(laserToggle && isToggle)
             laserToggle.enabled = true;
         else if (laser)
             laser.ToggleLaser();
     }
 }
+    
