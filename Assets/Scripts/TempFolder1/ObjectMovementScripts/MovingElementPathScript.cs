@@ -41,7 +41,7 @@ public class MovingElementPathScript : MonoBehaviour
     [Space]
 
     // List of moving elements on the path
-    private List<MovingElementScript> movingObjects;
+    private readonly List<MovingElementScript> movingObjects = new List<MovingElementScript>();
 
     private float splineLength; // Length of the current spline
 
@@ -58,7 +58,6 @@ public class MovingElementPathScript : MonoBehaviour
     private void Awake()
     {
         splinePath = GetComponent<SplineContainer>();
-        movingObjects = new List<MovingElementScript>();
 
         // NOTE: Only the first Spline in the container matters.
         // You can have infinite Knots, but only the first Spline is used as the path
