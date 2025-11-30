@@ -5,10 +5,27 @@ using PlayerController;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Splines;
+
+// TODO -----> MAJOR ISSUE, Because of how rigidbodies work, this script has issues with nested rigidbodies
+// For example, a parent having a rigidbody with a child having a rigidbody. The child rigidbody would now
+// calculate its current transformed position differently, as it now has to adhere to its parent's physics.
+// The problem is if the child is Kinematic, the child can't move using direct velocity setting since it
+// would be overwritten by the parent. So, in the future, someone should change this program to handle
+// rb.MovePosition instead of setting the velocity directly. Not sure why I didn't do this at the start, but
+// I did not think this would be an issue.
+
+// NOTE: The above issue only matters if you really want to nest paths.
+// Ex: An Element moves along the Inner Path, and the Inner Path moves along the Outer Path.
+// The quick solution is making the elements not children of rigidbodies or setting them to Dynamic.
+// The problem with the Dynamic setting is that platforms can be affected by outside forces
+// The parent-child problem is more just an issue with hierarchy organization
+
+
+// Enum Class representing the type of moving object
 public enum MovingObjectType
 {
-    Platform,
-    Outlet
+    Platform, // Any object that is a platform
+    NonPlatform // Any object that is not a platform
 }
 
 // Enum Class Representing the Current State of a Moving Platform
@@ -21,57 +38,67 @@ public enum MovingObjectState
 
 // Requires a Rigidbody2D because that it is handling the moving object's physics
 [RequireComponent(typeof(Rigidbody2D))]
-public class MovingObjectScript : MonoBehaviour
+
+// Class representing a moving element on a moving element path
+public class MovingElementScript : MonoBehaviour
 {
-    [SerializeField] private MovingObjectPathScript movingObjectPath;
+    // The path the moving element is subscribed to
+    [SerializeField] private MovingElementPathScript movingElementPath;
 
     [Header("Initial Position")]
     [SerializeField] [Range(0f, 1f)] private float objectStartLocation; // Where in its path the object starts
     [SerializeField] private bool isMovingRight = true; // The direction the object is moving across the spline
 
-    [SerializeField] private MovingObjectType movingObjectType;
+    // Object type, either a platform or not
+    [SerializeField] private MovingObjectType movingObjectType = MovingObjectType.NonPlatform;
 
+    // Platform-Specific Variables (These variables check if the player is on this platform):
+
+    // If MovingObjectType.Platform is the movingObjectType, show this header
     [ShowIf(nameof(movingObjectType), MovingObjectType.Platform)]
     [Space] [ReadOnly] [SerializeField] private string GroundHeader = "Platform Ground Detection";
 
+    // Y-offset for the moving platform grounded trigger (platform ground collision is for the player only)
     [ShowIf(nameof(movingObjectType), MovingObjectType.Platform)]
     [SerializeField] private float yOffset = 0.2f;
+
+    // Y-scale for the platform grounded trigger (X-scale is decided by the 2D collider width)
     [ShowIf(nameof(movingObjectType), MovingObjectType.Platform)]
     [SerializeField] private float yScale = 0.06f;
 
-    [ShowIf(nameof(movingObjectType), MovingObjectType.Platform)] [SerializeField]
-    private Color triggerColor = Color.red;
+    // Color for the platform grounded trigger
+    [ShowIf(nameof(movingObjectType), MovingObjectType.Platform)]
+    [SerializeField] private Color triggerColor = Color.red;
+
+    // Activated/Deactivated Actions
 
     [Header("On Activated/Deactivated")]
     [SerializeField] private UnityEvent activatedActions;
 
     [SerializeField] private UnityEvent deactivatedActions;
 
-    // Enum Class Representing Moving Object Types
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private List<ContactPoint2D> contactPoints; // List of contact points touching the platform's collider
-    private float currentPlatformLocation;
+    private float currentElementLocation;
     private float currentSpeed;
 
     private Vector3 lastPosition; // Holds the platform's position in the last frame
     private Vector2 lastVelocity; // Holds the platform's velocity in the last frame
 
-    private MovingObjectPathScript movingObjectPathReference;
-
-    private int pingPongDestination;
-    private Collider2D platformCollider;
+    private int pingPongDestination; // Variable used to fix the issue that the platform would keep changing direction if on an edge
+    private Collider2D platformCollider; // Reference to the object's collider (ONLY MATTERS IF OBJECT TYPE == Platform)
     private Dictionary<Rigidbody2D, bool> platformObjects; // Dictionary containing objects touching the platform
 
-    private PlayerController2D player;
-    private Rigidbody2D rb;
-    private SplineContainer splinePath;
-    private MovingObjectState state;
+    private PlayerController2D player; // Reference to the player if they are on the platform
+    private Rigidbody2D rb; // Reference to this script's rigidbody
+    private SplineContainer splinePath; // Path that the platform is moving on
+    private MovingObjectState state; // Current movement state of the platform
 
-    private Vector3 triggerPosition;
-    private Vector3 triggerScale;
-    private bool usingAcceleration;
+    private Vector3 triggerPosition; // Position of a platform's ground trigger
+    private Vector3 triggerScale; // Scale of a platform's ground trigger
+    private bool usingAcceleration; // Boolean holding the usingAcceleration info from parent path
 
 
+    // Get all required components and set variables to default values
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -86,22 +113,27 @@ public class MovingObjectScript : MonoBehaviour
         state = MovingObjectState.Idle;
         lastVelocity = Vector2.zero;
         lastPosition = transform.position;
-        currentPlatformLocation = objectStartLocation;
+        currentElementLocation = objectStartLocation;
 
-        if (movingObjectPath != null) {
-            splinePath = movingObjectPath.addMovingObject(this);
+        // Subscribes this moving element to a path
+        if (movingElementPath != null) {
+            splinePath = movingElementPath.addMovingObject(this);
         }
 
+        // Ensures that in ping-pong mode the platform moves correctly on path edges
         pingPongDestination = isMovingRight ? 1 : 0;
     }
 
 
-
+    // Graphical representation for the moving platform grounded triggers
     private void OnDrawGizmosSelected()
     {
+        // Only show this graphic if the moving object is a platform
         if (movingObjectType != MovingObjectType.Platform) {
             return;
         }
+
+        // Platforms require a collider to show this grounded trigger graphic
         if (GetComponent<Collider>() == null) {
             platformCollider = GetComponent<Collider2D>();
             CalculateTriggerTransform();
@@ -113,22 +145,24 @@ public class MovingObjectScript : MonoBehaviour
         Gizmos.DrawWireCube(triggerPosition, triggerScale);
     }
 
+    // Runs only in edit mode
     private void OnValidate()
     {
-        if (!Application.isPlaying) {
-            if (movingObjectPath == null) {
-                return;
-            }
+        if (movingElementPath == null) {
+            return;
+        }
 
-            splinePath = movingObjectPath.GetSplinePath();
+        // Get the spline path from the moving element's path
+        splinePath = movingElementPath.GetSplinePath();
 
-            if (splinePath is not null) {
-                transform.position = splinePath.EvaluatePosition(0, objectStartLocation);
-            }
-
+        // This handles the element start location during edit mode
+        // This is to help the user see where the platform should start
+        if (splinePath is not null) {
+            transform.position = splinePath.EvaluatePosition(0, objectStartLocation);
         }
     }
 
+    // Calculates the bounds for the platform grounded trigger
     private void CalculateTriggerTransform()
     {
         Vector3 platformPos = transform.position;
@@ -136,57 +170,62 @@ public class MovingObjectScript : MonoBehaviour
         triggerPosition = new Vector3(platformPos.x, platformPos.y + yOffset, platformPos.z);
     }
 
-    private void HandleObjectPath(MovingObjectPathScript movingObjectPath)
+    // Handles what the element will be doing depending on the LoopType
+    private void HandleObjectPath(MovingElementPathScript movingElementPath)
     {
-        switch (movingObjectPath.GetLoopType()) {
-            // If the platform wraps, make it continuously move in a circle
+        switch (movingElementPath.GetLoopType()) {
+            // If the element wraps, make it continuously move in a circle
             // Requires a closed spline path
             case LoopType.Wrap:
                 if (isMovingRight) {
-                    if (currentPlatformLocation >= 1) {
-                        currentPlatformLocation -= 1;
+                    if (currentElementLocation >= 1) {
+                        currentElementLocation -= 1;
                     }
                 } else {
-                    if (currentPlatformLocation <= 0) {
-                        currentPlatformLocation += 1;
+                    if (currentElementLocation <= 0) {
+                        currentElementLocation += 1;
                     }
                 }
 
                 break;
 
-            // If the platform ping-pongs, it will continuously move back and forth between the path's start and end
+            // If the element ping-pongs, it will continuously move back and forth between the path's start and end
             case LoopType.Pingpong:
-                if (currentPlatformLocation <= 0 && pingPongDestination == 0 || currentPlatformLocation >= 1 && pingPongDestination == 1) {
-                    currentPlatformLocation = Mathf.Clamp(currentPlatformLocation, 0, 1);
+                if (currentElementLocation <= 0 && pingPongDestination == 0 ||
+                    currentElementLocation >= 1 && pingPongDestination == 1) {
+
+                    currentElementLocation = Mathf.Clamp(currentElementLocation, 0, 1);
                     isMovingRight = !isMovingRight;
                     pingPongDestination = isMovingRight ? 1 : 0;
 
-                    if (movingObjectPath.GetUseAcceleration() && movingObjectPath.ResetSpeedAtPathEnds()) {
+                    if (movingElementPath.GetUseAcceleration() && movingElementPath.ResetSpeedAtPathEnds()) {
                         currentSpeed = 0;
                     }
                 }
 
                 break;
-            // If the platform is a one-way, it rag dolls once it has finished its path
+            // If the element is a one-way, it rag dolls once it has finished its path
             case LoopType.OneWay:
 
-                float gravityScale = movingObjectPath.GetGravityScale();
-                bool keepSpeedAfterLoop = movingObjectPath.GetKeepSpeedAfterLoop();
-                if (isMovingRight && currentPlatformLocation >= 1) {
+                float gravityScale = movingElementPath.GetGravityScale();
+                bool keepSpeedAfterLoop = movingElementPath.GetKeepSpeedAfterLoop();
+                if (isMovingRight && currentElementLocation >= 1) {
                     RagdollPlatform(keepSpeedAfterLoop, gravityScale);
-                } else if (!isMovingRight && currentPlatformLocation <= 0) {
+                } else if (!isMovingRight && currentElementLocation <= 0) {
                     RagdollPlatform(keepSpeedAfterLoop, gravityScale);
                 }
 
                 break;
-            // If the platform is a none type, it stays in place
+            // If the element is a none type, it stays in place
             case LoopType.None:
                 state = MovingObjectState.Idle;
                 break;
         }
     }
 
-// Adds initial speed to objects that just starting touching the platform
+    // Adds initial speed to objects that just starting touching the platform
+    // NOTE: This treats all objects as having "sticky feet", meaning they always move at the same speed as the platform
+    // These calculations essentially ignore friction
     private void AddInitialSpeedToNewObjs(Vector2 initialVelocity)
     {
         foreach (KeyValuePair<Rigidbody2D, bool> platformObject in platformObjects) {
@@ -212,83 +251,82 @@ public class MovingObjectScript : MonoBehaviour
             platformObject.Key.linearVelocity =
                 new Vector2(initialVelocity.x, platformObject.Key.linearVelocity.y);
 
-            // With these physics, the objects currently have "sticky feet" when it comes to platforms.
-            // These calculations don't take friction into account
         }
     }
 
-// Updates the platform's speed. Only matters if acceleration is turned on
-    private void updatePlatformSpeed(MovingObjectPathScript movingObjectPath)
+    // Updates the element's speed. Only matters if acceleration is turned on
+    private void UpdateElementSpeed(MovingElementPathScript movingElementPath)
     {
-        float maxSpeed = movingObjectPath.GetMaxSpeed();
+        float maxSpeed = movingElementPath.GetMaxSpeed();
         if (currentSpeed < maxSpeed) {
-            currentSpeed += movingObjectPath.GetAcceleration() * Time.fixedDeltaTime;
+            currentSpeed += movingElementPath.GetAcceleration() * Time.fixedDeltaTime;
         }
 
         currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
     }
 
-// Calculates the next place that the platform is moving to
-    private Vector3 CalculateNextLocation(MovingObjectPathScript movingObjectPath)
+    // Calculates the next place that the element is moving to
+    private Vector3 CalculateNextLocation(MovingElementPathScript movingElementPath)
     {
-        float distToMove = currentSpeed * Time.fixedDeltaTime / movingObjectPath.GetSplineLength();
+        float distToMove = currentSpeed * Time.fixedDeltaTime / movingElementPath.GetSplineLength();
 
         // If not moving right, flip the direction
         if (!isMovingRight) {
             distToMove *= -1;
         }
 
-        currentPlatformLocation = Mathf.Clamp01(currentPlatformLocation + distToMove);
+        currentElementLocation = Mathf.Clamp01(currentElementLocation + distToMove);
 
-        // If the platform location is essentially at 1, but isn't because of floating point values, round it to 1
-        if (currentPlatformLocation > 0.9999999f) {
-            currentPlatformLocation = 1f;
+        // If the element location is essentially at 1, but isn't because of floating point values, round it to 1
+        if (currentElementLocation > 0.9999999f) {
+            currentElementLocation = 1f;
         }
 
-        return movingObjectPath.GetSplinePath().EvaluatePosition(currentPlatformLocation);
+        return movingElementPath.GetSplinePath().EvaluatePosition(currentElementLocation);
     }
 
-    public void Move(MovingObjectPathScript movingObjectPath)
+    // Main function that moves the element
+    public void Move(MovingElementPathScript movingElementPath)
     {
-        // If the platform isn't in the moving state, don't move
+        // If the element isn't in the moving state, don't move
         if (state != MovingObjectState.Moving) {
             return;
         }
 
-        // Update the platform speed (Only matters if acceleration is turned on)
-        updatePlatformSpeed(movingObjectPath);
+        // Update the element speed (Only matters if acceleration is turned on)
+        UpdateElementSpeed(movingElementPath);
 
-        // Given the platform's loop type, handle its path
-        HandleObjectPath(movingObjectPath);
+        // Given the element's loop type, handle its path
+        HandleObjectPath(movingElementPath);
 
-        // If the platform started to ragdoll, skip the moving and calculations
+        // If the element started to ragdoll, skip the moving and calculations
         if (state == MovingObjectState.Ragdoll) {
-            movingObjectPath.RemoveMovingObject(this);
+            movingElementPath.RemoveMovingObject(this);
             return;
         }
 
-        Vector3 nextLocation = CalculateNextLocation(movingObjectPath);
+        Vector3 nextLocation = CalculateNextLocation(movingElementPath);
 
         MoveObject(nextLocation);
     }
 
-// Runs when the platform is activated
-    public void Activate(MovingObjectPathScript movingObjectPath)
+    // Runs when the element is activated
+    public void Activate(MovingElementPathScript movingElementPath)
     {
         state = MovingObjectState.Moving;
 
-        // If not using acceleration, set platform to max speed
-        currentSpeed = movingObjectPath.GetUseAcceleration() ? 0 : movingObjectPath.GetMaxSpeed();
+        // If not using acceleration, set the element to max speed
+        currentSpeed = movingElementPath.GetUseAcceleration() ? 0 : movingElementPath.GetMaxSpeed();
         activatedActions?.Invoke();
     }
 
-// Runs when the platform is deactivated
+    // Runs when the element is deactivated
     public void Deactivate()
     {
-        // Sets the platform to be idle
+        // Sets the element to be idle
         state = MovingObjectState.Idle;
 
-        // Won't do anything if not a platform because it can't get platform objects
+        // Won't do anything if not a platform because a non-platform can't carry objects
         foreach (KeyValuePair<Rigidbody2D, bool> platformObject in platformObjects) {
             if (platformObject.Value) {
                 // Remove the last frame's velocity
@@ -298,20 +336,16 @@ public class MovingObjectScript : MonoBehaviour
         }
 
         lastPosition = transform.position;
-        // Set the platform's linear velocity to 0
-        rb.linearVelocity = Vector2.zero;
         lastVelocity = Vector2.zero;
+
+        // Set the element's linear velocity to 0
+        rb.linearVelocity = Vector2.zero;
 
         deactivatedActions?.Invoke();
     }
 
-    public MovingObjectPathScript getPath()
-    {
-        return movingObjectPath;
-    }
-
-    // Turns the platform into a ragdoll
-// When a ragdoll, the platform stops following the spline's path and falls freely with gravity.
+    // Turns the element into a ragdoll
+    // When a ragdoll, the element stops following its assigned path and falls freely with gravity.
     private void RagdollPlatform(bool keepSpeedAfterLoop, float gravity)
     {
         state = MovingObjectState.Ragdoll;
@@ -348,13 +382,14 @@ public class MovingObjectScript : MonoBehaviour
     }
 
 
+    // Function that physically moves this element 
     private void MoveObject(Vector3 nextLocation)
     {
-        // Removes the platform velocity from the last frame and adds the platform velocity for this frame
+        // Removes the element velocity from the last frame and adds the element velocity for this frame
         Vector2 velocity = (nextLocation - lastPosition) / Time.fixedDeltaTime;
         lastPosition = nextLocation;
 
-        // If the object is a platform, move the platform
+        // If the object is a platform, move the objects on the platform
         if (movingObjectType == MovingObjectType.Platform) {
             MovePlatformObjects(velocity, lastVelocity);
             HandlePlayerOnPlatform();
@@ -362,10 +397,11 @@ public class MovingObjectScript : MonoBehaviour
 
         rb.linearVelocity += velocity - lastVelocity;
 
-        // Saves the platform's velocity this frame
+        // Saves the element's velocity this frame
         lastVelocity = velocity;
     }
 
+    // Moves the objects on top of the platform so they move with the platform
     private void MovePlatformObjects(Vector2 velocity, Vector2 lastVel)
     {
         // Adds initial speed to objects that just started touching the platform
@@ -377,38 +413,47 @@ public class MovingObjectScript : MonoBehaviour
         }
     }
 
+    // Adds forces to the player if on top of the platform.
+    // This is done separately from the other objects on the platform because of how the player's physics is programmed
     private void HandlePlayerOnPlatform()
     {
+        // Sets up the location of the grounded trigger
         CalculateTriggerTransform();
 
-        // Setting collision to look at all layers in case the Player layer ever changes
+        // Checks what is colliding with the grounded trigger.
+        // Sets collision to look at all layers in case the Player layer ever changes
         Collider2D[] collidingObjects = Physics2D.OverlapBoxAll(triggerPosition, triggerScale, 0, ~0);
 
         bool playerOnPlatform = false;
         foreach (Collider2D collidingObject in collidingObjects) {
+            // Find any object that has the playerController component
             PlayerController2D playerController = collidingObject.GetComponent<PlayerController2D>();
             if (playerController is not null) {
+                // If the player is on the platform, edit its OnMovingPlatform status
                 player = playerController;
                 player.OnMovingPlatform = true;
                 playerOnPlatform = true;
             }
         }
 
+        // Remove the platform force on the player if they leave the grounded trigger
         if (!playerOnPlatform && player != null) {
             player.RemoveForce(gameObject);
             player.OnMovingPlatform = false;
             player = null;
         }
 
+        // Add force each frame if the player is grounded on the platform
         if (player is not null) {
             player.AddOrUpdateForce(gameObject, rb.linearVelocity);
             player.CombineCurrentVelocities();
         }
     }
 
-// Gets and holds all the objects on the platform
+    // Gets and holds all the objects on the platform
     private void GetPlatformConnectedObjects()
     {
+        // Get everything colliding with the platform
         rb.GetContacts(contactPoints);
 
         // Sets the boolean values of all platform objects currently touching the platform

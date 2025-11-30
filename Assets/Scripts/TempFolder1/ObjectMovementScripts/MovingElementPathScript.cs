@@ -5,43 +5,49 @@ using UnityEngine.Splines;
 
 // Requires a Spline Container as it sets the path the platform will move on
 [RequireComponent(typeof(SplineContainer))]
-public class MovingObjectPathScript : MonoBehaviour
+
+// Class that handles all the moving elements on a spline path
+public class MovingElementPathScript : MonoBehaviour
 {
+    [SerializeField] private bool activeByDefault = true; // Sets if the platform is active on start
 
-    [SerializeField]
-    private bool activeByDefault = true; // Sets if the platform is active on start
+    [Header("Platform Movement")]
+    [SerializeField] private float maxSpeed = 1f; // Maximum platform speed
 
-    [Header("Platform Speed")] [SerializeField]
-    private float maxSpeed = 1f; // Maximum platform speed
-
-    [SerializeField]
-    private bool useAcceleration; // If the platform uses acceleration or starts at max speed
+    [SerializeField] private bool useAcceleration; // Sets the platform uses acceleration or stays at max speed
 
     // Handles Acceleration. Can toggle extra variables by clicking on useAcceleration
     [ShowIf(nameof(useAcceleration), true)] [SerializeField]
     private float acceleration = 0.25f; // The platform's acceleration
 
+    // If the loop type is LoopType.Pingpong, show this variable
+    // Resets the platform's speed once it reaches the end of its path
     [ShowIf(nameof(pingPongAccelRequirements), true)]
     [SerializeField] private bool resetSpeedAtPathEnds;
 
-    [Header("Loop Type")] [SerializeField]
-    private LoopType loopType; // The loop pathing type
+    [Header("Loop Type")]
+    [SerializeField] private LoopType loopType; // The loop pathing type
 
-    [ShowIf(nameof(loopType), LoopType.OneWay)] [SerializeField]
-    private bool keepSpeedAfterLoop;
+    // LoopType.OneWay Specific Variables
 
-    // LoopType OneWay Specific Variables
-    [ShowIf(nameof(loopType), LoopType.OneWay)] [SerializeField]
-    private float gravity;
+    // Make the platform keep its current speed after detaching from the path
+    [ShowIf(nameof(loopType), LoopType.OneWay)]
+    [SerializeField] private bool keepSpeedAfterLoop;
+
+    // The gravity scale of the platform
+    [ShowIf(nameof(loopType), LoopType.OneWay)]
+    [SerializeField] private float gravityScale;
+
     [Space]
 
-    // Platform object. While not stated, it does require a rigidbody2D
-    private readonly List<MovingObjectScript> movingObjects = new List<MovingObjectScript>();
+    // List of moving elements on the path
+    private List<MovingElementScript> movingObjects;
 
     private float splineLength; // Length of the current spline
 
-    private SplineContainer splinePath;
+    private SplineContainer splinePath; // Spline path the elements will be moving on
 
+    // Represents the requirements for the resetSpeedAtPathEnds variable to show in the inspector
     private bool pingPongAccelRequirements {
         get {
             return loopType == LoopType.Pingpong && useAcceleration;
@@ -52,17 +58,20 @@ public class MovingObjectPathScript : MonoBehaviour
     private void Awake()
     {
         splinePath = GetComponent<SplineContainer>();
+        movingObjects = new List<MovingElementScript>();
+
+        // NOTE: Only the first Spline in the container matters.
+        // You can have infinite Knots, but only the first Spline is used as the path
         splineLength = splinePath.Splines[0].GetLength();
         EnsureValidSpline();
-        EnsureObjectsOnPath();
     }
 
     private void Start()
     {
-        // Calculates the length of the spline aka the platform's path
+        // Calculates the length of the path
         splineLength = splinePath.CalculateLength();
 
-        // Activates or deactivates that platform depending on activeByDefault
+        // Activates or deactivates the platform depending on activeByDefault
         if (activeByDefault) {
             Activate();
         } else {
@@ -71,23 +80,16 @@ public class MovingObjectPathScript : MonoBehaviour
     }
 
     // Move the platform each FixedUpdate
-    protected void FixedUpdate()
-    {
-        MoveObjects();
-    }
+    protected void FixedUpdate() => MoveObjects();
 
-    // Runs after any change in the inspector and the game is not running
+    // Runs after any change in the inspector during Edit Mode
     private void OnValidate()
     {
-        EnsureObjectsOnPath();
+        splinePath = GetComponent<SplineContainer>();
 
-        if (!Application.isPlaying) {
-            // Updates the platform position depending on the platformStartLocation's variable
-            splinePath = GetComponent<SplineContainer>();
+        // Depending on the loop type, this sets if the spline should have a closed loop or not
+        splinePath.Splines[0].Closed = ShouldCloseSplineLoop(loopType);
 
-            // Depending on the loop type, this sets if the spline should have a closed loop type or not
-            splinePath.Splines[0].Closed = ShouldCloseSplineLoop(loopType);
-        }
     }
 
     // Given a loop type, returns if that type should have a closed spline knot
@@ -114,100 +116,71 @@ public class MovingObjectPathScript : MonoBehaviour
         }
     }
 
-    // Main function that moves the platform
+    // Main function that moves each element subscribed to the path
     private void MoveObjects()
     {
         if (movingObjects.Count == 0) {
             return;
         }
 
-        foreach (MovingObjectScript movingObject in movingObjects.ToArray()) {
+        // Moves each element
+        foreach (MovingElementScript movingObject in movingObjects.ToArray()) {
             movingObject.Move(this);
         }
     }
 
-    private void EnsureObjectsOnPath()
-    {
-
-    }
-
+    // When this path is activated, run the activate functions of each moving object attached
     public void Activate()
     {
-        if (movingObjects.Count == 0) {
-            return;
-        }
-
-        for (int i = movingObjects.Count - 1; i >= 0; --i) {
-            movingObjects[i].Activate(this);
+        foreach (MovingElementScript movingObject in movingObjects.ToArray()) {
+            movingObject.Activate(this);
         }
     }
 
+    // When this path is deactivated, run the deactivate functions of each moving object attached
     public void Deactivate()
     {
-        foreach (MovingObjectScript movingObject in movingObjects.ToArray()) {
+        foreach (MovingElementScript movingObject in movingObjects.ToArray()) {
             movingObject.Deactivate();
         }
     }
 
-    public void RemoveMovingObject(MovingObjectScript movingObject)
+    // Subscribes a moving element to the movingObjects list, assuming they aren't already
+    public SplineContainer addMovingObject(MovingElementScript movingElement)
     {
-        if (movingObjects.Contains(movingObject)) {
-            movingObjects.Remove(movingObject);
-        }
-    }
-
-    public SplineContainer addMovingObject(MovingObjectScript movingObject)
-    {
-        if (movingObjects.Contains(movingObject)) {
+        if (movingObjects.Contains(movingElement)) {
             return splinePath;
         }
 
-        movingObjects.Add(movingObject);
+        movingObjects.Add(movingElement);
         return splinePath;
     }
 
-    public float GetMaxSpeed()
+    // Unsubscribes a moving element to the movingObjects list
+    public void RemoveMovingObject(MovingElementScript movingElement)
     {
-        return maxSpeed;
+        if (movingObjects.Contains(movingElement)) {
+            movingObjects.Remove(movingElement);
+        }
     }
 
-    public float GetAcceleration()
-    {
-        return acceleration;
-    }
+    // Getter Functions
 
-    public bool GetUseAcceleration()
-    {
-        return useAcceleration;
-    }
+    public float GetMaxSpeed() => maxSpeed;
 
-    public LoopType GetLoopType()
-    {
-        return loopType;
-    }
+    public float GetAcceleration() => acceleration;
 
-    public bool GetKeepSpeedAfterLoop()
-    {
-        return keepSpeedAfterLoop;
-    }
+    public bool GetUseAcceleration() => useAcceleration;
 
-    public float GetGravityScale()
-    {
-        return gravity;
-    }
+    public LoopType GetLoopType() => loopType;
 
-    public SplineContainer GetSplinePath()
-    {
-        return splinePath;
-    }
+    public bool GetKeepSpeedAfterLoop() => keepSpeedAfterLoop;
 
-    public bool ResetSpeedAtPathEnds()
-    {
-        return resetSpeedAtPathEnds;
-    }
+    public float GetGravityScale() => gravityScale;
 
-    public float GetSplineLength()
-    {
-        return splineLength;
-    }
+    public SplineContainer GetSplinePath() => splinePath;
+
+    public bool ResetSpeedAtPathEnds() => resetSpeedAtPathEnds;
+
+    public float GetSplineLength() => splineLength;
 }
