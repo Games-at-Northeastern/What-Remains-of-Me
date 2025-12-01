@@ -39,6 +39,7 @@ public class KeyDoorTrigger : MonoBehaviour
             autoOpenDoor.OpenDoor();
             screenRenderer.sprite = checkSprite;
             moniterAudioSource.PlayOneShot(acceptSFX);
+            cs.Disable();
             Destroy(this);
         }
     }
