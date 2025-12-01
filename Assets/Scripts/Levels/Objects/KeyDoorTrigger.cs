@@ -13,41 +13,39 @@ public class KeyDoorTrigger : MonoBehaviour
     [SerializeField] private AudioClip acceptSFX;
 
     private Coroutine resetRoutine;
+    private ControlSchemes cs;
 
     void Start()
     {
         autoOpenDoor = transform.parent.GetComponentInChildren<AutoOpenDoor>();
+        cs = new ControlSchemes();
+        cs.Player.Dialogue.performed += _ => EnterCode();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && KeyOutlet.hasKey)
+        if (other.CompareTag("Player"))
+        {
+            screenRenderer.sprite = crossSprite;
+            moniterAudioSource.PlayOneShot(denySFX);
+            cs.Enable();
+        }
+    }
+
+    private void EnterCode()
+    {
+        if (KeyOutlet.hasKey)
         {
             autoOpenDoor.OpenDoor();
             screenRenderer.sprite = checkSprite;
             moniterAudioSource.PlayOneShot(acceptSFX);
             Destroy(this);
-            return;
-        }
-        else if (other.CompareTag("Player") && !KeyOutlet.hasKey)
-        {
-            screenRenderer.sprite = crossSprite;
-            moniterAudioSource.PlayOneShot(denySFX);
-            /*if (resetRoutine != null)
-                StopCoroutine(resetRoutine);*/
-
-            //resetRoutine = StartCoroutine(ResetAfterDelay());
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other) => screenRenderer.sprite = defaultSprite;
-
-    /*
-    private IEnumerator ResetAfterDelay()
+    private void OnTriggerExit2D(Collider2D other)
     {
-        yield return new WaitForSeconds(5f);
         screenRenderer.sprite = defaultSprite;
-        resetRoutine = null;
+        cs.Disable();
     }
-    */
 }

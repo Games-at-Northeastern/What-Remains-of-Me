@@ -36,7 +36,7 @@ public class OutletTriggerCameraZoom : MonoBehaviour
     // Enables the collider for a certain amount of time
     private IEnumerator EnableColliderForTime(float time) 
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         cameraCollider.enabled = true;
         yield return new WaitForSeconds(time);
         cameraCollider.enabled = false;
