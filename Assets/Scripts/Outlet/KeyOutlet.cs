@@ -77,6 +77,11 @@ public class KeyOutlet : Outlet
         StopAllCoroutines();
         grantRoutine = null;
         StopWarnings();
+
+        if (currentProgress == ProgressState.YELLOW)
+            yellowWarningAnim.enabled = true;
+        else if (currentProgress == ProgressState.RED)
+            redWarningAnim.enabled = true;
     }
 
     // Enable the yellow blinking animation and play the first warning sound.
@@ -133,6 +138,7 @@ public class KeyOutlet : Outlet
 
         currentProgress = ProgressState.END;
         StopWarnings();
+        completedSprite.enabled = true;
         hasKey = true;
         audioSourceSelf.PlayOneShot(completedDownloadSFX);
 
