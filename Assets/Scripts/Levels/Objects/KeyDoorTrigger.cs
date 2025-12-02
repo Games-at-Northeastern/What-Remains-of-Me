@@ -11,6 +11,7 @@ public class KeyDoorTrigger : MonoBehaviour
     [SerializeField] private AudioSource moniterAudioSource;
     [SerializeField] private AudioClip denySFX;
     [SerializeField] private AudioClip acceptSFX;
+    [SerializeField] private SpriteRenderer hintRenderer;
 
     private Coroutine resetRoutine;
     private ControlSchemes cs;
@@ -29,6 +30,11 @@ public class KeyDoorTrigger : MonoBehaviour
             screenRenderer.sprite = crossSprite;
             moniterAudioSource.PlayOneShot(denySFX);
             cs.Enable();
+
+            if (KeyOutlet.hasKey)
+            {
+                hintRenderer.enabled = true;
+            }
         }
     }
 
@@ -40,6 +46,7 @@ public class KeyDoorTrigger : MonoBehaviour
             screenRenderer.sprite = checkSprite;
             moniterAudioSource.PlayOneShot(acceptSFX);
             cs.Disable();
+            hintRenderer.enabled = false;
             Destroy(this);
         }
     }
@@ -48,5 +55,6 @@ public class KeyDoorTrigger : MonoBehaviour
     {
         screenRenderer.sprite = defaultSprite;
         cs.Disable();
+        hintRenderer.enabled = false;
     }
 }
