@@ -65,7 +65,7 @@ public class Outlet : MonoBehaviour
         CS.Enable();
         SoundController.instance.PlaySound(plugInSound);
         goalIntensity = connectedGoal;
-        StartCoroutine(ControlLight());
+        // StartCoroutine(ControlLight());
         if (grappleCam)
         {
             grappleCam.Priority = 100;
@@ -83,7 +83,7 @@ public class Outlet : MonoBehaviour
     {
         CS.Disable();
         StopAllCoroutines();
-        StartCoroutine(FadeOutLight());
+        // StartCoroutine(FadeOutLight());
         if (grappleCam)
         {
             grappleCam.Priority = -100;
@@ -93,19 +93,21 @@ public class Outlet : MonoBehaviour
     }
 
     //Lerps the light to the goal
+    // These lights are causing lag, should replace with emissive texture!
     IEnumerator ControlLight()
     {
-        if (outletLights.Count == 0)
-        {
-            yield break;
-        }
+        yield return null;
+        // if (outletLights.Count == 0)
+        // {
+        //     yield break;
+        // }
 
-        while (true)
-        {
-            foreach (Light2D outletLight in outletLights)
-                outletLight.intensity = Mathf.Lerp(outletLight.intensity, goalIntensity, Time.deltaTime * lerpSpeed);
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
+        // while (true)
+        // {
+        //     foreach (Light2D outletLight in outletLights)
+        //         outletLight.intensity = Mathf.Lerp(outletLight.intensity, goalIntensity, Time.deltaTime * lerpSpeed);
+        //     yield return new WaitForSeconds(Time.deltaTime);
+        // }
     }
 
 
