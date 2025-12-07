@@ -5,27 +5,22 @@ using System.Threading.Tasks;
 [RequireComponent(typeof(Light2D))]
 public class MotionSensorLight : MonoBehaviour
 {
-    [Header("This script only works with point lights that are facing down!")]
+    [Header("This script only works with 2D spot lights!")]
     [SerializeField] private float minIntensity = 0.1f;
     [SerializeField] private float maxIntensity = 1f;
-    [SerializeField] private int minFlickers = 2;
-    [SerializeField] private int maxFlickers = 5;
+    [SerializeField] private int minFlickers = 1;
+    [SerializeField] private int maxFlickers = 3;
     [SerializeField] private int minFlickerLengthInMS = 10;
     [SerializeField] private int maxFlickerLengthInMS = 50;
 
-    private Vector2 minCoords;
-    private Vector2 maxCoords;
     private float startingIntensity;
     private bool flickeringIn = false;
     private bool flickeringOut = false;
     private Light2D _light;
     private Transform _player;
+    private Bounds bounds;
     private bool playerInBoundsLastFrame = false;
-    private bool PlayerInBounds => _player != null
-            && _player.position.x > minCoords.x
-            && _player.position.x < maxCoords.x
-            && _player.position.y > minCoords.y
-            && _player.position.y < maxCoords.y;
+    private bool PlayerInBounds => bounds.Contains(_player.position);
 
     private void Awake()
     {
@@ -40,10 +35,55 @@ public class MotionSensorLight : MonoBehaviour
             return;
         }
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        CalculateBounds();
+    }
 
+    private void CalculateBounds()
+    {
         var xDif = Mathf.Abs(Mathf.Cos(_light.pointLightOuterAngle / 2) * _light.pointLightOuterRadius);
-        maxCoords = new Vector2(gameObject.transform.position.x + xDif, gameObject.transform.position.y);
-        minCoords = new Vector2(gameObject.transform.position.x - xDif, maxCoords.y - _light.pointLightOuterRadius);
+        var topRight = new Vector2(gameObject.transform.position.x + xDif, gameObject.transform.position.y + _light.pointLightOuterRadius);
+        var bottomLeft = new Vector2(gameObject.transform.position.x - xDif, gameObject.transform.position.y);
+
+        var sinZRot = Mathf.Sin(Mathf.Deg2Rad * gameObject.transform.localEulerAngles.z);
+        var cosZRot = Mathf.Cos(Mathf.Deg2Rad * gameObject.transform.localEulerAngles.z);
+        var rot1 = RotatePointAroundPivot(topRight, gameObject.transform.position);
+        var rot2 = RotatePointAroundPivot(bottomLeft, gameObject.transform.position);
+
+        var maxX = Mathf.Max(rot1.x, rot2.x);
+        var maxY = Mathf.Max(rot1.y, rot2.y);
+        var minX = Mathf.Min(rot1.x, rot2.x);
+        var minY = Mathf.Min(rot1.y, rot2.y);
+
+        var boundsSize = new Vector3(
+            Mathf.Abs(maxX - minX),
+            Mathf.Abs(maxY - minY),
+            0);
+        var boundsCenter = new Vector3(
+            minX + (boundsSize.x / 2),
+            minY + (boundsSize.y / 2),
+            0
+        );
+        bounds = new Bounds(boundsCenter, boundsSize);
+
+        Vector2 RotatePointAroundPivot(Vector2 point, Vector2 pivot)
+        {
+            Vector2 ret = new(
+                (cosZRot * (point.x - pivot.x)) - (sinZRot * (point.y - pivot.y)) + pivot.x,
+                (sinZRot * (point.x - pivot.x)) + (cosZRot * (point.y - pivot.y)) + pivot.y
+                );
+            Debug.Log($"MDB -- {gameObject.name}: {point} rotated {gameObject.transform.eulerAngles.z} degrees around {pivot} = {ret}");
+            return ret;
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (bounds == null)
+        {
+            return;
+        }
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(bounds.center, bounds.size);
     }
 
     private void Update()
@@ -53,7 +93,7 @@ public class MotionSensorLight : MonoBehaviour
         {
             return;
         }
-
+        playerInBoundsLastFrame = inBounds;
         if (inBounds)
         {
             FlickerIn();
@@ -62,7 +102,6 @@ public class MotionSensorLight : MonoBehaviour
         {
             FlickerOut();
         }
-        playerInBoundsLastFrame = inBounds;
     }
 
     private async void FlickerOut()
