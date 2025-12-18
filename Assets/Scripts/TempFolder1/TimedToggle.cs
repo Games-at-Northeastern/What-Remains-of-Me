@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -12,20 +13,27 @@ public class TimedToggle : AEventToggle
     private bool _resetStateUponReactivation = false;
     [SerializeField]
     private float _duration;
+    [SerializeField]
+    private bool delay;
+    [SerializeField]
+    private float delayAmount;
 
+    private bool delayComplete = false;
     private bool _state;
     private Coroutine _coroutine;
 
 
-
     private void OnEnable()
     {
-        if (_resetStateUponReactivation)
+        if (!delay)
         {
             _state = _enabledOnStart;
+            _coroutine = StartCoroutine(IEFlip());
         }
-
-        _coroutine = StartCoroutine(IEFlip());
+        else
+        {
+            StartCoroutine(StartDelay());
+        }
     }
 
     private void OnDisable() => StopCoroutine(_coroutine);
@@ -40,4 +48,18 @@ public class TimedToggle : AEventToggle
 
         yield return IEFlip(); // loop IEnum
     }
+
+    private IEnumerator StartDelay()
+    {
+        yield return _useUnscaledTime ? new WaitForSeconds(delayAmount) : new WaitForSecondsRealtime(delayAmount);
+
+        _state = !_state; // flippy dippy doo
+
+        delayComplete = true;
+        _state = !_state;
+        FireEvent(_state);
+
+        yield return IEFlip();
+    }
+
 }
