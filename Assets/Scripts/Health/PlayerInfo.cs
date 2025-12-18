@@ -1,78 +1,83 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using SmartScriptableObjects.ReactiveProperties;
+using Ink.Runtime;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
-
+using Object = Ink.Runtime.Object;
 [CreateAssetMenu]
 public class PlayerInfo : ScriptableObject
 {
-    [Header("Dependency Injection")]
-    [FormerlySerializedAs("_virusSO")]
-    public PercentageFloatReactivePropertySO _virusPercentageSO;
-    public PercentageFloatReactivePropertySO _batteryPercentageSO;
+    public float iframesTime;
+    public List<UpgradeType> currentActivatedUpgrades;
 
     // any information about the player we want tracked can
     // be stored here.
     [Header("Info")]
-    [HideInInspector] public IReactiveProperty<float> batteryPercentage;
+    public Dictionary<UpgradeType, IUpgrade> upgrades = new Dictionary<UpgradeType, IUpgrade>();
 
-    public float battery
-    {
-        get => batteryPercentage.Value * maxBattery;
-        set => batteryPercentage.Value = value / maxBattery;
+    public float battery {
+        get {
+            return EnergyManager.Instance.GetBattery();
+        }
+        set {
+            EnergyManager.Instance.SetBattery(value);
+        }
+
     }
-
-    private float _maxBattery;
-    public float maxBattery
-    {
-        get => _maxBattery;
-        set
-        {
-            batteryPercentage.Value = battery / value;
-            _maxBattery = value;
+    public float maxBattery {
+        get {
+            return EnergyManager.Instance.GetMaxBattery();
+        }
+        // This shouldn't really be done and in the PlayerHealth script it makes no sense
+        set {
+            /*batteryPercentage.Value = battery / value;
+            _maxBattery = value;*/
         }
     }
-    [HideInInspector] public IReactiveProperty<float> virusPercentage;
-    public float virus
-    {
-        get => virusPercentage.Value * maxVirus;
-        set => virusPercentage.Value = (value / maxVirus);
+    public float virus {
+        get {
+            return EnergyManager.Instance.GetVirus();
+        }
+
+        set {
+            EnergyManager.Instance.SetVirus(value);
+        }
     }
-    public float maxVirus = 100;
-    [SerializeField] private float initialMaxBattery;
-    public float iframesTime;
-    public Dictionary<UpgradeType, IUpgrade> upgrades = new();
-    public List<UpgradeType> currentActivatedUpgrades;
 
-
-
-    private void OnValidate()
-    {
-        batteryPercentage = _batteryPercentageSO;
-        virusPercentage = _virusPercentageSO;
-        currentActivatedUpgrades.Clear();
+    public float maxVirus {
+        get {
+            return EnergyManager.Instance.GetMaxVirus();
+        }
     }
+
+    public ReactiveProperty<float> batteryPercentage {
+        get {
+            return new ReactiveProperty<float>(EnergyManager.Instance.GetBatteryPercentage());
+        }
+    }
+    public ReactiveProperty<float> virusPercentage {
+        get {
+            return new ReactiveProperty<float>(EnergyManager.Instance.GetVirusPercentage());
+        }
+    }
+
+
+
+    private void OnValidate() => currentActivatedUpgrades.Clear();
 
     public void ResetUpgrades(List<UpgradeType> upgrades)
     {
         currentActivatedUpgrades.Clear();
 
-        foreach(var upgrade in upgrades)
-        { 
+        foreach (UpgradeType upgrade in upgrades) {
             currentActivatedUpgrades.Add(upgrade);
         }
     }
 
     public void AddVoices(List<VoiceModule.VoiceTypes> voices)
     {
-        foreach (var type in voices)
-        {
-            if(type != VoiceModule.VoiceTypes.NONE)
-            {
-                Ink.Runtime.Object obj = new Ink.Runtime.BoolValue(true);
+        foreach (VoiceModule.VoiceTypes type in voices) {
+            if (type != VoiceModule.VoiceTypes.NONE) {
+                Object obj = new BoolValue(true);
                 // call the DialogueManager to set the variable in the globals dictionary
                 InkDialogueManager.GetInstance().SetVariableState(VoiceModule.VoiceTypeString(type), obj);
             }
@@ -83,18 +88,15 @@ public class PlayerInfo : ScriptableObject
     {
         currentActivatedUpgrades.Add(type);
         upgrades[type].Aquire();
-    } 
+    }
 
     public void ActivateModules()
     {
-        foreach (UpgradeType upgrade in currentActivatedUpgrades)
-        {
+        foreach (UpgradeType upgrade in currentActivatedUpgrades) {
             upgrades[upgrade].TurnOn();
         }
     }
 
-    public void ResetMaxBattery()
-    {
-        _maxBattery = initialMaxBattery;
-    }
+    // Because the EnergyManager class handles the current energy, this should do nothing
+    public void ResetMaxBattery() {}
 }
