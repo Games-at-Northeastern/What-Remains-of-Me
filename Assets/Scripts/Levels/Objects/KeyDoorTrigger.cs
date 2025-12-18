@@ -53,8 +53,11 @@ public class KeyDoorTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        screenRenderer.sprite = defaultSprite;
-        cs.Disable();
-        hintRenderer.enabled = false;
+        if (other.CompareTag("Player"))
+        {
+            screenRenderer.sprite = defaultSprite;
+            cs.Disable();
+            hintRenderer.enabled = false;
+        }
     }
 }
