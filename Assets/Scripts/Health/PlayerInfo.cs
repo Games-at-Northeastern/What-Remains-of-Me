@@ -1,78 +1,92 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using SmartScriptableObjects.ReactiveProperties;
+using Ink.Runtime;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
-
-[CreateAssetMenu]
+using Object = Ink.Runtime.Object;
 public class PlayerInfo : ScriptableObject
 {
-    [Header("Dependency Injection")]
-    [FormerlySerializedAs("_virusSO")]
-    public PercentageFloatReactivePropertySO _virusPercentageSO;
-    public PercentageFloatReactivePropertySO _batteryPercentageSO;
+    // NOTE: Energy is now handled by a single EnergyManager instance.
+    // To migrate away from using scriptable objects for runtime data and not edit a ton of scripts,
+    // PlayerInfo now delegates all battery/virus related requests to the EnergyManager instance
+    
+    public float iframesTime;
+    public List<UpgradeType> currentActivatedUpgrades;
 
     // any information about the player we want tracked can
     // be stored here.
     [Header("Info")]
-    [HideInInspector] public IReactiveProperty<float> batteryPercentage;
+    public Dictionary<UpgradeType, IUpgrade> upgrades = new Dictionary<UpgradeType, IUpgrade>();
+    
+    // Gets/Sets the current battery from the EnergyManager instance
+    public float battery {
+        get {
+            return EnergyManager.Instance.GetBattery();
+        }
+        set {
+            EnergyManager.Instance.SetBattery(value);
+        }
 
-    public float battery
-    {
-        get => batteryPercentage.Value * maxBattery;
-        set => batteryPercentage.Value = value / maxBattery;
     }
-
-    private float _maxBattery;
-    public float maxBattery
-    {
-        get => _maxBattery;
-        set
-        {
-            batteryPercentage.Value = battery / value;
-            _maxBattery = value;
+    
+    // Gets the current maxBattery from the EnergyManager instance
+    public float maxBattery {
+        get {
+            return EnergyManager.Instance.GetMaxBattery();
+        }
+        // This shouldn't really be done and in the PlayerHealth script it makes no sense
+        set {
+            /*batteryPercentage.Value = battery / value;
+            _maxBattery = value;*/
         }
     }
-    [HideInInspector] public IReactiveProperty<float> virusPercentage;
-    public float virus
-    {
-        get => virusPercentage.Value * maxVirus;
-        set => virusPercentage.Value = (value / maxVirus);
+    
+    // Gets/Sets the current virus from the EnergyManager instance
+    public float virus {
+        get {
+            return EnergyManager.Instance.GetVirus();
+        }
+
+        set {
+            EnergyManager.Instance.SetVirus(value);
+        }
     }
-    public float maxVirus = 100;
-    [SerializeField] private float initialMaxBattery;
-    public float iframesTime;
-    public Dictionary<UpgradeType, IUpgrade> upgrades = new();
-    public List<UpgradeType> currentActivatedUpgrades;
 
-
-
-    private void OnValidate()
-    {
-        batteryPercentage = _batteryPercentageSO;
-        virusPercentage = _virusPercentageSO;
-        currentActivatedUpgrades.Clear();
+    // Gets the current maxVirus from the EnergyManager instance
+    public float maxVirus {
+        get {
+            return EnergyManager.Instance.GetMaxVirus();
+        }
     }
+
+    public ReactiveProperty<float> batteryPercentage {
+        get {
+            return new ReactiveProperty<float>(EnergyManager.Instance.GetBatteryPercentage());
+        }
+    }
+    public ReactiveProperty<float> virusPercentage {
+        get {
+            return new ReactiveProperty<float>(EnergyManager.Instance.GetVirusPercentage());
+        }
+    }
+
+
+
+    private void OnValidate() => currentActivatedUpgrades.Clear();
 
     public void ResetUpgrades(List<UpgradeType> upgrades)
     {
         currentActivatedUpgrades.Clear();
 
-        foreach(var upgrade in upgrades)
-        { 
+        foreach (UpgradeType upgrade in upgrades) {
             currentActivatedUpgrades.Add(upgrade);
         }
     }
 
     public void AddVoices(List<VoiceModule.VoiceTypes> voices)
     {
-        foreach (var type in voices)
-        {
-            if(type != VoiceModule.VoiceTypes.NONE)
-            {
-                Ink.Runtime.Object obj = new Ink.Runtime.BoolValue(true);
+        foreach (VoiceModule.VoiceTypes type in voices) {
+            if (type != VoiceModule.VoiceTypes.NONE) {
+                Object obj = new BoolValue(true);
                 // call the DialogueManager to set the variable in the globals dictionary
                 InkDialogueManager.GetInstance().SetVariableState(VoiceModule.VoiceTypeString(type), obj);
             }
@@ -83,18 +97,15 @@ public class PlayerInfo : ScriptableObject
     {
         currentActivatedUpgrades.Add(type);
         upgrades[type].Aquire();
-    } 
+    }
 
     public void ActivateModules()
     {
-        foreach (UpgradeType upgrade in currentActivatedUpgrades)
-        {
+        foreach (UpgradeType upgrade in currentActivatedUpgrades) {
             upgrades[upgrade].TurnOn();
         }
     }
 
-    public void ResetMaxBattery()
-    {
-        _maxBattery = initialMaxBattery;
-    }
+    // Because the EnergyManager class handles the current energy, this should do nothing
+    public void ResetMaxBattery() {}
 }

@@ -1,3 +1,4 @@
+/*
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,3 +13,5 @@ public class BatteryPercentageInitializer : MonoBehaviour
         playerInfo.virusPercentage = playerInfo._virusPercentageSO;
     }
 }
+*/
+
