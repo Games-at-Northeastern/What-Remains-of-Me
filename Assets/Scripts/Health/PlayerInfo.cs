@@ -3,9 +3,12 @@ using Ink.Runtime;
 using UniRx;
 using UnityEngine;
 using Object = Ink.Runtime.Object;
-[CreateAssetMenu]
 public class PlayerInfo : ScriptableObject
 {
+    // NOTE: Energy is now handled by a single EnergyManager instance.
+    // To migrate away from using scriptable objects for runtime data and not edit a ton of scripts,
+    // PlayerInfo now delegates all battery/virus related requests to the EnergyManager instance
+    
     public float iframesTime;
     public List<UpgradeType> currentActivatedUpgrades;
 
@@ -13,7 +16,8 @@ public class PlayerInfo : ScriptableObject
     // be stored here.
     [Header("Info")]
     public Dictionary<UpgradeType, IUpgrade> upgrades = new Dictionary<UpgradeType, IUpgrade>();
-
+    
+    // Gets/Sets the current battery from the EnergyManager instance
     public float battery {
         get {
             return EnergyManager.Instance.GetBattery();
@@ -23,6 +27,8 @@ public class PlayerInfo : ScriptableObject
         }
 
     }
+    
+    // Gets the current maxBattery from the EnergyManager instance
     public float maxBattery {
         get {
             return EnergyManager.Instance.GetMaxBattery();
@@ -33,6 +39,8 @@ public class PlayerInfo : ScriptableObject
             _maxBattery = value;*/
         }
     }
+    
+    // Gets/Sets the current virus from the EnergyManager instance
     public float virus {
         get {
             return EnergyManager.Instance.GetVirus();
@@ -43,6 +51,7 @@ public class PlayerInfo : ScriptableObject
         }
     }
 
+    // Gets the current maxVirus from the EnergyManager instance
     public float maxVirus {
         get {
             return EnergyManager.Instance.GetMaxVirus();
