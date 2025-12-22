@@ -38,7 +38,7 @@ namespace Levels.Objects.Platform
 
         protected virtual void OnTriggerEnter2D(Collider2D other)
         {
-            if (IsOnTop(other.transform.position))
+            if (IsOnTop(other.transform.position) && other.gameObject.CompareTag("Player"))
             {
                 other.transform.SetParent(transform);
             }
