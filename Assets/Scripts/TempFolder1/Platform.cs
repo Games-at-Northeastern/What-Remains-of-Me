@@ -2,14 +2,24 @@ namespace Levels.Objects.Platform
 {
     using UnityEngine;
     using CharacterController;
+    using System.ComponentModel.Design;
+
     /// <summary>
     /// Represents the behavior of a platform object.
     /// </summary>
     public class Platform : MonoBehaviour
     {
         [SerializeField] private string _eventCollisionTag = "PlatformEventTarget";
-
+        [SerializeField] private MovingElement movingPlatform;
         protected virtual bool IsOnTop(Vector2 normal) => Vector2.Dot(transform.up, normal) < -0.5f;
+
+        private void Update()
+        {
+            if (movingPlatform._destinationIndex != 1 && TryGetComponent(out Collider2D collider))
+            {
+                collider.enabled = false;
+            }
+        }
 
         protected virtual void OnCollisionEnter2D(Collision2D col)
         {
@@ -42,6 +52,7 @@ namespace Levels.Objects.Platform
             {
                 other.transform.SetParent(transform);
             }
+            
 
             if (!string.IsNullOrEmpty(_eventCollisionTag) && other.CompareTag(_eventCollisionTag))
             {
