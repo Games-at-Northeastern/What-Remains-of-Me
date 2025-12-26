@@ -6,7 +6,7 @@ public class InteractOnRayDetect : MonoBehaviour
 {
     #region player tracking
     [Header("Player Tracking")]
-    [SerializeField] private GameObject detectedObject;
+    [SerializeField] public GameObject detectedObject;
     [SerializeField] private Collider2D detectedCollider;
     [SerializeField] private bool isTracking;
     private bool isColliding = false;
@@ -24,6 +24,12 @@ public class InteractOnRayDetect : MonoBehaviour
     [SerializeField] private Vector3 currentPos;
     #endregion
 
+    #region camera system
+    [Header("Camera system")]
+    [SerializeField] private GameObject systemObject;
+    private bool systemActivated;
+    #endregion
+
     #region action
     [SerializeField] private GameObject activator;
     #endregion
@@ -36,8 +42,12 @@ public class InteractOnRayDetect : MonoBehaviour
     }
     private void Update()
     {
+        systemActivated = (systemObject != null && systemObject.GetComponent<CameraSystemManager>().systemFlag);
         ColliderConstruction();
-        TrackPlayer(detectedCollider);
+        if(!systemActivated)
+        {
+            TrackPlayer(detectedCollider);
+        }
     }
 
     private void TrackPlayer(Collider2D other)
@@ -61,15 +71,20 @@ public class InteractOnRayDetect : MonoBehaviour
                 {
                     detectCone.color = Color.red;
                     activator.GetComponent<Animator>().SetBool("Activate", true);
+                    if(systemObject != null)
+                    {
+                        Debug.Log("System Flag now True");
+                        systemObject.GetComponent<CameraSystemManager>().systemFlag = true;
+                    }
                     StopAllCoroutines();
                 }
-                else
+                else if (!systemActivated)
                 {
                     StartCoroutine(Deactivate());
                 }
             }
             //if theere's nothing to hit, not tracking anything
-            if (hits == null || hits.Length == 0)
+            if ((hits == null || hits.Length == 0) && !systemActivated)
             {
                 StartCoroutine(Deactivate());
 
@@ -78,8 +93,11 @@ public class InteractOnRayDetect : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Deactivate());
-
+            if(!systemActivated)
+            {
+                StartCoroutine(Deactivate());
+            }
+            
             return;
         }
     }
