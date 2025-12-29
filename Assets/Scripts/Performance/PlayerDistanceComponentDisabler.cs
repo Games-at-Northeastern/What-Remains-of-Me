@@ -25,7 +25,7 @@ public class PlayerDistanceComponentDisabler<T> : PlayerDistanceComponentDisable
     {
         foreach (var comp in components)
         {
-            if (!comp)
+            if (!comp || !comp.enabled)
                 continue;
 
             Bounds bounds = GetComponentBounds(comp);
