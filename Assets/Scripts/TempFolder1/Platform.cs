@@ -15,6 +15,10 @@ namespace Levels.Objects.Platform
 
         private void Update()
         {
+            if (!movingPlatform)
+            {
+                return;
+            }
             if (movingPlatform._destinationIndex != 1 && TryGetComponent(out Collider2D collider))
             {
                 collider.enabled = false;
@@ -31,7 +35,8 @@ namespace Levels.Objects.Platform
 
 
             // platform behavior was deleted by a merge resolution; this should work?
-            if (!string.IsNullOrEmpty(_eventCollisionTag) && col.gameObject.CompareTag(_eventCollisionTag)) {
+            if (!string.IsNullOrEmpty(_eventCollisionTag) && col.gameObject.CompareTag(_eventCollisionTag))
+            {
                 var coll = col.gameObject.GetComponent<IOnCollision>();
 
                 if (coll != null)
@@ -52,7 +57,7 @@ namespace Levels.Objects.Platform
             {
                 other.transform.SetParent(transform);
             }
-            
+
 
             if (!string.IsNullOrEmpty(_eventCollisionTag) && other.CompareTag(_eventCollisionTag))
             {

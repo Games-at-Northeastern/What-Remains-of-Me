@@ -1,41 +1,117 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Tilemaps;
 
-// the #if ensures the script is not compiled when making a build, because it is only meant to work in the Editor.
-// Once the casters are applied, no need to compile this script with the rest.
-#if UNITY_EDITOR
-
+/// <summary>
+/// Adds shadow caster 2Ds with the same shape as this game object's tilemap 2D component.
+/// Shadow casters are broken down into sections of user-specified width.
+/// Creates or adds a ShadowCasterDisabler component to this game object upon generating
+///   shadowcasters. 
+/// </summary>
+[RequireComponent(typeof(Tilemap))]
 public class ShadowCasterApplicator : MonoBehaviour
 {
-    [SerializeField] private bool selfShadows = true;
-    private CompositeCollider2D tilemapCollider;
+    [SerializeField] private int shadowCasterWidth = 20;
 
-	static readonly FieldInfo shapePathField = typeof(ShadowCaster2D).GetField("m_ShapePath", BindingFlags.NonPublic | BindingFlags.Instance);
-	static readonly FieldInfo shapePathHashField = typeof(ShadowCaster2D).GetField("m_ShapePathHash", BindingFlags.NonPublic | BindingFlags.Instance);
-	static readonly MethodInfo generateShadowMeshMethod = typeof(ShadowCaster2D)
-									.Assembly
-									.GetType("UnityEngine.Rendering.Universal.ShadowUtility")
-									.GetMethod("GenerateShadowMesh", BindingFlags.Public | BindingFlags.Static);
+    private int shadowCasterCount = 0;
+    private Grid grid;
+    private Tilemap tilemap;
+    private Tilemap tempTilemap;
+    private CompositeCollider2D tempCompositeCollider;
+    private TilemapCollider2D tempTilemapCollider;
+    private ShadowCasterDisabler disabler;
+
+    static readonly FieldInfo shapePathField = typeof(ShadowCaster2D).GetField("m_ShapePath", BindingFlags.NonPublic | BindingFlags.Instance);
+    static readonly FieldInfo shapePathHashField = typeof(ShadowCaster2D).GetField("m_ShapePathHash", BindingFlags.NonPublic | BindingFlags.Instance);
 
     public void Create()
     {
-        DestroyOldShadowCasters();
-        tilemapCollider = GetComponent<CompositeCollider2D>();
-
-        // for all paths in the collider, which I think of as different seperated chunks, it creates a new GameObject, makes it a child of this tilemap, and adds a ShadowCaster2D component to it
-        for (int i = 0; i < tilemapCollider.pathCount; i++)
+        if (!TryGetComponent(out tilemap))
         {
-            Vector2[] pathVertices = new Vector2[tilemapCollider.GetPathPointCount(i)];
-            tilemapCollider.GetPath(i, pathVertices);
-            GameObject shadowCaster = new GameObject("shadow_caster_" + i);
-            shadowCaster.transform.parent = gameObject.transform;
-            ShadowCaster2D shadowCasterComponent = shadowCaster.AddComponent<ShadowCaster2D>();
-            shadowCasterComponent.selfShadows = this.selfShadows;
+            return;
+        }
+        if (!transform.parent.TryGetComponent(out grid))
+        {
+            return;
+        }
+        if (!TryGetComponent(out disabler))
+        {
+            disabler = gameObject.AddComponent<ShadowCasterDisabler>();
+        }
 
-            // shapes the new shadow caster to fit this piece of tilemap geometry
+        DestroyShadowcasters();
+        shadowCasterCount = 0;
+
+        tilemap.CompressBounds();
+        int startX = tilemap.cellBounds.xMin;
+
+        while (startX < tilemap.cellBounds.xMax)
+        {
+            InstantiateTempTilemap();
+
+            for (int x = startX; x < Mathf.Min(startX + shadowCasterWidth, tilemap.cellBounds.xMax); x++)
+            {
+                for (int y = tilemap.cellBounds.yMin; y <= tilemap.cellBounds.yMax; y++)
+                {
+                    Vector3Int target = new(x, y);
+                    TileBase tile = tilemap.GetTile(target);
+                    if (!tile)
+                        continue;
+                    tempTilemap.SetTile(target, tile);
+                }
+            }
+
+            tempTilemap.CompressBounds();
+            tempTilemapCollider.ProcessTilemapChanges();
+            GenerateShadowCasters(tempCompositeCollider);
+
+            DestroyTempTilemap();
+
+            startX += shadowCasterWidth;
+        }
+    }
+
+    private void InstantiateTempTilemap()
+    {
+        GameObject tempGO = new GameObject("Temp");
+        tempTilemap = tempGO.AddComponent<Tilemap>();
+
+        tempTilemapCollider = tempGO.AddComponent<TilemapCollider2D>();
+        tempTilemapCollider.compositeOperation = Collider2D.CompositeOperation.Merge;
+        tempGO.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        tempCompositeCollider = tempGO.AddComponent<CompositeCollider2D>();
+
+        tempGO.transform.parent = grid.transform;
+        tempGO.transform.SetLocalPositionAndRotation(tilemap.transform.localPosition, tilemap.transform.localRotation);
+        tempGO.transform.localScale = tilemap.transform.localScale;
+    }
+
+    private void DestroyTempTilemap()
+    {
+        DestroyImmediate(tempTilemap.gameObject);
+        tempTilemap = null;
+        tempTilemapCollider = null;
+        tempCompositeCollider = null;
+    }
+
+    private void GenerateShadowCasters(CompositeCollider2D collider)
+    {
+        for (int i = 0; i < collider.pathCount; i++)
+        {
+            GameObject shadowCaster = new GameObject("shadow_caster_" + shadowCasterCount);
+            shadowCaster.transform.parent = gameObject.transform;
+            shadowCasterCount++;
+
+            ShadowCaster2D shadowCasterComponent = shadowCaster.AddComponent<ShadowCaster2D>();
+            shadowCasterComponent.selfShadows = false;
+
+            Vector2[] pathVertices = new Vector2[collider.GetPathPointCount(i)];
+            collider.GetPath(i, pathVertices);
+
             Vector3[] testPath = new Vector3[pathVertices.Length];
             for (int j = 0; j < pathVertices.Length; j++)
             {
@@ -44,21 +120,29 @@ public class ShadowCasterApplicator : MonoBehaviour
 
             shapePathField.SetValue(shadowCasterComponent, testPath);
             shapePathHashField.SetValue(shadowCasterComponent, Random.Range(int.MinValue, int.MaxValue));
+
+            if (disabler)
+            {
+                disabler.AddDisableableComponent(shadowCasterComponent);
+            }
         }
     }
 
-    public void DestroyOldShadowCasters()
+    public void DestroyShadowcasters()
     {
-        var tempList = transform.Cast<Transform>().ToList();
-        foreach (var child in tempList)
+        var children = transform.Cast<Transform>().ToList();
+        foreach (var child in children)
         {
-            DestroyImmediate(child.gameObject);
+            if (child.GetComponent<ShadowCaster2D>())
+            {
+                DestroyImmediate(child.gameObject);
+            }
         }
     }
 }
 
-// This is the GUI that appears in the Inspector, allowing for the 'Create' and 'Remove shadows' buttons.
-[CustomEditor (typeof(ShadowCasterApplicator))]
+
+[CustomEditor(typeof(ShadowCasterApplicator))]
 public class ShadowCaster2DTileMapEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -67,13 +151,13 @@ public class ShadowCaster2DTileMapEditor : Editor
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Create"))
         {
-            var creator = (ShadowCasterApplicator) target;
+            var creator = (ShadowCasterApplicator)target;
             creator.Create();
         }
-        if (GUILayout.Button("Remove shadows"))
+        if (GUILayout.Button("Remove Shadows"))
         {
-            var creator = (ShadowCasterApplicator) target;
-            creator.DestroyOldShadowCasters();
+            var creator = (ShadowCasterApplicator)target;
+            creator.DestroyShadowcasters();
         }
         EditorGUILayout.EndHorizontal();
     }
