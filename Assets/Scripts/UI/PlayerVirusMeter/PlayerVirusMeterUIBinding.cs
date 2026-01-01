@@ -25,7 +25,7 @@ namespace UI.PlayerVirusMeter
         private void Awake()
         {
             _playerVirusMeterUI = _playerVirusMeterUIMB;
-            _virusReactiveProperty = new ReactiveProperty<float>(EnergyManager.Instance.GetVirus());
+            _virusReactiveProperty = new ReactiveProperty<float>(EnergyManager.Instance.Virus);
             ;
 
             // Get the virus UI to sync up with player virus stat when the scene is loaded

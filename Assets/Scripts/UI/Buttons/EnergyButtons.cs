@@ -8,7 +8,7 @@ public class EnergyButtons : MonoBehaviour
 
     public void OnClick()
     {
-        EnergyManager.Instance.SetBattery(EnergyManager.Instance.GetMaxBattery() * buttonEnergyAmount);
-        EnergyManager.Instance.SetVirus(EnergyManager.Instance.GetMaxVirus() * buttonVirusAmount);
+        EnergyManager.Instance.Battery = EnergyManager.Instance.MaxBattery * buttonEnergyAmount;
+        EnergyManager.Instance.Virus = EnergyManager.Instance.MaxVirus * buttonVirusAmount;
     }
 }

@@ -12,7 +12,7 @@ public class UpdateVirusUI : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update() => setCurrentVirusPercentage(EnergyManager.Instance.GetVirusPercentage());
+    private void Update() => setCurrentVirusPercentage(EnergyManager.Instance.VirusPercentage);
 
     //
     public void setCurrentVirusPercentage(float percentage) => virusTransform.sizeDelta = new Vector2(Mathf.CeilToInt(percentage * 29),
