@@ -6,7 +6,7 @@ public class OutletTriggerCameraZoom : MonoBehaviour
 
 {
 
-    [SerializeField] private Outlet keyOutlet;
+    [SerializeField] private KeyOutlet keyOutlet;
     [SerializeField] private GameObject zoomCamera;
     [SerializeField] private BoxCollider2D cameraCollider;
 
@@ -26,7 +26,7 @@ public class OutletTriggerCameraZoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (KeyOutlet.hasKey && !keyUsed) 
+        if (keyOutlet.hasKey && !keyUsed) 
         {
            StartCoroutine(EnableColliderForTime(5f));
            keyUsed = true;

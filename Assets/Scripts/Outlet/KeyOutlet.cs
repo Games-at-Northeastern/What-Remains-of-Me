@@ -18,12 +18,12 @@ public class KeyOutlet : Outlet
     [SerializeField] private AudioClip completedDownloadSFX;
     [SerializeField] private AudioClip warningBeepsYellow;
     [SerializeField] private AudioClip warningBeepsRed;
+    [SerializeField] public bool hasKey;
 
     public WireThrower wire;
 
     private List<IAlarmListener> listeners = new List<IAlarmListener>();
-
-    public static bool hasKey = false;
+    
     private Coroutine grantRoutine;
     private AudioSource audioSourceSelf;
     

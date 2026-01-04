@@ -12,6 +12,7 @@ public class KeyDoorTrigger : MonoBehaviour
     [SerializeField] private AudioClip denySFX;
     [SerializeField] private AudioClip acceptSFX;
     [SerializeField] private SpriteRenderer hintRenderer;
+    [SerializeField] private KeyOutlet serverOutlet;
 
     private Coroutine resetRoutine;
     private ControlSchemes cs;
@@ -31,7 +32,7 @@ public class KeyDoorTrigger : MonoBehaviour
             moniterAudioSource.PlayOneShot(denySFX);
             cs.Enable();
 
-            if (KeyOutlet.hasKey)
+            if (serverOutlet.hasKey)
             {
                 hintRenderer.enabled = true;
             }
@@ -40,7 +41,7 @@ public class KeyDoorTrigger : MonoBehaviour
 
     private void EnterCode()
     {
-        if (KeyOutlet.hasKey)
+        if (serverOutlet.hasKey)
         {
             autoOpenDoor.OpenDoor();
             screenRenderer.sprite = checkSprite;
