@@ -96,8 +96,9 @@ public class VirusTurret : MonoBehaviour
                 // If the shooting line/laser hits the player, manually adjust the player's energy and virus appropriately
                 if (hit.transform != null && LayerMask.LayerToName(hit.transform.gameObject.layer) == "Player") // this also tends to error? is this a setup issue?
                 {
-                    playerInfo.battery += energyTransferPerSecond * Time.fixedDeltaTime;
-                    playerInfo.virus += virusTransferPerSecond * Time.fixedDeltaTime;
+                    EnergyManager.Instance.Battery += energyTransferPerSecond * Time.fixedDeltaTime;
+
+                    EnergyManager.Instance.Virus += virusTransferPerSecond * Time.fixedDeltaTime;
                 }
             }
         } else {

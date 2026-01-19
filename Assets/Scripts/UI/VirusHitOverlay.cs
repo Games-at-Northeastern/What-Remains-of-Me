@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class VirusHitOverlay : MonoBehaviour
 {
     [SerializeField] private Material overlayMaterial;
@@ -16,30 +13,27 @@ public class VirusHitOverlay : MonoBehaviour
     [SerializeField] private float lastVirusLevel;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         overlayMaterial.SetFloat("_Intensity", 0);
-        lastVirusLevel = playerEnergy.virus;
+        lastVirusLevel = EnergyManager.Instance.Virus;
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        float virusIncrease = playerEnergy.virus - lastVirusLevel;
+        float virusIncrease = EnergyManager.Instance.Virus - lastVirusLevel;
         float virusThresholdRange = maxVirusThreshold - minVirusThreshold;
         float virusValueInRange = Mathf.Clamp((virusIncrease - minVirusThreshold) / virusThresholdRange, 0, 1);
         float intensityRange = maxIntensity - minIntensity;
-        float intensityValue = minIntensity + (virusValueInRange * intensityRange);
+        float intensityValue = minIntensity + virusValueInRange * intensityRange;
 
-        if (virusIncrease > minVirusThreshold)
-        {
+        if (virusIncrease > minVirusThreshold) {
             overlayMaterial.SetFloat("_Intensity", intensityValue);
-        }
-        else
-        {
+        } else {
             overlayMaterial.SetFloat("_Intensity", 0);
         }
 
-        lastVirusLevel = playerEnergy.virus;
+        lastVirusLevel = EnergyManager.Instance.Virus;
     }
 }

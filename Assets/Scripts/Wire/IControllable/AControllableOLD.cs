@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -177,3 +178,5 @@ public abstract class AControllableOLD : MonoBehaviour, IControllable
         return cleanEnergy <= maxCharge - amount;
     }
 }
+*/
+
