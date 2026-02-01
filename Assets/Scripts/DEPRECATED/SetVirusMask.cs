@@ -7,12 +7,15 @@ namespace UI.PlayerBatteryMeter
 
         [SerializeField] private RectTransform _maskRectTransform;
         [SerializeField] private float _maxMaskWidth;
+        private EnergyManager energyManager;
+
+        private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
 
         private void Update()
         {
 
-            _maskRectTransform.sizeDelta = new Vector2(EnergyManager.Instance.Virus / 2.62f, _maskRectTransform.sizeDelta.y);
-            Debug.Log(EnergyManager.Instance.Virus);
+            _maskRectTransform.sizeDelta = new Vector2(energyManager.Virus / 2.62f, _maskRectTransform.sizeDelta.y);
+            Debug.Log(energyManager.Virus);
         }
     }
 

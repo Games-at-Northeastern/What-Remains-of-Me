@@ -13,6 +13,7 @@ public class DeathZone : MonoBehaviour
     private bool canDieToPit;
     //Collider and death zone for this class 
     private BoxCollider2D collider;
+    private EnergyManager energyManager;
     //Player health to use in internal functions 
     private PlayerHealth playerHealthScript;
 
@@ -24,12 +25,14 @@ public class DeathZone : MonoBehaviour
         playerHealthScript = GameObject.Find("Player").GetComponentInChildren(typeof(PlayerHealth)) as PlayerHealth;
     }
 
+    private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player") {
             switch (zoneType) {
                 case DeathZoneType.instakill:
-                    playerHealthScript.LoseEnergy(EnergyManager.Instance.MaxBattery);
+                    playerHealthScript.LoseEnergy(energyManager.MaxBattery);
                     break;
                 case DeathZoneType.damage:
                     playerHealthScript.LoseEnergy(batteryDamage);
@@ -47,7 +50,7 @@ public class DeathZone : MonoBehaviour
     {
         canDieToPit = false;
         yield return new WaitForSecondsRealtime(pitDelay);
-        playerHealthScript.LoseEnergy(EnergyManager.Instance.MaxBattery);
+        playerHealthScript.LoseEnergy(energyManager.MaxBattery);
         canDieToPit = true;
     }
 }

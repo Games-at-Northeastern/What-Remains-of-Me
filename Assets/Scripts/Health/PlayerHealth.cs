@@ -11,6 +11,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
+    private EnergyManager energyManager;
     private bool iframes;
 
     /*
@@ -21,6 +22,8 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      *
      */
 
+    private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
+
     private void Update()
     {
         // TODO : This should really be done with listeners/events - ideally, this would actually be
@@ -28,22 +31,22 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
         // to not directly reference the PlayerInfo
 
         // check if player has depleted all health (with some float forgiveness)
-        if (EnergyManager.Instance.Battery <= 0.01) {
+        if (energyManager.Battery <= 0.01) {
             EnergyDepletedDeath();
         }
         // check if player has reached minimum health (the player cannot drain any more health)
-        else if (EnergyManager.Instance.Battery <= 1f) {
+        else if (energyManager.Battery <= 1f) {
             EnergyDepletionWarning();
         } else {
             warning.GetComponent<WarningController>().StopLowHealthWarning();
         }
 
         // check if the player has reached 100% virus (with some float forgiveness)
-        if (EnergyManager.Instance.Virus >= EnergyManager.Instance.MaxVirus - 0.01) {
+        if (energyManager.Virus >= energyManager.MaxVirus - 0.01) {
             VirusFullDeath();
         }
         // check if the player has any virus
-        else if (EnergyManager.Instance.Virus >= 0.01) {
+        else if (energyManager.Virus >= 0.01) {
             VirusWarning();
         } else {
             warning.GetComponent<WarningController>().StopLightBlinking();
@@ -55,8 +58,8 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
 
     public void LoadPlayerData(PlayerData playerData)
     {
-        EnergyManager.Instance.Battery = playerData.batteryPercentage * EnergyManager.Instance.MaxBattery;
-        EnergyManager.Instance.Virus = playerData.virusPercentage * EnergyManager.Instance.MaxVirus;
+        energyManager.Battery = playerData.batteryPercentage * energyManager.MaxBattery;
+        energyManager.Virus = playerData.virusPercentage * energyManager.MaxVirus;
     }
     public void LoadLevelData(LevelData levelData)
     {
@@ -64,8 +67,8 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     }
     public void SaveData(ref PlayerData playerData, ref LevelData levelData)
     {
-        playerData.batteryPercentage = EnergyManager.Instance.BatteryPercentage;
-        playerData.virusPercentage = EnergyManager.Instance.VirusPercentage;
+        playerData.batteryPercentage = energyManager.BatteryPercentage;
+        playerData.virusPercentage = energyManager.VirusPercentage;
 
     }
 
@@ -77,7 +80,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     private void VirusFullDeath()
     {
         Debug.Log("Death from virus full");
-        EnergyManager.Instance.Virus = 0f;
+        energyManager.Virus = 0f;
         LevelManager.PlayerDeath();
     }
 
@@ -104,8 +107,8 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     /// </summary>
     private void VirusWarning()
     {
-        warning.GetComponent<WarningController>().VirusControl(EnergyManager.Instance.Virus / EnergyManager.Instance.MaxVirus);
-        if (EnergyManager.Instance.Virus >= EnergyManager.Instance.MaxVirus * 0.8f) {
+        warning.GetComponent<WarningController>().VirusControl(energyManager.Virus / energyManager.MaxVirus);
+        if (energyManager.Virus >= energyManager.MaxVirus * 0.8f) {
             Debug.Log("Virus Overload Warning");
             warning.GetComponent<WarningController>().StartLightBlinking();
         } else {
@@ -132,8 +135,8 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      */
     public void LoseEnergy(float amount)
     {
-        EnergyManager.Instance.Battery -= amount;
-        if (EnergyManager.Instance.BatteryPercentage <= 0f) {
+        energyManager.Battery -= amount;
+        if (energyManager.BatteryPercentage <= 0f) {
             Die();
         }
         OnHealthChanged.Invoke();
@@ -150,7 +153,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
 
     public void GainEnergy(float amount)
     {
-        EnergyManager.Instance.Battery += amount;
+        energyManager.Battery += amount;
         OnHealthChanged.Invoke();
     }
 
@@ -164,34 +167,34 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      */
     public void AddVirus(float amount)
     {
-        EnergyManager.Instance.Virus += amount;
+        energyManager.Virus += amount;
         // playerInfo.maxBattery -= amount;
-        if (EnergyManager.Instance.BatteryPercentage <= 0f || EnergyManager.Instance.VirusPercentage >= 0.99f) {
+        if (energyManager.BatteryPercentage <= 0f || energyManager.VirusPercentage >= 0.99f) {
             Die();
         }
     }
 
-    public void SubtractVirus(float amount) => EnergyManager.Instance.Virus -= -amount;
+    public void SubtractVirus(float amount) => energyManager.Virus -= -amount;
     // playerInfo.maxBattery += amount;
     /*
      * Gives the battery amount the player has, from 0 to 1.
      */
-    public float GetRelativeBattery() => EnergyManager.Instance.BatteryPercentage;
+    public float GetRelativeBattery() => energyManager.BatteryPercentage;
 
     /*
      * Can the player transfer amount of energy to other things?
      *
      * @param amount     the amount of energy being given
      */
-    public bool CanGiveEnergy(float amount) => EnergyManager.Instance.Battery >= amount;
+    public bool CanGiveEnergy(float amount) => energyManager.Battery >= amount;
 
     /*
      * Can the player take amount of energy from other things?
      *
      * @param amount    the amount of energy being taken
      */
-    public bool CanTakeEnergy(float amount) => EnergyManager.Instance.Battery + EnergyManager.Instance.Virus <=
-        EnergyManager.Instance.MaxBattery - amount;
+    public bool CanTakeEnergy(float amount) => energyManager.Battery + energyManager.Virus <=
+        energyManager.MaxBattery - amount;
 
     /*
      * Damages the player if there are no Iframes.

@@ -43,9 +43,7 @@ public class ControllableDoor : AControllable
     private AudioSource openingAudioLoop;
 
     public bool ShouldDisappear {
-        get {
-            return shouldDisappear;
-        }
+        get => shouldDisappear;
         set {
             if (shouldDisappear != value) {
                 shouldDisappear = value;
@@ -77,9 +75,7 @@ public class ControllableDoor : AControllable
     }
 
     public bool InvertMask {
-        get {
-            return invertMask;
-        }
+        get => invertMask;
         set {
             invertMask = value;
 
@@ -166,13 +162,14 @@ public class ControllableDoor : AControllable
 
     public void setMaxCharge()
     {
+        EnergyManager energyManager = PlayerManager.Instance.EnergyManager;
         cleanEnergy = 0;
         virus = 0;
-        maxCharge = (float)Math.Round(EnergyManager.Instance.Battery - requiredAtlasEnergy) - 1.0f;
+        maxCharge = (float)Math.Round(energyManager.Battery - requiredAtlasEnergy) - 1.0f;
 
-        if (!virusAllowed && EnergyManager.Instance.Virus > 0) {
+        if (!virusAllowed && energyManager.Virus > 0) {
             //If Atlas has virus and we don't want him to, make him drain all his energy
-            maxCharge = EnergyManager.Instance.Battery;
+            maxCharge = energyManager.Battery;
         }
 
         if (maxCharge <= 1) {

@@ -24,7 +24,7 @@ namespace UI.PlayerBatteryMeter
         private void Awake()
         {
             _playerBatteryMeterUI = _playerBatteryMeterUIMB;
-            _batteryReactiveProperty = new ReactiveProperty<float>(EnergyManager.Instance.BatteryPercentage);
+            _batteryReactiveProperty = new ReactiveProperty<float>(PlayerManager.Instance.EnergyManager.BatteryPercentage);
 
             // Get the virus UI to sync up with player virus stat when the scene is loaded
             // This only has to happen once, it will automatically update hereafter

@@ -20,12 +20,14 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
 
     public UnityEvent<float> OnEnergyChange;
 
+    private EnergyManager energyManager;
 
     protected float totalEnergy {
-        get {
-            return cleanEnergy + virus;
-        }
+        get => cleanEnergy + virus;
     }
+
+
+    private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
 
     /// <summary>
     ///     This controllable gains the given amount of energy and takes it from the player health.
@@ -33,19 +35,19 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// </summary>
     public void GainEnergy(float amount)
     {
-        if (amount <= 0 || totalEnergy >= maxCharge || EnergyManager.Instance.Battery <= 1f) {
+        if (amount <= 0 || totalEnergy >= maxCharge || energyManager.Battery <= 1f) {
             return;
         }
         float totalEnergyBefore = totalEnergy;
 
         // this is the cause of the outlet's never filling up to full
         amount = Mathf.Min(amount, maxCharge - totalEnergy);
-        amount = Mathf.Min(amount, EnergyManager.Instance.Battery - 1f);
+        amount = Mathf.Min(amount, energyManager.Battery - 1f);
 
-        float virusProportion = EnergyManager.Instance.Virus / EnergyManager.Instance.Battery;
+        float virusProportion = energyManager.Virus / energyManager.Battery;
 
-        EnergyManager.Instance.Battery -= amount;
-        EnergyManager.Instance.Virus -= amount * virusProportion;
+        energyManager.Battery -= amount;
+        energyManager.Virus -= amount * virusProportion;
 
         cleanEnergy += amount * (1f - virusProportion);
         virus += amount * virusProportion;
@@ -63,18 +65,18 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// </summary>
     public void LoseEnergy(float amount)
     {
-        if (amount <= 0 || totalEnergy <= 0 || EnergyManager.Instance.Battery >= EnergyManager.Instance.MaxBattery) {
+        if (amount <= 0 || totalEnergy <= 0 || energyManager.Battery >= energyManager.MaxBattery) {
             return;
         }
         float totalEnergyBefore = totalEnergy;
 
         amount = Mathf.Min(amount, totalEnergy);
-        amount = Mathf.Min(amount, EnergyManager.Instance.MaxBattery - EnergyManager.Instance.Battery);
+        amount = Mathf.Min(amount, energyManager.MaxBattery - energyManager.Battery);
 
         float virusProportion = virus / totalEnergy;
 
-        EnergyManager.Instance.Battery += amount;
-        EnergyManager.Instance.Virus += amount * virusProportion;
+        energyManager.Battery += amount;
+        energyManager.Virus += amount * virusProportion;
 
         cleanEnergy -= amount * (1f - virusProportion);
         virus -= amount * virusProportion;

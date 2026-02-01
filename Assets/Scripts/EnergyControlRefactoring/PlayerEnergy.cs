@@ -8,6 +8,9 @@ public class PlayerEnergy : EnergyControl
 {
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
+    private EnergyManager energyManager;
+
+    private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
 
     /// <summary>
     ///     Represents any necessary steps to handle the player death when they hold their max Virus amount.
@@ -30,9 +33,9 @@ public class PlayerEnergy : EnergyControl
     private void updatePlayerInfo()
     {
 
-        if (EnergyManager.Instance.Virus >= EnergyManager.Instance.MaxVirus - 0.01) {
+        if (energyManager.Virus >= energyManager.MaxVirus - 0.01) {
             VirusFullDeath();
-        } else if (EnergyManager.Instance.Battery <= 0.01) {
+        } else if (energyManager.Battery <= 0.01) {
             EnergyDepletedDeath();
         }
     }

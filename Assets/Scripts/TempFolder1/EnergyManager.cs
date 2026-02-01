@@ -1,8 +1,6 @@
 using UnityEngine;
-public class EnergyManager : MonoBehaviour
+public class EnergyManager : IManager
 {
-
-    public static EnergyManager Instance;
 
     // If the scene wants to start with no energy
     [SerializeField] private bool startWithNoEnergy;
@@ -50,24 +48,11 @@ public class EnergyManager : MonoBehaviour
     // Initialize the energy manager in the first moment the scene is run
     private void Awake()
     {
-        InitializeManagerInstance();
-
         batteryPercentage = 0;
         virusPercentage = 0;
 
         if (!startWithNoEnergy) {
             batteryPercentage = 1;
         }
-    }
-
-    // Initializes and enforces a singular instance of this EnergyManager
-    private void InitializeManagerInstance()
-    {
-        if (Instance == null) {
-            Instance = this;
-        } else {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(Instance);
     }
 }

@@ -35,6 +35,7 @@ public class VirusTurret : MonoBehaviour
     public AudioSource audioSource;
 
     private bool activateVisual;
+    private EnergyManager energyManager;
     private Coroutine laserCoroutine;
     private Vector3 lastTargetPos;
 
@@ -43,6 +44,7 @@ public class VirusTurret : MonoBehaviour
 
     private void Start()
     {
+        energyManager = PlayerManager.Instance.EnergyManager;
         turnedOn = true;
         lineRenderer.textureMode = LineTextureMode.Tile;
         virusAnimator = rotatingPointTransform.transform.GetChild(2).GetComponent<Animator>();
@@ -96,9 +98,9 @@ public class VirusTurret : MonoBehaviour
                 // If the shooting line/laser hits the player, manually adjust the player's energy and virus appropriately
                 if (hit.transform != null && LayerMask.LayerToName(hit.transform.gameObject.layer) == "Player") // this also tends to error? is this a setup issue?
                 {
-                    EnergyManager.Instance.Battery += energyTransferPerSecond * Time.fixedDeltaTime;
+                    energyManager.Battery += energyTransferPerSecond * Time.fixedDeltaTime;
 
-                    EnergyManager.Instance.Virus += virusTransferPerSecond * Time.fixedDeltaTime;
+                    energyManager.Virus += virusTransferPerSecond * Time.fixedDeltaTime;
                 }
             }
         } else {
@@ -135,7 +137,7 @@ public class VirusTurret : MonoBehaviour
             StartFiringAnimation();
             yield return new WaitForSeconds(shootDuration);
 
-            if (turnedOn == false) {
+            if (!turnedOn) {
                 break;
             }
 
@@ -146,7 +148,7 @@ public class VirusTurret : MonoBehaviour
             StartPowerDownAnimation();
             yield return new WaitForSeconds(endDelay);
 
-            if (turnedOn == false) {
+            if (!turnedOn) {
                 break;
             }
 

@@ -12,17 +12,20 @@ public class VirusHitOverlay : MonoBehaviour
 
     [SerializeField] private float lastVirusLevel;
 
+    private EnergyManager energyManager;
+
     // Start is called before the first frame update
     private void Start()
     {
+        energyManager = PlayerManager.Instance.EnergyManager;
         overlayMaterial.SetFloat("_Intensity", 0);
-        lastVirusLevel = EnergyManager.Instance.Virus;
+        lastVirusLevel = energyManager.Virus;
     }
 
     // Update is called once per frame
     private void FixedUpdate()
     {
-        float virusIncrease = EnergyManager.Instance.Virus - lastVirusLevel;
+        float virusIncrease = energyManager.Virus - lastVirusLevel;
         float virusThresholdRange = maxVirusThreshold - minVirusThreshold;
         float virusValueInRange = Mathf.Clamp((virusIncrease - minVirusThreshold) / virusThresholdRange, 0, 1);
         float intensityRange = maxIntensity - minIntensity;
@@ -34,6 +37,6 @@ public class VirusHitOverlay : MonoBehaviour
             overlayMaterial.SetFloat("_Intensity", 0);
         }
 
-        lastVirusLevel = EnergyManager.Instance.Virus;
+        lastVirusLevel = energyManager.Virus;
     }
 }

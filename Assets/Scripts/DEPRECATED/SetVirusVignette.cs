@@ -6,10 +6,15 @@ public class SetVirusVignette : MonoBehaviour
     [SerializeField] private PlayerInfo AtlasPlayerInfo;
 
     [SerializeField] private Volume vignetteVolume;
+    private EnergyManager energyManager;
 
     private Vignette vg;
-    private void Start() => vignetteVolume.profile.TryGet(out vg);
+    private void Start()
+    {
+        vignetteVolume.profile.TryGet(out vg);
+        energyManager = PlayerManager.Instance.EnergyManager;
+    }
 
 
-    private void Update() => vg.intensity.value = EnergyManager.Instance.Virus / EnergyManager.Instance.Battery;
+    private void Update() => vg.intensity.value = energyManager.Virus / energyManager.Battery;
 }
