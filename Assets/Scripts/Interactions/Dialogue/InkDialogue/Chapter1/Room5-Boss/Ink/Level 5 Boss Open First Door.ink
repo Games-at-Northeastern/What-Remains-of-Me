@@ -7,7 +7,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 
-#portrait:jones1 #speaker:Vox
+#portrait:vox1 #speaker:Vox
 Let me show you what true power is.
 OPEN DOOR 1A
 ...how pitiful.
@@ -15,4 +15,4 @@ OPEN DOOR 1A
 ->DONE
 
 ->END
-#portrait:jones1 #speaker:Vox
+#portrait:vox1 #speaker:Vox
