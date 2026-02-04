@@ -7,19 +7,21 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 
-The outlet in front of you will take you to Vox. #layout:left #portrait:Handler #speaker:The Handler
+That outlet should take you to Vox, but you’ll need to power it first. #layout:left #portrait:Handler #speaker:The Handler
 
-You'll need to find enough energy to power it...
+Energy is getting scarce, so be sure to-
 
 #portrait:jones1 #speaker:Vox
 
-STOP.
+Fool.
+
+You blindly follow a human you don’t even know.
 
 You accomplish nothing by attempting to reach me. 
 
-The one guiding you does not have your interests in mind.
+Continuing this way will only result in your own destruction
 
-You have one course of action. Shut yourself down.
+I have seen it all too well.
 
 
 ->DONE

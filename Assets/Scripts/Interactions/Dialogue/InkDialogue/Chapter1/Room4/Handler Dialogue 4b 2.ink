@@ -7,11 +7,11 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 
-This next part is tricky... #layout:left #portrait:Handler #speaker:The Handler
+Don’t listen to anything Vox might say. He’s infected with the Virus. #layout:left #portrait:Handler #speaker:The Handler
 
-Remember that you can drain energy from outlets.
+Stay focused on the task ahead of you.
 
-You may need all the energy you can get...
+Drain as much energy as you can from the outlets. You’ll need all of it to get past him.
 
 ->DONE
 
