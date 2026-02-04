@@ -8,7 +8,7 @@ public class SetBatteryUI : MonoBehaviour
 
     private void Update()
     {
-        _batteryUIBar.material.SetFloat("_Virus_Amount", PlayerManager.Instance.EnergyManager.VirusPercentage);
-        _batteryUIBar.material.SetFloat("_Battery_Amount", PlayerManager.Instance.EnergyManager.BatteryPercentage);
+        _batteryUIBar.material.SetFloat("_Virus_Amount", PlayerRef.PlayerManager.EnergyManager.VirusPercentage);
+        _batteryUIBar.material.SetFloat("_Battery_Amount", PlayerRef.PlayerManager.EnergyManager.BatteryPercentage);
     }
 }

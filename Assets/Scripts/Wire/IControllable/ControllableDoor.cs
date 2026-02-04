@@ -162,7 +162,7 @@ public class ControllableDoor : AControllable
 
     public void setMaxCharge()
     {
-        EnergyManager energyManager = PlayerManager.Instance.EnergyManager;
+        EnergyManager energyManager = PlayerRef.PlayerManager.EnergyManager;
         cleanEnergy = 0;
         virus = 0;
         maxCharge = (float)Math.Round(energyManager.Battery - requiredAtlasEnergy) - 1.0f;

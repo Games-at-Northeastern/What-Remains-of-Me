@@ -22,7 +22,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      *
      */
 
-    private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
+    private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
 
     private void Update()
     {

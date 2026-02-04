@@ -12,7 +12,7 @@ public class SetVirusVignette : MonoBehaviour
     private void Start()
     {
         vignetteVolume.profile.TryGet(out vg);
-        energyManager = PlayerManager.Instance.EnergyManager;
+        energyManager = PlayerRef.PlayerManager.EnergyManager;
     }
 
 

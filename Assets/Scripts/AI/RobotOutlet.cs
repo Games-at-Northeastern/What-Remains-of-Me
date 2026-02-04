@@ -66,7 +66,7 @@ public class RobotOutlet : AControllable
         }
 
         // Update ink script for enemy to say
-        if (PlayerManager.Instance.EnergyManager.Virus <= 50) // atlas has low virus level
+        if (PlayerRef.PlayerManager.EnergyManager.Virus <= 50) // atlas has low virus level
         {
             if (virus < 50) // enemy has low virus level
             {

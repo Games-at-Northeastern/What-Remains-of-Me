@@ -8,8 +8,8 @@ public class LazerCollision : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player") {
-            PlayerManager.Instance.EnergyManager.Battery += energyAmount * Time.fixedDeltaTime;
-            PlayerManager.Instance.EnergyManager.Virus += virusAmount * Time.fixedDeltaTime;
+            PlayerRef.PlayerManager.EnergyManager.Battery += energyAmount * Time.fixedDeltaTime;
+            PlayerRef.PlayerManager.EnergyManager.Virus += virusAmount * Time.fixedDeltaTime;
         }
     }
 }

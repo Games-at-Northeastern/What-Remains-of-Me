@@ -27,7 +27,7 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     }
 
 
-    private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
+    private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
 
     /// <summary>
     ///     This controllable gains the given amount of energy and takes it from the player health.

@@ -8,7 +8,7 @@ public class EnergyButtons : MonoBehaviour
 
     private EnergyManager energyManager;
 
-    private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
+    private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
 
     public void OnClick()
     {

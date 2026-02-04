@@ -25,7 +25,7 @@ public class DeathZone : MonoBehaviour
         playerHealthScript = GameObject.Find("Player").GetComponentInChildren(typeof(PlayerHealth)) as PlayerHealth;
     }
 
-    private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
+    private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
 
     private void OnTriggerEnter2D(Collider2D other)
     {

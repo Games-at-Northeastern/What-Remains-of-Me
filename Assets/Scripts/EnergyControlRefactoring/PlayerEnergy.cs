@@ -10,7 +10,7 @@ public class PlayerEnergy : EnergyControl
     public UnityEvent OnDamageTaken;
     private EnergyManager energyManager;
 
-    private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
+    private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
 
     /// <summary>
     ///     Represents any necessary steps to handle the player death when they hold their max Virus amount.

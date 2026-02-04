@@ -9,7 +9,7 @@ namespace UI.PlayerBatteryMeter
         [SerializeField] private float _maxMaskWidth;
         private EnergyManager energyManager;
 
-        private void Start() => energyManager = PlayerManager.Instance.EnergyManager;
+        private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
 
         private void Update()
         {

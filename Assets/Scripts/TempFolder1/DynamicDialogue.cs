@@ -21,7 +21,7 @@ public class DynamicDialogue : ADynamicAsset<DialogueEntry>
 
         // the latter clause is to ensure that dialogues that don't lock movement don't mess things up
         if (other.CompareTag("Player") && !_cachedInstance.dialogueIsPlaying) {
-            DialogueEntry data = MatchState(PlayerManager.Instance.EnergyManager.Virus, _paired.GetVirus());
+            DialogueEntry data = MatchState(PlayerRef.PlayerManager.EnergyManager.Virus, _paired.GetVirus());
             _cachedInstance.stopMovement = data.stopMovement;
             _cachedInstance.autoTurnPage = data.autoPageTurn;
             _cachedInstance.waitBeforePageTurn = data.pageTurnWait;

@@ -56,7 +56,7 @@ public class MovingElementScript : MonoBehaviour
 
     // If MovingObjectType.Platform is the movingObjectType, show this header
     [ShowIf(nameof(movingObjectType), MovingObjectType.Platform)]
-    [Space] [ReadOnly] [SerializeField] private string GroundHeader = "Platform Ground Detection";
+    [Space] [SwitchableHeader] [SerializeField] private string GroundHeader = "Platform Ground Detection";
 
     // Y-offset for the moving platform grounded trigger (platform ground collision is for the player only)
     [ShowIf(nameof(movingObjectType), MovingObjectType.Platform)]
@@ -483,7 +483,7 @@ public class MovingElementScript : MonoBehaviour
 
         // For all objects that are no longer touching the platform (their boolean value is false), remove them
         foreach (Rigidbody2D platformObject in platformObjects.Keys.ToArray()) {
-            if (platformObjects[platformObject] == false) {
+            if (!platformObjects[platformObject]) {
                 platformObject.linearVelocity -= lastVelocity;
                 platformObjects.Remove(platformObject);
             }

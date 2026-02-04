@@ -44,7 +44,7 @@ public class VirusTurret : MonoBehaviour
 
     private void Start()
     {
-        energyManager = PlayerManager.Instance.EnergyManager;
+        energyManager = PlayerRef.PlayerManager.EnergyManager;
         turnedOn = true;
         lineRenderer.textureMode = LineTextureMode.Tile;
         virusAnimator = rotatingPointTransform.transform.GetChild(2).GetComponent<Animator>();

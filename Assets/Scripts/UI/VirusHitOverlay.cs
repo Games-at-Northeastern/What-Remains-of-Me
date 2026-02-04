@@ -17,7 +17,7 @@ public class VirusHitOverlay : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        energyManager = PlayerManager.Instance.EnergyManager;
+        energyManager = PlayerRef.PlayerManager.EnergyManager;
         overlayMaterial.SetFloat("_Intensity", 0);
         lastVirusLevel = energyManager.Virus;
     }

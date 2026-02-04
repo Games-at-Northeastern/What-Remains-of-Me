@@ -48,7 +48,7 @@ public class OutletDoorOverrider : MonoBehaviour
         }
 
         //Have we hit the threashold and can we start the sequence?
-        if (PlayerManager.Instance.EnergyManager.Battery < threashHold && !sequenceStarted && canStart) {
+        if (PlayerRef.PlayerManager.EnergyManager.Battery < threashHold && !sequenceStarted && canStart) {
             sequenceStarted = true;
             wireThrower.DisconnectWire();
             tag = "Untagged";

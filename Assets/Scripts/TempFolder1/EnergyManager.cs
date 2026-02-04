@@ -1,4 +1,6 @@
 using UnityEngine;
+
+// Class holding the player's runtime energy data
 public class EnergyManager : IManager
 {
 
@@ -9,8 +11,8 @@ public class EnergyManager : IManager
     [SerializeField] private float maxVirus;
 
     // For now, these will be floats, but I do want to change them to integers in the future
-    [SerializeField] private float batteryPercentage;
-    [SerializeField] private float virusPercentage;
+    [ReadOnly] [SerializeField] private float batteryPercentage;
+    [ReadOnly] [SerializeField] private float virusPercentage;
 
     // Returns the current battery value 
     public float Battery {
@@ -48,6 +50,7 @@ public class EnergyManager : IManager
     // Initialize the energy manager in the first moment the scene is run
     private void Awake()
     {
+        Debug.Log(PlayerRef.PlayerManager.AbilityManager.transform.position);
         batteryPercentage = 0;
         virusPercentage = 0;
 
