@@ -1,15 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 namespace PlayerController
 {
     /// <summary>
-    /// Settings for the playerMovement
+    ///     Settings for the playerMovement
     /// </summary>
     [CreateAssetMenu]
     public class PlayerSettings : ScriptableObject
     {
         // SERIALIZED FIELDS
+        [Header("Energy")]
+        public int maxEnergy;
+        public int maxVirus;
+
         [Header("Grounded")]
         [Tooltip("the maximum speed the player can move on the ground")]
         public float maxRunSpeed;

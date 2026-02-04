@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Ink.Runtime;
-using UniRx;
 using UnityEngine;
 using Object = Ink.Runtime.Object;
 public class PlayerInfo : ScriptableObject
@@ -8,7 +7,7 @@ public class PlayerInfo : ScriptableObject
     // NOTE: Energy is now handled by a single EnergyManager instance.
     // To migrate away from using scriptable objects for runtime data and not edit a ton of scripts,
     // PlayerInfo now delegates all battery/virus related requests to the EnergyManager instance
-    
+
     public float iframesTime;
     public List<UpgradeType> currentActivatedUpgrades;
 
@@ -16,8 +15,8 @@ public class PlayerInfo : ScriptableObject
     // be stored here.
     [Header("Info")]
     public Dictionary<UpgradeType, IUpgrade> upgrades = new Dictionary<UpgradeType, IUpgrade>();
-    
-    // Gets/Sets the current battery from the EnergyManager instance
+
+    /*// Gets/Sets the current battery from the EnergyManager instance
     public float battery {
         get {
             return EnergyManager.Instance.GetBattery();
@@ -27,7 +26,7 @@ public class PlayerInfo : ScriptableObject
         }
 
     }
-    
+
     // Gets the current maxBattery from the EnergyManager instance
     public float maxBattery {
         get {
@@ -36,10 +35,10 @@ public class PlayerInfo : ScriptableObject
         // This shouldn't really be done and in the PlayerHealth script it makes no sense
         set {
             /*batteryPercentage.Value = battery / value;
-            _maxBattery = value;*/
+            _maxBattery = value;#1#
         }
     }
-    
+
     // Gets/Sets the current virus from the EnergyManager instance
     public float virus {
         get {
@@ -67,7 +66,7 @@ public class PlayerInfo : ScriptableObject
         get {
             return new ReactiveProperty<float>(EnergyManager.Instance.GetVirusPercentage());
         }
-    }
+    }*/
 
 
 
