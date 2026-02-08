@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
 {
 
     [SerializeField] private int sceneID;
+    [SerializeField] private GameObject optionsMenu; 
 
    /// <summary>
    /// Loads Chapter 1 Room 1 (the tutorial scene).
@@ -27,6 +28,16 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Quitting Game");
         Application.Quit();
+    }
+
+    public void ShowMenu()
+    {
+        optionsMenu.SetActive(true);
+    }
+
+    public void CloseMenu()
+    {
+        optionsMenu.SetActive(false);
     }
 
 
