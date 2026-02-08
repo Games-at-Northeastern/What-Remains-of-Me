@@ -14,15 +14,12 @@ public class ButtonImageAnimator : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerEnter(PointerEventData data)
     {
-        Debug.Log("Mouse entered");
         buttonImage.gameObject.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData data)
     {
-        Debug.Log("object selected");
         buttonImage.gameObject.SetActive(false);
-        // temp stub for anim adds
     }
 
     public void OnSelect(BaseEventData data)

@@ -32,11 +32,19 @@ public class MainMenu : MonoBehaviour
 
     public void ShowMenu()
     {
+        if (optionsMenu == null)
+        {
+            return;
+        }
         optionsMenu.SetActive(true);
     }
 
     public void CloseMenu()
     {
+        if (optionsMenu == null)
+        {
+            return;
+        }
         optionsMenu.SetActive(false);
     }
 
