@@ -518,6 +518,33 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ceb65863723d6a14095a496e4b5621f0, type: 3}
+--- !u!1 &1653488568 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8989179927772791833, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+  m_PrefabInstance: {fileID: 7462509401723271042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1653488572
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653488568}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c496819507cfdcf4da77faf239ab1be6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!224 &1681613931 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8291136126266337255, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
@@ -968,6 +995,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2801083053945913831, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4234096915538234937, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1115,7 +1146,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8989179927772791833, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1653488572}
   m_SourcePrefab: {fileID: 100100000, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
