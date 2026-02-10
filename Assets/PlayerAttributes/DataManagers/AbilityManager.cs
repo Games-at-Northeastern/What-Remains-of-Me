@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using PlayerController;
 using UnityEngine;
 public class AbilityManager : IManager
 {
@@ -26,12 +25,14 @@ public class AbilityManager : IManager
         }
     }
 
-    public void ApplyAbilities(PlayerController2D player)
+    public void ApplyAbilities(PlayerManager playerManager, PlayerLoadout loadout)
     {
         copiedAbilities = new List<Ability>();
-        foreach (Ability ability in abilities) {
+        foreach (Ability ability in loadout.Abilities) {
             copiedAbilities.Add(Instantiate(ability));
-            copiedAbilities.Last().SetPlayerController(player);
+            copiedAbilities.Last().SetPlayerController(playerManager.PlayerController);
         }
     }
+
+    public Ability[] GetAbilities() => copiedAbilities.ToArray();
 }

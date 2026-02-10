@@ -29,6 +29,7 @@ public class PlayerRef : ScriptableObject
         }
     }
 
+
     // Reference to the runtime PlayerRef Scriptable Object instance
     public static PlayerRef Instance {
         get {

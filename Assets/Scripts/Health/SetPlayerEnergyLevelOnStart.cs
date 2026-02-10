@@ -1,10 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using SmartScriptableObjects.ReactiveProperties;
+using UnityEngine;
+
+// NOTE: THIS SCRIPT HAS BEEN FULLY DEPRECATED
 
 public class SetPlayerEnergyLevelOnStart : MonoBehaviour
 {
+
+    //Keeps track if this is the games first start. We will probably have to remove this once going to a save/load system.
+    public static bool firstStart = true;
 
     [SerializeField] private PercentageFloatReactivePropertySO playerBatterySO;
     [SerializeField] private PercentageFloatReactivePropertySO playerVirusSO;
@@ -12,17 +15,13 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
     [Header("How much energy the player should start with between 0 and 1")]
     [SerializeField] private float PlayerEnergyStartingValue = 1f;
     [Header("How much virus the player should start with between 0 and 1")]
-    [SerializeField] private float PlayerVirusStartingValue = 0f;
+    [SerializeField] private float PlayerVirusStartingValue;
+    [SerializeField] private bool useDefaultValues;
 
-    //Keeps track if this is the games first start. We will probably have to remove this once going to a save/load system.
-    public static bool firstStart = true;
-    [SerializeField] private bool useDefaultValues = false;
-
-    void Start()
+    private void Start()
     {
 
-        if (firstStart || useDefaultValues)
-        {
+        if (firstStart || useDefaultValues) {
             ResetHealth();
             firstStart = false;
         }
@@ -33,7 +32,7 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
     }
 
     /// <summary>
-    /// Resets the player health to the original starting value
+    ///     Resets the player health to the original starting value
     /// </summary>
     private void ResetHealth()
     {
@@ -41,8 +40,5 @@ public class SetPlayerEnergyLevelOnStart : MonoBehaviour
         playerVirusSO.Value = PlayerVirusStartingValue;
     }
 
-    private void ResetVirus()
-    {
-        playerVirusSO.Value = PlayerVirusStartingValue;
-    }
+    private void ResetVirus() => playerVirusSO.Value = PlayerVirusStartingValue;
 }

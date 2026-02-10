@@ -33,6 +33,7 @@ namespace PlayerController
             Swinging,
             OnWall // On Wall state is currently never reached
         }
+        [SerializeField] private PlayerSettings editorPlayerData;
         [SerializeField] private Vector2 internalVelocity = Vector2.zero; // velocity controlled by actions and inputs native to the player (Basic Ground Movement, Jumping, Swinging, Sliding, etc.)
         [Header("General")]
         [SerializeField] private PlayerState startState = PlayerState.Aerial; // initial player movement state
@@ -63,10 +64,12 @@ namespace PlayerController
         {
             //No level data to load for Player Controller
         }
+
         public void SaveData(ref PlayerData playerData, ref LevelData levelData) => playerData.playerPosition = transform.position;
+        public void SetPlayerStats(PlayerManager playerManager) => stats_ = playerManager.PlayerStats;
         #region Internal References
 
-        [SerializeField] public PlayerSettings stats_; // settings which define player movement
+        private PlayerSettings stats_; // settings which define player movement
         [SerializeField] private WireThrower wire; // Handles wire and wire physics
 
         private Rigidbody2D rb; // final value of rb.velocity after each FixedUpdate is ExternalVelocity + _speed
@@ -179,6 +182,7 @@ namespace PlayerController
 
         private void Start()
         {
+            stats_ = PlayerRef.PlayerManager.PlayerStats;
             SetupMoves();
             rb = GetComponent<Rigidbody2D>();
             col = GetComponent<CapsuleCollider2D>();
@@ -195,6 +199,9 @@ namespace PlayerController
         }
         private void OnValidate()
         {
+            if (stats_ == null) {
+                stats_ = editorPlayerData;
+            }
             filter = new ContactFilter2D().NoFilter();
             filter.SetLayerMask(~stats_.IgnoreLayers);
         }

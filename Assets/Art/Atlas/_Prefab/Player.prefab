@@ -642,6 +642,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4766182311223276394}
   - {fileID: 7803416329029818618}
   - {fileID: 7803416330169813703}
   - {fileID: 7803416330563633430}
@@ -653,7 +654,6 @@ Transform:
   - {fileID: 240930063551750115}
   - {fileID: 6827189443635245957}
   - {fileID: 921584017341680690}
-  - {fileID: 4766182311223276394}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &1911170117102511828
@@ -752,10 +752,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83dfc1d866f4ce54f9aa00ad217def1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  editorPlayerData: {fileID: 11400000, guid: 587debca046dd6748879c19fe3fb34ed, type: 2}
   internalVelocity: {x: 0, y: 0}
   startState: 1
   currentState: 0
-  stats_: {fileID: 11400000, guid: 587debca046dd6748879c19fe3fb34ed, type: 2}
   wire: {fileID: 7803416330169813700}
   col: {fileID: 1911170117102511828}
   inputs: {fileID: 6931513395316122100}
@@ -1664,6 +1664,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3489466232858766927, guid: 0a6d26f593e61473ea43ccb1863b7ae2, type: 3}
       propertyPath: playerObject
+      value: 
+      objectReference: {fileID: 4467459801094715970}
+    - target: {fileID: 3489466232858766927, guid: 0a6d26f593e61473ea43ccb1863b7ae2, type: 3}
+      propertyPath: godModeLoadout
+      value: 
+      objectReference: {fileID: 11400000, guid: 65622c69f50f8404fb7f7eaabbb61271, type: 2}
+    - target: {fileID: 3489466232858766927, guid: 0a6d26f593e61473ea43ccb1863b7ae2, type: 3}
+      propertyPath: startingLoadout
+      value: 
+      objectReference: {fileID: 11400000, guid: b13d71d46030d484c84f0867255ea1ad, type: 2}
+    - target: {fileID: 3489466232858766927, guid: 0a6d26f593e61473ea43ccb1863b7ae2, type: 3}
+      propertyPath: playerController
       value: 
       objectReference: {fileID: 4467459801094715970}
     - target: {fileID: 8639111221804257760, guid: 0a6d26f593e61473ea43ccb1863b7ae2, type: 3}

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef2730f5a816d4ee19d7b1858c8ae1bf, type: 3}
+  m_Name: LightweightArmor
+  m_EditorClassIdentifier: Assembly-CSharp::Upgrade
+  upgradeName: Lightweight Armor
+  upgradeDescription: Makes Atlas Run 2x Faster and Jump 1.5x Higher
+  StatChanges:
+  - fieldName: maxRunSpeed
+    upgradeNum: 2
+    upgradeType: 0
+  - fieldName: jumpHeight
+    upgradeNum: 3
+    upgradeType: 1
+  - fieldName: maxAirSpeed
+    upgradeNum: 2
+    upgradeType: 1
