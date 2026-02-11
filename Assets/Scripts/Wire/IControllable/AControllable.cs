@@ -35,6 +35,10 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// </summary>
     public void GainEnergy(float amount)
     {
+        if (energyManager is null) {
+            energyManager = PlayerRef.PlayerManager.EnergyManager;
+        }
+
         if (amount <= 0 || totalEnergy >= maxCharge || energyManager.Battery <= 1f) {
             return;
         }
@@ -65,6 +69,10 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// </summary>
     public void LoseEnergy(float amount)
     {
+        if (energyManager is null) {
+            energyManager = PlayerRef.PlayerManager.EnergyManager;
+        }
+
         if (amount <= 0 || totalEnergy <= 0 || energyManager.Battery >= energyManager.MaxBattery) {
             return;
         }
