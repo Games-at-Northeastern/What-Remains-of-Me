@@ -8,8 +8,7 @@ using UnityEngine;
 /// </summary>
 public class MovingElementControllerScript : AControllable
 {
-    // Moving element path that can be turned on and off with energy
-    [SerializeField] private MovingElementPathScript movingElementPath;
+    [SerializeField] private MovingElementPathScript[] movingElementPaths;
 
     public AudioSource audioSource;
 
@@ -21,7 +20,12 @@ public class MovingElementControllerScript : AControllable
     private void FixedUpdate()
     {
         if (Math.Abs(GetPercentFull() - 1) < 0.01f && !hasMoved) {
-            movingElementPath.Activate();
+            // Activate all moving element paths
+            foreach (var path in movingElementPaths) {
+                if (path != null) {
+                    path.Activate();
+                }
+            }
             hasMoved = true;
 
             /// <summary>
@@ -31,7 +35,12 @@ public class MovingElementControllerScript : AControllable
                 audioSource.Play();
             }
         } else if (GetPercentFull() < 0.99f && hasMoved) {
-            movingElementPath.Deactivate();
+            // Deactivate all moving element paths
+            foreach (var path in movingElementPaths) {
+                if (path != null) {
+                    path.Deactivate();
+                }
+            }
             hasMoved = false;
 
             /// <summary>
