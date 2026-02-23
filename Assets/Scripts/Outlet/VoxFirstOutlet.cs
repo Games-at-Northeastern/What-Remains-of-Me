@@ -13,7 +13,6 @@ public class VoxFirstOutlet : AControllable
     [SerializeField] private Sprite openDoorSprite2;
     [SerializeField] private Collider2D doorCollider2;
     [SerializeField] private Animator doorAnimator2;
-    [SerializeField] private MovingElementController elevatorSolve;
     [SerializeField] private WireThrower wire;
     [SerializeField] private VoxOutlet secondStepOutlet;
     [SerializeField] private Animator secondOutletAnimator;
@@ -61,8 +60,6 @@ public class VoxFirstOutlet : AControllable
         door2.sprite = openDoorSprite2;
         doorAnimator2.enabled = false;
         doorCollider2.enabled = false;
-        //Make sure the elevator starts working
-        elevatorSolve.CreateEnergy(20, 0);
 
         //Disable this outlet
         GetComponent<SpriteRenderer>().color = Color.gray;
