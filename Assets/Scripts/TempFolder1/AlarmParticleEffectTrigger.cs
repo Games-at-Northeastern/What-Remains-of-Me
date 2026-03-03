@@ -3,17 +3,15 @@ using System.Collections;
 
 public class AlarmParticleEffectTrigger : MonoBehaviour, IAlarmListener
 {
-    [SerializeField] private ParticleSystem particles;
-    [SerializeField] private TimedToggle particleToggle;
+    [SerializeField] private TimedToggle toggle;
     [SerializeField] private KeyOutlet keyOutlet;
-    [SerializeField] private bool isToggle = true;
 
     void Start()
     {
 
         keyOutlet.Subscribe(this);
-        if (particles)
-            particles.gameObject.SetActive(false);
+        if (toggle)
+            toggle.enabled = false;
     }
 
     public void OnAlarmStart()
@@ -22,13 +20,13 @@ public class AlarmParticleEffectTrigger : MonoBehaviour, IAlarmListener
         StartCoroutine(WaitToTurnOn());
     }
 
-    // Activates the particle effect's game object after a set of time
+    // Activates the alarm lights after a set of time
     private IEnumerator WaitToTurnOn()
     {
         yield return new WaitForSeconds(2f);
-        if (particleToggle && isToggle)
-            particleToggle.enabled = true;
-        else if (particles)
-            particles.gameObject.SetActive(true);
+        if (toggle)
+        {
+            toggle.enabled = true;
+        }
     }
 }
