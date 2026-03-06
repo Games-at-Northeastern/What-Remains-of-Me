@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Intensity: 0.11
   m_LightVolumeIntensity: 1.14
   m_LightVolumeEnabled: 1
-  m_ApplyToSortingLayers: 81d1938c00000000d327c7393faa85412b185603d381b321
+  m_ApplyToSortingLayers: 81d1938c00000000d327c7393faa8541d381b32179cd986d
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0
   m_ShadowSoftnessFalloffIntensity: 0.5
@@ -249,6 +249,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &318358099213141363
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -267,6 +268,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -288,9 +291,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 565412307
   m_SortingLayer: 3
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 184f56740c188f74194e907aebb17c55, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -300,7 +305,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &7776128942757024446
 MonoBehaviour:
@@ -334,7 +338,7 @@ MonoBehaviour:
   m_Intensity: 0.3
   m_LightVolumeIntensity: 2
   m_LightVolumeEnabled: 1
-  m_ApplyToSortingLayers: 81d1938c154752b179cd986dd327c739
+  m_ApplyToSortingLayers: 81d1938c79cd986dd327c739000000003faa8541d381b321
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -400,6 +404,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7101669173262391201
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -418,6 +423,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -439,9 +446,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 565412307
   m_SortingLayer: 3
   m_SortingOrder: 6
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f0e32515b40782a42bfb4eedbdcd6d04, type: 3}
   m_Color: {r: 0.5254902, g: 0.011764707, b: 0.7960785, a: 1}
   m_FlipX: 0
@@ -451,7 +460,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &3311768928034087561
 GameObject:
@@ -743,7 +751,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83dfc1d866f4ce54f9aa00ad217def1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  externalVelocity: {x: 0, y: 0}
   internalVelocity: {x: 0, y: 0}
   startState: 1
   stats_: {fileID: 11400000, guid: 587debca046dd6748879c19fe3fb34ed, type: 2}
@@ -933,6 +940,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: f0bdc6a5-1e62-4ae3-97f6-8109ebac291a
     m_ActionName: 'Player/SwitchVoiceModule[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 52596ffb-7ff8-4ca1-8c09-094c0d12925e
+    m_ActionName: 'Player/UI Movement Down[/Keyboard/s]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -999,7 +1010,7 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0
   m_ShadowSoftnessFalloffIntensity: 0.5
@@ -1088,6 +1099,7 @@ MonoBehaviour:
   playerTransform: {fileID: 6860228394538578389}
 --- !u!212 &7803416329029818616
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1106,6 +1118,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1127,9 +1141,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 565412307
   m_SortingLayer: 3
   m_SortingOrder: 5
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f31f90459b152b94a9cac44fbb2f977b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1139,7 +1155,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &7803416329029818619
 Animator:
@@ -1209,7 +1224,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &7803416329464112781
 LineRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1228,6 +1243,8 @@ LineRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1249,9 +1266,11 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 565412307
   m_SortingLayer: 3
   m_SortingOrder: -1
+  m_MaskInteraction: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
@@ -1310,7 +1329,6 @@ LineRenderer:
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_MaskInteraction: 0
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 0
