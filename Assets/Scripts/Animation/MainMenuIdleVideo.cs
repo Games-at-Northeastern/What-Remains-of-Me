@@ -27,6 +27,7 @@ public class MainMenuIdleVideo : MonoBehaviour
     private void Awake()
     {
         videoPlayer = GetComponent<VideoPlayer>();
+        videoPlayer.audioOutputMode = VideoAudioOutputMode.None;
         rt = RenderTexture.GetTemporary(Screen.width, Screen.height);
         videoPlayer.targetTexture = rt;
         img.texture = rt;
@@ -142,7 +143,6 @@ public class MainMenuIdleVideo : MonoBehaviour
 
     void OnInput(InputEventPtr ptr, InputDevice device)
     {
-        Debug.Log("Input");
         lastInputTime = Time.time;
         if (transitioning || menuCanvas.alpha < 1f || !menuCanvas.gameObject.activeSelf)
         {
