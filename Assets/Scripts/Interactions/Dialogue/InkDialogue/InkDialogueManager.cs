@@ -661,14 +661,15 @@ public class InkDialogueManager : MonoBehaviour
     animator.SetBool("SmallVoxSpeaking", true);
     Debug.Log("[PlayVoxSmallScreenAnimation] Set SmallVoxSpeaking = true");
 
-    if (voxOutlet.firstStep)
-    {
-        animator.SetBool("SmallVoxHurt", true);
-        Debug.Log("[PlayVoxSmallScreenAnimation] Set SmallVoxHurt = true");
-    }
-    else
-    {
-        Debug.Log("[PlayVoxSmallScreenAnimation] Playing standard speaking animation");
+        if (voxOutlet != null && voxOutlet.firstStep)
+        {
+            animator.SetBool("SmallVoxHurt", true);
+            Debug.Log("[PlayVoxSmallScreenAnimation] Set SmallVoxHurt = true");
+        }
+        else
+        {
+            Debug.Log("[PlayVoxSmallScreenAnimation] Playing standard speaking animation");
+        }
     }
 }
     
