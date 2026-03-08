@@ -86,7 +86,7 @@ public class WireThrower : MonoBehaviour
         _lineRenderer.enabled = false;
         ConnectedOutlet = null;
         _framesHeld = 0;
-        reticle.GetComponent<Light2D>().enabled = false;
+        reticle.GetComponent<SpriteRenderer>().enabled = false;
         mainCamera = Camera.main;
 
         pms = FindObjectOfType<PlugMovementSettings>();
@@ -528,16 +528,16 @@ public class WireThrower : MonoBehaviour
             // Only show the reticle if the plug is within range
             if (Vector2.Distance(transform.position, reticle.transform.position) <= pms.StraightSpeed * pms.StraightTimeTillRetraction + 0.75f)
             {
-                reticle.GetComponent<Light2D>().enabled = true;
+                reticle.GetComponent<SpriteRenderer>().enabled = true;
             }
             else
             {
-                reticle.GetComponent<Light2D>().enabled = false;
+                reticle.GetComponent<SpriteRenderer>().enabled = false;
             }
         }
         else
         {
-            reticle.GetComponent<Light2D>().enabled = false;
+            reticle.GetComponent<SpriteRenderer>().enabled = false;
         }
         HandleMouseInactivity();
         HandleLineRendering();
