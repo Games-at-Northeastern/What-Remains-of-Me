@@ -120,11 +120,12 @@ public class ControllableDoor : AControllable
         boxCollider.size = doorRenderer.size;
         defaultOffset = boxCollider.offset;
 
-        maskObject.transform.localScale = doorRenderer.size;
+        if (maskObject)
+            maskObject.transform.localScale = doorRenderer.size;
 
         ShouldDisappear = shouldDisappear;
 
-        if(!enableDetectingFeatures)
+        if (!enableDetectingFeatures)
         {
             float percentFull = GetPercentFull();
             transform.position = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, percentFull);
