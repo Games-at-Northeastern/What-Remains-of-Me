@@ -100,7 +100,7 @@
                     "name": "Dialogue",
                     "type": "Button",
                     "id": "4f6a4455-5e7e-4ea0-84b0-9f464323db54",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -145,6 +145,15 @@
                     "name": "SwitchVoiceModule",
                     "type": "Button",
                     "id": "f0bdc6a5-1e62-4ae3-97f6-8109ebac291a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "e2a4bbf6-aef4-47fc-a9b6-e2f630b61520",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -534,6 +543,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "UI Movement Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "39cbbbc8-04e0-4d01-a6ed-a0d627ce9e46",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e818d704-4336-4fdf-ac18-a82bc48ed8c9",
+                    "path": "<XInputController>/{Menu}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,17 +1,14 @@
 using PlayerController;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using TMPro;
-
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 /// <summary>
-/// This class provides the functionalities needed for the pause menu.
+///     This class provides the functionalities needed for the pause menu.
 /// </summary>
-
 public class PauseMenu : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
+    public static bool GameIsPaused;
     public GameObject pausePanel;
     public GameObject settingsPanel;
     public GameObject confirmQuitMenu;
@@ -21,17 +18,6 @@ public class PauseMenu : MonoBehaviour
 
     private PlayerController2D player;
 
-    /// <summary>
-    /// Pauses the game if the "P" key is pressed.
-    /// </summary>
-    private void OnValidate()
-    {
-        if (FindObjectOfType<EventSystem>() == null)
-        {
-            Debug.LogWarning("pause menu won't work without an Event System and.or UI input module");
-        }
-    }
-    
     private void Start()
     {
         pausePanel.SetActive(false);
@@ -40,30 +26,33 @@ public class PauseMenu : MonoBehaviour
         player = FindAnyObjectByType<PlayerController2D>();
     }
 
-    void Update()
+    private void Update() {}
+
+    /// <summary>
+    ///     Pauses the game if the "P" key is pressed.
+    /// </summary>
+    private void OnValidate()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (!GameIsPaused)
-            {
-                Pause();
-            }
-            else
-            {
-                if (settingsPanel.activeInHierarchy)
-                {
-                    ExitSettingsMenu();
-                }
-                else
-                {
-                    Resume();
-                }
+        if (FindObjectOfType<EventSystem>() == null) {
+            Debug.LogWarning("pause menu won't work without an Event System and.or UI input module");
+        }
+    }
+
+    public void HandleGamePause()
+    {
+        if (!GameIsPaused) {
+            Pause();
+        } else {
+            if (settingsPanel.activeInHierarchy) {
+                ExitSettingsMenu();
+            } else {
+                Resume();
             }
         }
     }
 
     /// <summary>
-    /// Pauses the game by opening the pause menu and stopping the game time.
+    ///     Pauses the game by opening the pause menu and stopping the game time.
     /// </summary>
     public void Pause()
     {
@@ -75,7 +64,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Resumes the game by closing the pause menu and starting the game time.
+    ///     Resumes the game by closing the pause menu and starting the game time.
     /// </summary>
     public void Resume()
     {
@@ -91,7 +80,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Closes the pause menu and goes to the main menu screen.
+    ///     Closes the pause menu and goes to the main menu screen.
     /// </summary>
     public void MainMenu()
     {
@@ -100,14 +89,11 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Opens the quit confirmation menu
+    ///     Opens the quit confirmation menu
     /// </summary>
-    public void ConfirmQuit()
-    {
-        confirmQuitMenu.SetActive(true);
-    }
+    public void ConfirmQuit() => confirmQuitMenu.SetActive(true);
     /// <summary>
-    /// restarts the level
+    ///     restarts the level
     /// </summary>
     public void RestartLevel()
     {
@@ -116,7 +102,7 @@ public class PauseMenu : MonoBehaviour
 
     }
     /// <summary>
-    /// Opens up the settings menu where a variety of settings could be adjusted.
+    ///     Opens up the settings menu where a variety of settings could be adjusted.
     /// </summary>
     public void SettingsMenu()
     {
@@ -125,7 +111,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Closes the settings panel, reopens the pause panel.
+    ///     Closes the settings panel, reopens the pause panel.
     /// </summary>
     public void ExitSettingsMenu()
     {
@@ -134,7 +120,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Quits the game and logs the action.
+    ///     Quits the game and logs the action.
     /// </summary>
     public void QuitGame()
     {
@@ -143,7 +129,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Switch the states of toggle mouse(on/off).
+    ///     Switch the states of toggle mouse(on/off).
     /// </summary>
     public void ToggleMouse()
     {

@@ -186,7 +186,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""name"": ""Dialogue"",
                     ""type"": ""Button"",
                     ""id"": ""4f6a4455-5e7e-4ea0-84b0-9f464323db54"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -231,6 +231,15 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""name"": ""SwitchVoiceModule"",
                     ""type"": ""Button"",
                     ""id"": ""f0bdc6a5-1e62-4ae3-97f6-8109ebac291a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""e2a4bbf6-aef4-47fc-a9b6-e2f630b61520"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -620,6 +629,28 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""UI Movement Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""39cbbbc8-04e0-4d01-a6ed-a0d627ce9e46"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e818d704-4336-4fdf-ac18-a82bc48ed8c9"",
+                    ""path"": ""<XInputController>/{Menu}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1232,6 +1263,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
         m_Player_GiveVirus = m_Player.FindAction("GiveVirus", throwIfNotFound: true);
         m_Player_TakeVirus = m_Player.FindAction("TakeVirus", throwIfNotFound: true);
         m_Player_SwitchVoiceModule = m_Player.FindAction("SwitchVoiceModule", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_Restart = m_Debug.FindAction("Restart", throwIfNotFound: true);
@@ -1346,6 +1378,7 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_GiveVirus;
     private readonly InputAction m_Player_TakeVirus;
     private readonly InputAction m_Player_SwitchVoiceModule;
+    private readonly InputAction m_Player_Pause;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1422,6 +1455,10 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @SwitchVoiceModule => m_Wrapper.m_Player_SwitchVoiceModule;
         /// <summary>
+        /// Provides access to the underlying input action "Player/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1495,6 +1532,9 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
             @SwitchVoiceModule.started += instance.OnSwitchVoiceModule;
             @SwitchVoiceModule.performed += instance.OnSwitchVoiceModule;
             @SwitchVoiceModule.canceled += instance.OnSwitchVoiceModule;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         /// <summary>
@@ -1554,6 +1594,9 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
             @SwitchVoiceModule.started -= instance.OnSwitchVoiceModule;
             @SwitchVoiceModule.performed -= instance.OnSwitchVoiceModule;
             @SwitchVoiceModule.canceled -= instance.OnSwitchVoiceModule;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         /// <summary>
@@ -2008,6 +2051,13 @@ public partial class @ControlSchemes: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSwitchVoiceModule(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Debug" which allows adding and removing callbacks.
