@@ -2,6 +2,7 @@ using PlayerController;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 /// <summary>
 ///     This class provides the functionalities needed for the pause menu.
@@ -15,8 +16,9 @@ public class PauseMenu : MonoBehaviour
 
     [SerializeField] private TMP_Text mouseToggleText;
     private bool isMouseEnabled = true;
-
     private PlayerController2D player;
+
+    private PlayerInput playerInput;
 
     private void Start()
     {
@@ -24,9 +26,17 @@ public class PauseMenu : MonoBehaviour
         settingsPanel.SetActive(false);
         confirmQuitMenu.SetActive(false);
         player = FindAnyObjectByType<PlayerController2D>();
+        playerInput = player.gameObject.GetComponent<PlayerInput>();
     }
 
-    private void Update() {}
+    private void Update()
+    {
+        if (!GameIsPaused && playerInput.currentActionMap.name != "Player") {
+            playerInput.SwitchCurrentActionMap("Player");
+        } else if (playerInput.currentActionMap.name != "UI" && GameIsPaused) {
+            playerInput.SwitchCurrentActionMap("UI");
+        }
+    }
 
     /// <summary>
     ///     Pauses the game if the "P" key is pressed.
@@ -47,6 +57,7 @@ public class PauseMenu : MonoBehaviour
                 ExitSettingsMenu();
             } else {
                 Resume();
+
             }
         }
     }

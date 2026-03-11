@@ -511,17 +511,17 @@ MonoBehaviour:
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.15
   m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_PointAction: {fileID: -8826571647395516208, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_MoveAction: {fileID: -2162317707873921450, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_SubmitAction: {fileID: -5613838739016420440, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_CancelAction: {fileID: 5155531599881056843, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_LeftClickAction: {fileID: 6346011859282036982, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_MiddleClickAction: {fileID: 1766194692899879477, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_RightClickAction: {fileID: 5480496510447955067, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_ScrollWheelAction: {fileID: -4087169389079189959, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_TrackedDevicePositionAction: {fileID: -8641952678247926484, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: -6659987234330235096, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
   m_DeselectOnBackgroundClick: 0
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
@@ -616,6 +616,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3637009469456773891, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3637009469456773891, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3637009469456773891, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: m_ActionEvents.Array.data[29].m_ActionId
+      value: 2d031717-9d64-43a9-9dba-c81b7400dda3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3637009469456773891, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: m_ActionEvents.Array.data[29].m_ActionName
+      value: 'UI/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+      objectReference: {fileID: 0}
     - target: {fileID: 6860228394538578389, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
