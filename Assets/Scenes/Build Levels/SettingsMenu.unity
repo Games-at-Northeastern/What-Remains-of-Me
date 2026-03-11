@@ -419,6 +419,34 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052072443}
   m_CullTransparentMesh: 1
+--- !u!1 &1157554649 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7823735703986046279, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+  m_PrefabInstance: {fileID: 7462509401723271042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1157554650 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7042677426756812383, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+  m_PrefabInstance: {fileID: 7462509401723271042}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157554649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &1157554655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157554649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb8f6d8d07d4d4e8fa100ae33da790eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GDCLevelManager
 --- !u!1 &1167755886
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6860228394538578391, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -752,7 +780,7 @@ CanvasGroup:
   m_GameObject: {fileID: 630971753}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 0
+  m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &1847717763
@@ -1320,9 +1348,33 @@ PrefabInstance:
       value: -425
       objectReference: {fileID: 0}
     - target: {fileID: 7042677426756812383, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042677426756812383, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 1157554650}
+    - target: {fileID: 7042677426756812383, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042677426756812383, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 624136294}
+      objectReference: {fileID: 1157554655}
+    - target: {fileID: 7042677426756812383, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadGameScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042677426756812383, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GDCLevelManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042677426756812383, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8291136126266337255, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1433,6 +1485,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6667885702764610466, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
       insertIndex: -1
       addedObject: {fileID: 791746214}
+    - targetCorrespondingSourceObject: {fileID: 7823735703986046279, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1157554655}
     - targetCorrespondingSourceObject: {fileID: 2011694287537880090, guid: d102f6b8dd0e3ed4692dce4b9896ab69, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2070227504}
