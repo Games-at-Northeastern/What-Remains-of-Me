@@ -6,9 +6,13 @@ public class EnergyButtons : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float buttonVirusAmount;
 
+    private EnergyManager energyManager;
+
+    private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
+
     public void OnClick()
     {
-        EnergyManager.Instance.SetBattery(EnergyManager.Instance.GetMaxBattery() * buttonEnergyAmount);
-        EnergyManager.Instance.SetVirus(EnergyManager.Instance.GetMaxVirus() * buttonVirusAmount);
+        energyManager.Battery = energyManager.MaxBattery * buttonEnergyAmount;
+        energyManager.Virus = energyManager.MaxVirus * buttonVirusAmount;
     }
 }

@@ -21,7 +21,7 @@ ACCESS REQUIREMENT: Voice Command Module
 ACCESS GRANTED: Force Door Deactivation #layout:left #portrait:isp #speaker:Force Door
 WARNING: Surface Access. Hostile Forces Expected. Proceed with Caution.
 
-...#layout:left #portrait:jones1 #speaker:Jones A.I.
+...#layout:left #portrait:vox1 #speaker:Vox A.I.
 ...
 ...
 

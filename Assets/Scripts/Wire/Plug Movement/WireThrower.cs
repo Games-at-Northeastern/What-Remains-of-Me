@@ -33,9 +33,9 @@ public class WireThrower : MonoBehaviour
     [SerializeField] private ParticleSystem energySparks;
     [SerializeField] private float flowSpeed = 1.0f;
     private Vector2[] playerToOutletPoints = new Vector2[5];
-    public AControllable ConnectedOutletsControllable {get; private set;}
+    public AControllable ConnectedOutletsControllable { get; private set; }
     private float virusFromOutlet;
-    
+
     // Accessible Fields
     public Outlet ConnectedOutlet { get; private set; } // If null, disconnected. Otherwise, connected.
     public UnityEvent onConnect = new UnityEvent();
@@ -109,7 +109,7 @@ public class WireThrower : MonoBehaviour
 
     #region External Commands
 
-     public void ToggleMouseAffectsPriority()
+    public void ToggleMouseAffectsPriority()
     {
         MouseAffectsPriority = !MouseAffectsPriority;
 
@@ -184,9 +184,9 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void HandleThrowInputReleasedKeyboard(InputAction.CallbackContext ctx)
     {
-        if(!pc.LockedOrNot()) 
+        if (!pc.LockedOrNot())
         {
-        ThrowWire();
+            ThrowWire();
         }
     }
     /// <summary>
@@ -304,7 +304,7 @@ public class WireThrower : MonoBehaviour
             pme.Fire(new Straight(playerScreenPos, _activePlug.transform, transform, _plugMovementSettings));
         }
 
-        
+
         // Play SFX for shooting plug
         src.clip = shootWire;
         src.Play();
@@ -350,7 +350,8 @@ public class WireThrower : MonoBehaviour
 
         foreach (GameObject outlet in outlets)
         {
-            if (!outlet.GetComponent<SpriteRenderer>().isVisible) continue;
+            if (!outlet.GetComponent<SpriteRenderer>().isVisible)
+                continue;
 
             float currentDistance = Vector2.Distance(mouseWorldPos, outlet.transform.position);
 
@@ -381,7 +382,8 @@ public class WireThrower : MonoBehaviour
 
         foreach (GameObject outlet in sortedOutlets)
         {
-            if (!outlet.GetComponent<SpriteRenderer>().isVisible) continue;
+            if (!outlet.GetComponent<SpriteRenderer>().isVisible)
+                continue;
 
             float currentDistance = Vector2.Distance(position, outlet.transform.position);
             bool isInFront = IsOutletInFront(outlet, position, isFacingLeft);
@@ -442,24 +444,24 @@ public class WireThrower : MonoBehaviour
 
 
 
-        /// <summary>
-        /// Updates the outlet meter based on the closest GameObject.
-        /// </summary>
-        /// <param name="closest">The closest GameObject to update the meter for.</param>
-        private void UpdateMeter(GameObject closest)
-        {
-            // Get the OutletMeter component from the previous locked reticle (if any)
-            OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+    /// <summary>
+    /// Updates the outlet meter based on the closest GameObject.
+    /// </summary>
+    /// <param name="closest">The closest GameObject to update the meter for.</param>
+    private void UpdateMeter(GameObject closest)
+    {
+        // Get the OutletMeter component from the previous locked reticle (if any)
+        OutletMeter outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
 
-            // End the visuals of the previous locked reticle's outlet meter (if any)
-            outletMeter?.EndVisuals();
+        // End the visuals of the previous locked reticle's outlet meter (if any)
+        outletMeter?.EndVisuals();
 
-            // Update the lastReticleLock to the closest GameObject
-            lastReticleLock = closest;
+        // Update the lastReticleLock to the closest GameObject
+        lastReticleLock = closest;
 
-            // Get the OutletMeter component from the new locked reticle (if any)
-            outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
-        }
+        // Get the OutletMeter component from the new locked reticle (if any)
+        outletMeter = lastReticleLock?.GetComponentInChildren<OutletMeter>();
+    }
 
     #endregion
 
@@ -473,7 +475,7 @@ public class WireThrower : MonoBehaviour
         Vector2 playerScreenPos = mainCamera.WorldToScreenPoint(transform.position);
         Vector2 aimScreenPos = _controlSchemes.Player.AimMouse.ReadValue<Vector2>();
         Vector2 fireDir = aimScreenPos - playerScreenPos;
-        
+
         if (_isMouseInactivated)
         {
             // Get player direction
@@ -489,7 +491,7 @@ public class WireThrower : MonoBehaviour
                 fireDir = Vector2.right;
             }
         }
-        
+
 
         _activePlug = Instantiate(plugPrefab, transform.position, transform.rotation);
         PlugMovementExecuter pme = _activePlug.GetComponent<PlugMovementExecuter>();
@@ -545,7 +547,7 @@ public class WireThrower : MonoBehaviour
         HandleConnectionPhysics();
         _framesHeld += Time.deltaTime;
 
-        
+
 
         // REMOVED THIS AND REPLACED THIS WITH AUTO TARGETING RETICLE
         //if (Input.GetKeyDown(KeyCode.Q)) { _isLockOn = !_isLockOn; }
@@ -587,7 +589,7 @@ public class WireThrower : MonoBehaviour
             }
         }
     }
-    
+
 
     /// <summary>
     /// Register the plug as connected to the given GameObject.
@@ -604,12 +606,12 @@ public class WireThrower : MonoBehaviour
         outletMeter?.StartVisuals();
         outletMeter?.ConnectPlug();
         ConnectedOutletsControllable = ConnectedOutlet.controlled;
-        if(ConnectedOutletsControllable != null)
+        if (ConnectedOutletsControllable != null)
         {
             ConnectedOutletsControllable.OnVirusChange.AddListener(setSparkColor);
             ConnectedOutletsControllable.OnEnergyChange.AddListener(showEnergyFlow);
         }
-        
+
     }
 
     /// <summary>
@@ -642,20 +644,21 @@ public class WireThrower : MonoBehaviour
 
     public void showEnergyFlow(float newEnergy)
     {
-        if (timeSinceParticlePlaying < 1.0f) {
+        if (timeSinceParticlePlaying < 1.0f)
+        {
             timeSinceParticlePlaying += Time.deltaTime;
             return;
         }
         timeSinceParticlePlaying = 0.0f;
         ParticleSystem energySparksCopy = Instantiate(energySparks);
-        if (newEnergy > 0 )
+        if (newEnergy > 0)
         {
             energySparksCopy.transform.position = _lineRenderer.GetPosition(0);
             StartCoroutine(MoveEnergySparks(energySparksCopy, false));
         }
         else
         {
-            energySparksCopy.transform.position =  _lineRenderer.GetPosition(1);
+            energySparksCopy.transform.position = _lineRenderer.GetPosition(1);
             StartCoroutine(MoveEnergySparks(energySparksCopy, true));
         }
     }
@@ -670,23 +673,24 @@ public class WireThrower : MonoBehaviour
 
         while (distanceSoFar < totalDistance)
         {
-            if (!WireExists()) break;
-            distanceSoFar += flowSpeed * totalDistance/10000;
+            if (!WireExists())
+                break;
+            distanceSoFar += flowSpeed * totalDistance / 10000;
             if (towardsPlayer)
             {
                 direction = _lineRenderer.GetPosition(0) - _lineRenderer.GetPosition(1);
-                energySparksCopy.transform.position = _lineRenderer.GetPosition(1) + direction * distanceSoFar/totalDistance;
+                energySparksCopy.transform.position = _lineRenderer.GetPosition(1) + direction * distanceSoFar / totalDistance;
             }
             else
             {
                 direction = _lineRenderer.GetPosition(1) - _lineRenderer.GetPosition(0);
-                energySparksCopy.transform.position = _lineRenderer.GetPosition(0) + direction * distanceSoFar/totalDistance;
+                energySparksCopy.transform.position = _lineRenderer.GetPosition(0) + direction * distanceSoFar / totalDistance;
             }
             yield return null;
         }
         energySparksCopy.gameObject.SetActive(false);
         energySparksCopy.Stop();
-        Destroy(energySparksCopy);
+        Destroy(energySparksCopy.gameObject);
     }
 
     /// <summary>

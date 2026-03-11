@@ -7,7 +7,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 
-#portrait:jones1 #speaker:Vox
+#portrait:vox1 #speaker:Vox
 You have no real power here.
 You are not special.
 Try using your energy and see how little you can control.
