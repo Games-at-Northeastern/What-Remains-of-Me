@@ -52,13 +52,14 @@ public class PauseMenu : MonoBehaviour
     {
         if (!GameIsPaused) {
             Pause();
+            Debug.Log("Game paused");
         } else {
             if (settingsPanel.activeInHierarchy) {
                 ExitSettingsMenu();
             } else {
                 Resume();
-
             }
+            Debug.Log("Unpaused");
         }
     }
 
