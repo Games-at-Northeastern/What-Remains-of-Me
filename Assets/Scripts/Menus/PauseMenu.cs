@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading.Tasks;
 using PlayerController;
 using TMPro;
 using UnityEngine;
@@ -19,6 +21,7 @@ public class PauseMenu : MonoBehaviour
     private PlayerController2D player;
 
     private PlayerInput playerInput;
+    bool canPauseOrUnpause = true;
 
     private void Start()
     {
@@ -31,9 +34,12 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (!GameIsPaused && playerInput.currentActionMap.name != "Player") {
+        if (!GameIsPaused && playerInput.currentActionMap.name != "Player")
+        {
             playerInput.SwitchCurrentActionMap("Player");
-        } else if (playerInput.currentActionMap.name != "UI" && GameIsPaused) {
+        }
+        else if (playerInput.currentActionMap.name != "UI" && GameIsPaused)
+        {
             playerInput.SwitchCurrentActionMap("UI");
         }
     }
@@ -43,20 +49,30 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     private void OnValidate()
     {
-        if (FindObjectOfType<EventSystem>() == null) {
+        if (FindObjectOfType<EventSystem>() == null)
+        {
             Debug.LogWarning("pause menu won't work without an Event System and.or UI input module");
         }
     }
 
     public void HandleGamePause()
     {
-        if (!GameIsPaused) {
+        if (!canPauseOrUnpause)
+            return;
+
+        if (!GameIsPaused)
+        {
             Pause();
             Debug.Log("Game paused");
-        } else {
-            if (settingsPanel.activeInHierarchy) {
+        }
+        else
+        {
+            if (settingsPanel.activeInHierarchy)
+            {
                 ExitSettingsMenu();
-            } else {
+            }
+            else
+            {
                 Resume();
             }
             Debug.Log("Unpaused");
@@ -71,8 +87,16 @@ public class PauseMenu : MonoBehaviour
         pausePanel.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
+        ReactivateEscapeKey();
         if (player != null)
             player.LockInputs();
+    }
+
+    async void ReactivateEscapeKey()
+    {
+        canPauseOrUnpause = false;
+        await Task.Delay(100);
+        canPauseOrUnpause = true;
     }
 
     /// <summary>
@@ -80,6 +104,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void Resume()
     {
+        ReactivateEscapeKey();
         pausePanel.SetActive(false);
         settingsPanel.SetActive(false);
         confirmQuitMenu.SetActive(false);
