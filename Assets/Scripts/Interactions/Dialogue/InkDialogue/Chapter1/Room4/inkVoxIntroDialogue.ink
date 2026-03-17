@@ -1,2 +1,2 @@
-You cannot leave this facility.
+...You again.
     -> END
