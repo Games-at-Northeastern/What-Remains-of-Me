@@ -7,7 +7,7 @@ EXTERNAL openDoor()
 
 %:;&::%:;%:& ...H-ello?...%:;&::%:;%:& Atlas! You’re operational! #layout:left #portrait:Handler #speaker:The Handler
 
-You seem to be intact. That’s good. Try moving around while I run a few tests on my %:;&::%:;%:&
+Pardon our dust. I wasn't expecting any more of you to boot up, especially so soon. It's a miracle that your I.S.P is still functional too!
 
-You can use this lab's testing chamber to recalibrate and ensure you're still operational. {openDoor()}
+I'm opening up a door so you can get acclimated to your new body in our training facility. Don't over exert yourself out there! We're counting on you. {openDoor()}
 -> END
