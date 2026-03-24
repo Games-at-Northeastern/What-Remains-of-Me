@@ -10,6 +10,12 @@ public class VoxDoor : MonoBehaviour
 {
     private Animator _anim;
     private Collider2D _col;
+    
+    private void Awake() 
+    {
+        _anim = GetComponent<Animator>();
+        _col = GetComponent<Collider2D>();
+    }
 
     private void Start()
     {
