@@ -3,11 +3,11 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 === main ===
 
-We had installed this drop to test your vertical stabilizers. #layout:left #portrait:Handler #speaker:The Handler
+Don't worry about this drop. Your body can take it. #layout:left #portrait:Handler #speaker:The Handler
 
-I don't know if they're still functional after &!;;%;&&$ incident, but this is the only way forward.
+At least, it should...unless the &!;;%;&&$ incident did something to your stabilizers...
 
-You can trust me, Atlas.
+But nevermind that, this drop has been tested numerous times. You can trust me on that.
 
 There is nothing to fear.
 

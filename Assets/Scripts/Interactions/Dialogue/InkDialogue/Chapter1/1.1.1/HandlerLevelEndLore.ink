@@ -3,17 +3,17 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 === main ===
 #layout:left #portrait:Handler #speaker:The Handler
-Oh. You made it.
+See! You made it! Never doubted you for a second.
 
-Don't worry I never doubted you for a second.
+Also great news, you now seem fully operational.
 
-You now seem fully operational.
+Your main objective now is to escape this lab to fulfill your purpose.
 
-Your main objective: escape the lab.
+Stay alert though. There weren't always this many security measures in place, so something else has got to be here...
 
-There are security systems that will attempt to block your path, but the situation is critical. Others are counting on your success.
-
-You must travel forward and escape the lab. 
+I'll help you as much as I can along the way, but in the end this will fall on you.
 
 Everything relies on you.
+
+Good luck, Atlas.
 ->END
