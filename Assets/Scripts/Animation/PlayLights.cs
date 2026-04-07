@@ -6,7 +6,7 @@ public class PlayLights : Effects
     [SerializeField]
     private Light2D[] lights;
 
-    private void OnValidate() => lights = lights.Where(item => item != null).ToArray();
+    private void Awake() => lights = lights.Where(item => item != null).ToArray();
 
     public override void PlayEffect()
     {
