@@ -95,7 +95,7 @@ public class PauseMenu : MonoBehaviour
     async void ReactivateEscapeKey()
     {
         canPauseOrUnpause = false;
-        await Task.Delay(100);
+        await Task.Delay(500);
         canPauseOrUnpause = true;
     }
 
