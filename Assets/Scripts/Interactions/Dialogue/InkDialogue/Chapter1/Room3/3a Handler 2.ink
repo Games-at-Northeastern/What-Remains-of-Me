@@ -2,7 +2,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 -> main
 
 ===main===
-As you may have noticed, something in the virus’s construction causes unpredictable behavior in most machines.#layout:left #portrait:default #speaker:The Handler
-As such, we are doing everything we can to preserve what's left of our uninfected energy sources.
+You will also want to keep in mind whether or not the energy you transfer around is infected.#layout:left #portrait:default #speaker:The Handler
+Machines infected with the virus have been known to behave... erratically.
+However, that may prove useful… this part of the lab has been retrofitted with many safety measures, but you should be capable of dealing with them.
 ->DONE
-

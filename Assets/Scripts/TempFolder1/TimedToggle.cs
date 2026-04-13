@@ -1,40 +1,42 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+
 /// <summary>
-///     A time-based item toggler.
+/// A time-based item toggler.
 /// </summary>
 public class TimedToggle : AEventToggle
 {
     [SerializeField]
-    private bool _useUnscaledTime;
+    private bool _useUnscaledTime = false;
     [SerializeField]
-    private bool _resetStateUponReactivation;
+    private bool _resetStateUponReactivation = false;
     [SerializeField]
     private float _duration;
     [SerializeField]
     private bool delay;
     [SerializeField]
     private float delayAmount;
-    private Coroutine _coroutine;
-    private bool _state;
 
-    private bool delayComplete;
+    private bool delayComplete = false;
+    private bool _state;
+    private Coroutine _coroutine;
 
 
     private void OnEnable()
     {
-        if (!delay) {
+        if (!delay)
+        {
             _state = _enabledOnStart;
             _coroutine = StartCoroutine(IEFlip());
-        } else {
+        }
+        else
+        {
             StartCoroutine(StartDelay());
         }
     }
 
-    private void OnDisable()
-    {
-        if (_coroutine != null) StopCoroutine(_coroutine);
-    }
+    private void OnDisable() => StopCoroutine(_coroutine);
 
     private IEnumerator IEFlip()
     {
@@ -59,4 +61,5 @@ public class TimedToggle : AEventToggle
 
         yield return IEFlip();
     }
+
 }

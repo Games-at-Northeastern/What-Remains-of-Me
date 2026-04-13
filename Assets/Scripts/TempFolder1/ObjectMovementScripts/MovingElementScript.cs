@@ -495,10 +495,4 @@ public class MovingElementScript : MonoBehaviour
             platformObjects[rigidbody] = false;
         }
     }
-
-    /// <summary>
-    /// Return the current location of this element as [0, 1] of its subscribed path.
-    /// </summary>
-    /// <returns></returns>
-    public float GetLocation() => currentElementLocation;
 }

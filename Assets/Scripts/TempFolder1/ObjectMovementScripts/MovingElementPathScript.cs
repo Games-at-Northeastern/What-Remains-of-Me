@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Levels.Objects.Platform;
 using UnityEngine;
@@ -163,30 +161,6 @@ public class MovingElementPathScript : MonoBehaviour
         if (movingObjects.Contains(movingElement)) {
             movingObjects.Remove(movingElement);
         }
-    }
-
-    /// <summary>
-    /// Move all subscribed moving elements to location and deactivate them.
-    /// </summary>
-    /// <param name="location">the location to stop at</param>
-    public void StopAt(float location)
-    {
-        foreach (var obj in movingObjects)
-        {
-            StartCoroutine(StopElementAt(obj, location));
-        }
-    }
-
-    /// <summary>
-    /// Wait until the moving element is at the desired location and then deactivate it.
-    /// </summary>
-    /// <param name="element">the element to stop</param>
-    /// <param name="location">the target location</param>
-    /// <returns></returns>
-    private static IEnumerator StopElementAt(MovingElementScript element, float location)
-    {
-        yield return new WaitUntil(() => Mathf.Abs(location - element.GetLocation()) < 0.05f);
-        element.Deactivate();
     }
 
     // Getter Functions
