@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 /// <summary>
@@ -14,6 +15,7 @@ public class VoxFirstOutlet : AControllable
     [SerializeField] private VoxOutlet secondStepOutlet;
     [SerializeField] private Animator secondOutletAnimator;
     [SerializeField] private ParticleSystem explosionParticles;
+    [SerializeField] private PlayableDirector cutscene;
 
     private bool hasTriggered = false; // Ensure coroutine is only started once
     private void Update()
@@ -66,6 +68,9 @@ public class VoxFirstOutlet : AControllable
         secondOutletAnimator.SetBool("Activate", true);
         secondOutletAnimator.GetComponentInParent<BoxCollider2D>().enabled = true;
         
+        // Play the cutscene
+        cutscene.Play();
+        cutscene.stopped += _ => cutscene.gameObject.SetActive(false);
 
         yield break;
     }
