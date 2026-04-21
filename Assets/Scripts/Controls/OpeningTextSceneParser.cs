@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using Ink.Runtime;
 using TMPro;
 using System;
+using UnityEngine.SceneManagement;
 public class OpeningTextSceneParser : MonoBehaviour
 {
     public TextAsset inkJSON;
@@ -11,9 +12,6 @@ public class OpeningTextSceneParser : MonoBehaviour
     public TMP_Text displayText;
 
     Story story;
-    bool onFinishInvoked;
-
-    Action OnFinishText;
 
     private void OnEnable()
     {
@@ -43,8 +41,7 @@ public class OpeningTextSceneParser : MonoBehaviour
         if (!story.canContinue)
         {
             binding.action.performed -= ctx => ShowNextLine();
-            onFinishInvoked = true;
-            OnFinishText?.Invoke();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }
