@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 814527589}
   - component: {fileID: 814527588}
   - component: {fileID: 814527587}
+  - component: {fileID: 814527591}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -321,6 +322,35 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &814527591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814527586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898240e9d1ead334f983c0969550ced0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OpeningTextSceneParser
+  inkJSON: {fileID: 4900000, guid: f52523c4eb0558f409fcd8696d4f3b3e, type: 3}
+  binding: {fileID: 1136592698}
+  displayText: {fileID: 1757889210}
+--- !u!114 &1136592698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: Player/Jump
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_ActionId: a72efe12-9d57-4f77-8374-829960feee7e
 --- !u!1 &1305322610
 GameObject:
   m_ObjectHideFlags: 0

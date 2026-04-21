@@ -1,23 +1,50 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
+using Ink.Runtime;
+using TMPro;
+using System;
 public class OpeningTextSceneParser : MonoBehaviour
 {
+    public TextAsset inkJSON;
     public InputActionReference binding;
+    public TMP_Text displayText;
 
-    public UnityEvent listener;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    Story story;
+    bool onFinishInvoked;
 
-    private void OnEnable() => binding.action.Enable();
+    Action OnFinishText;
 
-    void Update()
+    private void OnEnable()
     {
-        binding.action.performed += ctx => Activate();
+        if (inkJSON && displayText && binding)
+        {
+            story = new Story(inkJSON.text);
+            if (!story.canContinue)
+            {
+                return;
+            }
+            binding.action.Enable();
+            binding.action.performed += ctx => ShowNextLine();
+        }
     }
 
-    private void Activate()
+    private void OnDisable()
     {
-        listener.Invoke();
+        binding.action.performed -= ctx => ShowNextLine();
+    }
+
+    void ShowNextLine()
+    {
+        if (story.canContinue)
+        {
+            displayText.text += "\n\n>" + story.Continue();
+        }
+        if (!story.canContinue)
+        {
+            binding.action.performed -= ctx => ShowNextLine();
+            onFinishInvoked = true;
+            OnFinishText?.Invoke();
+        }
     }
 }
