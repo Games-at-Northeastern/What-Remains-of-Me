@@ -5,7 +5,7 @@ EXTERNAL openDoor()
 
 === main ===
 
-%:;&::%:;%:& ...H-ello?...%:;&::%:;%:& Atlas! You’re operational! #layout:left #portrait:Handler_Shocked #speaker:The Handler
+%:;&::%:;%:& ...H-ello?...%:;&::%:;%:& Atlas! You're operational! #layout:left #portrait:Handler_Shocked #speaker:The Handler
 
 Pardon our dust. I wasn't expecting any more of you to boot up, especially so soon. It's a miracle that your I.S.P is still functional too! #portrait:Handler
 
