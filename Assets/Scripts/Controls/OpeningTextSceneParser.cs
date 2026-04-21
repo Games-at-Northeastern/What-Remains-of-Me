@@ -13,6 +13,8 @@ public class OpeningTextSceneParser : MonoBehaviour
 
     Story story;
 
+    bool shownLastLine;
+
     private void OnEnable()
     {
         if (inkJSON && displayText && binding)
@@ -38,7 +40,7 @@ public class OpeningTextSceneParser : MonoBehaviour
         {
             displayText.text += "\n\n>" + story.Continue();
         }
-        if (!story.canContinue)
+        else if (!story.canContinue)
         {
             binding.action.performed -= ctx => ShowNextLine();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
