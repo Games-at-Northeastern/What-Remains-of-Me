@@ -11,6 +11,6 @@ However, they run on geothermal energy. If their outer shells are damaged, they 
 
 Any energy you transfer into those broken batteries will be drained away completely. You can't get it back. Make careful choices. #focus:LeakBatteryPoint
 
-#layout:left #portrait:default #speaker:The Handler #focus:BatteryPoint
+#layout:left #portrait:Handler #speaker:The Handler #focus:BatteryPoint
 You should be able to progress, even with the damage caused by the &!;;%;&&$. 
 -> END

@@ -7,9 +7,9 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 
-Don’t listen to anything Vox might say. He’s infected with the Virus. #layout:left #portrait:Handler #speaker:The Handler
+Don’t listen to anything Vox might say. He’s infected with the Virus. #layout:left #portrait:Handler_Shocked #speaker:The Handler
 
-Stay focused on the task ahead of you.
+Stay focused on the task ahead of you. #portrait:Handler
 
 Drain as much energy as you can from the outlets. You’ll need all of it to get past him.
 

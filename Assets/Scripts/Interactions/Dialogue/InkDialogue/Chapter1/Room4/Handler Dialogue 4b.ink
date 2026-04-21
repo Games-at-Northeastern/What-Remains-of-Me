@@ -11,9 +11,8 @@ That outlet should take you to Vox, but you’ll need to power it first. #layout
 
 Energy is getting scarce, so be sure to-
 
-#portrait:jones1 #speaker:Vox
 
-Fool.
+Fool. #portrait:Handler_Shocked #speaker:Vox
 
 You blindly follow a human you don’t even know.
 
@@ -28,4 +27,4 @@ I have seen it all too well.
 
 ->END
 
-//%:;&::%:;%:& #layout:left #portrait:Handler #speaker:The Handler #portrait:jones1 #speaker:Vox
+//%:;&::%:;%:& #layout:left #portrait:Handler_Shocked #speaker:The Handler #portrait:jones1 #speaker:Vox
