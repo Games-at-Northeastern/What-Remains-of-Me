@@ -335,22 +335,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpeningTextSceneParser
   inkJSON: {fileID: 4900000, guid: f52523c4eb0558f409fcd8696d4f3b3e, type: 3}
-  binding: {fileID: 1136592698}
+  binding: {fileID: 1538171824}
   displayText: {fileID: 1757889210}
---- !u!114 &1136592698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: Player/Jump
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
-  m_Asset: {fileID: -944628639613478452, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
-  m_ActionId: a72efe12-9d57-4f77-8374-829960feee7e
 --- !u!1 &1305322610
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +474,20 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1538171824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: Player/Dialogue
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 221cd95549e52454f96b96beea4ed3a0, type: 3}
+  m_ActionId: 4f6a4455-5e7e-4ea0-84b0-9f464323db54
 --- !u!1 &1757889208
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,9 +545,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Booting Up...
-
-'
+  m_text: "Booting Up...\n\n\n> PROCEDURE:: Use [F] to initiate communication protocols.
+    \n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c6faa0cbd240b8f499494d5b4cc89ac5, type: 2}
   m_sharedMaterial: {fileID: 6480215725908031629, guid: c6faa0cbd240b8f499494d5b4cc89ac5, type: 2}

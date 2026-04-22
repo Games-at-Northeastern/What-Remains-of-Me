@@ -13,8 +13,6 @@ public class OpeningTextSceneParser : MonoBehaviour
 
     Story story;
 
-    bool shownLastLine;
-
     private void OnEnable()
     {
         if (inkJSON && displayText && binding)
@@ -25,24 +23,25 @@ public class OpeningTextSceneParser : MonoBehaviour
                 return;
             }
             binding.action.Enable();
-            binding.action.performed += ctx => ShowNextLine();
+            binding.action.performed += ShowNextLine;
         }
     }
 
     private void OnDisable()
     {
-        binding.action.performed -= ctx => ShowNextLine();
+        binding.action.performed -= ShowNextLine;
     }
 
-    void ShowNextLine()
+    void ShowNextLine(InputAction.CallbackContext context)
     {
         if (story.canContinue)
         {
-            displayText.text += "\n\n>" + story.Continue();
+            displayText.text += "\n\n> " + story.Continue();
         }
         else if (!story.canContinue)
         {
-            binding.action.performed -= ctx => ShowNextLine();
+            binding.action.performed -= ShowNextLine;
+            binding.action.Disable();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
