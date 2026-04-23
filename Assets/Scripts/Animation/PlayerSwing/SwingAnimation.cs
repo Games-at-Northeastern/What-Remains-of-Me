@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using PlayerController;
 using UnityEngine;
@@ -12,12 +13,14 @@ public class SwingAnimation : MonoBehaviour
     [SerializeField] WireThrower wire;
     [Space]
     [SerializeField] SwingAnimationData data;
+    [SerializeField] Sprite mainSprite;
     [SerializeField] float centerAngle;
     [SerializeField] float legAngle;
     [Space]
     [SerializeField] int targetFPS = 30;
 
     bool shouldUpdate;
+    bool animatorHasControl;
 
     bool facingRight;
     bool swingingRight;
@@ -44,6 +47,24 @@ public class SwingAnimation : MonoBehaviour
 
         lastSlice = slice;
         slice = GetSwingSlice();
+
+        bool shouldAnimatorHandle = ShouldAnimatorHandle();
+        if (shouldAnimatorHandle)
+        {
+            if (!animatorHasControl)
+            {
+                StopCoroutine(activeRoutine);
+                GiveAnimatorControl();
+            }
+        }
+        else
+        {
+            if (animatorHasControl)
+            {
+                BeginGrapple();
+            }
+        }
+
         if (lastSlice != slice)
         {
             SliceChanged(lastSlice, slice);
@@ -65,6 +86,9 @@ public class SwingAnimation : MonoBehaviour
         Vector3 outletPosCentered = outletPos - player.transform.position;
         float wireLineAngle = Mathf.Rad2Deg * Mathf.Atan(Mathf.Abs(outletPosCentered.y) / Mathf.Abs(outletPosCentered.x));
         float playerOutletAngle = 90f - wireLineAngle;
+
+        if (playerOutletAngle > 90f)
+            return SwingSlice.UPPER_HALF;
 
         if (playerOutletAngle * 2f < centerAngle)
             return SwingSlice.CENTER;
@@ -101,7 +125,9 @@ public class SwingAnimation : MonoBehaviour
         else if (current is SwingSlice.CENTER)
         {
             swingToCenterAutoplays = false;
-            Loop(SwingAnim.IDLE_CENTER);
+            StopCoroutine(activeRoutine);
+            playerRend.sprite = mainSprite;
+            playerRend.flipX = !facingRight;
         }
         else if (last is SwingSlice.LEFT_WING)
             Play(SwingAnim.SWING_RIGHT_FROM_LEFT);
@@ -112,6 +138,10 @@ public class SwingAnimation : MonoBehaviour
 
     void DirectionChanged()
     {
+        if (slice is SwingSlice.CENTER)
+        {
+            playerRend.flipX = !facingRight;
+        }
         if (!swingToCenterAutoplays)
         {
             if (slice is SwingSlice.LEFT_LEG)
@@ -123,25 +153,36 @@ public class SwingAnimation : MonoBehaviour
 
     void BeginGrapple()
     {
+        animatorHasControl = false;
         spriteFlipper.enabled = false;
         playerAnimator.enabled = false;
         player.transform.rotation = Quaternion.identity;
 
-        Loop(SwingAnim.IDLE_CENTER);
+        playerRend.sprite = mainSprite;
 
         shouldUpdate = true;
     }
 
     void EndGrapple()
     {
+        animatorHasControl = true;
+        GiveAnimatorControl();
+        shouldUpdate = false;
+    }
+
+    void GiveAnimatorControl()
+    {
+        animatorHasControl = true;
         if (activeRoutine != null)
             StopCoroutine(activeRoutine);
-
-        shouldUpdate = false;
         spriteFlipper.enabled = true;
         playerAnimator.enabled = true;
-        if (facingRight)
-            player.transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+        player.transform.rotation = new Quaternion(0f, facingRight ? 0f : 180f, 0f, 0f);
+    }
+
+    bool ShouldAnimatorHandle()
+    {
+        return player.Grounded || slice == SwingSlice.UPPER_HALF;
     }
 
     // ANIMATIONS
@@ -224,7 +265,7 @@ public class SwingAnimation : MonoBehaviour
         }
     }
 
-    enum SwingSlice { RIGHT_WING, RIGHT_LEG, CENTER, LEFT_LEG, LEFT_WING };
+    enum SwingSlice { RIGHT_WING, RIGHT_LEG, CENTER, LEFT_LEG, LEFT_WING, UPPER_HALF };
 }
 
 public static class SwingAnimUtil
