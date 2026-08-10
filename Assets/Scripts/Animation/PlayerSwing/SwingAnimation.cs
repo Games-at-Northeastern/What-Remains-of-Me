@@ -175,9 +175,10 @@ public class SwingAnimation : MonoBehaviour
         animatorHasControl = true;
         if (activeRoutine != null)
             StopCoroutine(activeRoutine);
+        playerRend.flipX = false;
         spriteFlipper.enabled = true;
-        playerAnimator.enabled = true;
         player.transform.rotation = new Quaternion(0f, facingRight ? 0f : 180f, 0f, 0f);
+        playerAnimator.enabled = true;
     }
 
     bool ShouldAnimatorHandle()
