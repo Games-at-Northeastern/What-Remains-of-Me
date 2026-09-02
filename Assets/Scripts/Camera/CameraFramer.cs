@@ -1,5 +1,5 @@
 using System;
-using Cinemachine;
+
 using PlayerController;
 using UnityEngine;
 
@@ -16,16 +16,16 @@ public class CameraFramer : MonoBehaviour
     [SerializeField]
     private FramingMode framingMode;
 
-    private CinemachineVirtualCamera framingCamera;
-    private CinemachineSmoothPath dollyPath;
+    private Unity.Cinemachine.CinemachineVirtualCamera framingCamera;
+    private Unity.Cinemachine.CinemachineSmoothPath dollyPath;
 
     private BoxCollider2D frameTrigger;
     private PlayerController2D player;
 
     private void Awake() {
         frameTrigger = GetComponent<BoxCollider2D>();
-        framingCamera = GetComponentInChildren<CinemachineVirtualCamera>();
-        dollyPath = GetComponentInChildren<CinemachineSmoothPath>();
+        framingCamera = GetComponentInChildren<Unity.Cinemachine.CinemachineVirtualCamera>();
+        dollyPath = GetComponentInChildren<Unity.Cinemachine.CinemachineSmoothPath>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController2D>();
     }
 
@@ -73,8 +73,8 @@ public class CameraFramer : MonoBehaviour
         if (!frameTrigger)
         {
             frameTrigger = GetComponent<BoxCollider2D>();
-            framingCamera = GetComponentInChildren<CinemachineVirtualCamera>();
-            dollyPath = GetComponentInChildren<CinemachineSmoothPath>();
+            framingCamera = GetComponentInChildren<Unity.Cinemachine.CinemachineVirtualCamera>();
+            dollyPath = GetComponentInChildren<Unity.Cinemachine.CinemachineSmoothPath>();
         }
 
         if (!dollyPath)

@@ -37,21 +37,22 @@ namespace Levels.Objects.Platform
         // sorta an invariant, but this method is only called when the state of the effector needs to change.
         protected override void AffectMovingElement(MovingElement element)
         {
-            int instanceID = element.GetInstanceID();
+            var instanceID = element.GetEntityId();
 
             // if we're active, disable
             if (_isEffectorActive)
             {
-                if (_processMap.TryGetValue(instanceID, out var tuple))
-                {
-                    element.StopCoroutine(tuple.coroutine);
-                    element.SetDir(tuple.initialState);
-                }
-                else
-                {
-                    // potential error if a platform is created/destroyed during runtime
-                    Debug.LogError($"{element.gameObject.name} does not have an entry in the map of processes! Are you creating the element during runtime?");
-                }
+                // ** instancID is no longer an int. If this code is used it needs to be reworked. **
+                // if (_processMap.TryGetValue(instanceID, out var tuple))
+                // {
+                //     element.StopCoroutine(tuple.coroutine);
+                //     element.SetDir(tuple.initialState);
+                // }
+                // else
+                // {
+                //     // potential error if a platform is created/destroyed during runtime
+                //     Debug.LogError($"{element.gameObject.name} does not have an entry in the map of processes! Are you creating the element during runtime?");
+                // }
 
                 _isEffectorActive = false;
             }
@@ -59,15 +60,16 @@ namespace Levels.Objects.Platform
             {
                 var tuple = (element.StartCoroutine(IEProcess(element)), element.GetDir());
 
+// ** instancID is no longer an int. If this code is used it needs to be reworked. **
                 // if a key already exists, then just override the value
-                if (_processMap.ContainsKey(instanceID))
-                {
-                    _processMap[instanceID] = tuple;
-                }
-                else // if it does not exist, create it with a value
-                {
-                    _processMap.Add(instanceID, tuple);
-                }
+                // if (_processMap.ContainsKey(instanceID))
+                // {
+                //     _processMap[instanceID] = tuple;
+                // }
+                // else // if it does not exist, create it with a value
+                // {
+                //     _processMap.Add(instanceID, tuple);
+                // }
 
                 _isEffectorActive = true;
             }
@@ -101,5 +103,4 @@ namespace Levels.Objects.Platform
             }
         }
     }
-
 }

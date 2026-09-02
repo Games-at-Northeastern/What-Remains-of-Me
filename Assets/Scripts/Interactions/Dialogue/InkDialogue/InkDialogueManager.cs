@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Ink.Runtime;
+using Ink.UnityIntegration;
 using PlayerController;
 using TMPro;
 using UnityEngine;
@@ -52,7 +53,8 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private DialogueAudioInfoSO currentAudioInfo;
 
     [Header("Ink Function Calls")] // fields for objects that get called from external functions in ink dialogue files
-    [SerializeField] private TextAsset inkJSONAsset;
+    //[SerializeField] private TextAsset inkJSONAsset;
+    [SerializeField] private InkFile inkJSONAsset;
     [SerializeField] private ControllableDoor doorController;
 
 
@@ -62,7 +64,7 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private int currentSelectedOption;
 
     [Header("Load Globals JSON")] [SerializeField]
-    private TextAsset globalsJSON;
+    private InkFile globalsJSON;
 
     [Header("Configs")] public bool stopMovement;
     public bool autoTurnPage;
@@ -171,9 +173,9 @@ public class InkDialogueManager : MonoBehaviour
         ContinueStory();
     }
 
-    public void EnterDialogueMode(TextAsset inkJSON)
+    public void EnterDialogueMode(InkFile inkFile)
     {
-        currentStory = new Story(inkJSON.text);
+        currentStory = new Story(inkFile.storyJson);
 
         // binds external function openDoor
         currentStory.BindExternalFunction("openDoor", () =>

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ink.UnityIntegration;
 
 
 /// <summary>
@@ -8,7 +9,7 @@ using UnityEngine;
 /// </summary>
 public class InkDialogueAmbientTrigger : MonoBehaviour
 {
-    [SerializeField] private List<TextAsset> dialougeLines;
+    [SerializeField] private List<InkFile> dialougeLines;
     private bool dialogueActive = true;
 
     [SerializeField] private float timeBetweenDialouge;
@@ -74,16 +75,16 @@ public class InkDialogueAmbientTrigger : MonoBehaviour
     /// Grab a random set of dialouge and throw it to the start of the list.
     /// </summary>
     /// <returns></returns>
-    private TextAsset PickNextDialouge()
+    private InkFile PickNextDialouge()
     {
-        if(dialougeLines.Count > 1)
+        if (dialougeLines.Count > 1)
         {
             int newAssetIndex = Random.Range(1, dialougeLines.Count - 1);
-            TextAsset oldAsset = dialougeLines[0];
+            InkFile oldAsset = dialougeLines[0];
             dialougeLines[0] = dialougeLines[newAssetIndex];
             dialougeLines[newAssetIndex] = oldAsset;
         }
-        Debug.Log("Line:" + dialougeLines[0].text);
+        Debug.Log("Line:" + dialougeLines[0].storyJson);
         return dialougeLines[0];
     }
     /// <summary>

@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using Ink.UnityIntegration;
 
 //Requires some kind of collider to know we're in the hint area
 [RequireComponent(typeof(Collider2D))]
@@ -24,7 +25,7 @@ public class HintArea : MonoBehaviour
     private DialogueOrder dialogueOrder;
 
     [SerializeField]
-    private TextAsset[] hintDialogue;
+    private InkFile[] hintDialogue;
     private int hintIndex = 0;
 
     [Header("Hint Style")]
@@ -110,7 +111,7 @@ public class HintArea : MonoBehaviour
         dialogueManager.EnterDialogueMode(hint);
     }
 
-    private TextAsset GetNextHint()
+    private InkFile GetNextHint()
     {
         var hint = hintDialogue[hintIndex];
 

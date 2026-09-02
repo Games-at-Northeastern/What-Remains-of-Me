@@ -2,22 +2,26 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using Ink.Runtime;
+using Ink.UnityIntegration;
 using TMPro;
 using System;
 using UnityEngine.SceneManagement;
 public class OpeningTextSceneParser : MonoBehaviour
 {
     public TextAsset inkJSON;
+    public InkFile inkFile;
     public InputActionReference binding;
     public TMP_Text displayText;
 
+
     Story story;
+
 
     private void OnEnable()
     {
-        if (inkJSON && displayText && binding)
+        if (displayText && binding)
         {
-            story = new Story(inkJSON.text);
+            story = new Story(inkFile.storyJson);
             if (!story.canContinue)
             {
                 return;

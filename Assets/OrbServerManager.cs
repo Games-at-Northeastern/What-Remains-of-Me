@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Ink.UnityIntegration;
 
 public class OrbServerManager : MonoBehaviour
 {
@@ -42,12 +43,19 @@ public class OrbServerManager : MonoBehaviour
     public bool fourTerminalHasFired = false;
 
     [Header("inkJSONs")]
-    public TextAsset noTerminalsInkJSON;
-    public TextAsset oneTerminalInkJSON;
-    public TextAsset twoTerminalsInkJSON;
-    public TextAsset threeTerminalsInkJSON;
-    public TextAsset fourTerminalsInkJSON;
-    public TextAsset currentText;
+    // public TextAsset noTerminalsInkJSON;
+    // public TextAsset oneTerminalInkJSON;
+    // public TextAsset twoTerminalsInkJSON;
+    // public TextAsset threeTerminalsInkJSON;
+    // public TextAsset fourTerminalsInkJSON;
+    // public TextAsset currentText;
+ public InkFile noTerminalsInkJSON;
+    public InkFile oneTerminalInkJSON;
+    public InkFile twoTerminalsInkJSON;
+    public InkFile threeTerminalsInkJSON;
+    public InkFile fourTerminalsInkJSON;
+    public InkFile currentText;
+
 
 
 

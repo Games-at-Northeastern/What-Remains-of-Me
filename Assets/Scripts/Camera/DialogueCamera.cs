@@ -1,13 +1,15 @@
 using UnityEngine;
 using PlayerController;
-using Cinemachine;
+using System;
+//using System.Threading.Tasks;
+
 
 public class DialogueCamera : MonoBehaviour
 {
     private PlayerController2D characterController;
 
-    private CinemachineVirtualCamera dialogueCameara;
-    private CinemachineTargetGroup targetGroup;
+    private Unity.Cinemachine.CinemachineCamera dialogueCameara;
+    private Unity.Cinemachine.CinemachineTargetGroup targetGroup;
 
 
     float prevPlayerWeight, prevPlayerRadius;
@@ -18,38 +20,39 @@ public class DialogueCamera : MonoBehaviour
     {
         Instance = this;
 
-        dialogueCameara = GetComponentInChildren<CinemachineVirtualCamera>();
-        characterController = FindFirstObjectByType<PlayerController2D>();
-        targetGroup = GetComponentInChildren<CinemachineTargetGroup>();
+        dialogueCameara = GetComponentInChildren<Unity.Cinemachine.CinemachineCamera>();
+        characterController = FindAnyObjectByType<PlayerController2D>();
+        targetGroup = GetComponentInChildren<Unity.Cinemachine.CinemachineTargetGroup>();
 
-        var playerTarget = new CinemachineTargetGroup.Target
+        var playerTarget = new Unity.Cinemachine.CinemachineTargetGroup.Target
         {
-            target = characterController.transform,
-            weight = 1f,
-            radius = 0f
+            Object = characterController.transform,
+            Weight = 1f,
+            Radius = 0f
         };
+        targetGroup.AddMember(characterController.transform, 1f, 0f);
 
-        targetGroup.m_Targets[0] = playerTarget;
+        targetGroup.Targets[0] = playerTarget;
 
         StopFramingDialogue();
     }
     public void StartFramingDialogue(Transform speaker)
     {
-        prevPlayerWeight = targetGroup.m_Targets[0].weight;
-        prevPlayerRadius = targetGroup.m_Targets[0].radius;
+        prevPlayerWeight = targetGroup.Targets[0].Weight;
+        prevPlayerRadius = targetGroup.Targets[0].Radius;
 
 
-        targetGroup.m_Targets[0].weight = 0f;
-        targetGroup.m_Targets[0].radius = 0f;
+        targetGroup.Targets[0].Weight = 0f;
+        targetGroup.Targets[0].Radius = 0f;
 
-        prevTargetWeight = targetGroup.m_Targets[1].weight;
-        prevTargetRadius = targetGroup.m_Targets[1].radius;
+        prevTargetWeight = targetGroup.Targets[1].Weight;
+        prevTargetRadius = targetGroup.Targets[1].Radius;
 
-        targetGroup.m_Targets[1] = new CinemachineTargetGroup.Target
+        targetGroup.Targets[1] = new Unity.Cinemachine.CinemachineTargetGroup.Target
         {
-            target = speaker,
-            weight = 1.2f,
-            radius = 0.1f
+            Object = speaker,
+            Weight = 1.2f,
+            Radius = 0.1f
         };
 
         dialogueCameara.Priority = 100;
@@ -57,18 +60,18 @@ public class DialogueCamera : MonoBehaviour
 
     public void StopFramingDialogue()
     {
-        targetGroup.m_Targets[0] = new CinemachineTargetGroup.Target
+        targetGroup.Targets[0] = new Unity.Cinemachine.CinemachineTargetGroup.Target
         {
-            target = targetGroup.m_Targets[0].target,
-            weight = prevPlayerWeight == 0 ? 1f : prevPlayerWeight,
-            radius = prevPlayerRadius
+            Object = targetGroup.Targets[0].Object,
+            Weight = prevPlayerWeight == 0 ? 1f : prevPlayerWeight,
+            Radius = prevPlayerRadius
         };
 
-        targetGroup.m_Targets[1] = new CinemachineTargetGroup.Target
+        targetGroup.Targets[1] = new Unity.Cinemachine.CinemachineTargetGroup.Target
         {
-            target = targetGroup.m_Targets[1].target,
-            weight = 0f,
-            radius = prevTargetRadius
+            Object = targetGroup.Targets[1].Object,
+            Weight = 0f,
+            Radius = prevTargetRadius
         };
 
         dialogueCameara.Priority = -100;

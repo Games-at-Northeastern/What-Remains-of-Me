@@ -1,4 +1,5 @@
 using UnityEngine;
+using Ink.UnityIntegration;
 public class RobotOutlet : AControllable
 {
     [Header("Needed Targets")]
@@ -7,12 +8,21 @@ public class RobotOutlet : AControllable
     [SerializeField] private GameObject inkDialogueTriggerOnRobot;
 
     [Header("inkJSON")]
-    [SerializeField] private TextAsset atlasLowEnemyLowVirusScript;
-    [SerializeField] private TextAsset atlasLowEnemyMediumVirusScript;
-    [SerializeField] private TextAsset atlasLowEnemyHighVirusScript;
-    [SerializeField] private TextAsset atlasHighEnemyLowVirusScript;
-    [SerializeField] private TextAsset atlasHighEnemyMediumVirusScript;
-    [SerializeField] private TextAsset atlasHighEnemyHighVirusScript;
+    // [SerializeField] private TextAsset atlasLowEnemyLowVirusScript;
+    // [SerializeField] private TextAsset atlasLowEnemyMediumVirusScript;
+    // [SerializeField] private TextAsset atlasLowEnemyHighVirusScript;
+    // [SerializeField] private TextAsset atlasHighEnemyLowVirusScript;
+    // [SerializeField] private TextAsset atlasHighEnemyMediumVirusScript;
+    // [SerializeField] private TextAsset atlasHighEnemyHighVirusScript;
+
+    [SerializeField] private InkFile atlasLowEnemyLowVirusScript;
+    [SerializeField] private InkFile atlasLowEnemyMediumVirusScript;
+    [SerializeField] private InkFile atlasLowEnemyHighVirusScript;
+    [SerializeField] private InkFile atlasHighEnemyLowVirusScript;
+    [SerializeField] private InkFile atlasHighEnemyMediumVirusScript;
+    [SerializeField] private InkFile atlasHighEnemyHighVirusScript;
+
+
 
     [Header("Enemy Sprites")]
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -31,7 +41,7 @@ public class RobotOutlet : AControllable
     private bool _isPacified;
     private bool _setTriggerActive;
 
-    private TextAsset currentInkJSONScript;
+    private InkFile currentInkJSONScript;
 
     // Start is called before the first frame update
     private void Awake()

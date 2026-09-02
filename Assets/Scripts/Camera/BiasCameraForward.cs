@@ -1,21 +1,21 @@
 
 using UnityEngine;
-using Cinemachine;
+
 using PlayerController;
 
 public class BiasCameraForward : MonoBehaviour {
     private PlayerController2D player;
-    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    [SerializeField] private Unity.Cinemachine.CinemachineVirtualCamera virtualCamera;
     [SerializeField] private float screenBias = 0.1f;
     [SerializeField] private float smoothingSpeed = 5f;
 
-    private CinemachineFramingTransposer transposer;
+    private Unity.Cinemachine.CinemachineFramingTransposer transposer;
     private float targetScreenX;
     private float currentScreenX;
 
     private void Start() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController2D>();
-        transposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+        transposer = virtualCamera.GetCinemachineComponent<Unity.Cinemachine.CinemachineFramingTransposer>();
         currentScreenX = 0.5f;
         transposer.m_ScreenX = currentScreenX;
     }

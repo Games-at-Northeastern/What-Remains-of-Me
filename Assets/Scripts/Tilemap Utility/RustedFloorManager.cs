@@ -184,7 +184,7 @@ public class RustedFloorManager : MonoBehaviour
     private List<RustedGroup> rustedGroups;
     [SerializeField] private Tilemap groundMap;
     [SerializeField] private int depth;
-    [SerializeField] Cinemachine.CinemachineVirtualCamera virtualCamera;
+    [SerializeField] Unity.Cinemachine.CinemachineVirtualCamera virtualCamera;
 
     private SpikeTeleport spikeTeleport;
 

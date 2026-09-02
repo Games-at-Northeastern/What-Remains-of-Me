@@ -2,6 +2,7 @@ using PlayerController;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Playables;
+using Ink.UnityIntegration;
 
 public class CutsceneTrigger : MonoBehaviour
 {
@@ -20,7 +21,8 @@ public class CutsceneTrigger : MonoBehaviour
     [SerializeField]
     private bool autoTurnPage;
     [SerializeField]
-    private TextAsset[] cutsceneDialogue;
+    //private TextAsset[] cutsceneDialogue;
+    private InkFile[] cutsceneDialogue;
     private int dialogueIndex = 0;
 
 

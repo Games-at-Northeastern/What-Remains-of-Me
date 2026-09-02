@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ink.UnityIntegration;
 
 public class NPCOutlet : AControllable
 {
     [SerializeField] private InkDialogueTrigger dialogueTrigger;
-    [SerializeField] private TextAsset cleanScript;
-    [SerializeField] private TextAsset infectedScript;
+    //[SerializeField] private TextAsset cleanScript;
+    //[SerializeField] private TextAsset infectedScript;
+    [SerializeField] private InkFile cleanScript;
+    [SerializeField] private InkFile infectedScript;
+
+
 
     [SerializeField] private int virusLevelUpdate;
 
@@ -27,11 +32,11 @@ public class NPCOutlet : AControllable
         }
     }
 
-    public void SetCleanScript(TextAsset newText) {
+    public void SetCleanScript(InkFile newText) {
         cleanScript = newText;
     }
 
-    public void SetInfectedScript(TextAsset newText) {
+    public void SetInfectedScript(InkFile newText) {
         infectedScript = newText;
     }
 

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
+
 using PlayerController;
 using System;
 
@@ -13,9 +13,9 @@ public class AnimationCutscene : MonoBehaviour
     public Animator animator;
 
     // this virtual camera is panned to. Íf you don't want to use this, set it to be the same as the player camera.
-    public CinemachineVirtualCamera panCam;
+    public Unity.Cinemachine.CinemachineVirtualCamera panCam;
     // put the default virtual cam for the player here.
-    public CinemachineVirtualCamera playerCam;
+    public Unity.Cinemachine.CinemachineVirtualCamera playerCam;
     // put the player's rigidbody here.
     [SerializeField]
     private PlayerController2D cc;

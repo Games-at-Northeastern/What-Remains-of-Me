@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using Cinemachine;
+
 
 /// <summary>
 ///     Temporarily activates a Cinemachine virtual camera when the player enters this trigger.
@@ -11,7 +11,7 @@ public class CinemachineViewTrigger : MonoBehaviour
 {
     [Header("Cameras")]
     [Tooltip("The virtual camera to activate when the player enters this trigger.")]
-    [SerializeField] private CinemachineVirtualCamera targetVcam;
+    [SerializeField] private Unity.Cinemachine.CinemachineVirtualCamera targetVcam;
 
     [Header("Priorities")]
     [Tooltip("Priority to set on the target vcam while active. Should be higher than your player follow vcam.")]

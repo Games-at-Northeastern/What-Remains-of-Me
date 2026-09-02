@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
+
 
 public class DetachCameraFromPlayer : MonoBehaviour
 {
     [SerializeField] private GameObject GameCamera;
-    [SerializeField] private CinemachineVirtualCamera VirtualCam;
+    [SerializeField] private Unity.Cinemachine.CinemachineVirtualCamera VirtualCam;
     [SerializeField] private Transform bossRoomCameraCenter;
 
     private void OnTriggerEnter2D(Collider2D collision)
