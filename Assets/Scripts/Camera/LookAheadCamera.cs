@@ -4,12 +4,12 @@ using PlayerController;
 
 public class LookAheadCamera : MonoBehaviour
 {
-    [SerializeField] private Unity.Cinemachine.CinemachineVirtualCamera virtualCam;
+    [SerializeField] private Unity.Cinemachine.CinemachineCamera virtualCam;
     private PlayerController2D player;
     [SerializeField] private float maxLookAheadDistance = 3.5f;
     [SerializeField] private float lookAheadSpeed = 2f;
 
-    private Unity.Cinemachine.CinemachineFramingTransposer transposer;
+    private Unity.Cinemachine.CinemachinePositionComposer transposer;
     private Vector3 currentLookAhead;
     private Camera mainCamera;
 
@@ -21,10 +21,10 @@ public class LookAheadCamera : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController2D>();
-        transposer = virtualCam.GetCinemachineComponent<Unity.Cinemachine.CinemachineFramingTransposer>();
+        transposer = virtualCam.GetComponent<Unity.Cinemachine.CinemachinePositionComposer>();
         if (transposer != null)
         {
-            currentLookAhead = transposer.m_TrackedObjectOffset;
+            currentLookAhead = transposer.TargetOffset;
         }
     }
 
@@ -67,7 +67,7 @@ public class LookAheadCamera : MonoBehaviour
     private void ApplyOffset()
     {
         float directionMultiplier = player.LeftOrRight == CharacterController.Facing.left ? -1f : 1f;
-        transposer.m_TrackedObjectOffset = new Vector3(
+        transposer.TargetOffset = new Vector3(
             currentLookAhead.x * directionMultiplier,
             currentLookAhead.y,
             currentLookAhead.z

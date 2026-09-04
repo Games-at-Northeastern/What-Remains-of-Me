@@ -295,6 +295,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -335,6 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpeningTextSceneParser
   inkJSON: {fileID: 4900000, guid: f52523c4eb0558f409fcd8696d4f3b3e, type: 3}
+  inkFile: {fileID: 0}
   binding: {fileID: 1538171824}
   displayText: {fileID: 1757889210}
 --- !u!1 &1305322610
@@ -545,8 +547,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Booting Up...\n\n\n> PROCEDURE:: Use [F] to initiate communication protocols.
-    \n"
+  m_text: "Booting Up...\n\n\n> PROCEDURE:: Use [F] to initiate communication protocols. \n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c6faa0cbd240b8f499494d5b4cc89ac5, type: 2}
   m_sharedMaterial: {fileID: 6480215725908031629, guid: c6faa0cbd240b8f499494d5b4cc89ac5, type: 2}
@@ -596,7 +597,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1

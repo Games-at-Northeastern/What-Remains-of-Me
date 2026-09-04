@@ -2,6 +2,8 @@ using System;
 
 using PlayerController;
 using UnityEngine;
+using Unity.Mathematics;
+using UnityEngine.Splines;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class CameraFramer : MonoBehaviour
@@ -16,16 +18,16 @@ public class CameraFramer : MonoBehaviour
     [SerializeField]
     private FramingMode framingMode;
 
-    private Unity.Cinemachine.CinemachineVirtualCamera framingCamera;
-    private Unity.Cinemachine.CinemachineSmoothPath dollyPath;
+    private Unity.Cinemachine.CinemachineCamera framingCamera;
+    private SplineContainer dollyPath;
 
     private BoxCollider2D frameTrigger;
     private PlayerController2D player;
 
     private void Awake() {
         frameTrigger = GetComponent<BoxCollider2D>();
-        framingCamera = GetComponentInChildren<Unity.Cinemachine.CinemachineVirtualCamera>();
-        dollyPath = GetComponentInChildren<Unity.Cinemachine.CinemachineSmoothPath>();
+        framingCamera = GetComponentInChildren<Unity.Cinemachine.CinemachineCamera>();
+        dollyPath = GetComponentInChildren<SplineContainer>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController2D>();
     }
 
@@ -73,8 +75,8 @@ public class CameraFramer : MonoBehaviour
         if (!frameTrigger)
         {
             frameTrigger = GetComponent<BoxCollider2D>();
-            framingCamera = GetComponentInChildren<Unity.Cinemachine.CinemachineVirtualCamera>();
-            dollyPath = GetComponentInChildren<Unity.Cinemachine.CinemachineSmoothPath>();
+            framingCamera = GetComponentInChildren<Unity.Cinemachine.CinemachineCamera>();
+            dollyPath = GetComponentInChildren<SplineContainer>();
         }
 
         if (!dollyPath)
@@ -84,26 +86,38 @@ public class CameraFramer : MonoBehaviour
 
         dollyPath.transform.localPosition = new Vector3(frameTrigger.offset.x, frameTrigger.offset.y, -10);
 
+        while (dollyPath.Spline.Count < 2)
+        {
+            dollyPath.Spline.Add(new BezierKnot(float3.zero));
+        }
+
         switch (framingMode)
         {
             case FramingMode.FrameEntireScreen:
-                framingCamera.m_Lens.OrthographicSize = Mathf.Max(CalculateVerticalFrameSize(), CalculateHorizontalFrameSize());
-                dollyPath.m_Waypoints[0].position = new Vector3(0, 0, -10);
-                dollyPath.m_Waypoints[1].position = new Vector3(0, 0, -10);
+                framingCamera.Lens.OrthographicSize = Mathf.Max(CalculateVerticalFrameSize(), CalculateHorizontalFrameSize());
+                SetKnotPositions(Vector3.zero, Vector3.zero);
                 break;
             case FramingMode.TrackHorizontally:
-                framingCamera.m_Lens.OrthographicSize = CalculateVerticalFrameSize();
-                dollyPath.m_Waypoints[0].position = new Vector3(-frameTrigger.size.x / 2f, 0, -10);
-                dollyPath.m_Waypoints[1].position = new Vector3(frameTrigger.size.x / 2f, 0, -10);
+                framingCamera.Lens.OrthographicSize = CalculateVerticalFrameSize();
+                SetKnotPositions(
+                    new Vector3(-frameTrigger.size.x / 2f, 0, -10),
+                    new Vector3(frameTrigger.size.x / 2f, 0, -10));
                 break;
             case FramingMode.TrackVertically:
-                framingCamera.m_Lens.OrthographicSize = CalculateHorizontalFrameSize();
-                dollyPath.m_Waypoints[0].position = new Vector3(0, -CalculateVerticalFrameSize(), -10);
-                dollyPath.m_Waypoints[1].position = new Vector3(0, CalculateVerticalFrameSize(), -10);
+                framingCamera.Lens.OrthographicSize = CalculateHorizontalFrameSize();
+                SetKnotPositions(
+                    new Vector3(0, -CalculateVerticalFrameSize(), -10),
+                    new Vector3(0, CalculateVerticalFrameSize(), -10));
                 break;
             default:
                 break;
         }
+    }
+
+    private void SetKnotPositions(Vector3 first, Vector3 second)
+    {
+        dollyPath.Spline.SetKnot(0, new BezierKnot((float3)first));
+        dollyPath.Spline.SetKnot(1, new BezierKnot((float3)second));
     }
 
 #if UNITY_EDITOR
