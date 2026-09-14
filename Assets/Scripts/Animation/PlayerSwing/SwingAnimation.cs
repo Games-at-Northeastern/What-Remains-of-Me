@@ -53,7 +53,8 @@ public class SwingAnimation : MonoBehaviour
         {
             if (!animatorHasControl)
             {
-                StopCoroutine(activeRoutine);
+                if (activeRoutine != null)
+                    StopCoroutine(activeRoutine);
                 GiveAnimatorControl();
             }
         }
