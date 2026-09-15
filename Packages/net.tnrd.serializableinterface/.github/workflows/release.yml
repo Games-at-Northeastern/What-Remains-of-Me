@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0        # full history needed by semantic-release
+          persist-credentials: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install dependencies
+        run: >
+          npm install -g --save false
+          semantic-release
+          @semantic-release/changelog
+          @semantic-release/commit-analyzer
+          @semantic-release/git
+          @semantic-release/github
+          @semantic-release/npm
+          @semantic-release/release-notes-generator
+          conventional-changelog-conventionalcommits
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_REGISTRY: 'https://npm.pkg.github.com/@Thundernerd'
+        run: npx semantic-release
