@@ -161,7 +161,7 @@ public class InkDialogueManager : MonoBehaviour
     public static InkDialogueManager GetInstance()
     {
         if (instance == null) {
-            instance = UnityEngine.Object.FindObjectOfType<InkDialogueManager>();
+            instance = new InkDialogueManager();
         }
 
         return instance;
