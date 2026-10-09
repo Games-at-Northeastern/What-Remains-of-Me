@@ -50,15 +50,31 @@ public class SpikeTeleport : MonoBehaviour
 
     public IEnumerator PerformDeath(GameObject target, Vector3 particleOffset)
     {
+        WarningController wc = target.GetComponentInChildren<WarningController>();
+        // The player has multiple colliders, so ignore repeat hits while already dead.
+        if (wc != null && wc.isDead)
+        {
+            yield break;
+        }
+
         objectToTeleport = target;
         Rigidbody2D targetRb = target.GetComponent<Rigidbody2D>();
         targetRb.isKinematic = true;
-        WarningController wc = target.GetComponentInChildren<WarningController>();
-        wc.isDead = true;
+        if (wc != null)
+        {
+            wc.isDead = true;
+        }
         targetRb.constraints = RigidbodyConstraints2D.FreezeAll;
-        deathParticles.gameObject.transform.position = objectToTeleport.transform.position + particleOffset;
-        deathParticles.Clear();
-        deathParticles.Play();
+        if (deathParticles != null)
+        {
+            deathParticles.gameObject.transform.position = objectToTeleport.transform.position + particleOffset;
+            deathParticles.Clear();
+            deathParticles.Play();
+        }
+        else
+        {
+            Debug.LogWarning($"{name}: SpikeTeleport has no Death Particles assigned.", this);
+        }
         objectToTeleport.GetComponentInChildren<SpriteRenderer>().enabled = false;
 
         objectToTeleport.GetComponentInChildren<PlayerController2D>().LockInputs();
@@ -75,13 +91,16 @@ public class SpikeTeleport : MonoBehaviour
         }
         
 
-        Invoke(nameof(TeleportPlayer), deathParticles.main.duration);
+        Invoke(nameof(TeleportPlayer), DeathDuration);
         if (resetScene)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         yield return StartCoroutine(UnFreezePlayer(targetRb));
     }
+
+    // Fallback delay so the player still respawns when no particles are assigned.
+    private float DeathDuration => deathParticles != null ? deathParticles.main.duration : 1f;
 
     private void TeleportPlayer()
     {
@@ -101,14 +120,17 @@ public class SpikeTeleport : MonoBehaviour
 
         objectToTeleport.SetActive(true);
         WarningController wc = objectToTeleport.GetComponentInChildren<WarningController>();
-        wc.isDead = false;
+        if (wc != null)
+        {
+            wc.isDead = false;
+        }
         LevelManager.PlayerReset();
         InkDialogueVariables.deathCount++;
     }
 
     IEnumerator UnFreezePlayer(Rigidbody2D targetRb)
     {
-        yield return new WaitForSeconds(deathParticles.main.duration);
+        yield return new WaitForSeconds(DeathDuration);
         targetRb.isKinematic = false;
         targetRb.constraints = RigidbodyConstraints2D.None;
         targetRb.constraints = RigidbodyConstraints2D.FreezeRotation;
