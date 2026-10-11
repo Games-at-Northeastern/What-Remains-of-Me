@@ -129,7 +129,7 @@ public class WireThrower : MonoBehaviour
     {
         if (_activePlug == null && ConnectedOutlet == null)
         {
-            Time.timeScale = 1;
+            //Time.timeScale = 1; DEPRECATED, was unpausing the game every frame when paused & not connected to outlet
             // if (_framesHeld < 0.1)
             //     if (_isLockOn) { FirePlugLockOn(); }
             //     else { FirePlugAutoAim(); }
@@ -167,7 +167,7 @@ public class WireThrower : MonoBehaviour
         if (_activePlug == null && ConnectedOutlet == null)
         {
             // Prepare to fire wire
-            Time.timeScale = 1;
+            //Time.timeScale = 1; DEPRECATED, was unpausing the game every frame when paused & not connected to outlet
             _framesHeld = 0;
         }
     }

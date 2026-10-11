@@ -34,12 +34,15 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
+        if (GameIsPaused && Time.timeScale != 0f)
+            Debug.LogWarning($"Paused but timeScale is {Time.timeScale} (frame {Time.frameCount})");
+
         if (!GameIsPaused && playerInput.currentActionMap.name != "Player")
         {
             playerInput.SwitchCurrentActionMap("Player");
         }
         else if (playerInput.currentActionMap.name != "UI" && GameIsPaused)
-        {
+        { 
             playerInput.SwitchCurrentActionMap("UI");
         }
     }
@@ -85,10 +88,10 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         pausePanel.SetActive(true);
-        Time.timeScale = 0f;
+        Time.timeScale = 0f; //BEING INFLUENCED BY SOMETHING ELSE, works when plugged in?
         GameIsPaused = true;
         ReactivateEscapeKey();
-        if (player != null)
+        if (player != null) //working normally
             player.LockInputs();
     }
 
@@ -108,7 +111,7 @@ public class PauseMenu : MonoBehaviour
         pausePanel.SetActive(false);
         settingsPanel.SetActive(false);
         confirmQuitMenu.SetActive(false);
-        Time.timeScale = 1f;
+        Time.timeScale = 1f; //Working normally
         GameIsPaused = false;
 
         if (player != null)
