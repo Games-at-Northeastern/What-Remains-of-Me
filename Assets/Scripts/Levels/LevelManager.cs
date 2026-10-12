@@ -95,6 +95,34 @@ public class LevelManager : MonoBehaviour
             checkpointHeld = true;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
+        // level switch hotkey
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            if (SceneManager.GetActiveScene().buildIndex > 0)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+            }
+            else
+            {
+                SceneManager.LoadScene(SceneManager.sceneCountInBuildSettings - 1);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            if (SceneManager.GetActiveScene().buildIndex < SceneManager.sceneCountInBuildSettings - 1)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+            else
+            {
+                SceneManager.LoadScene(0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     /// <summary>
