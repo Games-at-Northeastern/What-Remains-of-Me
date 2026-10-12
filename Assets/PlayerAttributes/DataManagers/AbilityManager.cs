@@ -12,25 +12,28 @@ public class AbilityManager : IManager
     // Update is called once per frame
     private void Update()
     {
-        foreach (Ability ability in copiedAbilities) {
+        foreach (Ability ability in copiedAbilities)
+        {
             ability.HandleInput();
         }
     }
 
     private void FixedUpdate()
     {
-        foreach (Ability ability in copiedAbilities) {
+        foreach (Ability ability in copiedAbilities)
+        {
             ability.UpdateStatus();
             ability.ExecuteAbility();
         }
     }
 
-    public void ApplyAbilities(PlayerManager playerManager, PlayerLoadout loadout)
+    public void ApplyAbilities(PlayerLoadout loadout)
     {
         copiedAbilities = new List<Ability>();
-        foreach (Ability ability in loadout.Abilities) {
+        foreach (Ability ability in loadout.Abilities)
+        {
             copiedAbilities.Add(Instantiate(ability));
-            copiedAbilities.Last().SetPlayerController(playerManager.PlayerController);
+            copiedAbilities.Last().SetPlayerController(PlayerRef.PlayerManager.PlayerController);
         }
     }
 

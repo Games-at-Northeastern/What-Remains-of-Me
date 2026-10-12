@@ -8,16 +8,17 @@ public class UpgradeManager : IManager
 
     private List<Upgrade> copiedUpgrades;
 
-    public PlayerSettings ApplyUpgrades(PlayerManager playerManager, PlayerLoadout loadout)
+    public PlayerSettings ApplyUpgrades(PlayerLoadout loadout)
     {
-        PlayerSettings pStats = Instantiate(playerManager.PlayerStats);
+        PlayerSettings pStats = Instantiate(PlayerRef.PlayerManager.PlayerStats);
         copiedUpgrades = new List<Upgrade>();
-        foreach (Upgrade upgrade in loadout.Upgrades) {
+        foreach (Upgrade upgrade in loadout.Upgrades)
+        {
             copiedUpgrades.Add(Instantiate(upgrade));
             copiedUpgrades.Last().ApplyUpgrade(pStats);
         }
 
-        playerManager.EnergyManager.SetMaxBatteryAndVirus(pStats);
+        PlayerRef.PlayerManager.EnergyManager.SetMaxBatteryAndVirus(pStats);
         return pStats;
     }
 

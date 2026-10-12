@@ -10,31 +10,37 @@ public class PlayerManager : MonoBehaviour
     private PlayerLoadout currentLoadout;
 
     // Getters and setters for the managers/stat-holding scriptable objects
-    public AbilityManager AbilityManager {
+    public AbilityManager AbilityManager
+    {
         get;
         private set;
     }
 
-    public UpgradeManager UpgradeManager {
+    public UpgradeManager UpgradeManager
+    {
         get;
         private set;
     }
 
-    public EnergyManager EnergyManager {
+    public EnergyManager EnergyManager
+    {
         get;
         private set;
     }
 
-    public PlayerSettings PlayerStats {
+    public PlayerSettings PlayerStats
+    {
         get;
         private set;
     }
 
-    public PlayerController2D PlayerController {
+    public PlayerController2D PlayerController
+    {
         get => playerController;
     }
 
-    public bool GodMode {
+    public bool GodMode
+    {
         get;
         private set;
     }
@@ -67,13 +73,16 @@ public class PlayerManager : MonoBehaviour
     // Helper function that checks if all required managers are being referenced
     private void CheckRequirements(Dictionary<string, IManager> managers)
     {
-        foreach (KeyValuePair<string, IManager> manager in managers) {
-            if (manager.Value == null) {
+        foreach (KeyValuePair<string, IManager> manager in managers)
+        {
+            if (manager.Value == null)
+            {
                 Debug.LogError($"PlayerManager doesn't have the {manager.Key} component in children");
             }
         }
     }
 
+    // Sets the loadout of the player (stats, abilities, energy) from the given PlayerLoadout
     private void SetLoadout(PlayerLoadout loadout)
     {
         Debug.Log(loadout.BasePlayerStats.maxRunSpeed);
@@ -87,22 +96,26 @@ public class PlayerManager : MonoBehaviour
     private void SetAbilitiesAndUpgrades(PlayerLoadout loadout)
     {
         // Applies all collected abilities to the player
-        AbilityManager.ApplyAbilities(this, loadout);
+        AbilityManager.ApplyAbilities(loadout);
 
         // Applies all collected upgrades to the player and sets the player's stats being used
-        PlayerStats = UpgradeManager.ApplyUpgrades(this, loadout);
+        PlayerStats = UpgradeManager.ApplyUpgrades(loadout);
 
-        playerController.SetPlayerStats(this);
+        // Sets the player stats
+        playerController.SetPlayerStats();
     }
 
     public void SetGodModeStats(GodModeButton button, bool godModeOn)
     {
-        if (godModeOn) {
+        if (godModeOn)
+        {
             currentLoadout = ScriptableObject.CreateInstance<PlayerLoadout>();
             currentLoadout.Init(Instantiate(PlayerStats), AbilityManager.GetAbilities(), UpgradeManager.GetUpgrades());
             SetLoadout(godModeLoadout);
             GodMode = true;
-        } else {
+        }
+        else
+        {
             SetLoadout(currentLoadout);
             GodMode = false;
         }

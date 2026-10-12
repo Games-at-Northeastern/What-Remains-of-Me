@@ -66,7 +66,7 @@ namespace PlayerController
         }
 
         public void SaveData(ref PlayerData playerData, ref LevelData levelData) => playerData.playerPosition = transform.position;
-        public void SetPlayerStats(PlayerManager playerManager) => stats_ = playerManager.PlayerStats;
+        public void SetPlayerStats() => stats_ = PlayerRef.PlayerManager.PlayerStats;
         #region Internal References
 
         private PlayerSettings stats_; // settings which define player movement
@@ -130,9 +130,12 @@ namespace PlayerController
 
         public void AddOrUpdateForce(GameObject ID, Vector2 force)
         {
-            if (externalVelocity.ContainsKey(ID)) {
+            if (externalVelocity.ContainsKey(ID))
+            {
                 externalVelocity[ID] = force;
-            } else {
+            }
+            else
+            {
                 Debug.Log("here");
                 externalVelocity.Add(ID, force);
             }
@@ -140,36 +143,44 @@ namespace PlayerController
 
         public void RemoveForce(GameObject ID) => externalVelocity.Remove(ID);
 
-        public bool OnMovingPlatform {
+        public bool OnMovingPlatform
+        {
             get;
             set;
         }
 
-        public Vector2 Velocity {
+        public Vector2 Velocity
+        {
             get => rb.linearVelocity;
         }
 
-        public Vector3 position {
+        public Vector3 position
+        {
             get => transform.position;
         }
 
-        public bool Grounded {
+        public bool Grounded
+        {
             get => TouchingGround();
         }
 
-        public Vector2 Direction {
+        public Vector2 Direction
+        {
             get => transform.forward;
         }
 
-        public Facing LeftOrRight {
+        public Facing LeftOrRight
+        {
             get => GetNewDirection();
         }
         private Facing GetNewDirection()
         {
-            if (inputs.GetMoveInput().x < 0) {
+            if (inputs.GetMoveInput().x < 0)
+            {
                 return Facing.left;
             }
-            if (inputs.GetMoveInput().x > 0) {
+            if (inputs.GetMoveInput().x > 0)
+            {
                 return Facing.right;
             }
             return currentDirection;
@@ -199,7 +210,8 @@ namespace PlayerController
         }
         private void OnValidate()
         {
-            if (stats_ == null) {
+            if (stats_ == null)
+            {
                 stats_ = editorPlayerData;
             }
             filter = new ContactFilter2D().NoFilter();
@@ -210,7 +222,8 @@ namespace PlayerController
             FlagUpdates();
             HandleSoundTriggers();
             SwitchState();
-            switch (currentState) {
+            switch (currentState)
+            {
                 case PlayerState.Grounded:
                     HandleGroundHorizontal();
                     HandleVerticalGrounded();
@@ -222,11 +235,14 @@ namespace PlayerController
                     JumpIfShould();
                     break;
                 case PlayerState.Swinging:
-                    if (JumpBuffered) {
+                    if (JumpBuffered)
+                    {
                         swing.CancelMove();
                         DeclareJumpInputUsed();
                         wire.DisconnectWire();
-                    } else {
+                    }
+                    else
+                    {
                         swing.UpdateInput(inputs.GetMoveInput().x);
                         swing.ContinueMove();
                     }
@@ -247,7 +263,8 @@ namespace PlayerController
         public void CombineCurrentVelocities()
         {
             rb.linearVelocity = internalVelocity;
-            foreach (GameObject key in externalVelocity.Keys) {
+            foreach (GameObject key in externalVelocity.Keys)
+            {
                 rb.linearVelocity += externalVelocity[key];
             }
 
@@ -256,7 +273,8 @@ namespace PlayerController
         public Vector2 ExternalVelocity()
         {
             Vector2 returnVec = Vector2.zero;
-            foreach (GameObject key in externalVelocity.Keys) {
+            foreach (GameObject key in externalVelocity.Keys)
+            {
                 returnVec += externalVelocity[key];
             }
             return returnVec;
@@ -278,14 +296,17 @@ namespace PlayerController
         private void SwitchState()
         {
             PlayerState newState = GetNewState();
-            if (newState == currentState) {
+            if (newState == currentState)
+            {
                 return;
             }
-            if (currentState == PlayerState.Swinging) {
+            if (currentState == PlayerState.Swinging)
+            {
                 swing.CancelMove();
             }
             currentState = newState;
-            switch (currentState) {
+            switch (currentState)
+            {
                 case PlayerState.Grounded:
                     groundMovement.StartMove();
                     break;
@@ -308,10 +329,12 @@ namespace PlayerController
         /// <returns></returns>
         private PlayerState GetNewState()
         {
-            if (grounded) {
+            if (grounded)
+            {
                 return PlayerState.Grounded;
             }
-            if (wire.IsConnected() && jumpCanceled) {
+            if (wire.IsConnected() && jumpCanceled)
+            {
                 return PlayerState.Swinging;
             }
             return PlayerState.Aerial;
@@ -335,19 +358,23 @@ namespace PlayerController
             {
                 timeSinceLanded = 0;
                 fLanded = true;
-            } else if (lastGroundedState && !grounded) // Left the ground
+            }
+            else if (lastGroundedState && !grounded) // Left the ground
             {
                 fLeftGround = true;
                 timeSinceLeftGround = 0;
                 timeSincePeakJump = 0;
-            } else if (!grounded) // Remained non grounded
+            }
+            else if (!grounded) // Remained non grounded
             {
                 timeSinceLeftGround += Time.fixedDeltaTime;
 
-                if (rb.linearVelocity.y < 0) {
+                if (rb.linearVelocity.y < 0)
+                {
                     timeSincePeakJump += Time.fixedDeltaTime;
                 }
-            } else // Remained grounded
+            }
+            else // Remained grounded
             {
                 timeSinceLanded += Time.fixedDeltaTime;
             }
@@ -356,7 +383,8 @@ namespace PlayerController
             Facing lastDirection = currentDirection;
             currentDirection = GetNewDirection();
 
-            if (lastDirection != currentDirection) {
+            if (lastDirection != currentDirection)
+            {
                 fSwitchedDirection = true;
             }
         }
@@ -377,7 +405,8 @@ namespace PlayerController
         /// </summary>
         private void HandleSoundTriggers()
         {
-            if (fLanded) {
+            if (fLanded)
+            {
                 PlayLandingNoise();
             }
         }
@@ -403,10 +432,12 @@ namespace PlayerController
         /// </summary>
         private void IfTouchingWallThenStopMomentum()
         {
-            if (TouchingLeftWall() && internalVelocity.x < 0) {
+            if (TouchingLeftWall() && internalVelocity.x < 0)
+            {
                 internalVelocity.x = 0;
             }
-            if (TouchingRightWall() && internalVelocity.x > 0) {
+            if (TouchingRightWall() && internalVelocity.x > 0)
+            {
                 internalVelocity.x = 0;
             }
         }
@@ -437,15 +468,18 @@ namespace PlayerController
         /// </summary>
         protected virtual void HandleVerticalAerial()
         {
-            if (TouchingCeiling()) {
+            if (TouchingCeiling())
+            {
                 InternalVelocity = new Vector2(InternalVelocity.x, 0);
                 CancelJump();
             }
             if (!inputs.IsJumpHeld() && !jumpCanceled || !jumpCanceled
-                && jump.IsMoveComplete()) {
+                && jump.IsMoveComplete())
+            {
                 CancelJump();
             }
-            if (!jump.IsMoveComplete()) {
+            if (!jump.IsMoveComplete())
+            {
                 jump.ContinueMove();
             }
 
@@ -464,11 +498,13 @@ namespace PlayerController
         private bool jumpCanceled = true;
 
         // if a jump is buffered to be initiated
-        private bool JumpBuffered {
+        private bool JumpBuffered
+        {
             get => inputs.TimeSinceJumpWasPressed < stats_.jumpBuffer && !ThisJumpInputWasUsed;
         }
         // if the most recent jump input has triggered a jump
-        private bool ThisJumpInputWasUsed {
+        private bool ThisJumpInputWasUsed
+        {
             get => timeSinceJumpWasTriggered <= inputs.TimeSinceJumpWasPressed;
         }
         protected virtual bool ShouldTriggerJump() => CanCoyoteJump() || CanGroundedJump();
@@ -479,7 +515,8 @@ namespace PlayerController
 
         protected virtual void PlayLandingNoise()
         {
-            if (timeSincePeakJump > 0) {
+            if (timeSincePeakJump > 0)
+            {
                 playerSFX.JumpLand(Math.Min(2f, timeSincePeakJump / stats_.landingVolumeTime));
             }
         }
@@ -488,13 +525,16 @@ namespace PlayerController
 
         protected virtual void JumpIfShould()
         {
-            if (isLocked) {
+            if (isLocked)
+            {
                 return; // prevents jumping while paused
             }
-            if (fLanded && !jumpCanceled) {
+            if (fLanded && !jumpCanceled)
+            {
                 CancelJump();
             }
-            if (ShouldTriggerJump()) {
+            if (ShouldTriggerJump())
+            {
                 TriggerJump();
             }
         }
@@ -578,8 +618,10 @@ namespace PlayerController
         /// <returns></returns>
         private static bool HitSolidObject(List<RaycastHit2D> hits)
         {
-            foreach (RaycastHit2D hit in hits) {
-                if (!hit.collider.isTrigger) {
+            foreach (RaycastHit2D hit in hits)
+            {
+                if (!hit.collider.isTrigger)
+                {
                     return true;
                 }
             }
@@ -589,7 +631,8 @@ namespace PlayerController
         private void OnCollisionEnter2D(Collision2D collision)
         {
             //calls the player to do what they need to take damage
-            if (collision.gameObject.layer.Equals("Damages")) {
+            if (collision.gameObject.layer.Equals("Damages"))
+            {
                 OnHurt();
             }
         }
@@ -645,14 +688,17 @@ namespace PlayerController
         // Calculates and returns Atlas's current animation state
         public AnimationType GetAnimationState()
         {
-            switch (currentState) {
+            switch (currentState)
+            {
                 case PlayerState.Grounded:
-                    if (internalVelocity.x != 0) {
+                    if (internalVelocity.x != 0)
+                    {
                         return AnimationType.RUN;
                     }
                     return AnimationType.IDLE;
                 case PlayerState.Aerial:
-                    if (internalVelocity.y > 0) {
+                    if (internalVelocity.y > 0)
+                    {
                         return AnimationType.JUMP_RISING;
                     }
                     return AnimationType.JUMP_FALLING;
