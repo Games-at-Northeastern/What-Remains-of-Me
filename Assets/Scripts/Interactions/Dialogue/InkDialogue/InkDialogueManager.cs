@@ -691,5 +691,5 @@ public class InkDialogueManager : MonoBehaviour
 
 
     private void RemoveSkipText() => skipTextRight.text = "";
-    private void AddSkipText() => skipTextRight.text = "Press 'RB' or 'F'";
+    private void AddSkipText() => skipTextRight.text = "Press 'RB' or 'F' ";
 }
