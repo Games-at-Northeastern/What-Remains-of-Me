@@ -1,11 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-
 /// <summary>
-/// Keeps track of, and handles changes in, the player's health (battery).
+///     Keeps track of, and handles changes in, the player's health (battery).
 /// </summary>
 public class PlayerHealth : MonoBehaviour, IDataPersistence
 {
@@ -13,7 +11,8 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
-    bool iframes;
+    private EnergyManager energyManager;
+    private bool iframes;
 
     /*
      * sets the PlayerHealth component to object and gets the
@@ -23,10 +22,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      *
      */
 
-    private void Start()
-    {
-        playerInfo.ResetMaxBattery();
-    }
+    private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
 
     private void Update()
     {
@@ -35,32 +31,24 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
         // to not directly reference the PlayerInfo
 
         // check if player has depleted all health (with some float forgiveness)
-        if (playerInfo.battery <= 0.01)
-        {
+        if (energyManager.Battery <= 0.01) {
             EnergyDepletedDeath();
         }
         // check if player has reached minimum health (the player cannot drain any more health)
-        else if (playerInfo.battery <= 1f)
-        {
+        else if (energyManager.Battery <= 1f) {
             EnergyDepletionWarning();
-        }
-        else
-        {
+        } else {
             warning.GetComponent<WarningController>().StopLowHealthWarning();
         }
 
         // check if the player has reached 100% virus (with some float forgiveness)
-        if (playerInfo.virus >= playerInfo.maxVirus - 0.01)
-        {
+        if (energyManager.Virus >= energyManager.MaxVirus - 0.01) {
             VirusFullDeath();
         }
         // check if the player has any virus
-        else if (playerInfo.virus >= 0.01)
-        {
+        else if (energyManager.Virus >= 0.01) {
             VirusWarning();
-        }
-        else
-        {
+        } else {
             warning.GetComponent<WarningController>().StopLightBlinking();
             warning.GetComponent<WarningController>().ResetVirus();
         }
@@ -68,19 +56,36 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
 
     }
 
+    public void LoadPlayerData(PlayerData playerData)
+    {
+        energyManager.Battery = playerData.batteryPercentage * energyManager.MaxBattery;
+        energyManager.Virus = playerData.virusPercentage * energyManager.MaxVirus;
+    }
+    public void LoadLevelData(LevelData levelData)
+    {
+        //No level data to load for Player Health
+    }
+    public void SaveData(ref PlayerData playerData, ref LevelData levelData)
+    {
+        playerData.batteryPercentage = energyManager.BatteryPercentage;
+        playerData.virusPercentage = energyManager.VirusPercentage;
+
+    }
+
     // TODO : Should there be some kind of scene resetting that is triggered by this? I.e. platforms, enemies, etc.?
 
     /// <summary>
-    /// Represents any necessary steps to handle the player death when they hold their max Virus amount.
+    ///     Represents any necessary steps to handle the player death when they hold their max Virus amount.
     /// </summary>
     private void VirusFullDeath()
     {
         Debug.Log("Death from virus full");
+        energyManager.Virus = 0f;
         LevelManager.PlayerDeath();
     }
 
     /// <summary>
-    /// Represents any necessary steps to handle the player death when their battery level reaches 0 from depletion.
+    ///     Represents any necessary steps to handle the player death when their battery level reaches 0 from depletion.
     /// </summary>
     private void EnergyDepletedDeath()
     {
@@ -89,44 +94,35 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     }
 
     /// <summary>
-    /// Represents any necessary steps to handle the player death when their battery level reaches 0 from taking damage.
+    ///     Represents any necessary steps to handle the player death when their battery level reaches 0 from taking damage.
     /// </summary>
-    private void EnergyDamageDeath()
-    {
-        Debug.Log("Death from energy empty upon damage");
-
-    }
+    private void EnergyDamageDeath() => Debug.Log("Death from energy empty upon damage");
 
 
     // Methods for to triggering audiovisual warnings for when the player is about to die
 
     /// <summary>
-    /// Triggers the virus warning (blinking headlight) at high virus percentages.
-    /// Additionally, updates eye and light color to match virus percentage.
+    ///     Triggers the virus warning (blinking headlight) at high virus percentages.
+    ///     Additionally, updates eye and light color to match virus percentage.
     /// </summary>
     private void VirusWarning()
     {
-        warning.GetComponent<WarningController>().VirusControl(playerInfo.virus / playerInfo.maxVirus);
-        if (playerInfo.virus >= playerInfo.maxVirus * 0.8f)
-        {
+        warning.GetComponent<WarningController>().VirusControl(energyManager.Virus / energyManager.MaxVirus);
+        if (energyManager.Virus >= energyManager.MaxVirus * 0.8f) {
             Debug.Log("Virus Overload Warning");
             warning.GetComponent<WarningController>().StartLightBlinking();
-        }
-        else
-        {
+        } else {
             warning.GetComponent<WarningController>().StopLightBlinking();
         }
     }
 
 
     /// <summary>
-    /// Triggers warnings for reaching minimum energy
+    ///     Triggers warnings for reaching minimum energy
     /// </summary>
-    private void EnergyDepletionWarning()
-    {
-       // Debug.Log("Energy Depletion Warning");
+    private void EnergyDepletionWarning() =>
+        // Debug.Log("Energy Depletion Warning");
         warning.GetComponent<WarningController>().StartLowHealthWarning();
-    }
 
 
     // -------------- Are these being used? Don't think so --------------
@@ -139,9 +135,8 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      */
     public void LoseEnergy(float amount)
     {
-        playerInfo.battery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0f)
-        {
+        energyManager.Battery -= amount;
+        if (energyManager.BatteryPercentage <= 0f) {
             Die();
         }
         OnHealthChanged.Invoke();
@@ -156,11 +151,11 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      * @param amount        amount of energy to add to the battery
      */
 
-     public void GainEnergy(float amount)
-     {
-         playerInfo.battery += amount;
-         OnHealthChanged.Invoke();
-     }
+    public void GainEnergy(float amount)
+    {
+        energyManager.Battery += amount;
+        OnHealthChanged.Invoke();
+    }
 
     /*
      * adds the given amount to the virus meter and decreases current battery
@@ -172,40 +167,34 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      */
     public void AddVirus(float amount)
     {
-        playerInfo.virus += amount;
-        playerInfo.maxBattery -= amount;
-        if (playerInfo.batteryPercentage.Value <= 0f || playerInfo.virusPercentage.Value >= 0.99f)
-        {
+        energyManager.Virus += amount;
+        // playerInfo.maxBattery -= amount;
+        if (energyManager.BatteryPercentage <= 0f || energyManager.VirusPercentage >= 0.99f) {
             Die();
         }
     }
 
-    public void SubtractVirus(float amount) {
-        playerInfo.virus -= amount;
-        playerInfo.maxBattery += amount;
-    }
-
+    public void SubtractVirus(float amount) => energyManager.Virus -= -amount;
+    // playerInfo.maxBattery += amount;
     /*
      * Gives the battery amount the player has, from 0 to 1.
      */
-    public float GetRelativeBattery() => playerInfo.batteryPercentage.Value;
+    public float GetRelativeBattery() => energyManager.BatteryPercentage;
 
     /*
      * Can the player transfer amount of energy to other things?
      *
      * @param amount     the amount of energy being given
      */
-    public bool CanGiveEnergy(float amount) => playerInfo.battery >= amount;
+    public bool CanGiveEnergy(float amount) => energyManager.Battery >= amount;
 
     /*
      * Can the player take amount of energy from other things?
      *
      * @param amount    the amount of energy being taken
      */
-    public bool CanTakeEnergy(float amount)
-    {
-        return (playerInfo.battery + playerInfo.virus) <= playerInfo.maxBattery - amount;
-    }
+    public bool CanTakeEnergy(float amount) => energyManager.Battery + energyManager.Virus <=
+        energyManager.MaxBattery - amount;
 
     /*
      * Damages the player if there are no Iframes.
@@ -214,8 +203,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      */
     public void RequestTakeDamage(float amount)
     {
-        if (!iframes)
-        {
+        if (!iframes) {
             TakeDamage(amount);
         }
     }
@@ -236,7 +224,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      * changing the boolean flag.
      *
      */
-    IEnumerator IFrameSequence()
+    private IEnumerator IFrameSequence()
     {
         iframes = true;
         yield return new WaitForSeconds(playerInfo.iframesTime);
@@ -246,26 +234,9 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     /*
      * reloads the current scene using the Unity Scene Manager
      */
-    void Die()
+    private void Die()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         InkDialogueVariables.deathCount++;
-    }
-
-    public void LoadPlayerData(PlayerData playerData)
-    {
-        playerInfo.batteryPercentage.Value = playerData.batteryPercentage;
-        playerInfo.virusPercentage.Value = playerData.virusPercentage;
-
-    }
-    public void LoadLevelData(LevelData levelData)
-    {
-        //No level data to load for Player Health
-    }
-    public void SaveData(ref PlayerData playerData, ref LevelData levelData)
-    {
-        playerData.batteryPercentage = playerInfo.batteryPercentage.Value;
-        playerData.virusPercentage = playerInfo.virusPercentage.Value;
-
     }
 }

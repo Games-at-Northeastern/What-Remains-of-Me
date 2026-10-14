@@ -1,28 +1,54 @@
+using System.Collections;
+using System.Threading.Tasks;
 using PlayerController;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using TMPro;
-
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 /// <summary>
-/// This class provides the functionalities needed for the pause menu.
+///     This class provides the functionalities needed for the pause menu.
 /// </summary>
-
 public class PauseMenu : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
+    public static bool GameIsPaused;
     public GameObject pausePanel;
     public GameObject settingsPanel;
     public GameObject confirmQuitMenu;
 
     [SerializeField] private TMP_Text mouseToggleText;
     private bool isMouseEnabled = true;
-
     private PlayerController2D player;
 
+    private PlayerInput playerInput;
+    bool canPauseOrUnpause = true;
+
+    private void Start()
+    {
+        pausePanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        confirmQuitMenu.SetActive(false);
+        player = FindAnyObjectByType<PlayerController2D>();
+        playerInput = player.gameObject.GetComponent<PlayerInput>();
+    }
+
+    private void Update()
+    {
+        if (GameIsPaused && Time.timeScale != 0f)
+            Debug.LogWarning($"Paused but timeScale is {Time.timeScale} (frame {Time.frameCount})");
+
+        if (!GameIsPaused && playerInput.currentActionMap.name != "Player")
+        {
+            playerInput.SwitchCurrentActionMap("Player");
+        }
+        else if (playerInput.currentActionMap.name != "UI" && GameIsPaused)
+        { 
+            playerInput.SwitchCurrentActionMap("UI");
+        }
+    }
+
     /// <summary>
-    /// Pauses the game if the "P" key is pressed.
+    ///     Pauses the game if the "P" key is pressed.
     /// </summary>
     private void OnValidate()
     {
@@ -31,58 +57,61 @@ public class PauseMenu : MonoBehaviour
             Debug.LogWarning("pause menu won't work without an Event System and.or UI input module");
         }
     }
-    
-    private void Start()
-    {
-        pausePanel.SetActive(false);
-        settingsPanel.SetActive(false);
-        confirmQuitMenu.SetActive(false);
-        player = FindAnyObjectByType<PlayerController2D>();
-    }
 
-    void Update()
+    public void HandleGamePause()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (!canPauseOrUnpause)
+            return;
+
+        if (!GameIsPaused)
         {
-            if (!GameIsPaused)
+            Pause();
+            Debug.Log("Game paused");
+        }
+        else
+        {
+            if (settingsPanel.activeInHierarchy)
             {
-                Pause();
+                ExitSettingsMenu();
             }
             else
             {
-                if (settingsPanel.activeInHierarchy)
-                {
-                    ExitSettingsMenu();
-                }
-                else
-                {
-                    Resume();
-                }
+                Resume();
             }
+            Debug.Log("Unpaused");
         }
     }
 
     /// <summary>
-    /// Pauses the game by opening the pause menu and stopping the game time.
+    ///     Pauses the game by opening the pause menu and stopping the game time.
     /// </summary>
     public void Pause()
     {
         pausePanel.SetActive(true);
-        Time.timeScale = 0f;
+        Time.timeScale = 0f; //BEING INFLUENCED BY SOMETHING ELSE, works when plugged in?
         GameIsPaused = true;
-        if (player != null)
+        ReactivateEscapeKey();
+        if (player != null) //working normally
             player.LockInputs();
     }
 
+    async void ReactivateEscapeKey()
+    {
+        canPauseOrUnpause = false;
+        await Task.Delay(500);
+        canPauseOrUnpause = true;
+    }
+
     /// <summary>
-    /// Resumes the game by closing the pause menu and starting the game time.
+    ///     Resumes the game by closing the pause menu and starting the game time.
     /// </summary>
     public void Resume()
     {
+        ReactivateEscapeKey();
         pausePanel.SetActive(false);
         settingsPanel.SetActive(false);
         confirmQuitMenu.SetActive(false);
-        Time.timeScale = 1f;
+        Time.timeScale = 1f; //Working normally
         GameIsPaused = false;
 
         if (player != null)
@@ -91,7 +120,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Closes the pause menu and goes to the main menu screen.
+    ///     Closes the pause menu and goes to the main menu screen.
     /// </summary>
     public void MainMenu()
     {
@@ -100,14 +129,11 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Opens the quit confirmation menu
+    ///     Opens the quit confirmation menu
     /// </summary>
-    public void ConfirmQuit()
-    {
-        confirmQuitMenu.SetActive(true);
-    }
+    public void ConfirmQuit() => confirmQuitMenu.SetActive(true);
     /// <summary>
-    /// restarts the level
+    ///     restarts the level
     /// </summary>
     public void RestartLevel()
     {
@@ -116,7 +142,7 @@ public class PauseMenu : MonoBehaviour
 
     }
     /// <summary>
-    /// Opens up the settings menu where a variety of settings could be adjusted.
+    ///     Opens up the settings menu where a variety of settings could be adjusted.
     /// </summary>
     public void SettingsMenu()
     {
@@ -125,7 +151,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Closes the settings panel, reopens the pause panel.
+    ///     Closes the settings panel, reopens the pause panel.
     /// </summary>
     public void ExitSettingsMenu()
     {
@@ -134,7 +160,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Quits the game and logs the action.
+    ///     Quits the game and logs the action.
     /// </summary>
     public void QuitGame()
     {
@@ -143,7 +169,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Switch the states of toggle mouse(on/off).
+    ///     Switch the states of toggle mouse(on/off).
     /// </summary>
     public void ToggleMouse()
     {

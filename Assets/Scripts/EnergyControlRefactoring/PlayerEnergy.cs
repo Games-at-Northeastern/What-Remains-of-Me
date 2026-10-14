@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,18 +6,14 @@ using UnityEngine.Events;
 // This could also be done in the scriptable object though with, you guessed it, events and listeners...
 public class PlayerEnergy : EnergyControl
 {
-    public PlayerInfo playerInfo;
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDamageTaken;
+    private EnergyManager energyManager;
 
-    private void Start()
-    {
-        playerInfo.ResetMaxBattery();
-    }
-
+    private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
 
     /// <summary>
-    /// Represents any necessary steps to handle the player death when they hold their max Virus amount.
+    ///     Represents any necessary steps to handle the player death when they hold their max Virus amount.
     /// </summary>
     private void VirusFullDeath()
     {
@@ -28,7 +22,7 @@ public class PlayerEnergy : EnergyControl
     }
 
     /// <summary>
-    /// Represents any necessary steps to handle the player death when their battery level reaches 0 from depletion.
+    ///     Represents any necessary steps to handle the player death when their battery level reaches 0 from depletion.
     /// </summary>
     private void EnergyDepletedDeath()
     {
@@ -39,12 +33,9 @@ public class PlayerEnergy : EnergyControl
     private void updatePlayerInfo()
     {
 
-        if (playerInfo.virus >= playerInfo.maxVirus - 0.01)
-        {
+        if (energyManager.Virus >= energyManager.MaxVirus - 0.01) {
             VirusFullDeath();
-        }
-        else if (playerInfo.battery <= 0.01)
-        {
+        } else if (energyManager.Battery <= 0.01) {
             EnergyDepletedDeath();
         }
     }

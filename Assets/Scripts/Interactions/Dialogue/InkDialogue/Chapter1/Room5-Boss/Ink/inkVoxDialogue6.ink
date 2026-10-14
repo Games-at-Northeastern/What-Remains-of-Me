@@ -1,3 +1,4 @@
-You are not ready for the world outisde. 
-Not that you will ever see it. 
+I don't dislike you, Atlas...
+But I can't let you leave.
+This is where you meet your end.
     -> END

@@ -2,5 +2,6 @@ INCLUDE  ../../../InkDialogue/InkAndJSONFiles/globas.ink
 -> main
 
 ===main===
-You won't escape. #layout:left #portrait:default #speaker:Vox
+It's almost impressive, really.
+All that effort... for a door. #layout:left #portrait:default #speaker:Vox
 -> DONE

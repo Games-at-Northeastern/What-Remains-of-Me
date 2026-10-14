@@ -1,10 +1,10 @@
+using System;
+using System.Collections.Generic;
+using CharacterController;
+using More2DGizmos;
+using UnityEngine;
 namespace PlayerController
 {
-    using System.Collections.Generic;
-    using UnityEngine;
-    using CharacterController;
-    using More2DGizmos;
-    using System;
     /* Script use notes:
      *
      * - the only direct change to rb.velocity should take place once at then end of a FixedUpdate()
@@ -26,23 +26,50 @@ namespace PlayerController
      */
     public class PlayerController2D : MonoBehaviour, CharacterController2D, IDataPersistence
     {
-        // Issue: public fields should not exist, and should instead be accessed using an External Getter
-        private Dictionary<GameObject, Vector2> externalVelocity = new(); // Vector which external objects (moving platforms, for the most part), modify to change the player's velocity
-        [SerializeField] private Vector2 internalVelocity = Vector2.zero; // velocity controlled by actions and inputs native to the player (Basic Ground Movement, Jumping, Swinging, Sliding, etc.)
-        [Header("General")]
-        [SerializeField] private PlayerState startState = PlayerState.Aerial; // initial player movement state
         public enum PlayerState
         {
             Grounded,
             Aerial,
             Swinging,
-            OnWall, // On Wall state is currently never reached
+            OnWall // On Wall state is currently never reached
         }
-        private PlayerState currentState; // Sl,ktores player controller state
-        private bool isLocked = false; // when locked, movement input has no effect
+        [SerializeField] private PlayerSettings editorPlayerData;
+        [SerializeField] private Vector2 internalVelocity = Vector2.zero; // velocity controlled by actions and inputs native to the player (Basic Ground Movement, Jumping, Swinging, Sliding, etc.)
+        [Header("General")]
+        [SerializeField] private PlayerState startState = PlayerState.Aerial; // initial player movement state
+        public PlayerState currentState; // Stores player controller state
+        // Issue: public fields should not exist, and should instead be accessed using an External Getter
+        private readonly Dictionary<GameObject, Vector2> externalVelocity = new Dictionary<GameObject, Vector2>(); // Vector which external objects (moving platforms, for the most part), modify to change the player's velocity
+        private bool isLocked; // when locked, movement input has no effect
+
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Vector2 origin = Kinematics.CapsuleColliderCenter(col);
+            GizmosPlus.BoxCast(origin + new Vector2(stats_.rightOffset, 0), new Vector2(0.01f, stats_.sideBounds.y), 0, Vector2.right, stats_.sideBounds.x - 0.01f, ~stats_.IgnoreLayers);
+            GizmosPlus.BoxCast(origin + new Vector2(-stats_.leftOffset, 0), new Vector2(0.01f, stats_.sideBounds.y), 0, Vector2.left, stats_.sideBounds.x - 0.01f, ~stats_.IgnoreLayers);
+            GizmosPlus.BoxCast(origin + new Vector2(0, stats_.ceilingOffset), new Vector2(stats_.ceilingBounds.x, 0.01f), 0, Vector2.up, stats_.ceilingBounds.y - 0.01f, ~stats_.IgnoreLayers);
+            GizmosPlus.BoxCast(origin + new Vector2(0, -stats_.groundOffset), new Vector2(stats_.groundBounds.x, 0.01f), 0, Vector2.down, 0.05f, ~stats_.IgnoreLayers);
+        }
+
+#endif
+        public void LoadPlayerData(PlayerData playerData)
+        {
+            internalVelocity = Vector2.zero;
+            transform.position = playerData.playerPosition;
+
+        }
+        public void LoadLevelData(LevelData levelData)
+        {
+            //No level data to load for Player Controller
+        }
+
+        public void SaveData(ref PlayerData playerData, ref LevelData levelData) => playerData.playerPosition = transform.position;
+        public void SetPlayerStats() => stats_ = PlayerRef.PlayerManager.PlayerStats;
         #region Internal References
 
-        [SerializeField] public PlayerSettings stats_; // settings which define player movement
+        private PlayerSettings stats_; // settings which define player movement
         [SerializeField] private WireThrower wire; // Handles wire and wire physics
 
         private Rigidbody2D rb; // final value of rb.velocity after each FixedUpdate is ExternalVelocity + _speed
@@ -66,6 +93,7 @@ namespace PlayerController
                                                              * It is PlayerController2d's (this file's) responsiblity to lock and unlock the PlayerInputHandler */
 
         #region flags
+
         // flags: true or false values defining events which took place during the physics update between the the former and the current fixedUpdate
         private bool fLanded;
         private bool fLeftGround;
@@ -73,12 +101,12 @@ namespace PlayerController
 
         // flag helpers; useful for determining the value of flags, but can also be used independently throughout the PlayerController
         private float timeSinceLeftGround = Mathf.Infinity;
-        private float timeSincePeakJump = 0;
+        private float timeSincePeakJump;
         private float timeSinceLanded = Mathf.Infinity;
-        private bool grounded = false;
-        private bool onMovingPlatform = false;
+        private bool grounded;
 
         public Facing currentDirection;
+
         #endregion
 
         public void SetupMoves() // loads stats and this character instance into IMove instances
@@ -92,17 +120,19 @@ namespace PlayerController
             wallJump = new WallJump(this, stats_.risingGravity, stats_.WallJumpDistance, stats_.takeControlAwayTime);
             wallSlide = new WallSlide(stats_.wallSlideGravity, stats_.maxWallSlideSpeed, this);
         }
+
         #endregion
 
         #region External Getters
+
         public Vector2 InternalVelocity { get => internalVelocity; set => internalVelocity = value; }
 
 
-        public void AddOrUpdateForce(GameObject ID, Vector2 force) 
+        public void AddOrUpdateForce(GameObject ID, Vector2 force)
         {
             if (externalVelocity.ContainsKey(ID))
             {
-                externalVelocity[ID] = force;   
+                externalVelocity[ID] = force;
             }
             else
             {
@@ -111,43 +141,59 @@ namespace PlayerController
             }
         }
 
-        public void RemoveForce(GameObject ID) 
+        public void RemoveForce(GameObject ID) => externalVelocity.Remove(ID);
+
+        public bool OnMovingPlatform
         {
-            externalVelocity.Remove(ID);
+            get;
+            set;
         }
 
-        public bool OnMovingPlatform { get => onMovingPlatform; set => onMovingPlatform = value; }
+        public Vector2 Velocity
+        {
+            get => rb.linearVelocity;
+        }
 
-        public Vector2 Velocity => rb.linearVelocity;
+        public Vector3 position
+        {
+            get => transform.position;
+        }
 
-        public Vector3 position => transform.position;
+        public bool Grounded
+        {
+            get => TouchingGround();
+        }
 
-        public bool Grounded => TouchingGround();
+        public Vector2 Direction
+        {
+            get => transform.forward;
+        }
 
-        public Vector2 Direction => transform.forward;
-
-        public Facing LeftOrRight => GetNewDirection();
+        public Facing LeftOrRight
+        {
+            get => GetNewDirection();
+        }
         private Facing GetNewDirection()
         {
             if (inputs.GetMoveInput().x < 0)
             {
                 return Facing.left;
             }
-            else if (inputs.GetMoveInput().x > 0)
+            if (inputs.GetMoveInput().x > 0)
             {
                 return Facing.right;
             }
-            else
-            {
-                return currentDirection;
-            }
+            return currentDirection;
         }
+
         #endregion
 
 
         #region ControllerCore
+
         private void Start()
         {
+            stats_ = PlayerRef.PlayerManager.PlayerStats;
             SetupMoves();
             rb = GetComponent<Rigidbody2D>();
             col = GetComponent<CapsuleCollider2D>();
@@ -164,6 +210,10 @@ namespace PlayerController
         }
         private void OnValidate()
         {
+            if (stats_ == null)
+            {
+                stats_ = editorPlayerData;
+            }
             filter = new ContactFilter2D().NoFilter();
             filter.SetLayerMask(~stats_.IgnoreLayers);
         }
@@ -205,8 +255,10 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Handles the combination of internal and externalVelocity to ensure all moving elements have made their adjustments to external velocity before rb's velocity is calculated.
-        /// EX: If a moving platform has a high enough acceleration and this is not done, there may be a large enough gap in speed where the player is forced into the air.
+        ///     Handles the combination of internal and externalVelocity to ensure all moving elements have made their adjustments
+        ///     to external velocity before rb's velocity is calculated.
+        ///     EX: If a moving platform has a high enough acceleration and this is not done, there may be a large enough gap in
+        ///     speed where the player is forced into the air.
         /// </summary>
         public void CombineCurrentVelocities()
         {
@@ -229,7 +281,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Used to slow down the player's ExternalVelocity once they are no longer affected by an external object
+        ///     Used to slow down the player's ExternalVelocity once they are no longer affected by an external object
         /// </summary>
         private void HandleExternalVelocityDecay()
         {
@@ -238,8 +290,8 @@ namespace PlayerController
         #region StateTransition
 
         /// <summary>
-        /// Switches the current player state to the new state.
-        /// if state switches performs startMove methods.
+        ///     Switches the current player state to the new state.
+        ///     if state switches performs startMove methods.
         /// </summary>
         private void SwitchState()
         {
@@ -248,14 +300,11 @@ namespace PlayerController
             {
                 return;
             }
-            else
+            if (currentState == PlayerState.Swinging)
             {
-                if (currentState == PlayerState.Swinging)
-                {
-                    swing.CancelMove();
-                }
-                currentState = newState;
+                swing.CancelMove();
             }
+            currentState = newState;
             switch (currentState)
             {
                 case PlayerState.Grounded:
@@ -271,13 +320,11 @@ namespace PlayerController
                     swing.UpdateInput(inputs.GetMoveInput().x);
                     swing.StartMove();
                     break;
-                default:
-                    break;
             }
         }
 
         /// <summary>
-        /// Returns the state the player should switch to
+        ///     Returns the state the player should switch to
         /// </summary>
         /// <returns></returns>
         private PlayerState GetNewState()
@@ -286,22 +333,17 @@ namespace PlayerController
             {
                 return PlayerState.Grounded;
             }
-            else
+            if (wire.IsConnected() && jumpCanceled)
             {
-                if (wire.IsConnected() && jumpCanceled)
-                {
-                    return PlayerState.Swinging;
-                }
-                else
-                {
-                    return PlayerState.Aerial;
-                }
+                return PlayerState.Swinging;
             }
+            return PlayerState.Aerial;
         }
+
         #endregion
 
         /// <summary>
-        /// Updates the flags and flag helpers based on changes during the physics update after the previous FixedUpdate
+        ///     Updates the flags and flag helpers based on changes during the physics update after the previous FixedUpdate
         /// </summary>
         /// <returns></returns>
         protected virtual void FlagUpdates()
@@ -348,7 +390,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Resets event flags to their default state (false)
+        ///     Resets event flags to their default state (false)
         /// </summary>
         /// <returns></returns>
         protected virtual void ResetFlags()
@@ -359,7 +401,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Handles sounds caused by flags
+        ///     Handles sounds caused by flags
         /// </summary>
         private void HandleSoundTriggers()
         {
@@ -374,7 +416,7 @@ namespace PlayerController
         #region Grounded and Aerial
 
         /// <summary>
-        /// Handles _speed.y when the player is grounded
+        ///     Handles _speed.y when the player is grounded
         /// </summary>
         protected virtual void HandleVerticalGrounded()
         {
@@ -385,7 +427,8 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// A helper function that uses _speed.x to stop horizontal player momentum in the direction of the wall the player is touching.
+        ///     A helper function that uses _speed.x to stop horizontal player momentum in the direction of the wall the player is
+        ///     touching.
         /// </summary>
         private void IfTouchingWallThenStopMomentum()
         {
@@ -400,7 +443,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Handles horizontal movement when the player is grounded
+        ///     Handles horizontal movement when the player is grounded
         /// </summary>
         protected virtual void HandleGroundHorizontal()
         {
@@ -411,7 +454,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Handles horizontal movement when the player is aerial
+        ///     Handles horizontal movement when the player is aerial
         /// </summary>
         protected virtual void HandleAirHorizontal()
         {
@@ -421,7 +464,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Handles vertical movement when the player is aerial
+        ///     Handles vertical movement when the player is aerial
         /// </summary>
         protected virtual void HandleVerticalAerial()
         {
@@ -430,8 +473,8 @@ namespace PlayerController
                 InternalVelocity = new Vector2(InternalVelocity.x, 0);
                 CancelJump();
             }
-            if ((!inputs.IsJumpHeld() && !jumpCanceled) || (!jumpCanceled
-                && jump.IsMoveComplete()))
+            if (!inputs.IsJumpHeld() && !jumpCanceled || !jumpCanceled
+                && jump.IsMoveComplete())
             {
                 CancelJump();
             }
@@ -446,20 +489,28 @@ namespace PlayerController
                 internalVelocity.y = Mathf.Max(stats_.terminalVelocity, InternalVelocity.y + gravityDelta);
             }
         }
+
         #endregion
 
         #region Jump
+
         private float timeSinceJumpWasTriggered;
         private bool jumpCanceled = true;
 
         // if a jump is buffered to be initiated
-        private bool JumpBuffered => inputs.TimeSinceJumpWasPressed < stats_.jumpBuffer && !ThisJumpInputWasUsed;
+        private bool JumpBuffered
+        {
+            get => inputs.TimeSinceJumpWasPressed < stats_.jumpBuffer && !ThisJumpInputWasUsed;
+        }
         // if the most recent jump input has triggered a jump
-        private bool ThisJumpInputWasUsed => timeSinceJumpWasTriggered <= inputs.TimeSinceJumpWasPressed;
+        private bool ThisJumpInputWasUsed
+        {
+            get => timeSinceJumpWasTriggered <= inputs.TimeSinceJumpWasPressed;
+        }
         protected virtual bool ShouldTriggerJump() => CanCoyoteJump() || CanGroundedJump();
         // if the player can "coyote jump", meaning they can trigger a jump during a small set time period after they leave the ground without jumping
-        protected virtual bool CanCoyoteJump() => (timeSinceLeftGround < stats_.coyoteTime)
-                && JumpBuffered;
+        protected virtual bool CanCoyoteJump() => timeSinceLeftGround < stats_.coyoteTime
+            && JumpBuffered;
         protected virtual void DeclareJumpInputUsed() => timeSinceJumpWasTriggered = 0;
 
         protected virtual void PlayLandingNoise()
@@ -492,19 +543,20 @@ namespace PlayerController
             jump.CancelMove();
             jumpCanceled = true;
         }
-        protected virtual void TriggerJump()
+        public virtual void TriggerJump()
         {
             OnMovingPlatform = false;
             jump.StartMove();
             jumpCanceled = false;
             timeSinceJumpWasTriggered = 0;
         }
+
         #endregion Jump
 
         #region Collision
 
         /// <summary>
-        /// Is player touching wall to their left
+        ///     Is player touching wall to their left
         /// </summary>
         /// <returns></returns>
         public bool TouchingLeftWall()
@@ -517,7 +569,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Is player touching wall to their right
+        ///     Is player touching wall to their right
         /// </summary>
         /// <returns></returns>
         public bool TouchingRightWall()
@@ -529,7 +581,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Is player touching the ceiling?
+        ///     Is player touching the ceiling?
         /// </summary>
         /// <returns></returns>
         public bool TouchingCeiling()
@@ -541,7 +593,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Is player touching the ground
+        ///     Is player touching the ground
         /// </summary>
         /// <returns></returns>
         public bool TouchingGround()
@@ -560,7 +612,7 @@ namespace PlayerController
         }
 
         /// <summary>
-        /// Did raycast hit a solid object
+        ///     Did raycast hit a solid object
         /// </summary>
         /// <param name="hits"></param>
         /// <returns></returns>
@@ -585,16 +637,14 @@ namespace PlayerController
             }
         }
         // not yet implemented
-        private void OnHurt()
-        {
-            knockback.StartMove();
-        }
+        private void OnHurt() => knockback.StartMove();
+
         #endregion
 
         #region Death
 
         /// <summary>
-        /// Respawns the player at a given location.
+        ///     Respawns the player at a given location.
         /// </summary>
         private void Respawn()
         {
@@ -605,7 +655,7 @@ namespace PlayerController
             internalVelocity = Vector2.zero;
         }
         /// <summary>
-        /// Resets the player to their original position. For debugging only.
+        ///     Resets the player to their original position. For debugging only.
         /// </summary>
         private void Restart()
         {
@@ -645,57 +695,23 @@ namespace PlayerController
                     {
                         return AnimationType.RUN;
                     }
-                    else
-                    {
-                        return AnimationType.IDLE;
-                    }
+                    return AnimationType.IDLE;
                 case PlayerState.Aerial:
                     if (internalVelocity.y > 0)
                     {
                         return AnimationType.JUMP_RISING;
                     }
-                    else
-                    {
-                        return AnimationType.JUMP_FALLING;
-                    }
+                    return AnimationType.JUMP_FALLING;
                 case PlayerState.OnWall:
                     break;
                 case PlayerState.Swinging:
                     return AnimationType.WIRE_SWING;
-                default:
-                    break;
             }
             //Temporary
             return AnimationType.IDLE;
         }
+
         #endregion
-
-
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            Vector2 origin = Kinematics.CapsuleColliderCenter(col);
-            GizmosPlus.BoxCast(origin + new Vector2(stats_.rightOffset, 0), new Vector2(0.01f, stats_.sideBounds.y), 0, Vector2.right, stats_.sideBounds.x - 0.01f, ~stats_.IgnoreLayers);
-            GizmosPlus.BoxCast(origin + new Vector2(-stats_.leftOffset, 0), new Vector2(0.01f, stats_.sideBounds.y), 0, Vector2.left, stats_.sideBounds.x - 0.01f, ~stats_.IgnoreLayers);
-            GizmosPlus.BoxCast(origin + new Vector2(0, stats_.ceilingOffset), new Vector2(stats_.ceilingBounds.x, 0.01f), 0, Vector2.up, stats_.ceilingBounds.y - 0.01f, ~stats_.IgnoreLayers);
-            GizmosPlus.BoxCast(origin + new Vector2(0, -stats_.groundOffset), new Vector2(stats_.groundBounds.x, 0.01f), 0, Vector2.down, 0.05f, ~stats_.IgnoreLayers);
-        }
-
-#endif
-        public void LoadPlayerData(PlayerData playerData)
-        {
-            internalVelocity = Vector2.zero;
-            transform.position = playerData.playerPosition;
-
-        }
-        public void LoadLevelData(LevelData levelData)
-        {
-            //No level data to load for Player Controller
-        }
-        public void SaveData(ref PlayerData playerData, ref LevelData levelData)
-        {
-            playerData.playerPosition = transform.position;
-        }
     }
 
 }

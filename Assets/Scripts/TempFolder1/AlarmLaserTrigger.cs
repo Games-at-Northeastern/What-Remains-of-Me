@@ -22,6 +22,12 @@ public class AlarmLaserTrigger : MonoBehaviour, IAlarmListener
         StartCoroutine(WaitToTurnOn());
     }
 
+    public void OffAlarmStart()
+    {
+
+        StopCoroutine(WaitToTurnOn());
+    }
+
     // Activates the alarm lights after a set of time
     private IEnumerator WaitToTurnOn() 
     {
@@ -32,4 +38,3 @@ public class AlarmLaserTrigger : MonoBehaviour, IAlarmListener
             laser.ToggleLaser();
     }
 }
-    

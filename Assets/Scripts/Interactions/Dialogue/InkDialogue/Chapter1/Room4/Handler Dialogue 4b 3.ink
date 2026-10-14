@@ -7,9 +7,9 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 
-The virus makes machines function in unexpected ways. #layout:left #portrait:Handler #speaker:The Handler
+The Virus is causing Vox to go haywire. #layout:left #portrait:Handler #speaker:The Handler
 
-You may be able to use that to your advantage...
+Try to redirect that chaos somewhere more useful.
 
 ->DONE
 

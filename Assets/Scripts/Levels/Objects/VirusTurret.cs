@@ -24,17 +24,18 @@ public class VirusTurret : MonoBehaviour
     public PlayerInfo playerInfo;
     public int energyTransferPerSecond;
     public int virusTransferPerSecond = 5;
-    [SerializeField] [Range(POWER_UP_ANIM_TIME, 10f)] private float startDelay = POWER_UP_ANIM_TIME;
-    [SerializeField] [Range(POWER_UP_ANIM_TIME, 10f)] private float endDelay = POWER_UP_ANIM_TIME;
+    [SerializeField][Range(POWER_UP_ANIM_TIME, 10f)] private float startDelay = POWER_UP_ANIM_TIME;
+    [SerializeField][Range(POWER_UP_ANIM_TIME, 10f)] private float endDelay = POWER_UP_ANIM_TIME;
     [Tooltip("Duration in seconds that this object will shoot continuously for, i.e. length of shots")]
     [SerializeField] private float shootDuration = 2f;
     [Tooltip("Duration in seconds that this object will pause for between shooting")]
-    [SerializeField] [Range(POWER_UP_ANIM_TIME, 10f)] private float delayBetweenShots = POWER_UP_ANIM_TIME;
+    [SerializeField][Range(POWER_UP_ANIM_TIME, 10f)] private float delayBetweenShots = POWER_UP_ANIM_TIME;
     [SerializeField] private float firingRadius = 20;
 
     public AudioSource audioSource;
 
     private bool activateVisual;
+    private EnergyManager energyManager;
     private Coroutine laserCoroutine;
     private Vector3 lastTargetPos;
 
@@ -43,6 +44,7 @@ public class VirusTurret : MonoBehaviour
 
     private void Start()
     {
+        energyManager = PlayerRef.PlayerManager.EnergyManager;
         turnedOn = true;
         lineRenderer.textureMode = LineTextureMode.Tile;
         virusAnimator = rotatingPointTransform.transform.GetChild(2).GetComponent<Animator>();
@@ -56,17 +58,22 @@ public class VirusTurret : MonoBehaviour
 
         Transform playerTransform = GetPlayerIfInNoticeRange();
 
-        if (playerTransform != null || virusAnimator.GetInteger("firingStatus") == 0) {
+        if (playerTransform != null || virusAnimator.GetInteger("firingStatus") == 0)
+        {
             Vector3 targetPos;
-            if (playerTransform != null) {
+            if (playerTransform != null)
+            {
                 lastTargetPos = playerTransform.position;
                 targetPos = playerTransform.position;
-            } else {
+            }
+            else
+            {
                 targetPos = lastTargetPos;
             }
 
             turnedOn = true;
-            if (laserCoroutine == null) {
+            if (laserCoroutine == null)
+            {
                 laserCoroutine = StartCoroutine(LaserAnimationCycle());
             }
 
@@ -77,7 +84,8 @@ public class VirusTurret : MonoBehaviour
             rotatingPointTransform.rotation = Quaternion.Lerp(rotatingPointTransform.rotation, targetRotation, speed * Time.deltaTime);
             //turretTransform.rotation = targetRotation;
 
-            if (activateVisual && Vector3.Distance(transform.position, targetPos) < firingRadius) {
+            if (activateVisual && Vector3.Distance(transform.position, targetPos) < firingRadius)
+            {
 
                 // Determine the nearest collision from the turret's shooting line towards the player,
                 // and set the line renderer to display until that collision point
@@ -96,11 +104,14 @@ public class VirusTurret : MonoBehaviour
                 // If the shooting line/laser hits the player, manually adjust the player's energy and virus appropriately
                 if (hit.transform != null && LayerMask.LayerToName(hit.transform.gameObject.layer) == "Player") // this also tends to error? is this a setup issue?
                 {
-                    playerInfo.battery += energyTransferPerSecond * Time.fixedDeltaTime;
-                    playerInfo.virus += virusTransferPerSecond * Time.fixedDeltaTime;
+                    energyManager.Battery += energyTransferPerSecond * Time.fixedDeltaTime;
+
+                    energyManager.Virus += virusTransferPerSecond * Time.fixedDeltaTime;
                 }
             }
-        } else {
+        }
+        else
+        {
             turnedOn = false;
         }
     }
@@ -115,9 +126,11 @@ public class VirusTurret : MonoBehaviour
     {
         // Getting all layer objects players, just in case there are multiple things with the player layer
         Collider2D[] desiredTargets = Physics2D.OverlapCircleAll(transform.position, firingRadius, playerLayer);
-        foreach (Collider2D target in desiredTargets) {
+        foreach (Collider2D target in desiredTargets)
+        {
             PlayerController2D playerController = target.GetComponent<PlayerController2D>();
-            if (playerController != null) {
+            if (playerController != null)
+            {
                 return target.gameObject.transform;
             }
         }
@@ -129,12 +142,14 @@ public class VirusTurret : MonoBehaviour
         bool poweredDown = false;
         yield return new WaitForSeconds(startDelay);
 
-        while (turnedOn) {
+        while (turnedOn)
+        {
             SetVirusBeamActive(true);
             StartFiringAnimation();
             yield return new WaitForSeconds(shootDuration);
 
-            if (turnedOn == false) {
+            if (!turnedOn)
+            {
                 break;
             }
 
@@ -145,7 +160,8 @@ public class VirusTurret : MonoBehaviour
             StartPowerDownAnimation();
             yield return new WaitForSeconds(endDelay);
 
-            if (turnedOn == false) {
+            if (!turnedOn)
+            {
                 break;
             }
 
@@ -155,7 +171,8 @@ public class VirusTurret : MonoBehaviour
 
         }
 
-        if (!poweredDown) {
+        if (!poweredDown)
+        {
             StartPowerDownAnimation();
         }
 
@@ -165,9 +182,12 @@ public class VirusTurret : MonoBehaviour
     private void SetVirusBeamActive(bool isActive)
     {
         activateVisual = isActive;
-        if (isActive) {
+        if (isActive)
+        {
             audioSource.Play();
-        } else {
+        }
+        else
+        {
             audioSource.Stop();
         }
     }
@@ -176,11 +196,15 @@ public class VirusTurret : MonoBehaviour
     private void StartPowerUpAnimation()
     {
         // Support for virus laser turning on/off and animation turning on/off with it if laser has an animator
-        if (virusAnimator != null) {
-            if (turnedOn) {
+        if (virusAnimator != null)
+        {
+            if (turnedOn)
+            {
                 virusAnimator.SetBool("turnedOn", true);
                 virusAnimator.SetInteger("firingStatus", 1);
-            } else {
+            }
+            else
+            {
                 virusAnimator.SetBool("turnedOn", false);
             }
         }
@@ -188,18 +212,23 @@ public class VirusTurret : MonoBehaviour
 
     private void StartFiringAnimation()
     {
-        if (virusAnimator != null) {
+        if (virusAnimator != null)
+        {
             virusAnimator.SetInteger("firingStatus", 0);
         }
     }
 
     private void StartPowerDownAnimation()
     {
-        if (virusAnimator != null) {
-            if (turnedOn) {
+        if (virusAnimator != null)
+        {
+            if (turnedOn)
+            {
                 virusAnimator.SetBool("turnedOn", false);
                 virusAnimator.SetInteger("firingStatus", -1);
-            } else {
+            }
+            else
+            {
                 virusAnimator.SetBool("turnedOn", false);
                 virusAnimator.SetInteger("firingStatus", -1);
             }

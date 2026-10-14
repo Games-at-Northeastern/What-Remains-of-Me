@@ -5,6 +5,6 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 {voiceModuleObtained:
 #layout:left #portrait:atlasexcited #speaker:Atlas
-I did it. I defeated Jones with your help!
+I did it. I defeated Vox with your help!
 }
 ->END

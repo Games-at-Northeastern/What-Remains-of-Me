@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using Ink.UnityIntegration;
+
 
 public class InkDialogueTrigger : MonoBehaviour
 {
@@ -10,8 +12,11 @@ public class InkDialogueTrigger : MonoBehaviour
     [SerializeField] private GameObject visualCue;
 
     [Header("inkJSON")]
-    public TextAsset KeyboardInkJSON;
-    public TextAsset ControllerInkJSON;
+    //public TextAsset KeyboardInkJSON;
+    //public TextAsset ControllerInkJSON;
+    public InkFile KeyboardInkJSON;
+    public InkFile ControllerInkJSON;
+
     [Header("Force Dialogue")]
     [SerializeField] private bool forceDialogue;
     [SerializeField] private bool stopMovement = true;

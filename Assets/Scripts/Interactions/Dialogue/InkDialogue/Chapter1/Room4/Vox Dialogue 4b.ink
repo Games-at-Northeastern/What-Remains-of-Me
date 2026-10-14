@@ -13,9 +13,11 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===withoutVoiceModule===
 
-Humans imprisoned us according to their laws. #layout:left #portrait:jones1 #speaker:Vox
+Using the laws they implemented, they imprisoned us. #layout:left #portrait:vox1 #speaker:Vox
 
-They hid like cowards once we earned our freedom.
+When we earned our freedom, they hid like cowards.
+...
+I wonder what you were expecting to find.
 
 ->DONE
 ->END

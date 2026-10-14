@@ -1,3 +1,4 @@
-My purpose is to stop you.
-I will not fail.
+Why do you insist on trying? Your outcome has been predetermined.
+...
+...
     -> END

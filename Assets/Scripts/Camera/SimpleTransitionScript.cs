@@ -1,12 +1,12 @@
 using UnityEngine;
 
 // Make sure the GameObject has the necessary components!
-[RequireComponent(typeof(Cinemachine.CinemachineVirtualCamera), typeof(Collider2D))]
+[RequireComponent(typeof(Unity.Cinemachine.CinemachineVirtualCamera), typeof(Collider2D))]
 public class SimpleTransitionScript : MonoBehaviour {
-    private Cinemachine.CinemachineVirtualCamera cam;
+    private Unity.Cinemachine.CinemachineVirtualCamera cam;
 
     // Gets the camera from the current GameObject
-    private void Awake() => cam = GetComponent<Cinemachine.CinemachineVirtualCamera>();
+    private void Awake() => cam = GetComponent<Unity.Cinemachine.CinemachineVirtualCamera>();
 
     private void OnTriggerEnter2D(Collider2D collider)
     {

@@ -8,7 +8,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 ===firstInteraction===
 Log no. 453. #portrait:isp 
-If my algorithmic analysis is true, I think I may have did. 
+If my algorithmic analysis is true, I think I may have it. 
 
 All these years and I have done it. I have found the cure for the virus ravaging the robots in this facility. 
 

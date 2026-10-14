@@ -6,7 +6,7 @@ INCLUDE ../../../InkDialogue/InkAndJSONFiles/globas.ink
 
 === firstInteraction ===
 Door is locked. #portrait:isp #speaker:I.S.P.
-Voice Module required for entry. #portrait:isp #speaker:I.S.P.
+Vox Voice Module required for entry. #portrait:isp #speaker:I.S.P.
 
 ->DONE
 

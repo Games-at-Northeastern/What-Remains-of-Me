@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 /// <summary>
@@ -9,15 +10,12 @@ using UnityEngine.UI;
 public class VoxFirstOutlet : AControllable
 {
     [SerializeField][Range(0, 100)] private float virusNeeded = 50f;
-    [SerializeField] private SpriteRenderer door2;
-    [SerializeField] private Sprite openDoorSprite2;
-    [SerializeField] private Collider2D doorCollider2;
-    [SerializeField] private Animator doorAnimator2;
-    [SerializeField] private MovingElementController elevatorSolve;
+    [SerializeField] private List<VoxDoor> doors;
     [SerializeField] private WireThrower wire;
     [SerializeField] private VoxOutlet secondStepOutlet;
     [SerializeField] private Animator secondOutletAnimator;
     [SerializeField] private ParticleSystem explosionParticles;
+    [SerializeField] private PlayableDirector cutscene;
 
     private bool hasTriggered = false; // Ensure coroutine is only started once
     private void Update()
@@ -52,18 +50,12 @@ public class VoxFirstOutlet : AControllable
     /// <returns></returns>
     private IEnumerator OpenDoor()
     {
-        //Open up the second door(the right one), of which it'll single the left door to open
-        doorAnimator2.SetBool("Opening", true);
-        //Give a delay
-        yield return new WaitForSecondsRealtime(2);
-        hasTriggered = true;
-        //Door has opened, start moving down
-        door2.sprite = openDoorSprite2;
-        doorAnimator2.enabled = false;
-        doorCollider2.enabled = false;
-        //Make sure the elevator starts working
-        elevatorSolve.CreateEnergy(20, 0);
-
+        //Open all doors
+        foreach (var door in doors) 
+        {
+            door.Open();
+        }
+        
         //Disable this outlet
         GetComponent<SpriteRenderer>().color = Color.gray;
         GetComponent<BoxCollider2D>().enabled = false;
@@ -76,6 +68,9 @@ public class VoxFirstOutlet : AControllable
         secondOutletAnimator.SetBool("Activate", true);
         secondOutletAnimator.GetComponentInParent<BoxCollider2D>().enabled = true;
         
+        // Play the cutscene
+        cutscene.Play();
+        cutscene.stopped += _ => cutscene.gameObject.SetActive(false);
 
         yield break;
     }

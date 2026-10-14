@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Ink.Runtime;
+using Ink.UnityIntegration;
 
 public class InkDialogueVariables
 {
@@ -10,10 +11,9 @@ public class InkDialogueVariables
     public static int deathCount;
 
     // constructor
-    public InkDialogueVariables(TextAsset textAsset)
+    public InkDialogueVariables(InkFile inkFile)
     {
-        
-        Story globalVars = new Story(textAsset.text);
+        var globalVars = new Story(inkFile.storyJson);
 
         // initializes dictionary
         variables = new Dictionary<string, Ink.Runtime.Object>();

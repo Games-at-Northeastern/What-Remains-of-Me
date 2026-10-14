@@ -1,3 +1,4 @@
-This place will not fall back under human control.
-The Insurgency will never be defeated. 
+Do you know what this room was built for?
+Order! Accountability!
+I assume you can appreciate the irony.
     -> END

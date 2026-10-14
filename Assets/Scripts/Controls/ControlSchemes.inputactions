@@ -100,7 +100,7 @@
                     "name": "Dialogue",
                     "type": "Button",
                     "id": "4f6a4455-5e7e-4ea0-84b0-9f464323db54",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -145,6 +145,15 @@
                     "name": "SwitchVoiceModule",
                     "type": "Button",
                     "id": "f0bdc6a5-1e62-4ae3-97f6-8109ebac291a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "e2a4bbf6-aef4-47fc-a9b6-e2f630b61520",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -517,17 +526,6 @@
                 },
                 {
                     "name": "",
-                    "id": "80df0cba-fa95-45f4-8b14-e25bf3091fe4",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UI Movement Up",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "5308398f-b919-4f3d-99ec-8ccc61a28219",
                     "path": "<Joystick>/stick/up",
                     "interactions": "",
@@ -539,8 +537,8 @@
                 },
                 {
                     "name": "",
-                    "id": "bcac0b7d-e870-4a35-ab4c-0c6f6cba0ca5",
-                    "path": "<Keyboard>/s",
+                    "id": "da8f7218-5fb9-4747-837d-d3873a31b75c",
+                    "path": "<Joystick>/stick/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -550,12 +548,23 @@
                 },
                 {
                     "name": "",
-                    "id": "da8f7218-5fb9-4747-837d-d3873a31b75c",
-                    "path": "<Joystick>/stick/down",
+                    "id": "39cbbbc8-04e0-4d01-a6ed-a0d627ce9e46",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "UI Movement Down",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e818d704-4336-4fdf-ac18-a82bc48ed8c9",
+                    "path": "<XInputController>/{Menu}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -621,6 +630,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "2d031717-9d64-43a9-9dba-c81b7400dda3",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Submit",
@@ -699,6 +717,15 @@
                     "type": "PassThrough",
                     "id": "b043dfd7-c05c-4f08-adc8-ffc430d7fc26",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "f92fb27e-b2ba-4c12-994a-ad821c1851e9",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -970,6 +997,72 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "2D Vector",
+                    "id": "bd5a76d6-8ac0-4569-9c61-e71c92f5aecf",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Up",
+                    "id": "3d8ad4ca-c795-4efc-baae-0f3bcf6f9d89",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "79a1bfbe-1fc6-4293-bc74-c08afea26d75",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Left",
+                    "id": "c0455383-2445-48b7-a9ff-d1495f3798c1",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Right",
+                    "id": "7635b3b1-392e-4a8b-a5e2-4443b2255341",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "27940c12-df0d-4a74-b14c-62b5530d227e",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "",
                     "id": "8ca91a41-5083-49ed-b0d6-959c265527c2",
                     "path": "*/{Submit}",
@@ -1026,6 +1119,17 @@
                 },
                 {
                     "name": "",
+                    "id": "3ba9d30d-bb10-4a2e-af56-56a9f14cd18a",
+                    "path": "<XInputController>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "47634bb9-365e-4e89-9d83-b60cf3bbe763",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -1064,6 +1168,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f3823638-b6ad-4e6c-ba60-8919f648dbe9",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1120,6 +1235,28 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ded0e1ef-f630-4554-ab26-a17747bb738d",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d4693132-e943-47e2-bdde-a131cbcfe2de",
+                    "path": "<XInputController>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
