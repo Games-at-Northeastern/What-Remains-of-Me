@@ -15,6 +15,9 @@ public class CheckpointManager : MonoBehaviour
     /// </summary>
     [SerializeField] private Checkpoint mostRecentPoint;
 
+    //3 alternate audios for door respawning
+    [SerializeField] private string[] respawnSoundNames = { "Player_Respawn", "doorRespawnSFX2", "doorRespawnSFX3" };
+
     private void Start()
     {
         if (LevelManager.HoldingCheckpoint())
@@ -60,13 +63,21 @@ public class CheckpointManager : MonoBehaviour
     /// Respawns the given transform at the appropriate recent checkpoint.
     /// </summary>
     /// <param name="respawnable"></param>
+    ///
+    
     public void RespawnAtRecent(Transform respawnable)
     {
         Debug.Log("ressp");
         Debug.Log(mostRecentPoint.getRespawnPosition());
         respawnable.transform.position = mostRecentPoint.getRespawnPosition();
         mostRecentPoint.RespawnStart();
-        SoundController.instance.PlaySound("Player_Respawn");
+
+        //Selects from the 3 assigned respawn sounds at random each time you respawn
+        if (respawnSoundNames != null && respawnSoundNames.Length > 0)
+        {
+            string chosen = respawnSoundNames[Random.Range(0, respawnSoundNames.Length)];
+            SoundController.instance.PlaySound(chosen);
+        }
     }
 
     /// <summary>
