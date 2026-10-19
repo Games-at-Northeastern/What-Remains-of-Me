@@ -461051,6 +461051,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8409161105926189108, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: m_Size.y
+      value: 6.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 8409161105926189108, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: m_Offset.y
+      value: 1.21
+      objectReference: {fileID: 0}
     - target: {fileID: 8409161105926189110, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -461136,8 +461144,24 @@ PrefabInstance:
       value: 55973931
       objectReference: {fileID: 0}
     - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: 'managedReferences[952882288274440287]'
+      value: 'Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.Provider2DCache`1[[UnityEngine.Rendering.Universal.ShadowShape2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: 'managedReferences[952882288274440288]'
+      value: Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.ShadowShape2DProvider_Collider2D
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: 'managedReferences[952882288274440289]'
+      value: Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.ShadowShape2DProvider_SpriteRenderer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
       propertyPath: 'managedReferences[2152692139894506330]'
       value: Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.ShadowMesh2D
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[1000].m_Provider2DCache
+      value: 952882288274440287
       objectReference: {fileID: 0}
     - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
       propertyPath: managedReferences[2152692139894506330].m_FlipX
@@ -461162,6 +461186,10 @@ PrefabInstance:
     - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
       propertyPath: managedReferences[2152692139894506330].m_IsTransformable
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440287].m_Cache.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
       propertyPath: managedReferences[2152692139894506330].m_Indices.Array.size
@@ -469291,6 +469319,38 @@ PrefabInstance:
       propertyPath: managedReferences[2152692139894506330].m_Vertices.Array.data[229].position.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440287].m_Cache.Array.data[0].m_Key.m_TypeName
+      value: ShadowShape2DProvider_Collider2D
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440287].m_Cache.Array.data[1].m_Key.m_TypeName
+      value: ShadowShape2DProvider_SpriteRenderer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440287].m_Cache.Array.data[0].m_Key.m_Component
+      value: 
+      objectReference: {fileID: 1420556755}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440287].m_Cache.Array.data[1].m_Key.m_Component
+      value: 
+      objectReference: {fileID: 1420556754}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440287].m_Cache.Array.data[0].m_Value.m_Provider
+      value: 952882288274440288
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440287].m_Cache.Array.data[1].m_Value.m_Provider
+      value: 952882288274440289
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440287].m_Cache.Array.data[0].m_Key.m_UsesComponent
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440287].m_Cache.Array.data[1].m_Key.m_UsesComponent
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -469687,6 +469747,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8409161105926189110, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
   m_PrefabInstance: {fileID: 1416247368}
   m_PrefabAsset: {fileID: 0}
+--- !u!212 &1420556754 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7611004106386769018, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+  m_PrefabInstance: {fileID: 1416247368}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &1420556755 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8409161105926189108, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+  m_PrefabInstance: {fileID: 1416247368}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1426470167
 GameObject:
   m_ObjectHideFlags: 0
@@ -469868,19 +469938,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 557518064448614325, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.97677463
+      value: 0.9861778
       objectReference: {fileID: 0}
     - target: {fileID: 557518064448614325, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -3.8242773e-17
+      value: 0.000000014695196
       objectReference: {fileID: 0}
     - target: {fileID: 557518064448614325, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.21426946
+      value: 0.16569078
       objectReference: {fileID: 0}
     - target: {fileID: 557518064448614325, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 3.769478e-17
+      value: -0.0000000024689852
       objectReference: {fileID: 0}
     - target: {fileID: 2001738223615619236, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_Name
@@ -471162,7 +471232,7 @@ PrefabInstance:
       objectReference: {fileID: 1232981407}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 68.44372
+      value: 67.33916
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -471174,15 +471244,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 5.4
+      value: 7.2
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0
+      value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 1
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
@@ -644871,8 +644941,24 @@ PrefabInstance:
       value: 55973931
       objectReference: {fileID: 0}
     - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: 'managedReferences[952882288274440290]'
+      value: 'Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.Provider2DCache`1[[UnityEngine.Rendering.Universal.ShadowShape2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: 'managedReferences[952882288274440291]'
+      value: Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.ShadowShape2DProvider_Collider2D
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: 'managedReferences[952882288274440292]'
+      value: Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.ShadowShape2DProvider_SpriteRenderer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
       propertyPath: 'managedReferences[2152692139894506303]'
       value: Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.ShadowMesh2D
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[1000].m_Provider2DCache
+      value: 952882288274440290
       objectReference: {fileID: 0}
     - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
       propertyPath: managedReferences[2152692139894506303].m_FlipX
@@ -644897,6 +644983,10 @@ PrefabInstance:
     - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
       propertyPath: managedReferences[2152692139894506303].m_IsTransformable
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440290].m_Cache.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
       propertyPath: managedReferences[2152692139894506303].m_Indices.Array.size
@@ -653026,6 +653116,38 @@ PrefabInstance:
       propertyPath: managedReferences[2152692139894506303].m_Vertices.Array.data[229].position.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440290].m_Cache.Array.data[0].m_Key.m_TypeName
+      value: ShadowShape2DProvider_Collider2D
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440290].m_Cache.Array.data[1].m_Key.m_TypeName
+      value: ShadowShape2DProvider_SpriteRenderer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440290].m_Cache.Array.data[0].m_Key.m_Component
+      value: 
+      objectReference: {fileID: 2067622263}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440290].m_Cache.Array.data[1].m_Key.m_Component
+      value: 
+      objectReference: {fileID: 2067622262}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440290].m_Cache.Array.data[0].m_Value.m_Provider
+      value: 952882288274440291
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440290].m_Cache.Array.data[1].m_Value.m_Provider
+      value: 952882288274440292
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440290].m_Cache.Array.data[0].m_Key.m_UsesComponent
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8947503429435726707, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+      propertyPath: managedReferences[952882288274440290].m_Cache.Array.data[1].m_Key.m_UsesComponent
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -653034,6 +653156,16 @@ PrefabInstance:
 --- !u!4 &2067622259 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8409161105926189110, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+  m_PrefabInstance: {fileID: 2067622258}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &2067622262 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7611004106386769018, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
+  m_PrefabInstance: {fileID: 2067622258}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &2067622263 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8409161105926189108, guid: 49e426ec6a70af3439101a566c47de73, type: 3}
   m_PrefabInstance: {fileID: 2067622258}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2067642117
