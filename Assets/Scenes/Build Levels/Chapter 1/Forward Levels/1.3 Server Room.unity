@@ -32174,6 +32174,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 354833218}
     - target: {fileID: 4486013903458379591, guid: d7f841ae719798b47afedc67a2555513, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4486013903458379591, guid: d7f841ae719798b47afedc67a2555513, type: 3}
       propertyPath: _assetBranches.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -115264,6 +115268,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1900537394148297893, guid: e4ffe4e3fb95ebb4ba70c061a7b9d6e9, type: 3}
   m_PrefabInstance: {fileID: 1301407702}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1303057573 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2883841719276004691, guid: a450e1bdb777aa641a319800aff30e25, type: 3}
+  m_PrefabInstance: {fileID: 498051520}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
 --- !u!43 &1304678827
 Mesh:
   m_ObjectHideFlags: 0
@@ -300955,11 +300970,11 @@ PrefabInstance:
     - target: {fileID: 3527655609309784789, guid: 25f151d1cde1af84ba26c349f04eb439, type: 3}
       propertyPath: m_ExposedReferences.m_References.Array.data[2].second
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1303057573}
     - target: {fileID: 3527655609309784789, guid: 25f151d1cde1af84ba26c349f04eb439, type: 3}
       propertyPath: m_ExposedReferences.m_References.Array.data[3].second
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1303057573}
     - target: {fileID: 3527655609309784790, guid: 25f151d1cde1af84ba26c349f04eb439, type: 3}
       propertyPath: m_LocalPosition.x
       value: 30.35
@@ -301003,6 +301018,10 @@ PrefabInstance:
     - target: {fileID: 3527655609309784791, guid: 25f151d1cde1af84ba26c349f04eb439, type: 3}
       propertyPath: m_Name
       value: Cutscene Trigger (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3527655609309784791, guid: 25f151d1cde1af84ba26c349f04eb439, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
