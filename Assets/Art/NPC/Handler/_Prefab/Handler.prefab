@@ -34,6 +34,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6342124366226788857
 SpriteRenderer:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -52,6 +53,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -73,9 +76,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1099278911
   m_SortingLayer: 2
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 7e739cd513be02549b7f4ac01a26d1a3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -85,8 +90,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &5457837875614206186
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +127,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1906009685983165492
 SpriteRenderer:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -140,6 +146,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -161,9 +169,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1099278911
   m_SortingLayer: 2
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 1378645081, guid: d31bef23ca12628439c331c25e85fbdc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -173,8 +183,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!95 &2092224874265375512
 Animator:
   serializedVersion: 7
@@ -207,6 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8407702468975898388}
   - component: {fileID: 8407702468975898389}
+  - component: {fileID: 4720645690258739615}
   m_Layer: 0
   m_Name: Hologram Light
   m_TagString: Untagged
@@ -241,15 +252,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComponentVersion: 2
+  m_ComponentVersion: 4
   m_LightType: 3
   m_BlendStyleIndex: 0
+  m_Light2DProvider:
+    rid: -2
+  m_SelectionSources:
+    rid: 6599797027151282178
   m_FalloffIntensity: 0.46
   m_Color: {r: 0, g: 0.72775984, b: 1, a: 0.45490196}
   m_Intensity: 1.5
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 1
-  m_ApplyToSortingLayers: 81d1938c00000000d327c7393faa8541
+  m_ApplyToSortingLayers: 81d1938c00000000d327c7393faa8541i
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -264,6 +279,9 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
   m_LocalBounds:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
@@ -281,6 +299,38 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 6599797027151282178
+      type: {class: Light2DProviderSources, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data:
+        m_SelectedHashCode: 3
+        m_SelectedSource:
+          rid: -2
+        m_Provider2DCache:
+          rid: 6599797027151282179
+    - rid: 6599797027151282179
+      type: {class: 'Provider2DCache`1[[UnityEngine.Rendering.Universal.Light2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]', ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data:
+        m_Cache: []
+--- !u!114 &4720645690258739615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8407702468975898378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 272b69896de6146158dcff0427701f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlickerControl
+  minIntensity: 0.1
+  maxIntensity: 3
+  flickerSpeed: 0.1
 --- !u!1 &8638050060508947278
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,7 +455,6 @@ MonoBehaviour:
   maxCharge: 100
   virus: 0
   uniqueID: 
-  playerInfo: {fileID: 11400000, guid: 538336c44357f4db491d56a1f22e7b7e, type: 2}
   OnVirusChange:
     m_PersistentCalls:
       m_Calls: []
@@ -413,8 +462,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   dialogueTrigger: {fileID: 8638050060508947276}
-  cleanScript: {fileID: 4900000, guid: 7d3cf77a7d0c108438113f5ba0b5d089, type: 3}
-  infectedScript: {fileID: 4900000, guid: 43c16c9bcce3e704abd79638d69dd824, type: 3}
+  cleanScript: {fileID: 0}
+  infectedScript: {fileID: 0}
   virusLevelUpdate: 20
 --- !u!114 &8407702469297980745
 MonoBehaviour:
@@ -437,7 +486,9 @@ MonoBehaviour:
   chargingGoal: 0
   targetingGoal: 0
   grappleCam: {fileID: 0}
+  shouldBaseOnControlled: 0
   grappleOverrideRange: {fileID: 0}
+  isConnected: 0
 --- !u!1 &8638050060587685210
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,6 +533,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8638050060587685211}
     m_Modifications:
+    - target: {fileID: 4401726289067597108, guid: 8688e363561d12f4fbc3a53482cc542b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4401726289067597110, guid: 8688e363561d12f4fbc3a53482cc542b, type: 3}
       propertyPath: m_Name
       value: VisualCue
@@ -529,6 +584,10 @@ PrefabInstance:
     - target: {fileID: 4401726289067597111, guid: 8688e363561d12f4fbc3a53482cc542b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4492550253255167055, guid: 8688e363561d12f4fbc3a53482cc542b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
