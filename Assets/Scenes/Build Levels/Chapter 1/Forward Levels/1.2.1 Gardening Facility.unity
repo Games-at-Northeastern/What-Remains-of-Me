@@ -33963,6 +33963,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4720645690258739615, guid: fac7398608fae54428a940dff4e4d204, type: 3}
+      propertyPath: hologramSprite
+      value: 
+      objectReference: {fileID: 2097358884}
     - target: {fileID: 5457837875614206186, guid: fac7398608fae54428a940dff4e4d204, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -461235,7 +461239,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8407702468975898378, guid: fac7398608fae54428a940dff4e4d204, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1667034801}
   m_SourcePrefab: {fileID: 100100000, guid: fac7398608fae54428a940dff4e4d204, type: 3}
 --- !u!4 &1098576581 stripped
 Transform:
@@ -498449,19 +498456,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 557518064448614325, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.96607345
+      value: 0.9838688
       objectReference: {fileID: 0}
     - target: {fileID: 557518064448614325, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.000000021673882
+      value: -0.0000000240524
       objectReference: {fileID: 0}
     - target: {fileID: 557518064448614325, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.25826755
+      value: 0.17889164
       objectReference: {fileID: 0}
     - target: {fileID: 557518064448614325, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000005794239
+      value: 0.0000000043733204
       objectReference: {fileID: 0}
     - target: {fileID: 2001738223615619236, guid: 76ffc83072034944da0378d38b26b10a, type: 3}
       propertyPath: m_Name
@@ -499743,7 +499750,7 @@ PrefabInstance:
       objectReference: {fileID: 1232981407}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 69.14679
+      value: 67.33916
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -499755,15 +499762,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 4.3199997
+      value: 6.62
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0.001039501
+      value: 0.17567568
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.997921
+      value: 0.6486487
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
@@ -537038,6 +537045,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1667034799 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8407702468975898378, guid: fac7398608fae54428a940dff4e4d204, type: 3}
+  m_PrefabInstance: {fileID: 1098576580}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1667034801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1667034799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 272b69896de6146158dcff0427701f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlickerControl
+  minIntensity: 0.1
+  maxIntensity: 1.5
+  flickerSpeed: 0.09
+  hologramSprite: {fileID: 0}
+  minAlpha: 0.2
+  maxAlpha: 1
 --- !u!1 &1667043669
 GameObject:
   m_ObjectHideFlags: 0
