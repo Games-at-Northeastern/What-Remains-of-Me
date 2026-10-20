@@ -29,6 +29,14 @@ public class ForceDoorDeactivate : MonoBehaviour
     }
     private void Update()
     {
-	        _hasVoiceModule = ((Ink.Runtime.BoolValue) InkDialogueManager.GetInstance().GetVariableState("VoiceVox")).value;
+        if (InkDialogueManager.GetInstance() == null)
+        {
+            return;
+        }
+        if (InkDialogueManager.GetInstance().GetVariableState("VoiceVox") == null)
+        {
+            return;
+        }
+	    _hasVoiceModule = ((Ink.Runtime.BoolValue) InkDialogueManager.GetInstance().GetVariableState("VoiceVox")).value;
     }
 }

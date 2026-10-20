@@ -45,6 +45,9 @@ public class OutletWire : MonoBehaviour
 
     void Update()
     {
+        if (outlet == null || tilemap == null)
+            return;
+
         var desiredState = WireState.off;
         if (useCombinedEnergy)
         {
