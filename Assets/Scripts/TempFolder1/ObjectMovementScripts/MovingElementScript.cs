@@ -501,4 +501,21 @@ public class MovingElementScript : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public float GetLocation() => currentElementLocation;
+
+    // Moves this element onto another path, starting from the closest location on that path
+    public void SetPath(MovingElementPathScript newPath, bool movingRight)
+    {
+        if (movingElementPath != null) {
+            movingElementPath.RemoveMovingObject(this);
+        }
+
+        movingElementPath = newPath;
+        splinePath = newPath.addMovingObject(this);
+
+        Vector3 localPosition = splinePath.transform.InverseTransformPoint(transform.position);
+        SplineUtility.GetNearestPoint(splinePath.Spline, localPosition, out _, out currentElementLocation);
+
+        isMovingRight = movingRight;
+        pingPongDestination = isMovingRight ? 1 : 0;
+    }
 }
