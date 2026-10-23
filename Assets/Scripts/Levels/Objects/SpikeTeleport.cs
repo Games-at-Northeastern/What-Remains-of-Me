@@ -124,6 +124,8 @@ public class SpikeTeleport : MonoBehaviour
         {
             wc.isDead = false;
         }
+        // Atlas is rebuilt on death, so wipe virus and refill battery
+        PlayerRef.PlayerManager.EnergyManager.ResetEnergy();
         LevelManager.PlayerReset();
         InkDialogueVariables.deathCount++;
     }

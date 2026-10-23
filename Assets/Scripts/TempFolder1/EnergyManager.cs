@@ -10,8 +10,8 @@ public class EnergyManager : IManager
     [ReadOnly] [SerializeField] private float maxVirus;
 
     [Header("Current Battery/Virus Percentages")]
-    [ReadOnly] [SerializeField] private float batteryPercentage;
-    [ReadOnly] [SerializeField] private float virusPercentage;
+    [Range(0f, 1f)] [SerializeField] private float batteryPercentage;
+    [Range(0f, 1f)] [SerializeField] private float virusPercentage;
 
     // Returns the current battery value 
     public float Battery {
@@ -55,6 +55,13 @@ public class EnergyManager : IManager
         virusPercentage = 0; // Defaults to no virus
         maxBattery = 100; // Defaults to 100
         maxVirus = 100; // Defaults to 100
+    }
+
+    // Restores Atlas to a freshly rebuilt state: full battery and no virus
+    public void ResetEnergy()
+    {
+        batteryPercentage = 1;
+        virusPercentage = 0;
     }
 
     // Only way to set the max battery and virus is using a PlayerSettings scriptable object

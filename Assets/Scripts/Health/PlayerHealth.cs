@@ -22,7 +22,13 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
      *
      */
 
-    private void Start() => energyManager = PlayerRef.PlayerManager.EnergyManager;
+    private void Start()
+    {
+        energyManager = PlayerRef.PlayerManager.EnergyManager;
+
+        // Atlas is rebuilt on death, so wipe virus and refill battery
+        LevelManager.OnPlayerDeath.AddListener(energyManager.ResetEnergy);
+    }
 
     private void Update()
     {
@@ -80,7 +86,6 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     private void VirusFullDeath()
     {
         Debug.Log("Death from virus full");
-        energyManager.Virus = 0f;
         LevelManager.PlayerDeath();
     }
 
