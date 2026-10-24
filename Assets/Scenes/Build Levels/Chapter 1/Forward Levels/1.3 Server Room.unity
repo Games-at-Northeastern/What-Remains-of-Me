@@ -52630,8 +52630,12 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: maxCharge
-      value: 75
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: audioSource
@@ -54676,6 +54680,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3175746269431765781, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 575034201}
+    - targetCorrespondingSourceObject: {fileID: 3175746269431765781, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1729981509}
     - targetCorrespondingSourceObject: {fileID: 1356603267965378348, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 575034200}
@@ -54691,7 +54698,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 575034189}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 575034199}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b221df3b18d866b4388068f553967b48, type: 3}
   m_Name: 
@@ -136535,6 +136542,22 @@ PrefabInstance:
       value: Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.ShadowMesh2D
       objectReference: {fileID: 0}
     - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: 'managedReferences[5137916146522521601]'
+      value: 'Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.Provider2DCache`1[[UnityEngine.Rendering.Universal.ShadowShape2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: 'managedReferences[5137916146522521602]'
+      value: Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.ShadowShape2DProvider_Collider2D
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: 'managedReferences[5137916146522521603]'
+      value: Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.ShadowShape2DProvider_SpriteRenderer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[1000].m_Provider2DCache
+      value: 5137916146522521601
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
       propertyPath: managedReferences[2152692139894506205].m_FlipX
       value: 0
       objectReference: {fileID: 0}
@@ -136557,6 +136580,10 @@ PrefabInstance:
     - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
       propertyPath: managedReferences[2152692139894506205].m_IsTransformable
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[5137916146522521601].m_Cache.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
       propertyPath: managedReferences[2152692139894506205].m_Indices.Array.size
@@ -137294,6 +137321,38 @@ PrefabInstance:
       propertyPath: managedReferences[2152692139894506205].m_Vertices.Array.data[19].position.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[5137916146522521601].m_Cache.Array.data[0].m_Key.m_TypeName
+      value: ShadowShape2DProvider_Collider2D
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[5137916146522521601].m_Cache.Array.data[1].m_Key.m_TypeName
+      value: ShadowShape2DProvider_SpriteRenderer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[5137916146522521601].m_Cache.Array.data[0].m_Key.m_Component
+      value: 
+      objectReference: {fileID: 1672633520}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[5137916146522521601].m_Cache.Array.data[1].m_Key.m_Component
+      value: 
+      objectReference: {fileID: 1992308100}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[5137916146522521601].m_Cache.Array.data[0].m_Value.m_Provider
+      value: 5137916146522521602
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[5137916146522521601].m_Cache.Array.data[1].m_Value.m_Provider
+      value: 5137916146522521603
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[5137916146522521601].m_Cache.Array.data[0].m_Key.m_UsesComponent
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383962850797328500, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+      propertyPath: managedReferences[5137916146522521601].m_Cache.Array.data[1].m_Key.m_UsesComponent
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3797961279211045702, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
       propertyPath: disappearSFX
       value: 
@@ -137403,6 +137462,11 @@ MonoBehaviour:
   cleanEnergyToActivate: 5
   virusEnergyToActivate: 10
   sprites: {fileID: 11400000, guid: 43ad74f3ddbcea34791ec7c7312dc95e, type: 2}
+--- !u!61 &1672633520 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 3960504248742835034, guid: a24df51d2fd4840d19801af489e898f5, type: 3}
+  m_PrefabInstance: {fileID: 1672633517}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1673426908
 GameObject:
   m_ObjectHideFlags: 0
@@ -139613,6 +139677,19 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!114 &1729981509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575034199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fbe34f617e601244852f918ed49ae50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CleanEnergyPlatformController
+  requiredCleanEnergy: 70
 --- !u!43 &1733011049
 Mesh:
   m_ObjectHideFlags: 0

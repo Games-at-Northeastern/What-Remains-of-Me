@@ -11,7 +11,17 @@ public class MovingElementController : AControllable
 {
     [SerializeField] private MovingElement[] _movingElements;
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [SerializeField] private bool useCleanEnergyRequirement = false;
+    [SerializeField] private float requiredCleanEnergy = 70f;
+
+
     private bool hasMoved = false;
+
+
 
     public AudioSource audioSource;
 
