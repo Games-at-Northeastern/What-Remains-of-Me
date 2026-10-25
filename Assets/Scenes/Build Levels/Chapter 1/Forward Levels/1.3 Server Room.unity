@@ -52631,15 +52631,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: maxCharge
-      value: 100
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: audioSource
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+      propertyPath: cleanEnergy
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 3175746269431765786, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       propertyPath: OnVirusChange.m_PersistentCalls.m_Calls.Array.size
@@ -54680,9 +54684,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3175746269431765781, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 575034201}
-    - targetCorrespondingSourceObject: {fileID: 3175746269431765781, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1729981509}
     - targetCorrespondingSourceObject: {fileID: 1356603267965378348, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 575034200}
@@ -54698,7 +54699,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 575034189}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 575034199}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b221df3b18d866b4388068f553967b48, type: 3}
   m_Name: 
@@ -54851,8 +54852,39 @@ MonoBehaviour:
         m_SelectedSource:
           rid: -2
         m_Provider2DCache:
-          rid: -2
+          rid: 5137916168488091648
     - rid: 4042070419732955241
+      type: {class: ShadowShape2DProvider_SpriteRenderer, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data: 
+    - rid: 5137916168488091648
+      type: {class: 'Provider2DCache`1[[UnityEngine.Rendering.Universal.ShadowShape2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]', ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data:
+        m_Cache:
+        - m_Key:
+            m_TypeName: ShadowShape2DProvider_Collider2D
+            m_Component: {fileID: 1305256970}
+            m_UsesComponent: 1
+          m_Value:
+            m_Provider:
+              rid: 5137916168488091649
+        - m_Key:
+            m_TypeName: ShadowShape2DProvider_Collider2D
+            m_Component: {fileID: 1305256970}
+            m_UsesComponent: 1
+          m_Value:
+            m_Provider:
+              rid: 5137916168488091649
+        - m_Key:
+            m_TypeName: ShadowShape2DProvider_SpriteRenderer
+            m_Component: {fileID: 575034196}
+            m_UsesComponent: 1
+          m_Value:
+            m_Provider:
+              rid: 5137916168488091650
+    - rid: 5137916168488091649
+      type: {class: ShadowShape2DProvider_Collider2D, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data: 
+    - rid: 5137916168488091650
       type: {class: ShadowShape2DProvider_SpriteRenderer, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
       data: 
 --- !u!114 &575034201
@@ -54867,7 +54899,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84d08918ec1fb4429ea27ce9824b047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _elementController: {fileID: 0}
+  _elementController: {fileID: 575034191}
   _virusEffect: {fileID: 575034198}
   _doVisualEffect: 1
   _doVirusEffectAt: 0.2
@@ -115465,6 +115497,11 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!61 &1305256970 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 1356603267965378345, guid: bfc8b849ac082480f895aacbbd719bcd, type: 3}
+  m_PrefabInstance: {fileID: 575034189}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1309031992
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -139677,19 +139714,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!114 &1729981509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 575034199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fbe34f617e601244852f918ed49ae50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CleanEnergyPlatformController
-  requiredCleanEnergy: 70
 --- !u!43 &1733011049
 Mesh:
   m_ObjectHideFlags: 0
