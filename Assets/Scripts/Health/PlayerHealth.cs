@@ -1,4 +1,5 @@
 using System.Collections;
+using PlayerController;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -85,8 +86,22 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     /// </summary>
     private void VirusFullDeath()
     {
-        Debug.Log("Death from virus full");
-        LevelManager.PlayerDeath();
+        Debug.Log("Death from virus full, go to last checkpoint");
+        SpikeTeleport teleporter = FindObjectOfType<SpikeTeleport>();
+        if (teleporter != null)
+        {
+            GameObject targetPlayer = LevelManager.PlayerRef;
+
+            if (targetPlayer == null)
+                targetPlayer = transform.root.gameObject;
+
+            StartCoroutine(teleporter.PerformDeath(targetPlayer));
+        }
+        else
+        {
+            LevelManager.PlayerDeath();
+        }
+
     }
 
     /// <summary>
