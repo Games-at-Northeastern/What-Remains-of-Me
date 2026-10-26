@@ -1,5 +1,3 @@
-using System;
-
 using PlayerController;
 using UnityEngine;
 using Unity.Mathematics;
@@ -24,24 +22,30 @@ public class CameraFramer : MonoBehaviour
     private BoxCollider2D frameTrigger;
     private PlayerController2D player;
 
-    private void Awake() {
+    private void Awake()
+    {
         frameTrigger = GetComponent<BoxCollider2D>();
         framingCamera = GetComponentInChildren<Unity.Cinemachine.CinemachineCamera>();
         dollyPath = GetComponentInChildren<SplineContainer>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController2D>();
     }
 
-    private void Start() {
-        if (framingCamera != null) {
+    private void Start()
+    {
+        if (framingCamera != null)
+        {
             framingCamera.Priority = -100;
-            if (player != null) {
+            if (player != null)
+            {
                 framingCamera.Follow = player.transform;
             }
-            else {
+            else
+            {
                 Debug.LogWarning("Player not found!");
             }
         }
-        else {
+        else
+        {
             Debug.LogError("CinemachineVirtualCamera not found!");
         }
     }
