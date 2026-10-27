@@ -29,8 +29,11 @@ public class PowerTrail : MonoBehaviour, IRenderableTrail
     {
         _meshRenderer = GetComponent<MeshRenderer>();
 
-        linkedControllable.OnEnergyChange.AddListener(SetActiveStatus);
-        linkedControllable.OnVirusChange.AddListener(SetVirus);
+        if (linkedControllable != null)
+        {
+            linkedControllable.OnEnergyChange.AddListener(SetActiveStatus);
+            linkedControllable.OnVirusChange.AddListener(SetVirus);
+        }
 
         _virusEffectMover.SetPermanentTrack(_initialTrail);
     }
