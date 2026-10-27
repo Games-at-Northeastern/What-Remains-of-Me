@@ -72,6 +72,7 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
 		else
 		{
             Deactivate();
+            Debug.Log(gameObject + " deactive");
     	}
 
         if (TryGetComponent(out Outlet outlet))
