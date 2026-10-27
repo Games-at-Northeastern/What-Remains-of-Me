@@ -47,9 +47,21 @@ public class InkDialogueTrigger : MonoBehaviour
         _firstInteraction = true;
     }
 
-    private void OnEnable() => visualCue.SetActive(_firstInteraction);
+    private void OnEnable()
+    {
+        if (visualCue != null)
+        {
+            visualCue.SetActive(_firstInteraction);
+        }
+    }
 
-    private void OnDisable() => visualCue.SetActive(false);
+    private void OnDisable()
+    {
+        if (visualCue != null)
+        {
+            visualCue.SetActive(false);
+        }
+    }
 
 #pragma warning disable IDE1006 // Naming Styles
     public UnityEvent OnDialogueEnded;
