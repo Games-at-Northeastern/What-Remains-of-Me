@@ -100,14 +100,16 @@ public class ControllableDoor : AControllable
         boxCollider = GetComponent<BoxCollider2D>();
         doorRenderer = GetComponent<SpriteRenderer>();
 
-        boxCollider.size = doorRenderer.size;
-        defaultOffset = boxCollider.offset;
+        if (boxCollider) {
+            boxCollider.size = doorRenderer.size;
+            defaultOffset = boxCollider.offset;
+        }
 
         maskObject.transform.localScale = doorRenderer.size;
 
         ShouldDisappear = shouldDisappear;
 
-        if (!enableDetectingFeatures) {
+        if (!enableDetectingFeatures && maxCharge > 0) {
             float percentFull = GetPercentFull();
             transform.position = Vector2.Lerp(initPos, initPos + posChangeForMaxEnergy, percentFull);
         }
