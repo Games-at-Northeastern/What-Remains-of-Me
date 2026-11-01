@@ -6,9 +6,8 @@ using UnityEngine.Tilemaps;
 //Updates the wires attached to outlets to match their energy level
 public class OutletWire : MonoBehaviour
 {
-
-    [SerializeField]
-    private bool useCombinedEnergy = false;
+    // Assuming as of F26 that if it is NOT combined, we will only want clean
+    public bool useCombinedEnergy = false;
     [SerializeField]
     private float combinedEnergyToActivate;
     //The amount of energy required in the outlet to turn the wire green

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class SetActive : Interaction
 {
-   public MovingElement movingElement;
+    public MovingElement movingElement;
 
-   public override void Execute()
-   {
-       movingElement.Activate();
-   }
+    public override void Execute()
+    {
+        movingElement.Activate();
+        Debug.Log("[SetActive] - activated platform");
+    }
 }

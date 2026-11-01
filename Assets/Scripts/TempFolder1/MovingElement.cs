@@ -68,12 +68,14 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
         if (_activeByDefault)
         {
             Activate();
+            Debug.Log(gameObject + " [Moving Element] - active");
+
         }
-		else
-		{
+        else
+        {
             Deactivate();
-            Debug.Log(gameObject + " deactive");
-    	}
+            Debug.Log(gameObject + " [Moving Element] -  deactive");
+        }
 
         if (TryGetComponent(out Outlet outlet))
         {
@@ -157,7 +159,8 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
         if (dist <= _locationAccuracy || hasMovedPast) // if we are close enough to point OR if we've passed the target point...
         {
             //Debug.Log("Fired for the following reason: " + (dist > _previousDistance ? $"distance ({dist}) is greater than previous ({_previousDistance})" : "within accuracy"));
-            if (_runtimePoints.Length == 1) {
+            if (_runtimePoints.Length == 1)
+            {
                 transform.position = _runtimePoints[0].position;
             }
             UpdateDestinationAndDirection();
@@ -238,6 +241,7 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
     public void Activate()
     {
         _shouldMove = true;
+        Debug.Log("[Moving Element] - activated");
         _activatedActions?.Invoke();
     }
 
@@ -252,7 +256,7 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
             rb.linearVelocity = Vector2.zero;
         }
 
-         _deactivatedActions?.Invoke();
+        _deactivatedActions?.Invoke();
     }
 
     // TODO: These setters (excluding setTrack and setDir) are remnants of old code. For future developers, find a way
@@ -326,7 +330,7 @@ public class MovingElement : MonoBehaviour, IMovingOutlet
     /// Method to permanetely assign a track.
     /// </summary>
     /// <param name="track"></param>
-    public void SetPermanentTrack(Transform[] track) =>_points = track;
+    public void SetPermanentTrack(Transform[] track) => _points = track;
 
     /// <summary>
     /// Sets the direction of movement of the element.

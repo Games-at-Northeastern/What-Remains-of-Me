@@ -13,7 +13,8 @@ public class NPCEffects : AControllable
 
     private void Awake()
     {
-        if(virusEffect.Length > 0){
+        if (virusEffect.Length > 0)
+        {
             initDensity = virusEffect[0].GetFloat("Density");
         }
     }
@@ -27,7 +28,8 @@ public class NPCEffects : AControllable
         if (totalEnergy <= 1 || (cleanEnergy <= 1 && virusPercent <= 1))
         {
             Debug.Log("total energy less than 0");
-            foreach(var v in virusEffect){
+            foreach (var v in virusEffect)
+            {
                 Debug.Log("turn off");
                 v.SetFloat("Density", 0f);
             }
@@ -36,7 +38,7 @@ public class NPCEffects : AControllable
         {
             if (virusPercent != null)
             {
-                Debug.Log("virus percent is not null");
+                // Debug.Log("virus percent is not null");
                 if (virusPercent < doVirusEffectAt)
                 {
                     Debug.Log("virus percent less than total virus");
@@ -62,6 +64,6 @@ public class NPCEffects : AControllable
                     v.SetFloat("Density", 0f);
                 }
             }
-        } 
+        }
     }
 }

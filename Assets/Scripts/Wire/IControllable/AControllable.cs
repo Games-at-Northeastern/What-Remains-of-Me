@@ -22,7 +22,8 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
 
     private EnergyManager energyManager;
 
-    protected float totalEnergy {
+    protected float totalEnergy
+    {
         get => cleanEnergy + virus;
     }
 
@@ -35,11 +36,13 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// </summary>
     public void GainEnergy(float amount)
     {
-        if (energyManager is null) {
+        if (energyManager is null)
+        {
             energyManager = PlayerRef.PlayerManager.EnergyManager;
         }
 
-        if (amount <= 0 || totalEnergy >= maxCharge || energyManager.Battery <= 1f) {
+        if (amount <= 0 || totalEnergy >= maxCharge || energyManager.Battery <= 1f)
+        {
             return;
         }
         float totalEnergyBefore = totalEnergy;
@@ -69,11 +72,13 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// </summary>
     public void LoseEnergy(float amount)
     {
-        if (energyManager is null) {
+        if (energyManager is null)
+        {
             energyManager = PlayerRef.PlayerManager.EnergyManager;
         }
 
-        if (amount <= 0 || totalEnergy <= 0 || energyManager.Battery >= energyManager.MaxBattery) {
+        if (amount <= 0 || totalEnergy <= 0 || energyManager.Battery >= energyManager.MaxBattery)
+        {
             return;
         }
         float totalEnergyBefore = totalEnergy;
@@ -102,26 +107,31 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     }
     public void LoadLevelData(LevelData levelData)
     {
-        if (!checkForUniqueIDScript()) {
+        if (!checkForUniqueIDScript())
+        {
             return;
         }
 
-        if (levelData == null) {
+        if (levelData == null)
+        {
             Debug.Log($"LodeLevelData: 'levelData' is null on {gameObject.name}.");
             return;
         }
 
-        if (!levelData.outletCleanEnergy.TryGetValue(uniqueID, out float savedCleanEnergy)) {
+        if (!levelData.outletCleanEnergy.TryGetValue(uniqueID, out float savedCleanEnergy))
+        {
             Debug.LogError("outletCleanEnergy for " + gameObject + " could not be obtained");
             return;
         }
         cleanEnergy = savedCleanEnergy;
 
-        if (!levelData.outletVirusEnergy.TryGetValue(uniqueID, out float savedVirusEnergy)) {
+        if (!levelData.outletVirusEnergy.TryGetValue(uniqueID, out float savedVirusEnergy))
+        {
             Debug.LogError("outletVirusEnergy for " + gameObject + " could not be obtained");
             return;
         }
-        if (!levelData.outletMaxEnergy.TryGetValue(uniqueID, out float savedMaxEnergy)) {
+        if (!levelData.outletMaxEnergy.TryGetValue(uniqueID, out float savedMaxEnergy))
+        {
             Debug.LogError("outletMaxEnergy for " + gameObject + " could not be obtained");
             return;
         }
@@ -134,28 +144,38 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
 
     public void SaveData(ref PlayerData playerData, ref LevelData levelData)
     {
-        if (!checkForUniqueIDScript()) {
+        if (!checkForUniqueIDScript())
+        {
             return;
         }
 
         //Check for clean outlet energy, if none exists add to dictionary
-        if (levelData.outletCleanEnergy.ContainsKey(uniqueID)) {
+        if (levelData.outletCleanEnergy.ContainsKey(uniqueID))
+        {
             levelData.outletCleanEnergy[uniqueID] = cleanEnergy;
-        } else {
+        }
+        else
+        {
             levelData.outletCleanEnergy.Add(uniqueID, cleanEnergy);
         }
 
         //check for virus outlet energy, if none exists add to dictionary
-        if (levelData.outletVirusEnergy.ContainsKey(uniqueID)) {
+        if (levelData.outletVirusEnergy.ContainsKey(uniqueID))
+        {
             levelData.outletVirusEnergy[uniqueID] = virus;
-        } else {
+        }
+        else
+        {
             levelData.outletVirusEnergy.Add(uniqueID, virus);
         }
 
         //check for max outlet energy, if none exists add to dictionary
-        if (levelData.outletMaxEnergy.ContainsKey(uniqueID)) {
+        if (levelData.outletMaxEnergy.ContainsKey(uniqueID))
+        {
             levelData.outletMaxEnergy[uniqueID] = maxCharge;
-        } else {
+        }
+        else
+        {
             levelData.outletMaxEnergy.Add(uniqueID, maxCharge);
         }
 
@@ -175,11 +195,13 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// </summary>
     private void EnsureNoNegativeEnergy()
     {
-        if (virus < 0) {
+        if (virus < 0)
+        {
             cleanEnergy += virus;
             virus = 0;
         }
-        if (cleanEnergy < 0) {
+        if (cleanEnergy < 0)
+        {
             cleanEnergy = 0;
         }
     }
@@ -195,7 +217,8 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// </summary>
     public void CreateEnergy(float amount, float virusRatio)
     {
-        if (amount <= 0 || totalEnergy >= maxCharge) {
+        if (amount <= 0 || totalEnergy >= maxCharge)
+        {
             return;
         }
 
@@ -210,7 +233,8 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
 
     public void SetEnergy(float amount)
     {
-        if (amount <= 0 || totalEnergy >= maxCharge) {
+        if (amount <= 0 || totalEnergy >= maxCharge)
+        {
             return;
         }
 
@@ -225,7 +249,8 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// </summary>
     public void LeakEnergy(float amount)
     {
-        if (amount <= 0 || totalEnergy <= 0) {
+        if (amount <= 0 || totalEnergy <= 0)
+        {
             return;
         }
 
@@ -240,17 +265,31 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
         //EnergyChange(totalEnergy);
     }
 
+    public float GetPercentFull() => totalEnergy / maxCharge;
+
     /// <summary>
     ///     Returns the percentage of total energy out of max energy that this AControllable has.
     /// </summary>
-    public float GetPercentFull() => totalEnergy / maxCharge;
+    public float GetPercentFull(bool isCombined)
+    {
+        var energy = totalEnergy;
+
+        if (!isCombined)
+        {
+            energy -= virus;
+        }
+
+        return energy / maxCharge;
+
+    }
 
     /// <summary>
     ///     Returns the percentage of total energy in this AControllable which is infected by virus.
     /// </summary>
     public float? GetVirusPercent()
     {
-        if (totalEnergy == 0f) {
+        if (totalEnergy == 0f)
+        {
             return null;
         }
         return virus / totalEnergy;
@@ -275,7 +314,8 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
     /// <returns>true if uniqueID is not null, false otherwise </returns>
     private bool checkForUniqueIDScript()
     {
-        if (uniqueID == null) {
+        if (uniqueID == null)
+        {
             Debug.Log(gameObject + " data cannot be saved or loaded from this object because it is missing a UniqueId.cs script");
             return false;
         }
@@ -289,7 +329,8 @@ public abstract class AControllable : MonoBehaviour, IControllable, IDataPersist
         maxCharge /= splitEntries;
         cleanEnergy /= splitEntries;
         virus /= splitEntries;
-        foreach (AControllable controllable in secondaryControllables) {
+        foreach (AControllable controllable in secondaryControllables)
+        {
             controllable.maxCharge = maxCharge;
             controllable.virus = virus;
             controllable.cleanEnergy = cleanEnergy;

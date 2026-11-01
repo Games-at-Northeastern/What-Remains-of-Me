@@ -30,16 +30,18 @@ public class MovingElementController : AControllable
     /// </summary>
     private void Update()
     {
-        if (Math.Abs(GetPercentFull() - 1) < 0.01f && !hasMoved)
+        if (GetComponentInChildren<OutletWire>() == null)
         {
-            Array.ForEach(_movingElements, movingElement => movingElement.Activate());
-            hasMoved = true;
-
-            /// <summary>
-            /// Used for when an audio source has to play when something is moving.
-            /// </summary>
-            if(audioSource)
-                audioSource.Play();
+            if (Math.Abs(GetPercentFull() - 1) < 0.01f && !hasMoved)
+            {
+                Debug.Log("[MovingElementController] - moving the platform, DOES NOT OUTLETWIRE CHILD");
+                HelperFunction();
+            }
+        }
+        else if (Math.Abs(GetPercentFull(GetComponentInChildren<OutletWire>().useCombinedEnergy) - 1) < 0.01f && !hasMoved)
+        {
+            Debug.Log("[MovingElementController] - moving the platform, HAS OUTLETWIRE CHILD");
+            HelperFunction();
 
         }
         else if (GetPercentFull() < 0.99f && hasMoved)
@@ -50,9 +52,22 @@ public class MovingElementController : AControllable
             /// <summary>
             /// Used for when an audio source has to stop when something isn't moving.
             /// </summary>
-            if(audioSource)
+            if (audioSource)
                 audioSource.Stop();
         }
+    }
+
+    private void HelperFunction()
+    {
+        Debug.Log("[MovingElementController] - moving the platform");
+        Array.ForEach(_movingElements, movingElement => movingElement.Activate());
+        hasMoved = true;
+
+        /// <summary>
+        /// Used for when an audio source has to play when something is moving.
+        /// </summary>
+        if (audioSource)
+            audioSource.Play();
     }
 
     public void ApplyToAll(Action<MovingElement> meFunc) => Array.ForEach(_movingElements, movingElement => meFunc(movingElement));

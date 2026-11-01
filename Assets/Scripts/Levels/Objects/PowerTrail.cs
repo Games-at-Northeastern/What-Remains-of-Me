@@ -55,8 +55,8 @@ public class PowerTrail : MonoBehaviour, IRenderableTrail
 
     public void SetActiveStatus(float energy)
     {
-            _meshRenderer.material = energy >= _enableAt ? _poweredMaterial : _deadMaterial;
-        
+        _meshRenderer.material = energy >= _enableAt ? _poweredMaterial : _deadMaterial;
+
     }
 
     public void SetVirus(float virusPercentage)
@@ -78,10 +78,10 @@ public class PowerTrail : MonoBehaviour, IRenderableTrail
         }
         else
         {
-        
-                _virusEffectMover.gameObject.SetActive(false);
-                _virusEffectMover.Deactivate();
-            
+
+            _virusEffectMover.gameObject.SetActive(false);
+            _virusEffectMover.Deactivate();
+
         }
     }
 }
