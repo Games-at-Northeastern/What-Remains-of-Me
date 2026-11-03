@@ -62,7 +62,7 @@ public class InkDialogueVariables
 
     public void updateDeathCount(Story s)
     {
-        if (variables.ContainsKey("deathCount"))
+        if (variables.ContainsKey("deathCount") && s.variablesState.TryGetDefaultVariableValue("deathCount") != null)
         {
             StartListening(s);
             s.variablesState["deathCount"] = deathCount;
