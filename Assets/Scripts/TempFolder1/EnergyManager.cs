@@ -51,7 +51,7 @@ public class EnergyManager : IManager
     // Initialize the energy manager in the first moment the scene is run
     private void Awake()
     {
-        batteryPercentage = 1; // Defaults to full battery
+        batteryPercentage = 0; // Defaults to full battery
         virusPercentage = 0; // Defaults to no virus
         maxBattery = 100; // Defaults to 100
         maxVirus = 100; // Defaults to 100
@@ -60,7 +60,7 @@ public class EnergyManager : IManager
     // Restores Atlas to a freshly rebuilt state: full battery and no virus
     public void ResetEnergy()
     {
-        batteryPercentage = 1;
+        batteryPercentage = 0;
         virusPercentage = 0;
     }
 
