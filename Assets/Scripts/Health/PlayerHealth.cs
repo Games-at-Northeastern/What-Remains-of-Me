@@ -38,11 +38,11 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
         // to not directly reference the PlayerInfo
 
         // check if player has depleted all health (with some float forgiveness)
-        //if (energyManager.Battery <= 0.01) {
-        //    EnergyDepletedDeath();
-        //}
+        if (energyManager.Battery <= 0.01) {
+            EnergyDepletedDeath();
+        }
         // check if player has reached minimum health (the player cannot drain any more health)
-        if (energyManager.Battery <= 1f) {
+        else if (energyManager.Battery <= 1f) {
             EnergyDepletionWarning();
         } else {
             warning.GetComponent<WarningController>().StopLowHealthWarning();
