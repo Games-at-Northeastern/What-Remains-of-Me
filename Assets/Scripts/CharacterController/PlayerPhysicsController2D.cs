@@ -1,4 +1,7 @@
+using System;
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PlayerController
 {
@@ -43,6 +46,13 @@ namespace PlayerController
         [SerializeField, Range(0f, 2f)] private float swingDrag = 0.1f;
         [SerializeField] private float maxReleaseSpeed = 18f;
 
+        [Header("Testing")]
+        [SerializeField, Tooltip("Turn off to run the original PlayerController2D movement instead. Can be toggled in play mode with P or R3")]
+        private bool useNewPhysics = true;
+
+        private InputAction togglePhysicsAction;
+        private Action originalFixedUpdate;
+
         private Rigidbody2D body;
         private PlayerInputHandler inputHandler;
         private WireThrower wireThrower;
@@ -58,6 +68,30 @@ namespace PlayerController
 
         private bool IsWireConnected => wireThrower != null && wireThrower.IsConnected();
 
+        private void Awake()
+        {
+            togglePhysicsAction = new InputAction("TogglePhysics", InputActionType.Button);
+            togglePhysicsAction.AddBinding("<Keyboard>/p");
+            togglePhysicsAction.AddBinding("<Gamepad>/rightStickButton");
+
+            MethodInfo baseFixedUpdate = typeof(PlayerController2D).GetMethod("FixedUpdate", BindingFlags.Instance | BindingFlags.NonPublic);
+            originalFixedUpdate = (Action)Delegate.CreateDelegate(typeof(Action), this, baseFixedUpdate);
+        }
+
+        private void OnEnable() => togglePhysicsAction.Enable();
+
+        private void OnDisable() => togglePhysicsAction.Disable();
+
+        private void OnDestroy() => togglePhysicsAction.Dispose();
+
+        private void Update()
+        {
+            if (togglePhysicsAction.WasPressedThisFrame() && Time.timeScale > 0f && !LockedOrNot())
+            {
+                SetNewPhysics(!useNewPhysics);
+            }
+        }
+
         private void FixedUpdate()
         {
             if (!initialized)
@@ -65,12 +99,18 @@ namespace PlayerController
                 Initialize();
             }
 
+            if (!useNewPhysics)
+            {
+                originalFixedUpdate();
+                return;
+            }
+
             FlagUpdates();
 
             PlayerSettings stats = PlayerRef.PlayerManager.PlayerStats;
             float dt = Time.fixedDeltaTime;
 
-            Vector2 velocity = body.linearVelocity - ExternalVelocity();
+            Vector2 velocity = KeepPhysicsSlowdown(InternalVelocity, body.linearVelocity - ExternalVelocity());
             UpdateGrounded(velocity.y, dt);
             UpdateWireConnection(stats);
 
@@ -121,6 +161,29 @@ namespace PlayerController
             initialized = true;
         }
 
+        /// <summary>
+        /// Switches between the new physics and the original PlayerController2D movement on the same component,
+        /// handing over the current velocity and wire state so the player keeps moving from where they are.
+        /// </summary>
+        private void SetNewPhysics(bool enable)
+        {
+            if (!initialized)
+            {
+                Initialize();
+            }
+
+            useNewPhysics = enable;
+            ResetMovement();
+            InternalVelocity = body.linearVelocity - ExternalVelocity();
+            currentState = PlayerState.Aerial;
+
+            if (!enable && IsWireConnected && wireJoint != null)
+            {
+                wireJoint.enabled = true;
+                wireThrower.SetMaxWireLength(Vector2.Distance(body.position, wireThrower.ConnectedOutlet.transform.position));
+            }
+        }
+
         private void ResetMovement()
         {
             isGrounded = false;
@@ -128,6 +191,19 @@ namespace PlayerController
             timeSinceGrounded = Mathf.Infinity;
             timeSinceJumpUsed = Mathf.Infinity;
             wasConnected = false;
+        }
+
+        /// <summary>
+        /// Collisions can slow the player down, but scripts that change the rigidbody's velocity directly (e.g. moving
+        /// platforms when the player steps on or off them) must not add speed, so only reductions of the velocity
+        /// commanded last step are kept.
+        /// </summary>
+        private static Vector2 KeepPhysicsSlowdown(Vector2 commanded, Vector2 actual)
+        {
+            return new Vector2(Slowdown(commanded.x, actual.x), Slowdown(commanded.y, actual.y));
+
+            static float Slowdown(float wanted, float result) =>
+                wanted > 0 ? Mathf.Clamp(result, 0f, wanted) : Mathf.Clamp(result, wanted, 0f);
         }
 
         private void UpdateGrounded(float velocityY, float dt)
