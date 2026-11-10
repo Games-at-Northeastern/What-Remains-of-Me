@@ -56,6 +56,7 @@ public class NewPlayerControllerTest : MonoBehaviour, CharacterController2D
     private float timeSinceGrounded = Mathf.Infinity;
     private bool isGrounded;
     private bool isJumping;
+    public Vector2 ExtraSpeed { get; set; }
 
     public bool InputsLocked => isLocked;
 

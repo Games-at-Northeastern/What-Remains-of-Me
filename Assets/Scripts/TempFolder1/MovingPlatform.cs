@@ -25,7 +25,7 @@ public class MovingPlatform : MovingElement
         if (player != null && collision.GetComponent<PlayerController2D>() == player)
         {
             player.OnMovingPlatform = false;
-            player.RemoveForce(gameObject);
+            //player.RemoveForce(gameObject);
             player = null;
         }
     }
@@ -33,14 +33,20 @@ public class MovingPlatform : MovingElement
     // Update is called once per frame
     private new void FixedUpdate()
     {
+        Vector2 currentVelocity = MovePlatform();
         if (player != null && player.OnMovingPlatform)
         {
-            player.AddOrUpdateForce(gameObject, MovePlatform());
-            player.CombineCurrentVelocities();
+            player.ExtraSpeed = currentVelocity;
         }
-        else
-        {
-            MovePlatform();
-        }
+        //if (player != null && player.OnMovingPlatform)
+        //{
+            
+        //    player.AddOrUpdateForce(gameObject, MovePlatform());
+        //    player.CombineCurrentVelocities();
+        //}
+        //else
+        //{
+        //    MovePlatform();
+        //}
     }
 }
