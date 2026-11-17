@@ -11,11 +11,11 @@ public class GrappleModule : MonoBehaviour, IPlayerModule
     [SerializeField] float maxDistance = 10f;
     [SerializeField] float swingAcceleration = 20f;    // units/s^2
     [SerializeField] float ropeGravityMultiplier = 2f; // 2 = double gravity on the rope
-    [SerializeField] LineRenderer rope;                // optional
+    [SerializeField] LineRenderer rope;
 
     Transform anchor;
     float ropeLength;
-    float swingInput; // cached from Update, used in FixedUpdate
+    float swingInput;
 
     public bool IsAttached => anchor != null;
 
@@ -81,7 +81,6 @@ public class GrappleModule : MonoBehaviour, IPlayerModule
         float g = Controller.GetGravity();         // units per step^2
         float dt = Time.fixedDeltaTime;
 
-        // 1. Swing input: push along the arc (strongest at the bottom, fades at the sides)
         if (swingInput != 0f)
         {
             Vector2 tangent = new Vector2(-radial.y, radial.x);
