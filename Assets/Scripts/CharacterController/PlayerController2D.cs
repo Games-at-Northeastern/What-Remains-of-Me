@@ -696,7 +696,8 @@ namespace PlayerController
             switch (currentState)
             {
                 case PlayerState.Grounded:
-                    if (internalVelocity.x != 0)
+                    float relativeSpeedX = Mathf.Abs(internalVelocity.x - ExtraSpeed.x);
+                    if (relativeSpeedX > 0.1f)
                     {
                         return AnimationType.RUN;
                     }
