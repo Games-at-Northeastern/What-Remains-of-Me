@@ -622,6 +622,10 @@ GameObject:
   - component: {fileID: 4467459801094715970}
   - component: {fileID: 6931513395316122100}
   - component: {fileID: 3637009469456773891}
+  - component: {fileID: 6813357316823110366}
+  - component: {fileID: 2387300157426313939}
+  - component: {fileID: 6518571429761815198}
+  - component: {fileID: 5378361458538863582}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -987,6 +991,71 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &6813357316823110366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860228394538578391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8351e7265eae4900b728c8047c7fc9a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minWireLength: 1.5
+  tautTolerance: 0.1
+  maxPullInSpeed: 6
+  swingGravity: 40
+  swingAcceleration: 14
+  maxSwingSpeed: 16
+  swingDrag: 0.1
+  maxReleaseSpeed: 18
+--- !u!114 &2387300157426313939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860228394538578391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a88f9ac6bf49babdf9423d3c540fbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundDeceleration: 55
+  turnAcceleration: 110
+--- !u!114 &6518571429761815198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860228394538578391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a985bac2914993b8b07321db4b8875, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  airAcceleration: 45
+  airDeceleration: 10
+  airTurnAcceleration: 60
+  overspeedDeceleration: 5
+  overspeedDecelerationWithoutInput: 20
+--- !u!114 &5378361458538863582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860228394538578391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26b498a86474755a0dee9f39cf4c492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  risingGravity: 20
+  fallGravity: 40
 --- !u!1 &7279311233505151241
 GameObject:
   m_ObjectHideFlags: 0
