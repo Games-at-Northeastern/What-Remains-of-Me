@@ -392,7 +392,7 @@ public class MovingElementScript : MonoBehaviour
         // If the object is a platform, move the objects on the platform
         if (movingObjectType == MovingObjectType.Platform) {
             MovePlatformObjects(velocity, lastVelocity);
-            HandlePlayerOnPlatform();
+            HandlePlayerOnPlatform(velocity);
         }
 
         rb.linearVelocity += velocity - lastVelocity;
@@ -415,7 +415,7 @@ public class MovingElementScript : MonoBehaviour
 
     // Adds forces to the player if on top of the platform.
     // This is done separately from the other objects on the platform because of how the player's physics is programmed
-    private void HandlePlayerOnPlatform()
+    private void HandlePlayerOnPlatform(Vector2 currentVelocity)
     {
         // Sets up the location of the grounded trigger
         CalculateTriggerTransform();
@@ -438,15 +438,13 @@ public class MovingElementScript : MonoBehaviour
 
         // Remove the platform force on the player if they leave the grounded trigger
         if (!playerOnPlatform && player != null) {
-            player.RemoveForce(gameObject);
             player.OnMovingPlatform = false;
             player = null;
         }
 
         // Add force each frame if the player is grounded on the platform
         if (player is not null) {
-            player.AddOrUpdateForce(gameObject, rb.linearVelocity);
-            player.CombineCurrentVelocities();
+            player.ExtraSpeed = currentVelocity;
         }
     }
 
