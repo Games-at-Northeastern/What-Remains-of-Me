@@ -26,6 +26,7 @@ namespace PlayerController
      */
     public class PlayerController2D : MonoBehaviour, CharacterController2D, IDataPersistence
     {
+        public Vector2 ExtraSpeed { get; set; } = Vector2.zero;
         public enum PlayerState
         {
             Grounded,
@@ -260,13 +261,13 @@ namespace PlayerController
         ///     EX: If a moving platform has a high enough acceleration and this is not done, there may be a large enough gap in
         ///     speed where the player is forced into the air.
         /// </summary>
-        public void CombineCurrentVelocities()
+        public virtual void CombineCurrentVelocities()
         {
-            rb.linearVelocity = internalVelocity;
-            foreach (GameObject key in externalVelocity.Keys)
-            {
-                rb.linearVelocity += externalVelocity[key];
-            }
+            rb.linearVelocity = new Vector2(internalVelocity.x, internalVelocity.y + ExtraSpeed.y);
+            //foreach (GameObject key in externalVelocity.Keys)
+            //{
+            //    rb.linearVelocity += externalVelocity[key];
+            //}
 
         }
 
@@ -358,6 +359,10 @@ namespace PlayerController
             {
                 timeSinceLanded = 0;
                 fLanded = true;
+                if (!OnMovingPlatform)
+                {
+                    ExtraSpeed = Vector2.zero; // clear extraspeed if land ground
+                }
             }
             else if (lastGroundedState && !grounded) // Left the ground
             {
