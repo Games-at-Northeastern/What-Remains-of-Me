@@ -6,12 +6,10 @@ public class WalkModule : MonoBehaviour, IPlayerModule
 {
     public RaycastPlayerController Controller { get; set; }
     public float HealthPercentile { get; private set; } = 1f;
-
-    [SerializeField] float maxSpeed = 0.15f; // units per physics step, same units as MoveDisplacement
-
+    [SerializeField] float maxSpeed = 0.2f; // units per physics step, same units as MoveDisplacement
+    [Header("Directional Acceleration Knobs")]
     // How fast speed changes, as a fraction of maxSpeed per second.
-    // 1 = 0 → max in 1 second, 2 = in 0.5 seconds, etc.
-    [FormerlySerializedAs("accelTimeMutliplier")]
+    //used to use an animation curve and intended to make acceleration more customizeable. overconvoluted, now acceleration is linear like the old PlayerController2D
     [SerializeField] float accelTimeMultiplier = 1f;
     [SerializeField] float decelTimeMultiplier = 2f;
     [SerializeField] float redirectTimeMultiplier = 2f;
@@ -49,13 +47,13 @@ public class WalkModule : MonoBehaviour, IPlayerModule
 
         float rate;
         if (input == 0f)
-            rate = decelTimeMultiplier;                       // no input: slow down
+            rate = decelTimeMultiplier;
         else if (x != 0f && Mathf.Sign(input) != Mathf.Sign(x))
-            rate = redirectTimeMultiplier;                    // pressing against current motion
+            rate = redirectTimeMultiplier;
         else if (Mathf.Abs(x) > maxSpeed)
-            rate = decelTimeMultiplier;                       // faster than walking (e.g. launch): ease down
+            rate = decelTimeMultiplier;
         else
-            rate = accelTimeMultiplier;                       // speeding up
+            rate = accelTimeMultiplier;
 
         Controller.MoveDisplacement.x = Mathf.MoveTowards(x, target, maxSpeed * rate * Time.deltaTime);
     }

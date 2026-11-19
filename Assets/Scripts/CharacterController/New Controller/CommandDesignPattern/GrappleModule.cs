@@ -7,12 +7,13 @@ public class GrappleModule : MonoBehaviour, IPlayerModule
     public RaycastPlayerController Controller { get; set; }
     public float HealthPercentile { get; private set; } = 1f;
 
+
     [SerializeField] string hookTag = "Outlet";
+    [Header("Physics settings")]
     [SerializeField] float maxDistance = 10f;
     [SerializeField] float swingAcceleration = 20f;    // units/s^2
     [SerializeField] float ropeGravityMultiplier = 2f; // 2 = double gravity on the rope
     [SerializeField] LineRenderer rope;
-
     Transform anchor;
     float ropeLength;
     float swingInput;
@@ -88,9 +89,6 @@ public class GrappleModule : MonoBehaviour, IPlayerModule
                 tangent = -tangent;
             v += tangent * (Mathf.Abs(tangent.x) * swingAcceleration * dt * dt);
         }
-
-        // Extra gravity while on the rope
-        //v.y -= g * (ropeGravityMultiplier - 1f);
 
         // Rope constraint. outward and allowed variables are to ensure that the string only exerts pull forces, not pushes
         v.y -= g;
