@@ -60,7 +60,7 @@ public class EnergyManager : IManager
     // Restores Atlas to a freshly rebuilt state: full battery and no virus
     public void ResetEnergy()
     {
-        batteryPercentage = 0;
+        batteryPercentage = batteryPercentage;
         virusPercentage = 0;
     }
 
