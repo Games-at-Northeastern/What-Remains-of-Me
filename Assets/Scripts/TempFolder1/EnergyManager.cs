@@ -1,5 +1,6 @@
 using PlayerController;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Class holding the player's runtime energy data
 public class EnergyManager : IManager
@@ -51,7 +52,14 @@ public class EnergyManager : IManager
     // Initialize the energy manager in the first moment the scene is run
     private void Awake()
     {
-        batteryPercentage = 0; // Defaults to full battery
+        if (SceneManager.GetActiveScene().name == "1.4.1 Weapons Testing Facility")
+        {
+            batteryPercentage = 0;
+        }
+        else
+        {
+            batteryPercentage = 100; // Defaults to full battery
+        }
         virusPercentage = 0; // Defaults to no virus
         maxBattery = 100; // Defaults to 100
         maxVirus = 100; // Defaults to 100
