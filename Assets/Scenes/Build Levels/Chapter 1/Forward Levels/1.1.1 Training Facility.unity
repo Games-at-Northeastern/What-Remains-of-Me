@@ -45612,6 +45612,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4577133023128366484, guid: 0231297ad2da811498d361f902b34b4f, type: 3}
   m_PrefabInstance: {fileID: 612360786}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &615000892 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4590497238284219874, guid: fccf9bebee17a464a80ba015554571d9, type: 3}
+  m_PrefabInstance: {fileID: 84301325}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3360d51810c0f457d823e299aa958a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &616984652 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1265458518184981043, guid: d440fab3dcd2043c49f57eb7030a31b7, type: 3}
@@ -370753,6 +370764,18 @@ PrefabInstance:
       propertyPath: 'm_ApplyToSortingLayers.Array.data[4]'
       value: 1838730617
       objectReference: {fileID: 0}
+    - target: {fileID: 759704385199689413, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: 'managedReferences[2773080991560368351]'
+      value: 'Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.Provider2DCache`1[[UnityEngine.Rendering.Universal.Light2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 759704385199689413, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: managedReferences[1000].m_Provider2DCache
+      value: 2773080991560368351
+      objectReference: {fileID: 0}
+    - target: {fileID: 759704385199689413, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: managedReferences[2773080991560368351].m_Cache.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2476191629135710749, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -370761,6 +370784,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3270266595771711758, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: energyManager
+      value: 
+      objectReference: {fileID: 615000892}
     - target: {fileID: 3270266595771711758, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
       propertyPath: lowBatterySFX
       value: 
@@ -370879,6 +370906,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4303813049045172828, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
       propertyPath: 'm_ApplyToSortingLayers.Array.data[4]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4303813049045172828, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: 'managedReferences[2773080991560368346]'
+      value: 'Unity.RenderPipelines.Universal.2D.Runtime UnityEngine.Rendering.Universal.Provider2DCache`1[[UnityEngine.Rendering.Universal.Light2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4303813049045172828, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: managedReferences[1000].m_Provider2DCache
+      value: 2773080991560368346
+      objectReference: {fileID: 0}
+    - target: {fileID: 4303813049045172828, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
+      propertyPath: managedReferences[2773080991560368346].m_Cache.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6860228394538578389, guid: 0e6994009427b404b8423cbd01e336d8, type: 3}
@@ -433791,7 +433830,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.4104137
+      value: -7.413004
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407713, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -433823,19 +433862,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: orthographic size
-      value: 5.4
+      value: 4.31
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0
+      value: -0.12663186
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 1
+      value: 1.2532637
       objectReference: {fileID: 0}
     - target: {fileID: 3482813680506407718, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 1
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 4289640520230391498, guid: 132d3525ec7344353852cf99b7e74fc7, type: 3}
       propertyPath: m_IsActive

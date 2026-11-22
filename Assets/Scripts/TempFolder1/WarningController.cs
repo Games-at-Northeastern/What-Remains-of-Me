@@ -23,6 +23,8 @@ public class WarningController : MonoBehaviour
     [SerializeField] private AudioSource lowBatterySFX;
     [SerializeField] private AudioClip virusAffectedSFX;
 
+
+    private EnergyManager energyManager;
     private GameObject lowHealthWarning;
     private float time;
     private Color initLightColorA;
@@ -49,6 +51,7 @@ public class WarningController : MonoBehaviour
         light2 = headlightB.GetComponent<UnityEngine.Rendering.Universal.Light2D>();
         eyeColor = virusEyes.GetComponent<SpriteRenderer>().color;
         virusEyes.GetComponent<SpriteRenderer>().color = new Color(eyeColor.r, eyeColor.g, eyeColor.b, 0.0f);
+        energyManager = PlayerRef.PlayerManager.EnergyManager;
 
     }
 
@@ -61,6 +64,11 @@ public class WarningController : MonoBehaviour
         if (isDead)
         {
             Debug.Log("turn off the light");
+            light1.enabled = false;
+            light2.enabled = false;
+        }
+        else if (energyManager.BatteryPercentage < 0.5f)
+        {
             light1.enabled = false;
             light2.enabled = false;
         }
@@ -80,7 +88,8 @@ public class WarningController : MonoBehaviour
                 time = -1.0f;
             }
             time += Time.deltaTime;
-        } else
+        }
+        else
         {
             light1.enabled = true;
             light2.enabled = true;
