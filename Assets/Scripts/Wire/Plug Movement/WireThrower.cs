@@ -75,6 +75,7 @@ public class WireThrower : MonoBehaviour
     #region StartUp
     private void Awake()
     {
+        wirePrompt = GameObject.FindGameObjectWithTag("HUD").transform.Find("WirePrompt").gameObject;
         // Add left click handling functionality
         _controlSchemes = new ControlSchemes();
         _controlSchemes.Enable();
@@ -505,6 +506,7 @@ public class WireThrower : MonoBehaviour
         pme.onConnectionRequest.AddListener((GameObject g) => ConnectPlug(g));
     }
 
+    public GameObject wirePrompt;
 
     /// <summary>
     /// Determines whether or not the Wire for this WireThrower exits.
@@ -596,6 +598,7 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void ConnectPlug(GameObject g)
     {
+        
         onConnect.Invoke();
         ConnectedOutlet = g.GetComponent<Outlet>();
         ConnectedOutlet.Connect();
@@ -606,6 +609,7 @@ public class WireThrower : MonoBehaviour
         outletMeter?.StartVisuals();
         outletMeter?.ConnectPlug();
         ConnectedOutletsControllable = ConnectedOutlet.controlled;
+        wirePrompt.SetActive(!(ConnectedOutletsControllable is NullControllable));
         if (ConnectedOutletsControllable != null)
         {
             ConnectedOutletsControllable.OnVirusChange.AddListener(setSparkColor);
@@ -619,6 +623,8 @@ public class WireThrower : MonoBehaviour
     /// </summary>
     void Disconnect()
     {
+        wirePrompt.SetActive(false);
+
         OutletMeter outletMeter = ConnectedOutlet.GetComponentInChildren<OutletMeter>();
         outletMeter?.DisconnectPlug();
         pc.RemoveForce(ConnectedOutlet.gameObject);
