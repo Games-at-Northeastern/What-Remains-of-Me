@@ -20,6 +20,8 @@ You accomplish nothing by attempting to reach me.
 
 Continuing this way will only result in your own destruction
 
+I must ensure it.
+
 I have seen it all too well.
 
 

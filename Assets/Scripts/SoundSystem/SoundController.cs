@@ -186,6 +186,10 @@ public class SoundController : MonoBehaviour
                 s.source.volume = s.baseVolume * volumeModifier;
                 s.source.Play();
 
+                //shows what the source is about to play
+                Debug.Log($"Playing '{name}' | clip: {s.source.clip} | vol: {s.source.volume} | pitch: {s.source.pitch} | playing: {s.source.isPlaying}", s.source);
+
+
                 if (s.loop)
                 {
                     if (!loopingSounds.Contains(s.soundName))
@@ -218,6 +222,9 @@ public class SoundController : MonoBehaviour
                 }
             }
         }
+
+        //only reached if no sound matched the name
+        Debug.LogWarning("No sound named " + name);
     }
 
     //Add SoundPlayer3D to list of SoundPlayer3Ds
