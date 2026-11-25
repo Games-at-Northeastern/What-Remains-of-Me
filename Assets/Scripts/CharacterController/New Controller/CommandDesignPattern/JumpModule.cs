@@ -19,10 +19,8 @@ public class JumpModule : MonoBehaviour, IPlayerModule
     {
 
         Controller = transform.GetComponent<RaycastPlayerController>();
-        //jumpForce = Mathf.Sqrt(2 * jumpHeight * Controller.GetGravity());
-
         float g = Controller.GetGravity();
-        jumpForce = (g + Mathf.Sqrt(g * g + 8f * g * jumpHeight)) / 2f;
+        jumpForce = (g + Mathf.Sqrt(g * g + 8f * g * jumpHeight)) / 2f; //derived from kinematics formula physics mecahanics
     }
 
 
