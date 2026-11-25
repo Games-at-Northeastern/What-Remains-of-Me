@@ -74,6 +74,11 @@ namespace PlayerController
             Vector2 velocity = KeepPhysicsSlowdown(InternalVelocity, body.linearVelocity - AppliedExtraSpeed - ExternalVelocity());
             bool wasGrounded = context.IsGrounded;
             bool grounded = velocity.y <= 0.1f && TouchingGround();
+            if (grounded && !OnMovingPlatform)
+            {
+                ExtraSpeed = Vector2.zero;
+            }
+
             context.BeginStep(velocity, grounded, PlayerRef.PlayerManager.PlayerStats, inputHandler, jumpTriggered, Time.fixedDeltaTime);
             jumpTriggered = false;
 

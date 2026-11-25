@@ -5,10 +5,10 @@ namespace PlayerController
     public class PhysicsAirModule : PhysicsHorizontalModule
     {
         [SerializeField] private float airAcceleration = 45f;
-        [SerializeField] private float airDeceleration = 10f;
+        [SerializeField] private float airDeceleration = 15f;
         [SerializeField] private float airTurnAcceleration = 60f;
         [SerializeField, Tooltip("How fast speed above the max air speed (e.g. after releasing the wire) bleeds off while holding that direction")]
-        private float overspeedDeceleration = 5f;
+        private float overspeedDeceleration = 2f;
         [SerializeField, Tooltip("How fast speed above the max air speed bleeds off when no direction is held")]
         private float overspeedDecelerationWithoutInput = 20f;
 
